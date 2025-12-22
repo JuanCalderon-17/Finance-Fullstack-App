@@ -104,6 +104,25 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// === INICIO: AUTO-MIGRACIÓN (El Robot Obrero) ===
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        // Esto revisa si hay cambios pendientes y crea las tablas si no existen
+        context.Database.Migrate();
+        Console.WriteLine("--> ¡Migraciones aplicadas con éxito en la Nube! ");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> Error aplicando migraciones: {ex.Message}");
+    }
+}
+// === FIN: AUTO-MIGRACIÓN ===
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
