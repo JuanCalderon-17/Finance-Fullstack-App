@@ -1,0 +1,192 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-white fs-4" href="#">
+      💰 Finance Manager
+    </a>
+    <button class="btn btn-outline-light btn-sm" (click)="logout()">
+      Cerrar Sesión
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+  
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow border-0 text-white" 
+           style="background: linear-gradient(to right, #1a1a2e, #16213e);"> 
+        <div class="card-body py-4">
+          <div class="row align-items-center">
+            
+            <div class="col-md-6 border-end border-secondary border-opacity-50 text-center">
+              <div class="row">
+                <div class="col-6">
+                  <h6 class="text-uppercase opacity-75 mb-1" style="font-size: 0.8rem; letter-spacing: 1px;">Ingresos</h6>
+                  <h2 class="fw-bold text-success mb-0"> +${{ totalIncome | number:'1.2-2' }}</h2>
+                </div>
+                <div class="col-6">
+                  <h6 class="text-uppercase opacity-75 mb-1" style="font-size: 0.8rem; letter-spacing: 1px;">Gastos</h6>
+                  <h2 class="fw-bold mb-0" [style.color]="alertColor"> -${{ totalSpent | number:'1.2-2' }}</h2>
+                </div>
+              </div>
+              
+              <hr class="border-secondary mx-auto opacity-50 my-4" style="width: 80%;">
+              
+              <div class="small opacity-75">
+                <i class="bi bi-info-circle me-1"></i> {{ alertMessage }}
+              </div>
+            </div>
+
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+              
+              <div *ngIf="totalSpent > 0" 
+                   class="d-flex justify-content-center align-items-center p-3"
+                   style="background-color: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
+                
+                <div style="height: 200px; width: 320px;">
+                  <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"></canvas>
+                </div>
+
+              </div>
+
+              <div *ngIf="totalSpent === 0" class="text-center opacity-50">
+                <p class="mb-0">Sin gastos para mostrar 📉</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    
+    <div class="col-lg-4 col-md-5 mb-4">
+      <div class="card shadow-sm border-0 h-100">
+        
+        <div class="card-header bg-white fw-bold" [class.text-primary]="isEditing">
+          {{ isEditing ? '✏️ Editando' : '➕ Nuevo Movimiento' }}
+        </div>
+
+        <div class="card-body">
+          <form (ngSubmit)="addTransaction()">
+            <div class="mb-3">
+              <label class="form-label">Descripción</label>
+              <input type="text" class="form-control" placeholder="Ej: Pizza..." 
+                     [(ngModel)]="newTransaction.description" name="desc" required>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Monto ($)</label>
+              <input type="number" class="form-control" placeholder="0.00" 
+                      [(ngModel)]="newTransaction.amount" name="amount" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Categoría</label>
+              <select class="form-select" [(ngModel)]="newTransaction.category" name="cat">
+                <optgroup label="Ingresos 🤑">
+                  <option value="Sueldo">Sueldo</option>
+                  <option value="Negocio">Negocio</option>
+                  <option value="Ingreso Extra">Ingreso Extra</option>
+                </optgroup>
+                <optgroup label="Gastos 💸">
+                  <option value="Ahorro">Ahorro</option>
+                  <option value="Comida">Comida</option>
+                  <option value="Transporte">Transporte</option>
+                  <option value="Salud">Salud</option>
+                  <option value="Ocio">Ocio</option>
+                  <option value="Casa">Casa</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="d-grid gap-2 mt-4">
+              <button type="submit" class="btn text-white"
+                [ngClass]="isEditing ? 'btn-warning text-dark' : ''"
+                [style.background-color]="isEditing ? '' : '#303134'"
+                [style.border-color]="isEditing ? '' : '#303134'">
+                {{ isEditing ? 'Actualizar' : 'Agregar' }}
+              </button>
+
+              <button type="button" class="btn btn-secondary" 
+                      *ngIf="isEditing" (click)="cancelEdit()">
+                Cancelar
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 col-md-7 mb-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <span class="fw-bold">📜 Historial</span>
+          
+          <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" style="width: 130px;" [(ngModel)]="selectedPeriod" (change)="applyFilters()">
+              <option value="all">Mes</option>
+              <option value="1">1ª Pago Fin Mes.</option>
+              <option value="2">2ª Quincena.</option>
+            </select>
+
+            <select class="form-select form-select-sm" [(ngModel)]="selectedMonth" (change)="applyFilters()">
+              <option [value]="0">Ene</option>
+              <option [value]="1">Feb</option>
+              <option [value]="2">Mar</option>
+              <option [value]="3">Abr</option>
+              <option [value]="4">May</option>
+              <option [value]="5">Jun</option>
+              <option [value]="6">Jul</option>
+              <option [value]="7">Ago</option>
+              <option [value]="8">Sep</option>
+              <option [value]="9">Oct</option>
+              <option [value]="10">Nov</option>
+              <option [value]="11">Dic</option>
+            </select>
+             <select class="form-select form-select-sm" [(ngModel)]="selectedYear" (change)="applyFilters()">
+                <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+              </select>
+          </div>
+        </div>
+
+        <div class="card-body p-0 table-responsive"> 
+          
+          <div *ngIf="filteredTransactions.length === 0" class="text-center py-5 text-muted">
+            <p>Sin datos.</p>
+          </div>
+
+          <table class="table table-hover mb-0 align-middle" *ngIf="filteredTransactions.length > 0">
+            <thead class="table-light">
+              <tr>
+                <th>Fecha</th>
+                <th>Desc.</th>
+                <th>Cat.</th>
+                <th class="text-end">Monto</th>
+                <th class="text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of filteredTransactions">
+                <td class="text-muted small">{{ t.transactionDate | date:'dd/MM' }}</td>
+                <td class="fw-bold text-truncate" style="max-width: 150px;">{{ t.description }}</td>
+                <td><span class="badge bg-secondary rounded-pill">{{ t.category }}</span></td>
+                <td class="text-end" [style.color]="t.amount > 0 ? 'green' : 'red'">
+                  ${{ t.amount | number:'1.2-2' }}
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-dark btn-sm me-1" (click)="edit(t)">✏️</button>
+                  <button class="btn btn-danger btn-sm" (click)="deleteTransaction(t.id)">🗑️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div> 
+</div>

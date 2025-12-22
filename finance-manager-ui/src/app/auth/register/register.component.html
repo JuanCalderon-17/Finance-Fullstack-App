@@ -1,0 +1,113 @@
+<section class="h-100 gradient-form" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+
+            <!-- FORM -->
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+
+                <div class="text-center">
+                  <h4 class="mt-1 mb-4">Register</h4>
+                </div>
+
+                <form #registerForm="ngForm" (ngSubmit)="register()">
+
+                  <p class="text-center mb-4">
+                    Crea tu cuenta para empezar a ahorrar
+                  </p>
+
+                  <!-- ERROR -->
+                  <div *ngIf="errorMessage" 
+                       class="alert alert-danger text-center mb-4" 
+                       role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ errorMessage }}
+                  </div>
+
+                  <!-- USERNAME -->
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="username">Username</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      class="form-control"
+                      [(ngModel)]="model.username"
+                      required />
+                  </div>
+
+                  <!-- EMAIL -->
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="email">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      class="form-control"
+                      [(ngModel)]="model.email"
+                      required />
+                  </div>
+
+                  <!-- PASSWORD -->
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="password">Password</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-control"
+                      [(ngModel)]="model.password"
+                      required />
+                  </div>
+
+                  <!-- SUBMIT BUTTON -->
+                  <div class="text-center pt-1 mb-4">
+                    <button class="btn btn-primary btn-lg w-100 gradient-custom-2"
+                            type="submit"
+                            [disabled]="isLoading">
+
+                      <ng-container *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm me-2"
+                              role="status"
+                              aria-hidden="true"></span>
+                        Creando cuenta...
+                      </ng-container>
+
+                      <span *ngIf="!isLoading">Registrarme</span>
+                    </button>
+                  </div>
+
+                  <!-- LOGIN LINK -->
+                  <div class="d-flex align-items-center justify-content-center pb-4">
+                    <p class="mb-0 me-2">¿Ya tienes una cuenta?</p>
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            routerLink="/auth/login">
+                      Log in
+                    </button>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <h4 class="mb-4">Bienvenido a Finance Manager</h4>
+                <p class="small mb-0">
+                  Por favor crea una cuenta antes de continuar
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
