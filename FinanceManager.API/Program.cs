@@ -28,11 +28,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     if (!string.IsNullOrEmpty(dbUrl))
     {
         Console.WriteLine("--> Usando Base de Datos de Render (Postgres)");
-        // Parsear la URL de Render para convertirla a formato Npgsql
         var databaseUri = new Uri(dbUrl);
         var userInfo = databaseUri.UserInfo.Split(':');
 
-        connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Require;Trust Server Certificate=true";
+        // CORRECCIÓN: Si el puerto no viene en la URL (es -1), forzamos el 5432
+        var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
+
+        connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Require;Trust Server Certificate=true";
     }
 
     // Importante: Usamos Npgsql en lugar de UseSqlServer
