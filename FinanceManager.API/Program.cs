@@ -18,10 +18,25 @@ builder.Services.AddEndpointsApiExplorer();
 
 // --- INICIO DE NUESTRO CÓDIGO DE CONFIGURACIÓN ---
 
-// 1. Configuración de la Base de Datos
+// 1. Configuración de la Base de Datos (Compatible con Render y Postgres)
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+    // Si existe la variable DATABASE_URL, significa que estamos en Render
+    if (!string.IsNullOrEmpty(dbUrl))
+    {
+        Console.WriteLine("--> Usando Base de Datos de Render (Postgres)");
+        // Parsear la URL de Render para convertirla a formato Npgsql
+        var databaseUri = new Uri(dbUrl);
+        var userInfo = databaseUri.UserInfo.Split(':');
+
+        connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Require;Trust Server Certificate=true";
+    }
+
+    // Importante: Usamos Npgsql en lugar de UseSqlServer
+    options.UseNpgsql(connectionString);
 });
 
 // 2. Configuración de ASP.NET Core Identity
