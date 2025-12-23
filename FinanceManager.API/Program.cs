@@ -72,7 +72,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularApp",
         policy =>
         {
-            policy.AllowAnyOrigin() // La dirección de nuestra app de Angular
+            policy.WithOrigins("https://financemanagerv.netlify.app") // La dirección de nuestra app de Angular
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -140,14 +140,13 @@ using (var scope = app.Services.CreateScope())
 // === FIN: AUTO-MIGRACIÓN ===
 
 
-// Configure the HTTP request pipeline.
+// Configuration, the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 
 // Middleware de Autenticación y Autorización
