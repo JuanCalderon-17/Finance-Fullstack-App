@@ -108,7 +108,6 @@ namespace FinanceManager.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Transaction>> PostTransaction(CreateTransactionDto transactionDto)
         {
-            // --- INICIO DEL CÓDIGO DE DIAGNÓSTICO ---
 
             // 1. Obtenemos el ID del usuario que está haciendo la petición.
             var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
@@ -139,9 +138,11 @@ namespace FinanceManager.API.Controllers
             {
                 Description = transactionDto.Description,
                 Amount = transactionDto.Amount,
-                TransactionDate = transactionDto.TransactionDate,
+                TransactionDate = DateTime.UtcNow,
                 Category = transactionDto.Category,
                 AppUserId = userId
+
+                
             };
 
             // 4. Guardamos la nueva transacción en la base de datos.
