@@ -1,0 +1,15 @@
+[build]
+  # Entramos a la carpeta de Angular
+  base = "finance-manager-ui"
+  
+  # Comando para construir
+  command = "npm run build"
+  
+  # La ruta EXACTA donde está tu index.html (Opción A)
+  publish = "dist/finance-manager-ui/browser"
+
+# ESTO ES MAGIA: Evita el error 404 al recargar la página
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
