@@ -36,14 +36,28 @@ export class RegisterComponent {
       error: (err) => {
         console.error("Error : ", err);
 
-        if (typeof err.error === 'string') { // Caso A: El backend envía un mensaje simple (Ej: "El email ya está en uso")
+        if (typeof err.error === 'string') {
           this.errorMessage = err.error;
-        } else if (Array.isArray(err.error)) { // Caso B: El backend envía una lista de errores (Ej: Password débil)
-          this.errorMessage = err.error.map((e: any) => e.description).join(' ');
+        } else if (Array.isArray(err.error)) { 
+          
+          this.errorMessage = err.error.map((e: any) => {
+            // El código 'InvalidUserName' es el que usa .NET cuando hay caracteres raros o ESPACIOS
+            if (e.code === 'InvalidUserName') {
+              return "⛔ El nombre de usuario NO puede tener espacios ni símbolos (solo letras y números).";
+            }
+            // Si el error es otro (ej: PasswordTooShort), dejamos el mensaje original o lo traducimos también
+            if (e.code === 'PasswordTooShort') {
+              return "⛔ La contraseña es muy corta.";
+            }
+            
+            return e.description; // Para cualquier otro error, mostramos el que viene del servidor
+          }).join(' ');
+          // ----------------------------------------------------
+
         } else {
-          this.errorMessage = "Ocurrió un error inesperado. Intenta de nuevo.";// Caso C: Error genérico (Servidor apagado, etc.)
-        } 
-        
+          this.errorMessage = "Ocurrió un error inesperado en el servidor. Intenta de nuevo.";
+        }
+
         // 5. Apagamos la carga
         this.isLoading = false;
       }
