@@ -131,15 +131,20 @@ export class DashboardComponent implements OnInit {
         this.totalSpent += t.amount;
       }
     });
+
+    const limitWithBuffer =  this.totalIncome * 1.20;
+
     
     //logica de reglas impuestas dispuestas
-    if (this.totalSpent < 120) {
+    if (this.totalSpent < this.totalIncome) {
       this.alertMessage = "Vamos bien. Intentemos no pasarnos!"
-    } else if (this.totalSpent >= 120 && this.totalSpent < 150) {
+      this.alertColor = 'green';
+
+    } else if (this.totalSpent >= this.totalIncome && this.totalSpent <= limitWithBuffer ) {
       this.alertMessage = "Llegamos al limite. Hasta ahi, ya no gastemos mas!"
       this.alertColor = 'orange';
     } else {
-      this.alertMessage = '¡ALERTA ROJA! Te has pasado del presupuesto.';
+      this.alertMessage = '¡ALERTA ROJA! Te has pasado del presupuesto. Estas en deficit, gastas mas de lo tienes!';
       this.alertColor = 'red';
     }
 
