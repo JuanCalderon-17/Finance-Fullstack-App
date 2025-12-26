@@ -10,74 +10,70 @@
 </nav>
 
 <div class="container">
-  <div class="flex justify-end mb-4">
-    <button (click)="toggleCurrency()" 
-            class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition flex items-center gap-2 border border-gray-600">
+  
+  <div class="d-flex justify-content-end mb-3">
+    <button (click)="toggleCurrency()" class="btn btn-outline-dark d-flex align-items-center gap-2">
         <i class="fas fa-exchange-alt"></i> 
-        <span>{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
+        <span class="fw-bold">{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
     </button>
   </div>
 
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card shadow border-0 text-white" 
-           style="background: linear-gradient(to right, #1a1a2e, #16213e);"> 
-        <div class="card-body py-4">
-          <div class="row align-items-center">
+  <div class="card shadow border-0 text-white mb-4" style="background-color: #1a1a2e;">
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        
+        <div class="col-md-6 border-end border-secondary border-opacity-25 text-center">
             
-            <div class="col-md-6 border-end border-secondary border-opacity-50 text-center">
-              <div class="flex justify-between items-center mb-6">
-                <div class="text-center w-1/2 border-r border-gray-700">
-                    <p class="text-gray-400 text-sm uppercase tracking-wider">Ingresos</p>
-                    <p class="text-3xl font-bold text-green-400">
+            <div class="row mb-4">
+                <div class="col-6 border-end border-secondary border-opacity-25">
+                    <p class="text-secondary small text-uppercase mb-1">Ingresos</p>
+                    <h3 class="fw-bold text-success">
                         {{ (totalIncome * exchangeRate) | currency:currencySymbol }}
-                    </p>
+                    </h3>
                 </div>
-                <div class="text-center w-1/2">
-                    <p class="text-gray-400 text-sm uppercase tracking-wider">Gastos</p>
-                    <p class="text-3xl font-bold text-red-400">
+                <div class="col-6">
+                    <p class="text-secondary small text-uppercase mb-1">Gastos</p>
+                    <h3 class="fw-bold text-danger">
                         {{ (totalSpent * exchangeRate) | currency:currencySymbol }}
+                    </h3>
+                </div>
+            </div>
+
+            <div class="alert py-2 mb-4" 
+                 [ngClass]="{
+                    'alert-success': alertColor === 'green',
+                    'alert-warning': alertColor === 'orange',
+                    'alert-danger': alertColor === 'red'
+                 }" role="alert">
+                <small><i class="bi bi-info-circle me-1"></i> {{ alertMessage }}</small>
+            </div>
+
+            <div class="card bg-primary bg-gradient text-white border-0 shadow-sm">
+                <div class="card-body py-3">
+                    <p class="small text-uppercase text-white-50 mb-1 fw-bold">Disponible / Ahorro</p>
+                    <h2 class="display-6 fw-bold mb-0">
+                        {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
+                    </h2>
+                    <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0">
+                        Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong>
                     </p>
                 </div>
             </div>
-              
-              <hr class="border-secondary mx-auto opacity-50 my-4" style="width: 80%;">
-              
-              <div class="small opacity-75">
-                <i class="bi bi-info-circle me-1"></i> {{ alertMessage }}
-              </div>
+
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0">
+            <div *ngIf="totalSpent > 0" class="p-3 bg-white rounded-4 shadow-sm" style="max-width: 320px; width: 100%;">
+                <div style="height: 200px;">
+                    <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"></canvas>
+                </div>
             </div>
             
-            <div class="bg-indigo-600 rounded-xl p-4 text-center shadow-inner relative overflow-hidden group col-md-10 mx-auto mt-3 mt-md-0">
-                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition duration-500"></div>
-                
-                <p class="text-indigo-200 text-sm font-semibold uppercase mb-1">Disponible / Ahorro</p>
-                
-                <h2 class="text-4xl font-extrabold text-white">
-                    {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
-                </h2>
-
-                <p class="text-xs text-indigo-300 mt-2" *ngIf="totalIncome > 0">
-                    Estás ahorrando el {{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }} de tus ingresos
-                </p>
-            </div>
-
-            <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0">
-              <div *ngIf="totalSpent > 0" 
-                   class="d-flex justify-content-center align-items-center p-3"
-                   style="background-color: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
-                <div style="height: 200px; width: 320px;">
-                  <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"></canvas>
-                </div>
-              </div>
-
-              <div *ngIf="totalSpent === 0" class="text-center opacity-50">
+            <div *ngIf="totalSpent === 0" class="text-center text-secondary opacity-50">
                 <p class="mb-0">Sin gastos para mostrar 📉</p>
-              </div>
             </div>
-
-          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -123,10 +119,8 @@
             </div>
 
             <div class="d-grid gap-2 mt-4">
-              <button type="submit" class="btn text-white"
-                [ngClass]="isEditing ? 'btn-warning text-dark' : ''"
-                [style.background-color]="isEditing ? '' : '#303134'"
-                [style.border-color]="isEditing ? '' : '#303134'">
+              <button type="submit" class="btn"
+                [ngClass]="isEditing ? 'btn-warning' : 'btn-dark'">
                 {{ isEditing ? 'Actualizar' : 'Agregar' }}
               </button>
 
@@ -147,13 +141,13 @@
           <span class="fw-bold">📜 Historial</span>
           
           <div class="d-flex gap-2">
-            <select class="form-select form-select-sm" style="width: 130px;" [(ngModel)]="selectedPeriod" (change)="applyFilters()">
+             <select class="form-select form-select-sm" style="width: 130px;" [(ngModel)]="selectedPeriod" (change)="applyFilters()">
               <option value="all">Mes</option>
               <option value="1">1ª Pago Fin Mes.</option>
               <option value="2">2ª Quincena.</option>
             </select>
 
-            <select class="form-select form-select-sm" [(ngModel)]="selectedMonth" (change)="applyFilters()">
+            <select class="form-select form-select-sm" style="width: 80px;" [(ngModel)]="selectedMonth" (change)="applyFilters()">
               <option [value]="0">Ene</option>
               <option [value]="1">Feb</option>
               <option [value]="2">Mar</option>
@@ -167,16 +161,16 @@
               <option [value]="10">Nov</option>
               <option [value]="11">Dic</option>
             </select>
-             <select class="form-select form-select-sm" [(ngModel)]="selectedYear" (change)="applyFilters()">
+            <select class="form-select form-select-sm" style="width: 80px;" [(ngModel)]="selectedYear" (change)="applyFilters()">
                 <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-              </select>
+            </select>
           </div>
         </div>
 
         <div class="card-body p-0 table-responsive"> 
           
           <div *ngIf="filteredTransactions.length === 0" class="text-center py-5 text-muted">
-            <p>Sin datos.</p>
+            <p>Sin datos este mes.</p>
           </div>
 
           <table class="table table-hover mb-0 align-middle" *ngIf="filteredTransactions.length > 0">
@@ -195,13 +189,17 @@
                 <td class="fw-bold text-truncate" style="max-width: 150px;">{{ t.description }}</td>
                 <td><span class="badge bg-secondary rounded-pill">{{ t.category }}</span></td>
                 
-                <td class="text-end" [style.color]="incomeCategories.includes(t.category) ? 'green' : 'red'">
+                <td class="text-end fw-bold" [style.color]="incomeCategories.includes(t.category) ? '#198754' : '#dc3545'">
                   {{ (t.amount * exchangeRate) | currency:currencySymbol }}
                 </td>
                 
                 <td class="text-center">
-                  <button class="btn btn-dark btn-sm me-1" (click)="edit(t)">✏️</button>
-                  <button class="btn btn-danger btn-sm" (click)="deleteTransaction(t.id)">🗑️</button>
+                  <button class="btn btn-outline-dark btn-sm me-1" (click)="edit(t)">
+                    <i class="bi bi-pencil-fill"></i>
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="deleteTransaction(t.id)">
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>
