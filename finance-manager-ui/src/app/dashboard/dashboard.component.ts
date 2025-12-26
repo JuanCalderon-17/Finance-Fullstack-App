@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
   currencyCode : string = 'USD'; //iniciamos en dolares
   currencySymbol : string = '$';
   exchangeRate : number = 1;
-  readonly USD_TO_BRL_RATE = 6.0; //tasa de conversion
+  readonly USD_TO_BRL_RATE = 6.5; //tasa de conversion
 
 
   constructor(private transactionService: TransactionService, private router: Router) { 

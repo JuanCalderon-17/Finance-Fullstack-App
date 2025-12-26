@@ -1,21 +1,32 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow" style="padding-top: 0.75rem; padding-bottom: 0.75rem;">
   <div class="container">
-    <a class="navbar-brand fw-bold text-white fs-4" href="#">
-      💰 Finance Manager
+    <a class="navbar-brand fw-bold text-white fs-4 d-flex align-items-center gap-2" href="#">
+      <span>💰</span> Finance Manager
     </a>
 
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-3">
         
         <button (click)="toggleCurrency()" 
-                class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
-                title="Cambiar Moneda">
-            <i class="fas fa-exchange-alt"></i> 
-            <span class="fw-bold">{{ currencyCode === 'USD' ? 'USD' : 'BRL' }}</span>
-            <span class="small">{{ currencyCode === 'USD' ? '🇺🇸' : '🇧🇷' }}</span>
+                class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2"
+                style="background-color: rgba(255, 255, 255, 0.15); border: none; padding: 6px 16px; transition: all 0.2s ease;"
+                onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.25)'"
+                onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'"
+                title="Cambiar divisa">
+            
+            <span style="font-size: 1.2em;">{{ currencyCode === 'USD' ? '🇺🇸' : '🇧🇷' }}</span>
+            
+            <span class="fw-bold small" style="letter-spacing: 0.5px;">
+                {{ currencyCode }}
+            </span>
+            
+            <i class="fas fa-chevron-down" style="font-size: 0.7em; opacity: 0.7;"></i>
         </button>
 
-        <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="logout()">
-          <i class="bi bi-box-arrow-right"></i> Salir
+        <div style="width: 1px; height: 24px; background-color: rgba(255,255,255,0.2);"></div>
+
+        <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 rounded-pill px-3" (click)="logout()">
+          <span class="small fw-bold">Log Out</span>
+          <i class="bi bi-box-arrow-right"></i> 
         </button>
     </div>
   </div>
