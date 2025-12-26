@@ -217,6 +217,16 @@ export class DashboardComponent implements OnInit {
   addTransaction() {
     this.newTransaction.amount = Number(this.newTransaction.amount); // Convertimos el monto a número por si acaso
 
+    if (!this.newTransaction.description || this.newTransaction.description.trim() === '') {
+      alert('⚠️Porfavor agrega una descripción para el movimiento.')
+      return; 
+    }
+
+    if (!this.newTransaction.amount || this.newTransaction.amount <= 0) {
+      alert('⚠️ El monto debe ser mayor a 0.')
+      return;
+    }
+
     if (this.isEditing && this.editingId) {
       this.transactionService.updateTransaction(this.editingId, this.newTransaction).subscribe({
         next: () => {

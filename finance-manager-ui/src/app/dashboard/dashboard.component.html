@@ -146,8 +146,11 @@
             </div>
 
             <div class="d-grid gap-2 mt-4">
-              <button type="submit" class="btn"
-                [ngClass]="isEditing ? 'btn-warning' : 'btn-dark'">
+              <button type="submit" class="btn text-white"
+                [ngClass]="isEditing ? 'btn-warning text-dark' : ''"
+                [style.background-color]="isEditing ? '' : '#303134'"
+                
+                [disabled]="!newTransaction.description || newTransaction.amount <= 0">
                 {{ isEditing ? 'Actualizar' : 'Agregar' }}
               </button>
 
