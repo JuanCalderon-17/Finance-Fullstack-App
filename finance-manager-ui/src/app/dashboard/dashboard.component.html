@@ -3,6 +3,12 @@
     <a class="navbar-brand fw-bold text-white fs-4" href="#">
       💰 Finance Manager
     </a>
+    <div class="d-flex justify-content-end mb-3">
+    <button (click)="toggleCurrency()" class="btn btn-outline-dark d-flex align-items-center gap-2">
+        <i class="fas fa-exchange-alt"></i> 
+        <span class="fw-bold">{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
+    </button>
+  </div>
     <button class="btn btn-outline-light btn-sm" (click)="logout()">
       Cerrar Sesión
     </button>
@@ -10,13 +16,7 @@
 </nav>
 
 <div class="container">
-  
-  <div class="d-flex justify-content-end mb-3">
-    <button (click)="toggleCurrency()" class="btn btn-outline-dark d-flex align-items-center gap-2">
-        <i class="fas fa-exchange-alt"></i> 
-        <span class="fw-bold">{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
-    </button>
-  </div>
+
 
   <div class="card shadow border-0 text-white mb-4" style="background-color: #1a1a2e;">
     <div class="card-body p-4">
@@ -54,8 +54,11 @@
                     <h2 class="display-6 fw-bold mb-0">
                         {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
                     </h2>
-                    <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0">
+                    <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0  && totalSpent <= totalIncome">
                         Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong>
+                    </p>
+                    <p class="small text-warning mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
+                        ⚠️ Te has excedido un <strong>{{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}</strong> de tu presupuesto.
                     </p>
                 </div>
             </div>
