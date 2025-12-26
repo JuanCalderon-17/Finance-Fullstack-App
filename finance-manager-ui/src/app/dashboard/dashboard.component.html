@@ -16,7 +16,8 @@
         <i class="fas fa-exchange-alt"></i> 
         <span>{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
     </button>
-</div>
+  </div>
+
   <div class="row mb-4">
     <div class="col-12">
       <div class="card shadow border-0 text-white" 
@@ -46,8 +47,8 @@
                 <i class="bi bi-info-circle me-1"></i> {{ alertMessage }}
               </div>
             </div>
-
-            <div class="bg-indigo-600 rounded-xl p-4 text-center shadow-inner relative overflow-hidden group">
+            
+            <div class="bg-indigo-600 rounded-xl p-4 text-center shadow-inner relative overflow-hidden group col-md-10 mx-auto mt-3 mt-md-0">
                 <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition duration-500"></div>
                 
                 <p class="text-indigo-200 text-sm font-semibold uppercase mb-1">Disponible / Ahorro</p>
@@ -61,16 +62,13 @@
                 </p>
             </div>
 
-            <div class="col-md-6 d-flex justify-content-center align-items-center">
-              
+            <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0">
               <div *ngIf="totalSpent > 0" 
                    class="d-flex justify-content-center align-items-center p-3"
                    style="background-color: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
-                
                 <div style="height: 200px; width: 320px;">
                   <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"></canvas>
                 </div>
-
               </div>
 
               <div *ngIf="totalSpent === 0" class="text-center opacity-50">
@@ -85,10 +83,8 @@
   </div>
 
   <div class="row">
-    
     <div class="col-lg-4 col-md-5 mb-4">
       <div class="card shadow-sm border-0 h-100">
-        
         <div class="card-header bg-white fw-bold" [class.text-primary]="isEditing">
           {{ isEditing ? '✏️ Editando' : '➕ Nuevo Movimiento' }}
         </div>
@@ -104,7 +100,7 @@
             <div class="mb-3">
               <label class="form-label">Monto ($)</label>
               <input type="number" class="form-control" placeholder="0.00" 
-                      [(ngModel)]="newTransaction.amount" name="amount" required>
+                     [(ngModel)]="newTransaction.amount" name="amount" required>
             </div>
 
             <div class="mb-3">
@@ -198,9 +194,11 @@
                 <td class="text-muted small">{{ t.transactionDate | date:'dd/MM' }}</td>
                 <td class="fw-bold text-truncate" style="max-width: 150px;">{{ t.description }}</td>
                 <td><span class="badge bg-secondary rounded-pill">{{ t.category }}</span></td>
+                
                 <td class="text-end" [style.color]="incomeCategories.includes(t.category) ? 'green' : 'red'">
-                    {{ (t.amount * exchangeRate) | currency:currencySymbol }}
+                  {{ (t.amount * exchangeRate) | currency:currencySymbol }}
                 </td>
+                
                 <td class="text-center">
                   <button class="btn btn-dark btn-sm me-1" (click)="edit(t)">✏️</button>
                   <button class="btn btn-danger btn-sm" (click)="deleteTransaction(t.id)">🗑️</button>
