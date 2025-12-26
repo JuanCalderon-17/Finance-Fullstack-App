@@ -178,12 +178,14 @@ export class DashboardComponent implements OnInit {
 
     this.filteredTransactions.forEach(t => {
       // Si la categoría no existe en el acumulador, la inicializamos
-      if(!this.incomeCategories.includes(t.category))
+      if(!this.incomeCategories.includes(t.category)) {
+
         if(!categoryTotals[t.category]) {
           categoryTotals[t.category] = 0;
         }
         //Sumamo el monto
         categoryTotals[t.category] += t.amount;
+      }
     })
 
     // Extraemos las llaves Categorías y valores Montos
