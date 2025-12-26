@@ -48,21 +48,23 @@
                 <small><i class="bi bi-info-circle me-1"></i> {{ alertMessage }}</small>
             </div>
 
-            <div class="card bg-primary bg-gradient text-white border-0 shadow-sm">
-                <div class="card-body py-3">
-                    <p class="small text-uppercase text-white-50 mb-1 fw-bold">Disponible / Ahorro</p>
-                    <h2 class="display-6 fw-bold mb-0">
-                        {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
-                    </h2>
-                    <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0  && totalSpent <= totalIncome">
-                        Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong>
-                    </p>
-                    <p class="small text-warning mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
-                        ⚠️ Te has excedido un <strong>{{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}</strong> de tu presupuesto.
-                    </p>
-                </div>
-            </div>
+            <div class="card-body py-3">
+                <p class="small text-uppercase text-white-50 mb-1 fw-bold">
+                    {{ totalIncome >= totalSpent ? 'Disponible / Ahorro' : '⚠️ Déficit / Deuda' }}
+                </p>
 
+                <h2 class="display-6 fw-bold mb-0">
+                    {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
+                </h2>
+
+                <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent <= totalIncome">
+                    Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong> de tus ingresos
+                </p>
+
+                <p class="small text-warning mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
+                    ⚠️ Te has excedido un <strong>{{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}</strong> de tu presupuesto
+                </p>
+            </div>
         </div>
 
         <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0">
