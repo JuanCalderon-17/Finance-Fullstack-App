@@ -7,19 +7,21 @@
     <div class="d-flex align-items-center gap-3">
         
         <button (click)="toggleCurrency()" 
-                class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2"
-                style="background-color: rgba(255, 255, 255, 0.15); border: none; padding: 6px 16px; transition: all 0.2s ease;"
-                onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.25)'"
-                onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'"
-                title="Cambiar divisa">
-            
-            <span style="font-size: 1.2em;">{{ currencyCode === 'USD' ? '🇺🇸' : '🇧🇷' }}</span>
-            
-            <span class="fw-bold small" style="letter-spacing: 0.5px;">
-                {{ currencyCode }}
-            </span>
-            
-            <i class="fas fa-chevron-down" style="font-size: 0.7em; opacity: 0.7;"></i>
+          class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2"
+          style="background-color: rgba(255, 255, 255, 0.15); border: none; padding: 6px 16px; transition: all 0.2s ease;"
+          onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.25)'"
+          onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'"
+          title="Cambiar divisa">
+      
+          <img [src]="currencyCode === 'USD' ? 'https://flagcdn.com/w40/us.png' : 'https://flagcdn.com/w40/br.png'" 
+              alt="flag" 
+              style="width: 22px; border-radius: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+          
+          <span class="fw-bold small" style="letter-spacing: 0.5px;">
+              {{ currencyCode }}
+          </span>
+          
+          <i class="fas fa-chevron-down" style="font-size: 0.7em; opacity: 0.7;"></i>
         </button>
 
         <div style="width: 1px; height: 24px; background-color: rgba(255,255,255,0.2);"></div>
