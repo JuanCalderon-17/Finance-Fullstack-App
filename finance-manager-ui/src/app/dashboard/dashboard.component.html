@@ -10,7 +10,13 @@
 </nav>
 
 <div class="container">
-  
+  <div class="flex justify-end mb-4">
+    <button (click)="toggleCurrency()" 
+            class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition flex items-center gap-2 border border-gray-600">
+        <i class="fas fa-exchange-alt"></i> 
+        <span>{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
+    </button>
+</div>
   <div class="row mb-4">
     <div class="col-12">
       <div class="card shadow border-0 text-white" 
@@ -19,22 +25,40 @@
           <div class="row align-items-center">
             
             <div class="col-md-6 border-end border-secondary border-opacity-50 text-center">
-              <div class="row">
-                <div class="col-6">
-                  <h6 class="text-uppercase opacity-75 mb-1" style="font-size: 0.8rem; letter-spacing: 1px;">Ingresos</h6>
-                  <h2 class="fw-bold text-success mb-0"> +${{ totalIncome | number:'1.2-2' }}</h2>
+              <div class="flex justify-between items-center mb-6">
+                <div class="text-center w-1/2 border-r border-gray-700">
+                    <p class="text-gray-400 text-sm uppercase tracking-wider">Ingresos</p>
+                    <p class="text-3xl font-bold text-green-400">
+                        {{ (totalIncome * exchangeRate) | currency:currencySymbol }}
+                    </p>
                 </div>
-                <div class="col-6">
-                  <h6 class="text-uppercase opacity-75 mb-1" style="font-size: 0.8rem; letter-spacing: 1px;">Gastos</h6>
-                  <h2 class="fw-bold mb-0" [style.color]="alertColor"> -${{ totalSpent | number:'1.2-2' }}</h2>
+                <div class="text-center w-1/2">
+                    <p class="text-gray-400 text-sm uppercase tracking-wider">Gastos</p>
+                    <p class="text-3xl font-bold text-red-400">
+                        {{ (totalSpent * exchangeRate) | currency:currencySymbol }}
+                    </p>
                 </div>
-              </div>
+            </div>
               
               <hr class="border-secondary mx-auto opacity-50 my-4" style="width: 80%;">
               
               <div class="small opacity-75">
                 <i class="bi bi-info-circle me-1"></i> {{ alertMessage }}
               </div>
+            </div>
+
+            <div class="bg-indigo-600 rounded-xl p-4 text-center shadow-inner relative overflow-hidden group">
+                <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition duration-500"></div>
+                
+                <p class="text-indigo-200 text-sm font-semibold uppercase mb-1">Disponible / Ahorro</p>
+                
+                <h2 class="text-4xl font-extrabold text-white">
+                    {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
+                </h2>
+
+                <p class="text-xs text-indigo-300 mt-2" *ngIf="totalIncome > 0">
+                    Estás ahorrando el {{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }} de tus ingresos
+                </p>
             </div>
 
             <div class="col-md-6 d-flex justify-content-center align-items-center">
@@ -174,8 +198,8 @@
                 <td class="text-muted small">{{ t.transactionDate | date:'dd/MM' }}</td>
                 <td class="fw-bold text-truncate" style="max-width: 150px;">{{ t.description }}</td>
                 <td><span class="badge bg-secondary rounded-pill">{{ t.category }}</span></td>
-                <td class="text-end" [style.color]="t.amount > 0 ? 'green' : 'red'">
-                  ${{ t.amount | number:'1.2-2' }}
+                <td class="text-end" [style.color]="incomeCategories.includes(t.category) ? 'green' : 'red'">
+                    {{ (t.amount * exchangeRate) | currency:currencySymbol }}
                 </td>
                 <td class="text-center">
                   <button class="btn btn-dark btn-sm me-1" (click)="edit(t)">✏️</button>

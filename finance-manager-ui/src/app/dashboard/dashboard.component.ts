@@ -62,6 +62,10 @@ export class DashboardComponent implements OnInit {
   alertColor: string = 'green';
   isEditing : boolean = false;
   editingId : number | null = null;
+  currencyCode : string = 'USD'; //iniciamos en dolares
+  currencySymbol : string = '$';
+  exchangeRate : number = 1;
+  readonly USD_TO_BRL_RATE = 6.0; //tasa de conversion
 
 
   constructor(private transactionService: TransactionService, private router: Router) { 
@@ -80,6 +84,22 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadTransactions();
   }
+
+
+  toggleCurrency() {
+    if( this.currencyCode === 'USD') {
+      this.currencyCode  = 'BRL';
+      this.currencySymbol = 'R$';
+      this.exchangeRate = this.USD_TO_BRL_RATE;
+    }
+    else {
+      //si ya estamos en BRL, volvemos a Dolares
+      this.currencyCode  = 'USD';
+      this.currencySymbol = '$';
+      this.exchangeRate = 1;
+    }
+  }
+
 
   loadTransactions() {
     this.transactionService.getTransactions().subscribe({
@@ -118,39 +138,38 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
   calculateStats() {
     this.totalSpent = 0;
     this.totalIncome = 0;
 
+    // 1. Sumamos todo (en Dólares, que es como viene de la BD)
     this.filteredTransactions.forEach(t => {
-      //separo ingresos e egresos
       if (this.incomeCategories.includes(t.category)) {
         this.totalIncome += t.amount;
       } else {
         this.totalSpent += t.amount;
       }
     });
-
-    const limitWithBuffer =  this.totalIncome * 1.20;
-
     
-    //logica de reglas impuestas dispuestas
-    if (this.totalSpent < this.totalIncome) {
-      this.alertMessage = "Vamos bien. Intentemos no pasarnos!"
-      this.alertColor = 'green';
+    // 2. Calculamos el límite con el margen del 10%
+    const limitWithBuffer = this.totalIncome * 1.10; 
 
-    } else if (this.totalSpent >= this.totalIncome && this.totalSpent <= limitWithBuffer ) {
-      this.alertMessage = "Llegamos al limite. Hasta ahi, ya no gastemos mas!"
+    // 3. Decidimos el color del semáforo
+    if (this.totalSpent <= this.totalIncome) {
+      this.alertMessage = "Vamos bien. ¡Estás dentro de tus posibilidades!";
+      this.alertColor = 'green';
+    } else if (this.totalSpent > this.totalIncome && this.totalSpent <= limitWithBuffer) {
+      const diff = (this.totalSpent - this.totalIncome) * this.exchangeRate; // Opcional: mostrar diff ajustada
+      this.alertMessage = `Cuidado: Te has pasado un poco. ¡Frena los gastos!`;
       this.alertColor = 'orange';
     } else {
-      this.alertMessage = '¡ALERTA ROJA! Te has pasado del presupuesto. Estas en deficit, gastas mas de lo tienes!';
+      this.alertMessage = '¡ALERTA ROJA! Has superado tu límite de seguridad del 10%.';
       this.alertColor = 'red';
     }
 
-
     this.updateChart();
   }
+
 
 
 
