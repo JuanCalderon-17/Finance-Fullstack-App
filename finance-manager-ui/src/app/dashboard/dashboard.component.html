@@ -3,22 +3,27 @@
     <a class="navbar-brand fw-bold text-white fs-4" href="#">
       💰 Finance Manager
     </a>
-    <div class="d-flex justify-content-end mb-3">
-    <button (click)="toggleCurrency()" class="btn btn-outline-dark d-flex align-items-center gap-2">
-        <i class="fas fa-exchange-alt"></i> 
-        <span class="fw-bold">{{ currencyCode === 'USD' ? '🇺🇸 USD' : '🇧🇷 BRL' }}</span>
-    </button>
-  </div>
-    <button class="btn btn-outline-light btn-sm" (click)="logout()">
-      Cerrar Sesión
-    </button>
+
+    <div class="d-flex align-items-center gap-2">
+        
+        <button (click)="toggleCurrency()" 
+                class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
+                title="Cambiar Moneda">
+            <i class="fas fa-exchange-alt"></i> 
+            <span class="fw-bold">{{ currencyCode === 'USD' ? 'USD' : 'BRL' }}</span>
+            <span class="small">{{ currencyCode === 'USD' ? '🇺🇸' : '🇧🇷' }}</span>
+        </button>
+
+        <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Salir
+        </button>
+    </div>
   </div>
 </nav>
 
 <div class="container">
 
-
-  <div class="card shadow border-0 text-white mb-4" style="background-color: #1a1a2e;">
+  <div class="card shadow border-0 text-white mb-4" style="background: linear-gradient(to right, #1a1a2e, #16213e);">
     <div class="card-body p-4">
       <div class="row align-items-center">
         
@@ -48,33 +53,37 @@
                 <small><i class="bi bi-info-circle me-1"></i> {{ alertMessage }}</small>
             </div>
 
-            <div class="card-body py-3">
-                <p class="small text-uppercase text-white-50 mb-1 fw-bold">
-                    {{ totalIncome >= totalSpent ? 'Disponible / Ahorro' : '⚠️ Déficit / Deuda' }}
-                </p>
+            <div class="card border-0 shadow-sm"
+                 [ngClass]="totalIncome >= totalSpent ? 'bg-primary bg-gradient' : 'bg-danger bg-gradient'">
+                
+                <div class="card-body py-3">
+                    <p class="small text-uppercase text-white-50 mb-1 fw-bold">
+                        {{ totalIncome >= totalSpent ? 'Disponible / Ahorro' : '⚠️ Déficit / Deuda' }}
+                    </p>
 
-                <h2 class="display-6 fw-bold mb-0">
-                    {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
-                </h2>
+                    <h2 class="display-6 fw-bold mb-0 text-white">
+                        {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
+                    </h2>
 
-                <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent <= totalIncome">
-                    Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong> de tus ingresos
-                </p>
+                    <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent <= totalIncome">
+                        Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong>
+                    </p>
 
-                <p class="small text-warning mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
-                    ⚠️ Te has excedido un <strong>{{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}</strong> de tu presupuesto
-                </p>
+                    <p class="small text-white mt-2 mb-0 fw-bold" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
+                        Te has excedido un {{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}
+                    </p>
+                </div>
             </div>
+
         </div>
 
         <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0">
-            <div *ngIf="totalSpent > 0" class="p-3 bg-white rounded-4 shadow-sm" style="max-width: 320px; width: 100%;">
+            <div *ngIf="totalSpent > 0" class="p-3 bg-white rounded-4 shadow-sm" style="width: 100%; max-width: 320px;">
                 <div style="height: 200px;">
                     <canvas baseChart [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"></canvas>
                 </div>
             </div>
-            
-            <div *ngIf="totalSpent === 0" class="text-center text-secondary opacity-50">
+            <div *ngIf="totalSpent === 0" class="text-white-50 opacity-50">
                 <p class="mb-0">Sin gastos para mostrar 📉</p>
             </div>
         </div>
