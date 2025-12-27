@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common'; // Importante para usar *ngFor
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../core/services/transaction.service';
 import { Transaction } from '../shared/models/transaction.model';
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective], 
+  imports: [CommonModule, FormsModule, BaseChartDirective, RouterLink], 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

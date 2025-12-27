@@ -1,1 +1,127 @@
-<p>debts works!</p>
+<div class="bg-dark text-white py-4 mb-4 shadow">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div>
+      <h2 class="fw-bold mb-0">💳 Mis Deudas</h2>
+      <p class="text-white-50 mb-0 small">Controla tu camino hacia la libertad financiera</p>
+    </div>
+    <a routerLink="/dashboard" class="btn btn-outline-light btn-sm">
+      <i class="bi bi-arrow-left"></i> Volver al Dashboard
+    </a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white fw-bold text-primary">
+          ➕ Nueva Deuda
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="addDebt()">
+            
+            <div class="mb-3">
+              <label class="form-label small">Nombre de la Deuda</label>
+              <input type="text" class="form-control" placeholder="Ej: Tarjeta Visa..." 
+                     [(ngModel)]="newDebt.name" name="name" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small">Monto Total ($)</label>
+              <input type="number" class="form-control" placeholder="0.00" 
+                     [(ngModel)]="newDebt.totalAmount" name="total" required>
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label small">Interés Anual (%)</label>
+                <input type="number" class="form-control" placeholder="0%" 
+                       [(ngModel)]="newDebt.interestRate" name="rate">
+                <div class="form-text x-small">Pon 0 si no tiene.</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label small">Plazo (Meses)</label>
+                <input type="number" class="form-control" placeholder="12" 
+                       [(ngModel)]="newDebt.installments" name="months">
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" 
+                      [disabled]="!newDebt.name || newDebt.totalAmount <= 0">
+                Guardar Deuda
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      
+      <div *ngIf="debts.length === 0" class="alert alert-info text-center">
+        ¡Felicidades! No tienes deudas registradas. (O aún no has agregado ninguna 😉)
+      </div>
+
+      <div class="card shadow-sm border-0 mb-3" *ngFor="let d of debts; let i = index">
+        <div class="card-body">
+          
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <h5 class="fw-bold mb-0 text-dark">{{ d.name }}</h5>
+              <span class="badge bg-light text-dark border mt-1">
+                {{ d.interestRate }}% Interés
+              </span>
+              <span class="badge bg-light text-dark border mt-1 ms-1">
+                {{ d.installments }} Cuotas
+              </span>
+            </div>
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteDebt(i)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+
+          <hr class="opacity-25">
+
+          <div class="row align-items-center">
+            <div class="col-md-5 mb-3 mb-md-0">
+              <p class="mb-1 small text-muted">Cuota Mensual Estimada:</p>
+              <h3 class="fw-bold text-primary mb-0">
+                {{ d.monthlyPayment | currency }}
+              </h3>
+              <small class="text-muted">Total deuda: {{ d.totalAmount | currency }}</small>
+            </div>
+
+            <div class="col-md-7">
+              <div class="d-flex justify-content-between small mb-1">
+                <span>Progreso de Pago:</span>
+                <span class="fw-bold">{{ d.progress | number:'1.0-0' }}%</span>
+              </div>
+              
+              <div class="progress" style="height: 20px; border-radius: 10px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                     role="progressbar" 
+                     [style.width.%]="d.progress">
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <label class="form-label x-small text-muted mb-0">
+                  Simular Cuotas Pagadas: <strong>{{ d.paidInstallments }}</strong> / {{ d.installments }}
+                </label>
+                <input type="range" class="form-range" 
+                       [min]="0" [max]="d.installments" 
+                       [(ngModel)]="d.paidInstallments" 
+                       (input)="calculateDebtMetrics(d)">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
