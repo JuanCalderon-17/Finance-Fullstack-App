@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { DebtsComponent } from './pages/debts/debts.component';
 
 export const routes: Routes = [
   
@@ -21,6 +22,12 @@ export const routes: Routes = [
     loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard] // AQUÍ PONEMOS AL GUARDIA!
   },
+
+  {
+    path: 'debts',
+    loadComponent: () => import('./pages/debts/debts.component').then(m => m.DebtsComponent),
+    canActivate: [authGuard]
+  }
 
   {
     path: '',

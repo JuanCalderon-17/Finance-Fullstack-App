@@ -72,7 +72,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularApp",
         policy =>
         {
-            policy.WithOrigins("https://financemanagerv.netlify.app") // La dirección de nuestra app de Angular
+            policy.WithOrigins("https://financemanagerv.netlify.app", "http://localhost:4200") // La dirección de nuestra app de Angular
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
