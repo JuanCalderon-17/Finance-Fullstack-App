@@ -30,6 +30,12 @@ export const routes: Routes = [
   },
 
   {
+    path: 'savings',
+    loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent),
+    canActivate: [authGuard]
+  },
+
+  {
     path: '',
     redirectTo: 'auth/login', // si entran a la raiz del app, esto redirije al login
     pathMatch: 'full'

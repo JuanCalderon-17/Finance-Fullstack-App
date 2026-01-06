@@ -7,11 +7,10 @@ namespace FinanceManager.API.Data
     public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
-        {
-        }
+            : base(options) {}
 
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<SavingsAccount> SavingsAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

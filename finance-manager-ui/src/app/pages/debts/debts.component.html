@@ -86,12 +86,31 @@
           <hr class="opacity-25">
 
           <div class="row align-items-center">
+            
             <div class="col-md-5 mb-3 mb-md-0">
-              <p class="mb-1 small text-muted">Cuota Mensual Estimada:</p>
-              <h3 class="fw-bold text-primary mb-0">
-                {{ d.monthlyPayment | currency }}
-              </h3>
-              <small class="text-muted">Total deuda: {{ d.totalAmount | currency }}</small>
+                
+                <div class="row">
+                    <div class="col-6 border-end">
+                        <p class="mb-1 small text-muted fw-bold">Cuota Mensual</p>
+                        <h4 class="fw-bold text-primary mb-0">
+                            {{ d.monthlyPayment | currency }}
+                        </h4>
+                    </div>
+
+                    <div class="col-6">
+                        <p class="mb-1 small text-muted fw-bold">Falta Pagar</p>
+                        <h4 class="fw-bold text-danger mb-0">
+                            {{ d.remainingAmount | currency }}
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="mt-2 pt-2 border-top border-light">
+                    <small class="text-muted text-uppercase x-small" style="font-size: 0.75rem;">
+                        Monto Original Prestado: <strong>{{ d.totalAmount | currency }}</strong>
+                    </small>
+                </div>
+
             </div>
 
             <div class="col-md-7">
@@ -117,6 +136,7 @@
                        (input)="calculateDebtMetrics(d)">
               </div>
             </div>
+
           </div>
 
         </div>

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models; 
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,41 +15,33 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-
-// --- INICIO DE NUESTRO CÓDIGO DE CONFIGURACIÓN ---
-
-// 1. Configuración de la Base de Datos (Compatible con Render y Postgres)
+// --- CONFIGURACIÓN 100% POSTGRESQL (PARA RENDER) ---
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    // 1. Intentamos leer la URL de la base de datos de Render
     var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-    // Si existe la variable DATABASE_URL, significa que estamos en Render
     if (!string.IsNullOrEmpty(dbUrl))
     {
+        // ESTAMOS EN RENDER
         Console.WriteLine("--> Usando Base de Datos de Render (Postgres)");
         var databaseUri = new Uri(dbUrl);
         var userInfo = databaseUri.UserInfo.Split(':');
-
-        // CORRECCIÓN: Si el puerto no viene en la URL (es -1), forzamos el 5432
         var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
 
         connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Require;Trust Server Certificate=true";
     }
 
-    // Importante: Usamos Npgsql en lugar de UseSqlServer
+    // Forzamos el uso de Npgsql (Postgres)
     options.UseNpgsql(connectionString);
 });
+// ----------------------------------------------------
 
-// 2. Configuración de ASP.NET Core Identity
-builder.Services.AddIdentityCore<AppUser>(opt =>
-{
-    opt.Password.RequireNonAlphanumeric = false;
-})
+builder.Services.AddIdentityCore<AppUser>(opt => { opt.Password.RequireNonAlphanumeric = false; })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager<SignInManager<AppUser>>();
 
-// 3. Configuración de la Autenticación con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -62,27 +54,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// 4. Registro de nuestro servicio de tokens
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-
-// 5. Le damos permiso a nuestra app de Angular para que hable con la API
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp",
-        policy =>
-        {
-            policy.WithOrigins("https://financemanagerv.netlify.app", "http://localhost:4200") // La dirección de nuestra app de Angular
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("https://financemanagerv.netlify.app", "http://localhost:4200")
+              .AllowAnyHeader().AllowAnyMethod();
+    });
 });
 
-
-// 6. Configuración de Swagger para que entienda JWT
 builder.Services.AddSwaggerGen(options =>
 {
-    // Definimos el esquema de seguridad "Bearer"
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -90,57 +74,27 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
-    // Añadimos el requisito de que se puede usar este esquema de seguridad
     options.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                },
-                Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header,
-            },
-            new List<string>()
-        }
+        { new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }, Scheme = "oauth2", Name = "Bearer", In = ParameterLocation.Header, }, new List<string>() }
     });
 });
 
-
-
-
-
-
-// --- FIN DE NUESTRO CÓDIGO DE CONFIGURACIÓN ---
-
-
 var app = builder.Build();
 
-// === INICIO: AUTO-MIGRACIÓN (El Robot Obrero) ===
+// === MIGRACIÓN AUTOMÁTICA EN LA NUBE ===
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        // Esto revisa si hay cambios pendientes y crea las tablas si no existen
-        context.Database.Migrate();
-        Console.WriteLine("--> ¡Migraciones aplicadas con éxito en la Nube! ");
+        context.Database.Migrate(); // Esto crea la tabla de Savings en Render
+        Console.WriteLine("--> ¡Migraciones aplicadas en Render!");
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"--> Error aplicando migraciones: {ex.Message}");
-    }
+    catch (Exception ex) { Console.WriteLine($"--> Error migraciones: {ex.Message}"); }
 }
-// === FIN: AUTO-MIGRACIÓN ===
 
-
-// Configuration, the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -148,11 +102,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAngularApp");
-
-// Middleware de Autenticación y Autorización
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

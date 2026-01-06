@@ -6,5 +6,8 @@ namespace FinanceManager.API.Models
     {
         public string FullName { get; set; } = string.Empty;
         //public ICollection<Transaction> Transaction { get; set; } 
+
+
+        public string RecoveryKeyword { get; set; } = string.Empty;
     }
-}
+}   

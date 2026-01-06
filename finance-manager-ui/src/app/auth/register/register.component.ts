@@ -1,8 +1,8 @@
-import { Component  } from "@angular/core";
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../../core/services/auth.service";
-import { RouterModule, Router } from '@angular/router'; // Añade RouterModule
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,27 +11,30 @@ import { RouterModule, Router } from '@angular/router'; // Añade RouterModule
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-
 export class RegisterComponent {
-  model: any = {} 
-  //Variables de Estado
+  
+  model: any = {};
   isLoading: boolean = false;
-  errorMessage:  string | null = null;
-
+  errorMessage: string | null = null;
 
   constructor(private authService: AuthService, private router: Router) { }
   
-  //funcion para llamar servicio
   register() {
     console.log('Enviando datos del registro:', this.model);  
     this.isLoading = true;
     this.errorMessage = null;
 
     this.authService.register(this.model).subscribe({
-      // 'next' se ejecuta si el registro es exitoso
       next: (response) => {
-        console.log('Usuario registrado exitosamente', response)
-        this.router.navigate(['/auth/login']);
+        console.log('Usuario registrado exitosamente', response);
+        
+        // 🛑 PASO 1: Guardar manualmente el usuario/token que nos dio el registro
+        // Esto es crucial para que el AuthGuard encuentre la llave.
+        localStorage.setItem('user', JSON.stringify(response));
+
+        // 🛑 PASO 2: Forzar la recarga de la página hacia el dashboard
+        // Usamos window.location.href en lugar de router.navigate para reiniciar la memoria del AuthGuard
+        window.location.href = '/dashboard';
       },
       error: (err) => {
         console.error("Error : ", err);
@@ -39,28 +42,20 @@ export class RegisterComponent {
         if (typeof err.error === 'string') {
           this.errorMessage = err.error;
         } else if (Array.isArray(err.error)) { 
-          
           this.errorMessage = err.error.map((e: any) => {
-            // El código 'InvalidUserName' es el que usa .NET cuando hay caracteres raros o ESPACIOS
-            if (e.code === 'InvalidUserName') {
-              return "⛔ El nombre de usuario NO puede tener espacios ni símbolos (solo letras y números).";
-            }
-            // Si el error es otro (ej: PasswordTooShort), dejamos el mensaje original o lo traducimos también
-            if (e.code === 'PasswordTooShort') {
-              return "⛔ La contraseña es muy corta.";
-            }
-            
-            return e.description; // Para cualquier otro error, mostramos el que viene del servidor
+            if (e.code === 'InvalidUserName') return "⛔ El nombre de usuario NO puede tener espacios ni símbolos.";
+            if (e.code === 'PasswordTooShort') return "⛔ La contraseña es muy corta.";
+            return e.description; 
           }).join(' ');
-          // ----------------------------------------------------
-
         } else {
-          this.errorMessage = "Ocurrió un error inesperado en el servidor. Intenta de nuevo.";
+          this.errorMessage = "Ocurrió un error inesperado. Intenta de nuevo.";
         }
 
-        // 5. Apagamos la carga
         this.isLoading = false;
       }
     });
   }
-} 
+
+  // ¡AQUÍ YA NO HAY NINGUNA FUNCIÓN loginAfterRegister! 🗑️
+  // Si tenías código aquí abajo, asegúrate de que esté borrado.
+}

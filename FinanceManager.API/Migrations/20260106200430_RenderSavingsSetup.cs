@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceManager.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialPostgres : Migration
+    public partial class RenderSavingsSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,7 @@ namespace FinanceManager.API.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: false),
+                    RecoveryKeyword = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -159,6 +160,30 @@ namespace FinanceManager.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SavingsAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Balance = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    Goal = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    Color = table.Column<string>(type: "text", nullable: false),
+                    Icon = table.Column<string>(type: "text", nullable: false),
+                    AppUserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavingsAccounts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SavingsAccounts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
                 {
@@ -219,6 +244,11 @@ namespace FinanceManager.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SavingsAccounts_AppUserId",
+                table: "SavingsAccounts",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_AppUserId",
                 table: "Transactions",
                 column: "AppUserId");
@@ -241,6 +271,9 @@ namespace FinanceManager.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "SavingsAccounts");
 
             migrationBuilder.DropTable(
                 name: "Transactions");
