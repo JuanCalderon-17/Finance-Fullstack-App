@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using FinanceManager.API.Data;
 using FinanceManager.API.Interfaces;
 using FinanceManager.API.Models;
@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// --- CONFIGURACI�N 100% POSTGRESQL (PARA RENDER) ---
+// --- CONFIGURACIÓN 100% POSTGRESQL (PARA RENDER) ---
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     // 1. Intentamos leer la URL de la base de datos de Render
@@ -56,14 +56,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+// 👇👇👇 AQUÍ ESTÁ EL CAMBIO CLAVE (La Llave Maestra) 👇👇👇
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("https://financemanagerv.netlify.app", "http://localhost:4200")
-              .AllowAnyHeader().AllowAnyMethod();
+        // Permitimos CUALQUIER origen, CUALQUIER cabecera y CUALQUIER método.
+        // Esto elimina el error de bloqueo inmediatamente.
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
+// 👆👆👆 FIN DEL CAMBIO 👆👆👆
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -82,7 +87,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// === MIGRACI�N AUTOM�TICA EN LA NUBE ===
+// === MIGRACIÓN AUTOMÁTICA EN LA NUBE ===
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -90,7 +95,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<AppDbContext>();
         context.Database.Migrate(); // Esto crea la tabla de Savings en Render
-        Console.WriteLine("--> �Migraciones aplicadas en Render!");
+        Console.WriteLine("--> ¡Migraciones aplicadas en Render!");
     }
     catch (Exception ex) { Console.WriteLine($"--> Error migraciones: {ex.Message}"); }
 }
@@ -101,7 +106,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Activamos la política CORS que definimos arriba
 app.UseCors("AllowAngularApp");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
