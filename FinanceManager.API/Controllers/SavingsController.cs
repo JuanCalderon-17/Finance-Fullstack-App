@@ -1,92 +1,90 @@
-﻿using FinanceManager.API.Models;
-using FinanceManager.API.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using FinanceManager.API.Data;
+using FinanceManager.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-
-
 
 namespace FinanceManager.API.Controllers
 {
-    public class SavingsController
+    [Authorize] // 🔒 Protege la ruta: solo usuarios logueados
+    [Route("api/[controller]")] // Esto crea la ruta: api/savings
+    [ApiController]
+    public class SavingsController : ControllerBase
     {
-        [Authorize]
-        [Route("api/[controller]")]
-        [ApiController]
+        private readonly AppDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public class SavingsAccountsController : ControllerBase
+        public SavingsController(AppDbContext context, UserManager<AppUser> userManager)
         {
-            private readonly AppDbContext _context;
-            private readonly UserManager<AppUser> _userManager;
-            public SavingsAccountsController(AppDbContext context, UserManager<AppUser> userManager)
-            {
-                _context = context;
-                _userManager = userManager;
-            }
-            // GET: api/SavingsAccounts
-            [HttpGet]
-            public async Task<ActionResult<IEnumerable<SavingsAccount>>> GetMySavings()
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return await _context.SavingsAccounts
-                    .Where(s => s.AppUserId == userId)
-                    .ToListAsync();
-            }
+            _context = context;
+            _userManager = userManager;
+        }
 
-            // POST: api/SavingsAccounts
-            [HttpPost]
-            public async Task<ActionResult<SavingsAccount>> PostSavingsAccount(SavingsAccount saving)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                saving.AppUserId = userId;
+        // GET: api/savings
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<SavingsAccount>>> GetMySavings()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                _context.SavingsAccounts.Add(saving);
-                await _context.SaveChangesAsync();
+            return await _context.SavingsAccounts
+                .Where(s => s.AppUserId == userId)
+                .ToListAsync();
+        }
 
-                return CreatedAtAction(nameof(GetMySavings), new { id = saving.Id }, saving);
-            }
+        // POST: api/savings
+        [HttpPost]
+        public async Task<ActionResult<SavingsAccount>> CreateSaving(SavingsAccount saving)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            saving.AppUserId = userId;
 
+            _context.SavingsAccounts.Add(saving);
+            await _context.SaveChangesAsync();
 
-            [HttpPut("{id}")]
-            public async Task<IActionResult> UpdateSaving(int id, SavingsAccount saving)
-            {
-                if (id != saving.Id) return BadRequest();
+            return CreatedAtAction(nameof(GetMySavings), new { id = saving.Id }, saving);
+        }
 
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        // PUT: api/savings/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSaving(int id, SavingsAccount saving)
+        {
+            if (id != saving.Id) return BadRequest();
 
-                // Verificamos que la cuenta pertenezca al usuario antes de editarla
-                var existingAccount = await _context.SavingsAccounts
-                    .FirstOrDefaultAsync(s => s.Id == id && s.AppUserId == userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (existingAccount == null) return NotFound("Cuenta no encontrada o no te pertenece.");
+            var existingAccount = await _context.SavingsAccounts
+                .FirstOrDefaultAsync(s => s.Id == id && s.AppUserId == userId);
 
-                // Actualizamos los datos
-                existingAccount.Name = saving.Name;
-                existingAccount.Balance = saving.Balance;
-                existingAccount.Color = saving.Color;
-                // No actualizamos AppUserId para evitar robos
+            if (existingAccount == null) return NotFound("Cuenta no encontrada o no te pertenece.");
 
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
+            existingAccount.Name = saving.Name;
+            existingAccount.Balance = saving.Balance;
+            existingAccount.Color = saving.Color;
+            existingAccount.Goal = saving.Goal;
+            existingAccount.Icon = saving.Icon;
 
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
 
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteSaving(int id)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        // DELETE: api/savings/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSaving(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                var saving = await _context.SavingsAccounts
-                    .FirstOrDefaultAsync(s => s.Id == id && s.AppUserId == userId);
+            var saving = await _context.SavingsAccounts
+                .FirstOrDefaultAsync(s => s.Id == id && s.AppUserId == userId);
 
-                if (saving == null) return NotFound("Cuenta no encontrada o no te pertenece.");
-                _context.SavingsAccounts.Remove(saving);
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
+            if (saving == null) return NotFound();
+
+            _context.SavingsAccounts.Remove(saving);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
