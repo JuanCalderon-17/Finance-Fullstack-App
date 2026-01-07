@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;    
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;   
+using System.Text.Json.Serialization;
 
 namespace FinanceManager.API.Models
 {
@@ -13,12 +13,18 @@ namespace FinanceManager.API.Models
         public string Name { get; set; } = string.Empty;
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Balance { get; set; } //cuanto debo
+        public decimal Balance { get; set; } // Monto Total Original
+
+        public double InterestRate { get; set; } // % Interés Anual
+        public int Installments { get; set; }    // Número de Cuotas (Plazo)
+        public int PaidInstallments { get; set; } // Cuotas ya pagadas
 
         public string Color { get; set; } = string.Empty;
         public string Icon { get; set; } = "bi-credit-card";
 
-        public string? AppUserId { get; set; }// esto permite que venga vacío desde el Frontend
+        public string? AppUserId { get; set; }
 
+        [JsonIgnore]
+        public AppUser? AppUser { get; set; }
     }
 }

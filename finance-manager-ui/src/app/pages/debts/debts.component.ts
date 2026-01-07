@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-// 👇 Importamos la interfaz correcta del servicio
 import { DebtsService, Debt } from '../../services/debts.service';
 
 @Component({
@@ -14,16 +13,18 @@ import { DebtsService, Debt } from '../../services/debts.service';
 })
 export class DebtsComponent implements OnInit {
 
-  // Usamos 'any' aquí para que no se queje si el HTML pide propiedades extra como 'progress'
   debts: any[] = [];
-
-  // Objeto que COINCIDE con tu formulario HTML
-  newDebt: any = {
+  isEditing: boolean = false; // ¿Estamos editando?
+  
+  // Modelo para el formulario (Nuevo o Edición)
+  currentDebt: Debt = {
     name: '',
-    totalAmount: 0,      // Tu HTML usa esto
-    interestRate: 0,     // Tu HTML usa esto
-    installments: 12,    // Tu HTML usa esto
-    paidInstallments: 0
+    balance: 0,
+    interestRate: 0,
+    installments: 12,
+    paidInstallments: 0,
+    color: '#ff416c',
+    icon: 'bi-credit-card'
   };
 
   totalDebt: number = 0;
@@ -37,76 +38,106 @@ export class DebtsComponent implements OnInit {
   loadData() {
     this.debtsService.getDebts().subscribe({
       next: (data) => {
-        // TRUCO: Convertimos los datos del Backend para que tu HTML los entienda
-        this.debts = data.map(d => ({
-          ...d,
-          totalAmount: d.balance, // El backend manda 'balance', lo mostramos como 'totalAmount'
-          // Valores visuales por defecto (ya que la BD no los guarda aún)
-          interestRate: 0,
-          installments: 1,
-          progress: 0
-        }));
+        // Calculamos los datos visuales para cada deuda que llega
+        this.debts = data.map(d => this.calculateMetrics(d));
         this.calculateTotal();
-      },
-      error: (err) => console.error('Error cargando deudas:', err)
+      }
     });
+  }
+
+  // 🧮 ZONA MATEMÁTICA
+  calculateMetrics(debt: Debt): any {
+    const d = { ...debt } as any; // Copia extensible
+    
+    // Cálculo de cuota simple (con interés compuesto básico si existe)
+    if (d.interestRate > 0) {
+       const r = d.interestRate / 12 / 100; // Tasa mensual
+       const n = d.installments;
+       // Fórmula de anualidad
+       const numerator = r * Math.pow(1 + r, n);
+       const denominator = Math.pow(1 + r, n) - 1;
+       d.monthlyPayment = d.balance * (numerator / denominator);
+    } else {
+       d.monthlyPayment = d.balance / (d.installments || 1);
+    }
+
+    // Progreso
+    d.progress = (d.paidInstallments / d.installments) * 100;
+    
+    // Saldo Restante Real
+    const remainingInstallments = d.installments - d.paidInstallments;
+    d.remainingAmount = remainingInstallments * d.monthlyPayment;
+
+    return d;
   }
 
   calculateTotal() {
-    this.totalDebt = this.debts.reduce((sum, debt) => sum + (debt.balance || 0), 0);
+    this.totalDebt = this.debts.reduce((sum, d) => sum + d.remainingAmount, 0);
   }
 
-  addDebt() {
-    // Validamos usando el campo del HTML (totalAmount)
-    if (!this.newDebt.name || this.newDebt.totalAmount <= 0) return;
+  // --- ACCIONES ---
 
-    // 🛡️ Preparamos el objeto para enviar al Backend
-    // Aquí traducimos 'totalAmount' -> 'balance'
-    const debtToSend: Debt = {
-      name: this.newDebt.name,
-      balance: this.newDebt.totalAmount, 
-      color: '#ff416c',
-      icon: 'bi-credit-card'
-    };
+  saveDebt() {
+    if (!this.currentDebt.name || this.currentDebt.balance <= 0) return;
 
-    this.debtsService.createDebt(debtToSend).subscribe({
-      next: (savedDebt) => {
-        // Agregamos a la lista visualmente
-        this.debts.push({
-          ...savedDebt,
-          totalAmount: savedDebt.balance, // Mapeo inmediato
-          progress: 0
-        });
-        
-        this.calculateTotal();
-
-        // Limpiamos el formulario
-        this.newDebt = { 
-          name: '', 
-          totalAmount: 0, 
-          interestRate: 0, 
-          installments: 12, 
-          paidInstallments: 0 
-        };
-      },
-      error: (err) => console.error('Error creando deuda:', err)
-    });
-  }
-
-  deleteDebt(index: number) {
-    const debt = this.debts[index];
-    
-    // Necesitamos el ID real de la base de datos
-    if (!debt.id) return;
-
-    if(confirm('¿Seguro que quieres borrar esta deuda?')) {
-      this.debtsService.deleteDebt(debt.id).subscribe({
+    if (this.isEditing && this.currentDebt.id) {
+      // MODO EDICIÓN
+      this.debtsService.updateDebt(this.currentDebt.id, this.currentDebt).subscribe({
         next: () => {
-          this.debts.splice(index, 1);
-          this.calculateTotal();
-        },
-        error: (err) => console.error('Error borrando:', err)
+          this.loadData();
+          this.resetForm();
+        }
+      });
+    } else {
+      // MODO CREACIÓN
+      this.debtsService.createDebt(this.currentDebt).subscribe({
+        next: () => {
+          this.loadData();
+          this.resetForm();
+        }
       });
     }
+  }
+
+  // Cargar datos en el formulario para editar
+  startEdit(debt: Debt) {
+    this.isEditing = true;
+    this.currentDebt = { ...debt }; // Copia para no modificar la lista directamente
+    window.scrollTo(0, 0); // Subir para ver el form
+  }
+
+  deleteDebt(id: number) {
+    if(confirm('¿Borrar esta deuda?')) {
+      this.debtsService.deleteDebt(id).subscribe({
+        next: () => this.loadData()
+      });
+    }
+  }
+
+  // Slider en tiempo real
+  onSliderChange(debt: any, newValue: number) {
+    debt.paidInstallments = newValue;
+    // Guardamos el cambio en la BD automáticamente al soltar el slider (opcional)
+    // O simplemente actualizamos visualmente:
+    const updated = this.calculateMetrics(debt);
+    Object.assign(debt, updated);
+    
+    // Si quieres guardar en BD cada vez que mueven el slider:
+    // this.debtsService.updateDebt(debt.id, debt).subscribe();
+  }
+  
+  // Guardar el cambio del slider al soltarlo
+  saveSliderChange(debt: any) {
+     if(debt.id) {
+         this.debtsService.updateDebt(debt.id, debt).subscribe();
+     }
+  }
+
+  resetForm() {
+    this.isEditing = false;
+    this.currentDebt = {
+      name: '', balance: 0, interestRate: 0, installments: 12, paidInstallments: 0,
+      color: '#ff416c', icon: 'bi-credit-card'
+    };
   }
 }

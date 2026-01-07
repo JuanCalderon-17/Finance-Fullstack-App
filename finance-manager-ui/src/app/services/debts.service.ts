@@ -6,7 +6,10 @@ import { Observable } from 'rxjs';
 export interface Debt {
   id?: number;
   name: string;
-  balance: number;
+  balance: number;         // Monto Total
+  interestRate: number;    // Interés
+  installments: number;    // Plazo
+  paidInstallments: number; // Cuotas pagadas
   color: string;
   icon: string;
 }
@@ -25,6 +28,10 @@ export class DebtsService {
 
   createDebt(debt: Debt): Observable<Debt> {
     return this.http.post<Debt>(this.apiUrl, debt);
+  }
+
+  updateDebt(id: number, debt: Debt): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, debt);
   }
 
   deleteDebt(id: number): Observable<any> {

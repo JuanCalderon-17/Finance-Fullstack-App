@@ -2,10 +2,10 @@
   <div class="container d-flex justify-content-between align-items-center">
     <div>
       <h2 class="fw-bold mb-0">💳 Mis Deudas</h2>
-      <p class="text-white-50 mb-0 small">Controla tu camino hacia la libertad financiera</p>
+      <p class="text-white-50 mb-0 small">Control total: Plazos, Intereses y Avance.</p>
     </div>
     <a routerLink="/dashboard" class="btn btn-outline-light btn-sm">
-      <i class="bi bi-arrow-left"></i> Volver al Dashboard
+      <i class="bi bi-arrow-left"></i> Volver
     </a>
   </div>
 </div>
@@ -14,43 +14,44 @@
   <div class="row">
 
     <div class="col-lg-4 mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-header bg-white fw-bold text-primary">
-          ➕ Nueva Deuda
+      <div class="card shadow-sm border-0 sticky-top" style="top: 20px; z-index: 1;">
+        <div class="card-header fw-bold text-white" 
+             [ngClass]="isEditing ? 'bg-warning' : 'bg-primary'">
+          {{ isEditing ? '✏️ Editando Deuda' : '➕ Nueva Deuda' }}
         </div>
         <div class="card-body">
-          <form (ngSubmit)="addDebt()">
+          <form (ngSubmit)="saveDebt()">
             
             <div class="mb-3">
-              <label class="form-label small">Nombre de la Deuda</label>
-              <input type="text" class="form-control" placeholder="Ej: Tarjeta Visa..." 
-                     [(ngModel)]="newDebt.name" name="name" required>
+              <label class="form-label small fw-bold">Nombre</label>
+              <input type="text" class="form-control" [(ngModel)]="currentDebt.name" name="name" required>
             </div>
 
             <div class="mb-3">
-              <label class="form-label small">Monto Total ($)</label>
-              <input type="number" class="form-control" placeholder="0.00" 
-                     [(ngModel)]="newDebt.totalAmount" name="total" required>
+              <label class="form-label small fw-bold">Monto Total Prestado ($)</label>
+              <input type="number" class="form-control" [(ngModel)]="currentDebt.balance" name="balance" required>
             </div>
 
             <div class="row">
               <div class="col-6 mb-3">
-                <label class="form-label small">Interés (%)</label>
-                <input type="number" class="form-control" placeholder="0" 
-                       [(ngModel)]="newDebt.interestRate" name="rate">
+                <label class="form-label small fw-bold">Interés Anual (%)</label>
+                <input type="number" class="form-control" [(ngModel)]="currentDebt.interestRate" name="rate">
               </div>
               <div class="col-6 mb-3">
-                <label class="form-label small">Plazo (Meses)</label>
-                <input type="number" class="form-control" placeholder="12" 
-                       [(ngModel)]="newDebt.installments" name="months">
+                <label class="form-label small fw-bold">Plazo (Meses)</label>
+                <input type="number" class="form-control" [(ngModel)]="currentDebt.installments" name="installments">
               </div>
             </div>
-            <p class="text-muted x-small fst-italic">* Interés y Plazo son referenciales.</p>
 
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary" 
-                      [disabled]="!newDebt.name || newDebt.totalAmount <= 0">
-                Guardar Deuda
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn" 
+                      [ngClass]="isEditing ? 'btn-warning text-dark' : 'btn-primary'"
+                      [disabled]="!currentDebt.name || currentDebt.balance <= 0">
+                {{ isEditing ? 'Guardar Cambios' : 'Crear Deuda' }}
+              </button>
+              
+              <button *ngIf="isEditing" type="button" class="btn btn-outline-secondary" (click)="resetForm()">
+                Cancelar Edición
               </button>
             </div>
 
@@ -61,69 +62,73 @@
 
     <div class="col-lg-8">
       
-      <div *ngIf="debts.length === 0" class="alert alert-info text-center shadow-sm">
-        <i class="bi bi-info-circle me-2"></i>
-        ¡No tienes deudas registradas! (O aún no se han cargado 😉)
+      <div *ngIf="debts.length === 0" class="alert alert-info text-center">
+        No hay deudas registradas.
       </div>
 
-      <div class="card shadow-sm border-0 mb-3" *ngFor="let d of debts; let i = index">
+      <div class="card shadow-sm border-0 mb-3" *ngFor="let d of debts">
         <div class="card-body">
           
-          <div class="d-flex justify-content-between align-items-start mb-2">
+          <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
-              <h5 class="fw-bold mb-0 text-dark">{{ d.name }}</h5>
-              <span class="badge bg-light text-dark border mt-1">
-                {{ d.interestRate || 0 }}% Interés
-              </span>
-              <span class="badge bg-light text-dark border mt-1 ms-1">
-                {{ d.installments || 12 }} Cuotas Ref.
-              </span>
+              <h4 class="fw-bold mb-0 text-dark">{{ d.name }}</h4>
+              <div class="mt-1">
+                <span class="badge bg-light text-dark border me-1">
+                  {{ d.interestRate }}% Interés
+                </span>
+                <span class="badge bg-light text-dark border">
+                  {{ d.installments }} Cuotas
+                </span>
+              </div>
             </div>
-            <button class="btn btn-outline-danger btn-sm" (click)="deleteDebt(i)">
-              <i class="bi bi-trash"></i>
-            </button>
+            
+            <div>
+              <button class="btn btn-outline-warning btn-sm me-2" (click)="startEdit(d)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteDebt(d.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
           </div>
 
-          <hr class="opacity-25">
-
-          <div class="row align-items-center">
-            
-            <div class="col-md-5 mb-3 mb-md-0">
-              <div class="row">
-                  <div class="col-6 border-end">
-                      <p class="mb-1 small text-muted fw-bold">Total Deuda</p>
-                      <h4 class="fw-bold text-primary mb-0">
-                        {{ d.totalAmount | currency }}
-                      </h4>
-                  </div>
-
-                  <div class="col-6">
-                      <p class="mb-1 small text-muted fw-bold">Cuota Aprox.</p>
-                      <h4 class="fw-bold text-secondary mb-0">
-                          {{ (d.totalAmount / (d.installments || 12)) | currency }}
-                      </h4>
-                  </div>
-              </div>
+          <div class="row g-3">
+            <div class="col-md-5">
+               <div class="p-3 bg-light rounded-3">
+                 <small class="text-muted d-block">Cuota Mensual</small>
+                 <span class="fs-4 fw-bold text-primary">{{ d.monthlyPayment | currency }}</span>
+                 
+                 <hr class="my-2">
+                 
+                 <small class="text-muted d-block">Saldo Pendiente</small>
+                 <span class="fs-4 fw-bold text-danger">{{ d.remainingAmount | currency }}</span>
+               </div>
             </div>
 
-            <div class="col-md-7">
-              <div class="d-flex justify-content-between small mb-1">
-                <span>Progreso (Simulado):</span>
-                <span class="fw-bold">0%</span>
-              </div>
+            <div class="col-md-7 d-flex flex-column justify-content-center">
               
-              <div class="progress" style="height: 10px; border-radius: 5px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 0%">
+              <div class="d-flex justify-content-between small mb-2">
+                <span class="fw-bold text-success">Pagado: {{ d.paidInstallments }} cuotas</span>
+                <span class="text-muted">Total: {{ d.installments }}</span>
+              </div>
+
+              <input type="range" class="form-range" 
+                     [min]="0" [max]="d.installments" 
+                     [(ngModel)]="d.paidInstallments"
+                     (input)="onSliderChange(d, d.paidInstallments)"
+                     (change)="saveSliderChange(d)">
+              
+              <div class="progress mt-2" style="height: 10px;">
+                <div class="progress-bar bg-success" role="progressbar" 
+                     [style.width.%]="d.progress">
                 </div>
               </div>
+              
+              <small class="text-center text-muted mt-2 fst-italic">
+                Desliza para actualizar tu avance 👆
+              </small>
 
-              <div class="mt-2 text-end">
-                 <small class="text-muted fst-italic" style="font-size: 0.75rem;">
-                    Guardado en la nube ☁️
-                 </small>
-              </div>
             </div>
-
           </div>
 
         </div>
