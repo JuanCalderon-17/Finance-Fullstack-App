@@ -12,6 +12,8 @@ namespace FinanceManager.API.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<SavingsAccount> SavingsAccounts { get; set; }
 
+        public DbSet<Debt> Debts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Keep this line!
