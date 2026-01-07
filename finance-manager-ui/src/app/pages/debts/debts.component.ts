@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-
+// 👇 Importamos la interfaz correcta del servicio
 import { DebtsService, Debt } from '../../services/debts.service';
 
 @Component({
@@ -14,32 +14,38 @@ import { DebtsService, Debt } from '../../services/debts.service';
 })
 export class DebtsComponent implements OnInit {
 
-  // La lista ahora viene vacía, esperaremos a que llegue de la base de datos
-  debts: Debt[] = [];
+  // Usamos 'any' aquí para que no se queje si el HTML pide propiedades extra como 'progress'
+  debts: any[] = [];
 
-  // Configuración para nueva deuda (Coincide con tu Backend)
-  newDebt: Debt = {
+  // Objeto que COINCIDE con tu formulario HTML
+  newDebt: any = {
     name: '',
-    balance: 0,
-    color: '#ff416c', // Color rojo por defecto para deudas
-    icon: 'bi-credit-card'
+    totalAmount: 0,      // Tu HTML usa esto
+    interestRate: 0,     // Tu HTML usa esto
+    installments: 12,    // Tu HTML usa esto
+    paidInstallments: 0
   };
 
   totalDebt: number = 0;
 
-  // Inyectamos el servicio en el constructor
   constructor(private debtsService: DebtsService) {}
 
   ngOnInit(): void {
     this.loadData();
   }
 
-  // --- CONEXIÓN CON EL BACKEND ---
-
   loadData() {
     this.debtsService.getDebts().subscribe({
       next: (data) => {
-        this.debts = data;
+        // TRUCO: Convertimos los datos del Backend para que tu HTML los entienda
+        this.debts = data.map(d => ({
+          ...d,
+          totalAmount: d.balance, // El backend manda 'balance', lo mostramos como 'totalAmount'
+          // Valores visuales por defecto (ya que la BD no los guarda aún)
+          interestRate: 0,
+          installments: 1,
+          progress: 0
+        }));
         this.calculateTotal();
       },
       error: (err) => console.error('Error cargando deudas:', err)
@@ -47,36 +53,40 @@ export class DebtsComponent implements OnInit {
   }
 
   calculateTotal() {
-    // Suma simple de todos los balances
-    this.totalDebt = this.debts.reduce((sum, debt) => sum + debt.balance, 0);
+    this.totalDebt = this.debts.reduce((sum, debt) => sum + (debt.balance || 0), 0);
   }
 
   addDebt() {
-    // Validaciones básicas
-    if (!this.newDebt.name || this.newDebt.balance <= 0) return;
+    // Validamos usando el campo del HTML (totalAmount)
+    if (!this.newDebt.name || this.newDebt.totalAmount <= 0) return;
 
-    // 🛡️ Preparamos el objeto LIMPIO para enviar al backend
-    // Esto evita errores si Angular agrega propiedades extra
+    // 🛡️ Preparamos el objeto para enviar al Backend
+    // Aquí traducimos 'totalAmount' -> 'balance'
     const debtToSend: Debt = {
       name: this.newDebt.name,
-      balance: this.newDebt.balance,
-      color: this.newDebt.color,
-      icon: this.newDebt.icon
+      balance: this.newDebt.totalAmount, 
+      color: '#ff416c',
+      icon: 'bi-credit-card'
     };
 
-    // Enviamos a la nube
     this.debtsService.createDebt(debtToSend).subscribe({
       next: (savedDebt) => {
-        // Éxito: Lo agregamos a la lista visual
-        this.debts.push(savedDebt);
+        // Agregamos a la lista visualmente
+        this.debts.push({
+          ...savedDebt,
+          totalAmount: savedDebt.balance, // Mapeo inmediato
+          progress: 0
+        });
+        
         this.calculateTotal();
 
         // Limpiamos el formulario
         this.newDebt = { 
           name: '', 
-          balance: 0, 
-          color: '#ff416c', 
-          icon: 'bi-credit-card' 
+          totalAmount: 0, 
+          interestRate: 0, 
+          installments: 12, 
+          paidInstallments: 0 
         };
       },
       error: (err) => console.error('Error creando deuda:', err)
@@ -84,19 +94,18 @@ export class DebtsComponent implements OnInit {
   }
 
   deleteDebt(index: number) {
-    const debtToDelete = this.debts[index];
+    const debt = this.debts[index];
+    
+    // Necesitamos el ID real de la base de datos
+    if (!debt.id) return;
 
-    // Necesitamos el ID para borrarlo de la base de datos
-    if (!debtToDelete.id) return;
-
-    if(confirm(`¿Ya pagaste la deuda "${debtToDelete.name}"? ¿Borrarla?`)) {
-      this.debtsService.deleteDebt(debtToDelete.id).subscribe({
+    if(confirm('¿Seguro que quieres borrar esta deuda?')) {
+      this.debtsService.deleteDebt(debt.id).subscribe({
         next: () => {
-          // Si el backend dice OK, lo borramos de la lista visual
           this.debts.splice(index, 1);
           this.calculateTotal();
         },
-        error: (err) => console.error('Error borrando deuda:', err)
+        error: (err) => console.error('Error borrando:', err)
       });
     }
   }
