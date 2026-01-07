@@ -35,10 +35,9 @@
 
             <div class="row">
               <div class="col-6 mb-3">
-                <label class="form-label small">Interés Anual (%)</label>
-                <input type="number" class="form-control" placeholder="0%" 
+                <label class="form-label small">Interés (%)</label>
+                <input type="number" class="form-control" placeholder="0" 
                        [(ngModel)]="newDebt.interestRate" name="rate">
-                <div class="form-text x-small">Pon 0 si no tiene.</div>
               </div>
               <div class="col-6 mb-3">
                 <label class="form-label small">Plazo (Meses)</label>
@@ -46,6 +45,7 @@
                        [(ngModel)]="newDebt.installments" name="months">
               </div>
             </div>
+            <p class="text-muted x-small fst-italic">* Interés y Plazo son referenciales.</p>
 
             <div class="d-grid">
               <button type="submit" class="btn btn-primary" 
@@ -61,8 +61,9 @@
 
     <div class="col-lg-8">
       
-      <div *ngIf="debts.length === 0" class="alert alert-info text-center">
-        ¡Felicidades! No tienes deudas registradas. (O aún no has agregado ninguna 😉)
+      <div *ngIf="debts.length === 0" class="alert alert-info text-center shadow-sm">
+        <i class="bi bi-info-circle me-2"></i>
+        ¡No tienes deudas registradas! (O aún no se han cargado 😉)
       </div>
 
       <div class="card shadow-sm border-0 mb-3" *ngFor="let d of debts; let i = index">
@@ -72,10 +73,10 @@
             <div>
               <h5 class="fw-bold mb-0 text-dark">{{ d.name }}</h5>
               <span class="badge bg-light text-dark border mt-1">
-                {{ d.interestRate }}% Interés
+                {{ d.interestRate || 0 }}% Interés
               </span>
               <span class="badge bg-light text-dark border mt-1 ms-1">
-                {{ d.installments }} Cuotas
+                {{ d.installments || 12 }} Cuotas Ref.
               </span>
             </div>
             <button class="btn btn-outline-danger btn-sm" (click)="deleteDebt(i)">
@@ -88,52 +89,38 @@
           <div class="row align-items-center">
             
             <div class="col-md-5 mb-3 mb-md-0">
-                
-                <div class="row">
-                    <div class="col-6 border-end">
-                        <p class="mb-1 small text-muted fw-bold">Cuota Mensual</p>
-                        <h4 class="fw-bold text-primary mb-0">
-                            {{ d.monthlyPayment | currency }}
-                        </h4>
-                    </div>
+              <div class="row">
+                  <div class="col-6 border-end">
+                      <p class="mb-1 small text-muted fw-bold">Total Deuda</p>
+                      <h4 class="fw-bold text-primary mb-0">
+                        {{ d.totalAmount | currency }}
+                      </h4>
+                  </div>
 
-                    <div class="col-6">
-                        <p class="mb-1 small text-muted fw-bold">Falta Pagar</p>
-                        <h4 class="fw-bold text-danger mb-0">
-                            {{ d.remainingAmount | currency }}
-                        </h4>
-                    </div>
-                </div>
-
-                <div class="mt-2 pt-2 border-top border-light">
-                    <small class="text-muted text-uppercase x-small" style="font-size: 0.75rem;">
-                        Monto Original Prestado: <strong>{{ d.totalAmount | currency }}</strong>
-                    </small>
-                </div>
-
+                  <div class="col-6">
+                      <p class="mb-1 small text-muted fw-bold">Cuota Aprox.</p>
+                      <h4 class="fw-bold text-secondary mb-0">
+                          {{ (d.totalAmount / (d.installments || 12)) | currency }}
+                      </h4>
+                  </div>
+              </div>
             </div>
 
             <div class="col-md-7">
               <div class="d-flex justify-content-between small mb-1">
-                <span>Progreso de Pago:</span>
-                <span class="fw-bold">{{ d.progress | number:'1.0-0' }}%</span>
+                <span>Progreso (Simulado):</span>
+                <span class="fw-bold">0%</span>
               </div>
               
-              <div class="progress" style="height: 20px; border-radius: 10px;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                     role="progressbar" 
-                     [style.width.%]="d.progress">
+              <div class="progress" style="height: 10px; border-radius: 5px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 0%">
                 </div>
               </div>
 
-              <div class="mt-3">
-                <label class="form-label x-small text-muted mb-0">
-                  Simular Cuotas Pagadas: <strong>{{ d.paidInstallments }}</strong> / {{ d.installments }}
-                </label>
-                <input type="range" class="form-range" 
-                       [min]="0" [max]="d.installments" 
-                       [(ngModel)]="d.paidInstallments" 
-                       (input)="calculateDebtMetrics(d)">
+              <div class="mt-2 text-end">
+                 <small class="text-muted fst-italic" style="font-size: 0.75rem;">
+                    Guardado en la nube ☁️
+                 </small>
               </div>
             </div>
 
