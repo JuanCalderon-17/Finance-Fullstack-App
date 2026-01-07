@@ -88,17 +88,31 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // === MIGRACIÓN AUTOMÁTICA EN LA NUBE ===
+// === MIGRACIÓN AUTOMÁTICA EN LA NUBE (MODO REPARACIÓN) ===
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        context.Database.Migrate(); // Esto crea la tabla de Savings en Render
-        Console.WriteLine("--> ¡Migraciones aplicadas en Render!");
+
+        // 👇 SOLO SI ESTAMOS EN RENDER (PRODUCCIÓN)
+        if (!app.Environment.IsDevelopment())
+        {
+            Console.WriteLine("-->  ATENCIÓN: Eliminando base de datos antigua para corregir esquema...");
+            context.Database.EnsureDeleted(); // <--- ESTA LÍNEA BORRA LA BD VIEJA Y ROTA
+
+            Console.WriteLine("-->  Creando base de datos nueva y correcta...");
+            context.Database.Migrate();       // <--- ESTA LÍNEA CREA LA BD PERFECTA
+            Console.WriteLine("-->  ¡Base de datos reparada exitosamente!");
+        }
     }
-    catch (Exception ex) { Console.WriteLine($"--> Error migraciones: {ex.Message}"); }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> ❌ Error crítico en migraciones: {ex.Message}");
+    }
 }
+// ==========================================================
 
 if (app.Environment.IsDevelopment())
 {
