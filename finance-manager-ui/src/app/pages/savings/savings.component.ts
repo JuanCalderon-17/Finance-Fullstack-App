@@ -52,16 +52,32 @@ export class SavingsComponent implements OnInit {
   addAccount() {
     if (!this.newAccount.name) return;
     
-    // Enviamos a la Base de Datos
-    this.savingsService.createSaving(this.newAccount).subscribe({
+    // 1. Preparamos el objeto limpio para enviar
+    const savingToSend: SavingAccount = {
+      name: this.newAccount.name,
+      balance: this.newAccount.balance || 0, // Asegura que sea número
+      color: this.newAccount.color,
+      icon: this.newAccount.icon,
+      // No enviamos 'Goal' ni 'Id' ni 'isEditing'
+    };
+
+    // 2. Enviamos a la Base de Datos
+    this.savingsService.createSaving(savingToSend).subscribe({
       next: (savedAccount) => {
-        // Agregamos a la lista local la respuesta del servidor (que ya tiene ID real)
+        // Éxito: Agregamos a la lista local
         this.accounts.push({ ...savedAccount, isEditing: false });
         this.calculateTotal();
+        
         // Reset form
         this.newAccount = { name: '', balance: 0, color: '#ffffff', icon: 'bi-bank' };
       },
-      error: (err) => console.error('Error creando cuenta', err)
+      error: (err) => {
+        console.error('Error creando cuenta', err);
+        // Tip: Si puedes, imprime err.error para ver qué campo falla
+        if(err.error && err.error.errors) {
+            console.log("Detalles del error:", err.error.errors); 
+        }
+      }
     });
   }
 
