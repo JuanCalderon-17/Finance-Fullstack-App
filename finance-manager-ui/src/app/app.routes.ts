@@ -1,26 +1,37 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { DebtsComponent } from './pages/debts/debts.component';
+import { LandingComponent } from './pages/landing/landing.component';
 
 export const routes: Routes = [
   
+  // 1. LA ENTRADA PRINCIPAL (Esto es lo que verá tu familia)
   {
-    path: 'auth', // rutas de autenticacion Públicas
+    path: '', 
+    component: LandingComponent,
+    pathMatch: 'full' // Agregamos esto por buena práctica
+  },
+  
+  // 2. RUTAS PÚBLICAS (Login y Registro)
+  {
+    path: 'auth', 
     children: [
       {
-        path: 'login', // ...y siga con 'login' (/auth/login)
+        path: 'login', 
         loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent)
       },
       {
-        path: 'register', // ...y siga con 'register' (/auth/register)
+        path: 'register', 
         loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent)
       }
     ]
   },
+
+  // 3. RUTAS PRIVADAS (Protegidas por el Guardia)
   {
     path: 'dashboard', 
     loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
-    canActivate: [authGuard] // AQUÍ PONEMOS AL GUARDIA!
+    canActivate: [authGuard] 
   },
 
   {
@@ -34,13 +45,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent),
     canActivate: [authGuard]
   },
-
-  {
-    path: '',
-    redirectTo: 'auth/login', // si entran a la raiz del app, esto redirije al login
-    pathMatch: 'full'
-  },
-  
+    
   // Si escriben cualquier ruta rara, los mando al login
   {
     path: '**',
