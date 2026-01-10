@@ -1,105 +1,101 @@
-/* Aseguramos que ocupe toda la pantalla y no haya scroll */
-:host {
-  display: block;
-  height: 100vh;
-  overflow: hidden;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Tipografía clásica y fuerte */
-}
-
-.baldwin-container {
-  height: 100%;
+/* =========================
+   HERO CONTAINER
+========================= */
+.hero-container {
+  position: relative;
   width: 100%;
-  /* El Fondo con Aura: Un degradado radial profundo de gris oscuro a negro puro */
-  background: radial-gradient(circle at 50% 30%, #2a2a2a 0%, #000000 80%);
-  color: #ffffff;
+  height: 100vh;
+
+  background-image: url('https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?q=80&w=3870&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   display: flex;
-  align-items: center;
   justify-content: center;
-  position: relative; /* Necesario para el efecto de ruido */
+  align-items: center;
 }
 
-/* Contenido centrado vertical y horizontalmente */
-.content-center {
+/* =========================
+   OVERLAY OSCURO
+========================= */
+.hero-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  pointer-events: none; /* CLAVE: no bloquea clicks */
+}
+
+/* =========================
+   CONTENIDO
+========================= */
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
   text-align: center;
-  z-index: 2; /* Para que esté por encima del ruido */
-  padding: 2rem;
+  color: white;
 }
 
-/* TIPOGRAFÍA IMPACTANTE */
-.vibe-title {
-  font-size: clamp(4rem, 10vw, 8rem); /* Se adapta al tamaño de pantalla, pero siempre GIGANTE */
-  font-weight: 900; /* Súper negrita */
+/* =========================
+   TITULO
+========================= */
+h1 {
+  font-size: 4rem;
+  font-weight: 900;
   line-height: 0.9;
-  margin: 0 0 1.5rem 0;
-  letter-spacing: -3px; /* Letras muy pegadas para impacto */
   text-transform: uppercase;
-  
-  /* Efecto de texto metálico sutil */
-  background: linear-gradient(to bottom right, #ffffff, #a8a8a8);
-  -webkit-background-clip: text;
-  background-clip: text;         
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0px 4px 30px rgba(255,255,255,0.1); /* Un resplandor muy suave */
+  margin-bottom: 20px;
+  font-family: 'Arial Black', sans-serif;
+
+  text-shadow:
+    0 0 6px rgba(0, 0, 0, 0.9),
+    0 0 18px rgba(0, 0, 0, 0.8),
+    0 0 35px rgba(0, 0, 0, 0.6);
 }
 
-.vibe-subtitle {
-  font-size: 1.2rem;
-  color: #888; /* Gris medio para que no compita con el título */
-  font-weight: 400;
-  letter-spacing: 2px; /* Letras separadas para elegancia */
-  margin-bottom: 3rem;
+/* =========================
+   SUBTITULO
+========================= */
+.subtitle {
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  margin-bottom: 40px;
   text-transform: uppercase;
+  color: #f0f0f0;
+
+  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.9);
 }
 
-/* BOTÓN "PERRÓN" */
-.btn-perron {
-  background-color: #ffffff;
-  color: #000000;
-  padding: 18px 40px;
+/* =========================
+   BOTON
+========================= */
+.btn-primary {
+  position: relative;
+  z-index: 3;
+
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 15px 45px;
   font-size: 1rem;
   font-weight: 800;
-  border: none;
-  border-radius: 0; /* Botones cuadrados son más agresivos/modernos */
   cursor: pointer;
   letter-spacing: 1px;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  box-shadow: 0 10px 30px -10px rgba(255,255,255,0.3); /* Sombra blanca */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-perron:hover {
-  transform: scale(1.05); /* Crece un poco */
-  background-color: #f0f0f0;
-  box-shadow: 0 20px 40px -10px rgba(255,255,255,0.5);
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
-/* Enlace secundario */
-.sub-action {
-  margin-top: 2rem;
+/* =========================
+   LOGIN LINK
+========================= */
+.login-link {
+  margin-top: 25px;
   font-size: 0.9rem;
-  color: #666;
-}
-
-.link-login {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  margin-left: 10px;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
-}
-
-.link-login:hover {
-  border-color: #fff;
-}
-
-/* OPCIONAL: Efecto de Ruido/Grano (Esa textura de foto de rollo) */
-/* Si te parece mucho, puedes borrar esta clase .noise-overlay */
-.noise-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 1;
-  opacity: 0.03; /* Muy sutil */
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
