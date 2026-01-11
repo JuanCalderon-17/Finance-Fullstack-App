@@ -1,28 +1,85 @@
-/* register.component.scss */
-
-.gradient-custom-2 {
-  background: linear-gradient(
-    135deg,
-    #0f172a,  /* negro azulado */
-    #1f2937,  /* gris oscuro */
-    #020617   /* casi negro */
-  );
-}
-.contenedor {
+/* === CONTENEDOR PRINCIPAL === */
+.register-container {
+  min-height: 100vh;
+  width: 100%;
+  /* Misma imagen de trading */
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
+              url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
   display: flex;
-  justify-content: center; /* centra horizontal */
+  align-items: center;
 }
 
-
-@media (min-width: 768px) {
-  .gradient-form {
-    height: 100vh;
-  }
+/* === TARJETA CRISTAL === */
+.auth-card {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  overflow: hidden;
 }
 
-@media (min-width: 769px) {
-  .gradient-custom-2 {
-    border-top-right-radius: 0.3rem;
-    border-bottom-right-radius: 0.3rem;
+/* === TIPOGRAFÍA === */
+.title-text {
+  font-family: 'Arial Black', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.text-muted { color: #aaa !important; }
+.text-muted-light { color: #ddd !important; line-height: 1.6; }
+
+/* === INPUTS === */
+.custom-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white !important;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.custom-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+  box-shadow: none;
+}
+
+.form-label {
+  color: #ccc;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* === BOTÓN REGISTRO === */
+.btn-register {
+  background: white;
+  color: black;
+  font-weight: 800;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* === LADO DERECHO === */
+.gradient-side {
+  background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.1));
+  border-left: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 991px) {
+  .gradient-side {
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
   }
 }
