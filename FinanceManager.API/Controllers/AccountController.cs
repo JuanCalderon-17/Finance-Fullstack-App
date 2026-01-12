@@ -1,8 +1,9 @@
-﻿// Archivo: Controllers/AccountController.cs
-
+﻿using System.Security.Cryptography; // Necesario para el Token Random
+using System.Text;
 using FinanceManager.API.DTOs;
-using FinanceManager.API.Interfaces; // No olvides este using para ITokenService
+using FinanceManager.API.Interfaces;
 using FinanceManager.API.Models;
+using FinanceManager.API.Services; // Para IEmailService
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,80 +15,100 @@ namespace FinanceManager.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager; // Experto en logins
-        private readonly ITokenService _tokenService; // Experto en crear tokens
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenService _tokenService;
+        private readonly IEmailService _emailService; // <--- ¡AQUÍ ESTÁ TU SERVICIO DE EMAIL!
 
-        // Inyectamos todos los servicios que necesitamos en el constructor
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
+        public AccountController(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            ITokenService tokenService,
+            IEmailService emailService) // Inyectamos el servicio
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _emailService = emailService;
         }
 
-        // Endpoint para registrar un nuevo usuario
-        // POST: api/account/register
+        // POST: api/account/register (ARREGLADO)
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.Username.ToLower()))
-            {
-                return BadRequest("El nombre de usuario ya está en uso.");
-            }
-
+            // 1. Validamos que el email no exista
             if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email.ToLower()))
             {
                 return BadRequest("El email ya está en uso.");
             }
 
+            // 2. Creamos el usuario USANDO EL EMAIL COMO USERNAME
             var user = new AppUser
             {
-                UserName = registerDto.Username.ToLower(),
-                Email = registerDto.Email.ToLower()
+                UserName = registerDto.Email.ToLower(), // Truco clave
+                Email = registerDto.Email.ToLower(),
+                FullName = registerDto.FullName
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
-            // Al registrar, también le damos un token para que inicie sesión automáticamente
             return new UserDto
             {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user) // Usamos nuestro servicio
+                Username = user.Email,
+                FullName = user.FullName,
+                Token = _tokenService.CreateToken(user)
             };
         }
 
-        // Endpoint para iniciar sesión
-        // POST: api/account/login
+        // POST: api/account/login (NORMAL)
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            // 1. Buscamos al usuario
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == loginDto.Username.ToLower());
 
-            if (user == null)
-            {
-                return Unauthorized("Usuario o contraseña inválidos.");
-            }
+            if (user == null) return Unauthorized("Email o contraseña inválidos.");
 
-            // 2. Usamos SignInManager para verificar la contraseña
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded)
-            {
-                return Unauthorized("Usuario o contraseña inválidos.");
-            }
+            if (!result.Succeeded) return Unauthorized("Email o contraseña inválidos.");
 
-            // 3. Si todo es correcto, creamos y devolvemos el token.
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user) // ¡Aquí está la magia!
+                FullName = user.FullName,
+                Token = _tokenService.CreateToken(user)
             };
+        }
+
+        // POST: api/account/forgot-password (TU NUEVA FUNCIONALIDAD)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null) return BadRequest("Usuario no encontrado.");
+
+            // Generar token random
+            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+
+            // Guardar en DB
+            user.PasswordResetToken = token;
+            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
+            await _userManager.UpdateAsync(user);
+
+            // Crear Link (Asegúrate de cambiar localhost por tu URL de Render cuando quieras probar el link final, pero para ver si llega el correo sirve así)
+            var resetLink = $"https://finance-fullstack-app.onrender.com/auth/reset-password?token={token}&email={request.Email}";
+
+            var body = $@"
+                <h1>Recuperar Contraseña</h1>
+                <p>Has solicitado restablecer tu contraseña.</p>
+                <p>Haz clic aquí:</p>
+                <a href='{resetLink}'>Restablecer Password</a>";
+
+            // Enviar Email
+            await _emailService.SendEmailAsync(request.Email, "Restablecer Password - Finance App", body);
+
+            return Ok("Correo enviado con éxito.");
         }
     }
 }
