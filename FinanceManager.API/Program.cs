@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using FinanceManager.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,11 +86,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 var app = builder.Build();
 
-// === MIGRACIÓN AUTOMÁTICA EN LA NUBE ===
-// === MIGRACIÓN AUTOMÁTICA EN LA NUBE (MODO REPARACIÓN) ===
-// === MIGRACIÓN AUTOMÁTICA EN LA NUBE ===
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

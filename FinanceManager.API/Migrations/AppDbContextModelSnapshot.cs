@@ -62,6 +62,9 @@ namespace FinanceManager.API.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("text");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
@@ -71,6 +74,9 @@ namespace FinanceManager.API.Migrations
                     b.Property<string>("RecoveryKeyword")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("ResetTokenExpires")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");

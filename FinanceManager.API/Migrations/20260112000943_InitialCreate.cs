@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceManager.API.Migrations
 {
     /// <inheritdoc />
-    public partial class RenderSavingsSetup : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,8 @@ namespace FinanceManager.API.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: false),
                     RecoveryKeyword = table.Column<string>(type: "text", nullable: false),
+                    PasswordResetToken = table.Column<string>(type: "text", nullable: true),
+                    ResetTokenExpires = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -160,6 +162,31 @@ namespace FinanceManager.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Debts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Balance = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    InterestRate = table.Column<double>(type: "double precision", nullable: false),
+                    Installments = table.Column<int>(type: "integer", nullable: false),
+                    PaidInstallments = table.Column<int>(type: "integer", nullable: false),
+                    Color = table.Column<string>(type: "text", nullable: false),
+                    Icon = table.Column<string>(type: "text", nullable: false),
+                    AppUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Debts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Debts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SavingsAccounts",
                 columns: table => new
                 {
@@ -167,10 +194,10 @@ namespace FinanceManager.API.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Balance = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    Goal = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    Goal = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
                     Color = table.Column<string>(type: "text", nullable: false),
                     Icon = table.Column<string>(type: "text", nullable: false),
-                    AppUserId = table.Column<string>(type: "text", nullable: false)
+                    AppUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -179,8 +206,7 @@ namespace FinanceManager.API.Migrations
                         name: "FK_SavingsAccounts_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -244,6 +270,11 @@ namespace FinanceManager.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Debts_AppUserId",
+                table: "Debts",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SavingsAccounts_AppUserId",
                 table: "SavingsAccounts",
                 column: "AppUserId");
@@ -271,6 +302,9 @@ namespace FinanceManager.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Debts");
 
             migrationBuilder.DropTable(
                 name: "SavingsAccounts");
