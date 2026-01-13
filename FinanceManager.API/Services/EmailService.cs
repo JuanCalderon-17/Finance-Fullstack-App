@@ -6,43 +6,50 @@ namespace FinanceManager.API.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
 
         public EmailService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _config = configuration;
         }
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            var emailSettings = _configuration.GetSection("EmailSettings");
-            var myEmail = emailSettings["Email"];
-            var myPassword = emailSettings["Password"];
-            var host = emailSettings["Host"];
-            var port = int.Parse(emailSettings["Port"]);
+            // Asegúrate de leer esto de tu configuración o variables de entorno
+            var smtpHost = _config["EmailSettings:Host"]; // o Environment.GetEnvironmentVariable("EMAIL_HOST")
+            var smtpPort = int.Parse(_config["EmailSettings:Port"]);
+            var smtpUser = _config["EmailSettings:User"];
+            var smtpPass = _config["EmailSettings:Password"];
 
-            // 2. configuro el cliente SMTP (el cartero)
-            var smtpClient = new SmtpClient(host)
+            var client = new SmtpClient(smtpHost, smtpPort)
             {
-                Port = port,
-                Credentials = new NetworkCredential(myEmail, myPassword),
-                EnableSsl = true,
+                Credentials = new NetworkCredential(smtpUser, smtpPass),
+                EnableSsl = true, // <--- IMPORTANTE PARA GMAIL
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false
             };
 
-            // 3. se crea el mensaje de correo
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(myEmail),
+                From = new MailAddress(smtpUser),
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = true,
+                IsBodyHtml = true // Si envías HTML
             };
 
             mailMessage.To.Add(toEmail);
 
-            await smtpClient.SendMailAsync(mailMessage);
-
+            try
+            {
+                await client.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                // Esto evitará que tu servidor explote y verás el error real en consola
+                Console.WriteLine($"--> Error enviando correo: {ex.Message}");
+                throw; // O lánzalo para que el Controller lo maneje, pero ya sabrás qué pasó.
+            }
         }
-        
+
     }
 }
