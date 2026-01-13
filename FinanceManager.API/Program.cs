@@ -57,16 +57,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-// 👇👇👇 AQUÍ ESTÁ EL CAMBIO CLAVE (La Llave Maestra) 👇👇👇
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        // Permitimos CUALQUIER origen, CUALQUIER cabecera y CUALQUIER método.
-        // Esto elimina el error de bloqueo inmediatamente.
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(
+                "http://localhost:4200",               // Para tus pruebas locales
+                "https://finanancemanagerpp.vercel.app" // <--- ¡LA CLAVE! Tu URL de Vercel
+              )
               .AllowAnyHeader()
               .AllowAnyMethod();
+        // .AllowCredentials(); // Opcional: Solo si usas cookies, pero con Tokens suele no hacer falta, prueba sin esto primero.
     });
 });
 // 👆👆👆 FIN DEL CAMBIO 👆👆👆
