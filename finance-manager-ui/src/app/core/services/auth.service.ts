@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs'; // ← AGREGADO
 import { environment } from '../../../environments/environment';
  
 @Injectable({
@@ -7,19 +8,30 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
   private baseUrl = environment.apiUrl + 'account/'
+  
   constructor(private http: HttpClient) { }
 
-  // Creamos metodo login
+  // Método login
   public login(model: any) {
     return this.http.post(this.baseUrl + 'login', model)
   } 
 
+  // Método register
   public register(model: any) {
-    // Esto llama a tu endpoint POST api/Account/register
     return this.http.post(this.baseUrl + 'register', model);
   }
 
+  // Método forgot password
   forgotPassword(email: string) {
     return this.http.post(this.baseUrl + 'forgot-password', { email });
+  }
+
+  // Método reset password (CORREGIDO)
+  resetPassword(email: string, token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}reset-password`, { // ← Quitamos /account extra
+      email,
+      token,
+      newPassword
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { DebtsComponent } from './pages/debts/debts.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
   
@@ -27,6 +28,10 @@ export const routes: Routes = [
       {
         path: 'forgot-password',
         loadComponent: () => import('./auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+      },
+      {
+        path: 'auth/reset-password',
+        component: ResetPasswordComponent
       }
     ]
   },

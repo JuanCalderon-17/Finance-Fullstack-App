@@ -134,5 +134,45 @@ namespace FinanceManager.API.Controllers
                 return BadRequest(new { error = $"No se pudo enviar el correo: {ex.Message}" });
             }
         }
+
+        // POST: api/account/reset-password
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+        {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(request.NewPassword))
+            {
+                return BadRequest("Todos los campos son requeridos.");
+            }
+
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null) return BadRequest("Usuario no encontrado.");
+
+            // Verificar token
+            if (user.PasswordResetToken != request.Token)
+            {
+                return BadRequest("Token inválido.");
+            }
+
+            // Verificar expiración
+            if (user.ResetTokenExpires < DateTime.UtcNow)
+            {
+                return BadRequest("El token ha expirado.");
+            }
+
+            // Cambiar contraseña
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+
+            if (!result.Succeeded) return BadRequest("Error al cambiar la contraseña.");
+
+            // Limpiar token
+            user.PasswordResetToken = null;
+            user.ResetTokenExpires = null;
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new { message = "Contraseña restablecida correctamente." });
+        }
+
     }
 }
