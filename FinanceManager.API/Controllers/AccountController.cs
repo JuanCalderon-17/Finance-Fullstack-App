@@ -1,12 +1,13 @@
-﻿using System.Security.Cryptography; // Necesario para el Token Random
-using System.Text;
-using FinanceManager.API.DTOs;
+﻿using FinanceManager.API.DTOs;
 using FinanceManager.API.Interfaces;
 using FinanceManager.API.Models;
-using FinanceManager.API.Services; // Para IEmailService
+using Microsoft.AspNetCore.Authorization; // <--- IMPORTANTE para [AllowAnonymous]
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography; // Necesario para el Token Random
+using System.Text;
+using FinanceManager.API.Services;  
 
 namespace FinanceManager.API.Controllers
 {
@@ -17,13 +18,13 @@ namespace FinanceManager.API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
-        private readonly IEmailService _emailService; // <--- ¡AQUÍ ESTÁ TU SERVICIO DE EMAIL!
+        private readonly IEmailService _emailService;
 
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             ITokenService tokenService,
-            IEmailService emailService) // Inyectamos el servicio
+            IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,20 +32,18 @@ namespace FinanceManager.API.Controllers
             _emailService = emailService;
         }
 
-        // POST: api/account/register (ARREGLADO)
+        // POST: api/account/register
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            // 1. Validamos que el email no exista
             if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email.ToLower()))
             {
                 return BadRequest("El email ya está en uso.");
             }
 
-            // 2. Creamos el usuario USANDO EL EMAIL COMO USERNAME
             var user = new AppUser
             {
-                UserName = registerDto.Email.ToLower(), // Truco clave
+                UserName = registerDto.Email.ToLower(),
                 Email = registerDto.Email.ToLower(),
                 FullName = registerDto.FullName
             };
@@ -61,7 +60,7 @@ namespace FinanceManager.API.Controllers
             };
         }
 
-        // POST: api/account/login (NORMAL)
+        // POST: api/account/login
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -81,11 +80,19 @@ namespace FinanceManager.API.Controllers
             };
         }
 
-        // POST: api/account/forgot-password (TU NUEVA FUNCIONALIDAD)
+        // ---------------------------------------------------------
+        // POST: api/account/forgot-password (VERSIÓN BLINDADA)
+        // ---------------------------------------------------------
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto request)
+        [AllowAnonymous] // <--- 1. CRUCIAL: Permite acceso sin login
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
         {
+            // Validamos que venga el email
+            if (string.IsNullOrEmpty(request.Email)) return BadRequest("El email es requerido.");
+
             var user = await _userManager.FindByEmailAsync(request.Email);
+            // Por seguridad, a veces es mejor retornar Ok() aunque no exista, 
+            // pero para debug dejaremos el BadRequest si no lo encuentra.
             if (user == null) return BadRequest("Usuario no encontrado.");
 
             // Generar token random
@@ -94,21 +101,38 @@ namespace FinanceManager.API.Controllers
             // Guardar en DB
             user.PasswordResetToken = token;
             user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
-            await _userManager.UpdateAsync(user);
 
-            // Crear Link (Asegúrate de cambiar localhost por tu URL de Render cuando quieras probar el link final, pero para ver si llega el correo sirve así)
-            var resetLink = $"https://finance-fullstack-app.onrender.com/auth/reset-password?token={token}&email={request.Email}";
+            // Importante: Asegurar que se guarde antes de enviar el correo
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded) return BadRequest("Error al generar el token.");
+
+            // 2. CORREGIDO: El link debe apuntar a tu FRONTEND (Vercel), no al backend
+            // Usé la URL que vi en tus logs: https://finanancemanagerpp.vercel.app
+            var resetLink = $"https://finanancemanagerpp.vercel.app/auth/reset-password?token={token}&email={request.Email}";
 
             var body = $@"
-                <h1>Recuperar Contraseña</h1>
-                <p>Has solicitado restablecer tu contraseña.</p>
-                <p>Haz clic aquí:</p>
-                <a href='{resetLink}'>Restablecer Password</a>";
+                <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                    <h2 style='color: #2c3e50;'>Recuperación de Contraseña</h2>
+                    <p>Has solicitado restablecer tu contraseña en Finance Manager.</p>
+                    <p>Haz clic en el siguiente enlace para continuar:</p>
+                    <a href='{resetLink}' style='background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Restablecer Contraseña</a>
+                    <p style='margin-top: 20px; font-size: 12px; color: #7f8c8d;'>Si no solicitaste esto, ignora este correo.</p>
+                </div>";
 
-            // Enviar Email
-            await _emailService.SendEmailAsync(request.Email, "Restablecer Password - Finance App", body);
+            // 3. BLINDAJE TRY-CATCH: Esto evita el error de CORS falso
+            try
+            {
+                await _emailService.SendEmailAsync(request.Email, "Recuperar Contraseña", body);
 
-            return Ok("Correo enviado con éxito.");
+                // Respuesta JSON correcta para Angular
+                return Ok(new { message = "¡Enlace enviado! Revisa tu correo." });
+            }
+            catch (Exception ex)
+            {
+                // Si falla el correo, lo atrapamos y devolvemos el error real
+                Console.WriteLine($"--> [ERROR CONTROLADO] Falló envío email: {ex.Message}");
+                return BadRequest(new { error = $"No se pudo enviar el correo: {ex.Message}" });
+            }
         }
     }
 }

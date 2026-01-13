@@ -24,12 +24,14 @@ namespace FinanceManager.API.Services
             var mailHost = _config["EmailSettings:Host"];
             var mailPort = _config["EmailSettings:Port"];
 
+            // Fallback a variables de entorno
             if (string.IsNullOrEmpty(mailUser)) mailUser = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
             if (string.IsNullOrEmpty(mailPass)) mailPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
             if (string.IsNullOrEmpty(mailHost)) mailHost = Environment.GetEnvironmentVariable("EMAIL_HOST");
             if (string.IsNullOrEmpty(mailPort)) mailPort = Environment.GetEnvironmentVariable("EMAIL_PORT");
 
-            if (!int.TryParse(mailPort, out int port)) port = 465; // <--- Cambiamos el default a 465 por seguridad
+            // Si falla el parseo, forzamos 465
+            if (!int.TryParse(mailPort, out int port)) port = 465;
 
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(mailUser));
@@ -43,31 +45,44 @@ namespace FinanceManager.API.Services
             using var smtp = new SmtpClient();
             try
             {
-                // 1. Aumentamos el Timeout a 20 segundos
-                smtp.Timeout = 20000;
+                // --- LOGS DE DEPURACIÓN (Míralos en Render si falla) ---
+                Console.WriteLine($"--> [DEBUG] Host: {mailHost}");
+                Console.WriteLine($"--> [DEBUG] Port: {port} (Si dice 587, cambia la Variable de Entorno a 465)");
+                Console.WriteLine($"--> [DEBUG] Usuario: {mailUser}");
 
-                // 2. EVITA TIMEOUTS EN RENDER: No verificar revocación de certificados
+                // Timeout de 20 segundos
+                smtp.Timeout = 20000;
                 smtp.CheckCertificateRevocation = false;
 
-                // 3. Selección inteligente de seguridad según el puerto
+                // LÓGICA MAESTRA:
+                // Si el puerto es 465, usamos SSL Implícito (SslOnConnect).
+                // Si es 587, usamos StartTls (Pero esto suele fallar en Render).
                 if (port == 465)
                 {
-                    // Puerto 465 usa SSL directo (Más estable en Render)
+                    Console.WriteLine("--> [DEBUG] Conectando vía SSL (Puerto 465)...");
                     await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.SslOnConnect);
                 }
                 else
                 {
-                    // Puerto 587 usa StartTls
+                    Console.WriteLine("--> [DEBUG] Conectando vía StartTls (Puerto 587)...");
                     await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.StartTls);
                 }
 
+                Console.WriteLine("--> [DEBUG] Autenticando...");
                 await smtp.AuthenticateAsync(mailUser, mailPass);
+
+                Console.WriteLine("--> [DEBUG] Enviando mensaje...");
                 await smtp.SendAsync(email);
+
+                Console.WriteLine("--> [EXITO] Correo enviado correctamente.");
                 await smtp.DisconnectAsync(true);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> Error MailKit ({ex.GetType().Name}): {ex.Message}");
+                Console.WriteLine($"--> [ERROR FATAL] MailKit: {ex.Message}");
+                // Importante: No lanzamos el error (throw) para que el frontend reciba algo,
+                // aunque sea un 200 OK falso, O lanzar una excepción controlada.
+                // Por ahora lanzamos para ver el error en Logs.
                 throw;
             }
         }
