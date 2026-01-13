@@ -15,26 +15,42 @@ namespace FinanceManager.API.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            // Asegúrate de leer esto de tu configuración o variables de entorno
-            var smtpHost = _config["EmailSettings:Host"]; // o Environment.GetEnvironmentVariable("EMAIL_HOST")
-            var smtpPort = int.Parse(_config["EmailSettings:Port"]);
-            var smtpUser = _config["EmailSettings:User"];
-            var smtpPass = _config["EmailSettings:Password"];
+            // 1. Intentamos leer de appsettings (Local)
+            var mailUser = _config["EmailSettings:User"];
+            var mailPass = _config["EmailSettings:Password"];
+            var mailHost = _config["EmailSettings:Host"];
+            var mailPort = _config["EmailSettings:Port"];
 
-            var client = new SmtpClient(smtpHost, smtpPort)
+            // 2. Si es nulo (estamos en Render), leemos la Variable de Entorno directa
+            if (string.IsNullOrEmpty(mailUser)) mailUser = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
+            if (string.IsNullOrEmpty(mailPass)) mailPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+            if (string.IsNullOrEmpty(mailHost)) mailHost = Environment.GetEnvironmentVariable("EMAIL_HOST");
+
+            // El puerto necesita un trato especial para convertirlo a int
+            if (string.IsNullOrEmpty(mailPort)) mailPort = Environment.GetEnvironmentVariable("EMAIL_PORT");
+
+            // 3. Validación de seguridad (Esto evitará el error "Value cannot be null")
+            if (string.IsNullOrEmpty(mailUser)) throw new Exception("ERROR: La variable 'EMAIL_USERNAME' está vacía o no se encuentra.");
+            if (string.IsNullOrEmpty(mailPass)) throw new Exception("ERROR: La variable 'EMAIL_PASSWORD' está vacía.");
+
+            // Parsear el puerto (usar 587 por defecto si falla)
+            if (!int.TryParse(mailPort, out int port)) port = 587;
+
+            // --- AQUÍ OCURRÍA TU ERROR ANTES (Al crear new MailAddress con null) ---
+            var client = new SmtpClient(mailHost, port)
             {
-                Credentials = new NetworkCredential(smtpUser, smtpPass),
-                EnableSsl = true, // <--- IMPORTANTE PARA GMAIL
+                Credentials = new NetworkCredential(mailUser, mailPass),
+                EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false
             };
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(smtpUser),
+                From = new MailAddress(mailUser), // <--- Aquí fallaba porque mailUser era NULL
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = true // Si envías HTML
+                IsBodyHtml = true
             };
 
             mailMessage.To.Add(toEmail);
@@ -45,9 +61,8 @@ namespace FinanceManager.API.Services
             }
             catch (Exception ex)
             {
-                // Esto evitará que tu servidor explote y verás el error real en consola
-                Console.WriteLine($"--> Error enviando correo: {ex.Message}");
-                throw; // O lánzalo para que el Controller lo maneje, pero ya sabrás qué pasó.
+                Console.WriteLine($"--> Error SMTP: {ex.Message}");
+                throw;
             }
         }
 
