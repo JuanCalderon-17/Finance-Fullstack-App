@@ -18,4 +18,8 @@ export class AuthService {
     // Esto llama a tu endpoint POST api/Account/register
     return this.http.post(this.baseUrl + 'register', model);
   }
+
+  forgotPassword(email: string) {
+    return this.http.post(this.baseUrl + 'forgot-password', { email });
+  }
 }
