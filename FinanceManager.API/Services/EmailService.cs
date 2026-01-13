@@ -1,6 +1,10 @@
-﻿using System.Net;
-using System.Net.Mail; 
-
+﻿using MimeKit;
+using MailKit.Net.Smtp;
+using MailKit.Security; // Necesario para SecureSocketOptions
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Threading.Tasks;
+using FinanceManager.API.Interfaces; // Asegúrate de que este namespace coincida con el tuyo
 
 namespace FinanceManager.API.Services
 {
@@ -15,56 +19,53 @@ namespace FinanceManager.API.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            // 1. Intentamos leer de appsettings (Local)
+            // 1. Leer configuración (igual que antes)
             var mailUser = _config["EmailSettings:User"];
             var mailPass = _config["EmailSettings:Password"];
             var mailHost = _config["EmailSettings:Host"];
             var mailPort = _config["EmailSettings:Port"];
 
-            // 2. Si es nulo (estamos en Render), leemos la Variable de Entorno directa
             if (string.IsNullOrEmpty(mailUser)) mailUser = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
             if (string.IsNullOrEmpty(mailPass)) mailPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
             if (string.IsNullOrEmpty(mailHost)) mailHost = Environment.GetEnvironmentVariable("EMAIL_HOST");
-
-            // El puerto necesita un trato especial para convertirlo a int
             if (string.IsNullOrEmpty(mailPort)) mailPort = Environment.GetEnvironmentVariable("EMAIL_PORT");
 
-            // 3. Validación de seguridad (Esto evitará el error "Value cannot be null")
-            if (string.IsNullOrEmpty(mailUser)) throw new Exception("ERROR: La variable 'EMAIL_USERNAME' está vacía o no se encuentra.");
-            if (string.IsNullOrEmpty(mailPass)) throw new Exception("ERROR: La variable 'EMAIL_PASSWORD' está vacía.");
-
-            // Parsear el puerto (usar 587 por defecto si falla)
             if (!int.TryParse(mailPort, out int port)) port = 587;
 
-            // --- AQUÍ OCURRÍA TU ERROR ANTES (Al crear new MailAddress con null) ---
-            var client = new SmtpClient(mailHost, port)
-            {
-                Credentials = new NetworkCredential(mailUser, mailPass),
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false
-            };
+            // 2. Crear el mensaje usando MimeKit (Más moderno)
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(mailUser));
+            email.To.Add(MailboxAddress.Parse(toEmail));
+            email.Subject = subject;
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(mailUser), // <--- Aquí fallaba porque mailUser era NULL
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            };
+            // Cuerpo del correo en HTML
+            var builder = new BodyBuilder();
+            builder.HtmlBody = body;
+            email.Body = builder.ToMessageBody();
 
-            mailMessage.To.Add(toEmail);
-
+            // 3. Enviar usando MailKit (Aquí está la magia que arregla el error 101)
+            using var smtp = new SmtpClient();
             try
             {
-                await client.SendMailAsync(mailMessage);
+                // Connect(host, port, options):
+                // StartTls es la opción correcta para el puerto 587 de Gmail
+                await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.StartTls);
+
+                // Autenticación
+                await smtp.AuthenticateAsync(mailUser, mailPass);
+
+                // Enviar
+                await smtp.SendAsync(email);
+
+                // Desconectar limpiamente
+                await smtp.DisconnectAsync(true);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> Error SMTP: {ex.Message}");
+                // Este log aparecerá en Render si algo falla
+                Console.WriteLine($"--> Error MailKit: {ex.Message}");
                 throw;
             }
         }
-
     }
 }
