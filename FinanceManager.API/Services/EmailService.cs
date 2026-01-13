@@ -22,16 +22,16 @@ namespace FinanceManager.API.Services
             var mailUser = _config["EmailSettings:User"];
             var mailPass = _config["EmailSettings:Password"];
             var mailHost = _config["EmailSettings:Host"];
-            var mailPort = _config["EmailSettings:Port"];
 
-            // Fallback a variables de entorno
+            // Fallback a variables de entorno para usuario/pass/host
             if (string.IsNullOrEmpty(mailUser)) mailUser = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
             if (string.IsNullOrEmpty(mailPass)) mailPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
             if (string.IsNullOrEmpty(mailHost)) mailHost = Environment.GetEnvironmentVariable("EMAIL_HOST");
-            if (string.IsNullOrEmpty(mailPort)) mailPort = Environment.GetEnvironmentVariable("EMAIL_PORT");
 
-            // Si falla el parseo, forzamos 465
-            if (!int.TryParse(mailPort, out int port)) port = 465;
+            // --- CAMBIO NUCLEAR: FORZAMOS PUERTO 465 ---
+            // Ignoramos lo que diga Render y forzamos el puerto seguro.
+            int port = 465;
+            // -------------------------------------------
 
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(mailUser));
@@ -45,28 +45,18 @@ namespace FinanceManager.API.Services
             using var smtp = new SmtpClient();
             try
             {
-                // --- LOGS DE DEPURACIÓN (Míralos en Render si falla) ---
+                // --- LOGS DE DEPURACIÓN ---
                 Console.WriteLine($"--> [DEBUG] Host: {mailHost}");
-                Console.WriteLine($"--> [DEBUG] Port: {port} (Si dice 587, cambia la Variable de Entorno a 465)");
+                Console.WriteLine($"--> [DEBUG] Port: {port} (FORZADO MANUALMENTE)");
                 Console.WriteLine($"--> [DEBUG] Usuario: {mailUser}");
 
                 // Timeout de 20 segundos
                 smtp.Timeout = 20000;
                 smtp.CheckCertificateRevocation = false;
 
-                // LÓGICA MAESTRA:
-                // Si el puerto es 465, usamos SSL Implícito (SslOnConnect).
-                // Si es 587, usamos StartTls (Pero esto suele fallar en Render).
-                if (port == 465)
-                {
-                    Console.WriteLine("--> [DEBUG] Conectando vía SSL (Puerto 465)...");
-                    await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.SslOnConnect);
-                }
-                else
-                {
-                    Console.WriteLine("--> [DEBUG] Conectando vía StartTls (Puerto 587)...");
-                    await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.StartTls);
-                }
+                // Como forzamos 465, usamos SIEMPRE SslOnConnect
+                Console.WriteLine("--> [DEBUG] Conectando vía SSL (Puerto 465)...");
+                await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.SslOnConnect);
 
                 Console.WriteLine("--> [DEBUG] Autenticando...");
                 await smtp.AuthenticateAsync(mailUser, mailPass);
@@ -80,9 +70,7 @@ namespace FinanceManager.API.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"--> [ERROR FATAL] MailKit: {ex.Message}");
-                // Importante: No lanzamos el error (throw) para que el frontend reciba algo,
-                // aunque sea un 200 OK falso, O lanzar una excepción controlada.
-                // Por ahora lanzamos para ver el error en Logs.
+                // Lanzamos el error para que el Controller lo capture y lo muestre en el frontend
                 throw;
             }
         }
