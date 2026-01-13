@@ -1,6 +1,5 @@
-﻿using MimeKit;
-using MailKit.Net.Smtp;
-using MailKit.Security;
+﻿using SendGrid;
+using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
@@ -19,64 +18,54 @@ namespace FinanceManager.API.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            var mailUser = Environment.GetEnvironmentVariable("EMAIL_USERNAME")
-                          ?? _config["EmailSettings:User"];
-            var mailPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD")
-                          ?? _config["EmailSettings:Password"];
-            var mailHost = Environment.GetEnvironmentVariable("EMAIL_HOST")
-                          ?? _config["EmailSettings:Host"];
-            var portStr = Environment.GetEnvironmentVariable("EMAIL_PORT")
-                         ?? _config["EmailSettings:Port"]
-                         ?? "587";
+            // Lee la API Key desde variables de entorno
+            var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY")
+                        ?? _config["SendGrid:ApiKey"];
 
-            if (string.IsNullOrEmpty(mailUser) || string.IsNullOrEmpty(mailPass) || string.IsNullOrEmpty(mailHost))
+            var fromEmail = Environment.GetEnvironmentVariable("EMAIL_FROM")
+                           ?? _config["SendGrid:FromEmail"]
+                           ?? "noreply@financemanager.com";
+
+            var fromName = Environment.GetEnvironmentVariable("EMAIL_FROM_NAME")
+                          ?? _config["SendGrid:FromName"]
+                          ?? "Finance Manager";
+
+            if (string.IsNullOrEmpty(apiKey))
             {
-                throw new InvalidOperationException("Configuración de email incompleta");
+                throw new InvalidOperationException("SendGrid API Key no configurada");
             }
-
-            int port = int.Parse(portStr);
-
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(mailUser));
-            email.To.Add(MailboxAddress.Parse(toEmail));
-            email.Subject = subject;
-
-            var builder = new BodyBuilder { HtmlBody = body };
-            email.Body = builder.ToMessageBody();
-
-            using var smtp = new SmtpClient();
 
             try
             {
-                Console.WriteLine($"--> [DEBUG] Intentando SendGrid: {mailHost}:{port}");
-                Console.WriteLine($"--> [DEBUG] Usuario: {mailUser}");
+                Console.WriteLine("--> [DEBUG] Usando SendGrid API REST");
+                Console.WriteLine($"--> [DEBUG] Enviando desde: {fromName} <{fromEmail}>");
+                Console.WriteLine($"--> [DEBUG] Destinatario: {toEmail}");
 
-                // Configuración crítica para evitar timeouts en Render
-                smtp.Timeout = 45000; // 45 segundos
-                smtp.CheckCertificateRevocation = false;
-                smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                var client = new SendGridClient(apiKey);
 
-                // Conectar con STARTTLS (puerto 587)
-                Console.WriteLine("--> [DEBUG] Conectando con STARTTLS...");
-                await smtp.ConnectAsync(mailHost, port, SecureSocketOptions.StartTls);
+                var from = new EmailAddress(fromEmail, fromName);
+                var to = new EmailAddress(toEmail);
 
-                Console.WriteLine("--> [DEBUG] Autenticando...");
-                await smtp.AuthenticateAsync(mailUser, mailPass);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject, "", body);
 
-                Console.WriteLine("--> [DEBUG] Enviando email...");
-                await smtp.SendAsync(email);
+                Console.WriteLine("--> [DEBUG] Enviando email vía SendGrid API...");
+                var response = await client.SendEmailAsync(msg);
 
-                Console.WriteLine("--> [ÉXITO] Email enviado correctamente");
-                await smtp.DisconnectAsync(true);
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"--> [ÉXITO] Email enviado correctamente (Status: {response.StatusCode})");
+                }
+                else
+                {
+                    var errorBody = await response.Body.ReadAsStringAsync();
+                    Console.WriteLine($"--> [ERROR] SendGrid respondió con error: {response.StatusCode}");
+                    Console.WriteLine($"--> [ERROR BODY] {errorBody}");
+                    throw new Exception($"SendGrid error: {response.StatusCode} - {errorBody}");
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> [ERROR MAILKIT] Tipo: {ex.GetType().Name}");
-                Console.WriteLine($"--> [ERROR MAILKIT] Mensaje: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"--> [INNER ERROR] {ex.InnerException.Message}");
-                }
+                Console.WriteLine($"--> [ERROR FATAL] {ex.Message}");
                 throw new Exception($"No se pudo enviar el correo: {ex.Message}", ex);
             }
         }

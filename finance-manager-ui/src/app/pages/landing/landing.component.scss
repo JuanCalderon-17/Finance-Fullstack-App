@@ -1,101 +1,119 @@
-/* =========================
-   HERO CONTAINER
-========================= */
+// === VARIABLES (Tus colores originales) ===
+$text-color: #ffffff;
+$btn-bg: #ffffff;
+$btn-text: #0f172a; // Negro con un toque azul muy oscuro (más elegante)
+
 .hero-container {
-  position: relative;
   width: 100%;
   height: 100vh;
-
-  background-image: url('https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?q=80&w=3870&auto=format&fit=crop');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-/* =========================
-   OVERLAY OSCURO
-========================= */
-.hero-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1;
-  pointer-events: none; /* CLAVE: no bloquea clicks */
-}
-
-/* =========================
-   CONTENIDO
-========================= */
-.content-wrapper {
-  position: relative;
-  z-index: 2;
-  max-width: 600px;
+  padding: 20px;
   text-align: center;
-  color: white;
+
+  // Fondo original
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(0, 0, 0, 0.9)), 
+              url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
-/* =========================
-   TITULO
-========================= */
+.content-wrapper {
+  max-width: 700px;
+  width: 90%; // Asegura buen ancho en móviles
+  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1); // Animación más fluida "tipo Apple"
+  
+  // === EFECTO CRISTAL PREMIUM ===
+  background: rgba(20, 20, 20, 0.4); // Un poco más oscuro para contraste
+  backdrop-filter: blur(12px);         // Blur más fuerte
+  -webkit-backdrop-filter: blur(12px); // Soporte Safari
+  padding: 3rem 2rem;
+  border-radius: 24px;                 // Bordes más redondeados
+  border: 1px solid rgba(255, 255, 255, 0.08); // Borde ultra fino
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); // Sombra profunda para que "flote"
+}
+
 h1 {
-  font-size: 4rem;
-  font-weight: 900;
-  line-height: 0.9;
+  // Cambio a fuente moderna del sistema (Mucho más limpio que Arial Black)
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   text-transform: uppercase;
-  margin-bottom: 20px;
-  font-family: 'Arial Black', sans-serif;
-
-  text-shadow:
-    0 0 6px rgba(0, 0, 0, 0.9),
-    0 0 18px rgba(0, 0, 0, 0.8),
-    0 0 35px rgba(0, 0, 0, 0.6);
-}
-
-/* =========================
-   SUBTITULO
-========================= */
-.subtitle {
-  font-size: 1.1rem;
-  letter-spacing: 3px;
-  margin-bottom: 40px;
-  text-transform: uppercase;
-  color: #f0f0f0;
-
-  text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.9);
-}
-
-/* =========================
-   BOTON
-========================= */
-.btn-primary {
-  position: relative;
-  z-index: 3;
-
-  background-color: white;
-  color: black;
-  border: none;
-  padding: 15px 45px;
-  font-size: 1rem;
+  color: $text-color;
   font-weight: 800;
-  cursor: pointer;
+  font-size: 3.5rem; 
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1px; // Las letras más juntas se ven más modernas
+  
+  // Sutil degradado en el texto blanco para darle brillo
+  background: linear-gradient(to bottom right, #ffffff, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  // Fallback si el degradado no carga
+  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  @media (max-width: 768px) {
+    font-size: 2.2rem; 
+    letter-spacing: 0px;
+  }
+}
+
+.subtitle {
+  font-family: system-ui, sans-serif;
+  color: #94a3b8; // Un gris azulado elegante en lugar de gris plano
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 3rem;
+  letter-spacing: 2px; // Espaciado amplio para subtítulos (estilo cine)
+  text-transform: uppercase;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+}
+
+// === BOTÓN PREMIUM ===
+.btn-primary {
+  background-color: $btn-bg;
+  color: $btn-text;
+  border: none;
+  padding: 16px 48px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 1px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px; // Radio moderno (ni cuadrado ni pastilla completa)
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  
+  // Transiciones suaves
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); // Resplandor blanco elegante
+    background-color: #f8fafc; // Blanco ligerísimamente gris al hover
+  }
+
+  &:active {
+    transform: translateY(0);
+    transform: scale(0.98);
+  }
 }
 
-.btn-primary:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-}
-
-/* =========================
-   LOGIN LINK
-========================= */
-.login-link {
-  margin-top: 25px;
-  font-size: 0.9rem;
+// === ANIMACIÓN SUAVE ===
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(40px) scale(0.95); // Entra desde abajo y un poco pequeño
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
 }
