@@ -140,38 +140,54 @@ namespace FinanceManager.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
         {
-            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(request.NewPassword))
+            try
             {
-                return BadRequest("Todos los campos son requeridos.");
+                if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(request.NewPassword))
+                {
+                    return BadRequest(new { error = "Todos los campos son requeridos." });
+                }
+
+                var user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    return BadRequest(new { error = "Usuario no encontrado." });
+                }
+
+                // Verificar token
+                if (user.PasswordResetToken != request.Token)
+                {
+                    return BadRequest(new { error = "Token inválido." });
+                }
+
+                // Verificar expiración
+                if (user.ResetTokenExpires < DateTime.UtcNow)
+                {
+                    return BadRequest(new { error = "El token ha expirado. Solicita uno nuevo." });
+                }
+
+                // Cambiar contraseña directamente (sin usar el Token Provider)
+                var passwordHasher = new PasswordHasher<AppUser>();
+                user.PasswordHash = passwordHasher.HashPassword(user, request.NewPassword);
+
+                // Limpiar token
+                user.PasswordResetToken = null;
+                user.ResetTokenExpires = null;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(new { error = "Error al cambiar la contraseña." });
+                }
+
+                Console.WriteLine($"--> [ÉXITO] Contraseña cambiada para: {user.Email}");
+                return Ok(new { message = "Contraseña restablecida correctamente." });
             }
-
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null) return BadRequest("Usuario no encontrado.");
-
-            // Verificar token
-            if (user.PasswordResetToken != request.Token)
+            catch (Exception ex)
             {
-                return BadRequest("Token inválido.");
+                Console.WriteLine($"--> [ERROR RESET PASSWORD] {ex.Message}");
+                return StatusCode(500, new { error = "Error interno del servidor." });
             }
-
-            // Verificar expiración
-            if (user.ResetTokenExpires < DateTime.UtcNow)
-            {
-                return BadRequest("El token ha expirado.");
-            }
-
-            // Cambiar contraseña
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
-
-            if (!result.Succeeded) return BadRequest("Error al cambiar la contraseña.");
-
-            // Limpiar token
-            user.PasswordResetToken = null;
-            user.ResetTokenExpires = null;
-            await _userManager.UpdateAsync(user);
-
-            return Ok(new { message = "Contraseña restablecida correctamente." });
         }
 
     }
