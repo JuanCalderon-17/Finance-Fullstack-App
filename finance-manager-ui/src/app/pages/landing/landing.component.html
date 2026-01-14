@@ -1,20 +1,57 @@
-<div class="hero-container">
-  <div class="content-wrapper">
+<div class="landing-container">
+  
+  <!-- Logo flotante superior izquierdo -->
+  <div class="logo-wrapper">
+    <span class="logo-text">Gerente Financiero</span>
+  </div>
 
-    <h1>
-      GERENCIADOR <br>
-      FINANCIERO
-    </h1>
+  <!-- Contenido principal -->
+  <div class="hero-content">
+    
+    <div class="text-content">
+      <h1 class="main-title">
+        La app de finanzas,<br>
+        a tu manera.
+      </h1>
+      
+      <p class="description">
+        Tu cuenta para gestionar gastos, ahorros y deudas.<br>
+        Sin comisiones. Sin complicaciones. Total control.
+      </p>
 
-    <p class="subtitle">
-      TUS FINANZAS EN CONTROL Y ORDEN.
-    </p>
-
-    <div class="actions">
-      <button routerLink="/auth/login" class="btn-primary">
-        EMPEZAR AHORA
+      <button routerLink="/auth/login" class="cta-button">
+        Empezar ahora
       </button>
     </div>
 
+    <!-- Tarjetas flotantes (mockup visual) -->
+    <div class="cards-showcase">
+      
+      <!-- Tarjeta 1: Balance -->
+      <div class="card card-balance">
+        <div class="card-label">Saldo disponible</div>
+        <div class="card-amount">$1,248.50</div>
+        <div class="card-actions">
+          <button class="mini-btn">Ingresos</button>
+          <button class="mini-btn">Gastos</button>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2: Resumen -->
+      <div class="card card-summary">
+        <div class="card-date">24 de enero, 2026</div>
+        <div class="card-highlight">+$350.00</div>
+        <div class="card-subtitle">Ingreso anticipado</div>
+      </div>
+
+      <!-- Tarjeta 3: Acción rápida -->
+      <div class="card card-action">
+        <div class="card-icon">💰</div>
+        <div class="card-title">Agregar transacción</div>
+      </div>
+
+    </div>
+
   </div>
+
 </div>

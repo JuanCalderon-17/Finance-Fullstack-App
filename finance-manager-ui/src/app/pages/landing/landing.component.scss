@@ -1,119 +1,340 @@
-// === VARIABLES (Tus colores originales) ===
-$text-color: #ffffff;
-$btn-bg: #ffffff;
-$btn-text: #0f172a; // Negro con un toque azul muy oscuro (más elegante)
+/* === PALETA DE COLORES ELEGANTE OSCURA === */
+$glass-bg: rgba(0, 0, 0, 0.6);
+$glass-border: rgba(255, 255, 255, 0.1);
+$text-primary: #ffffff;
+$text-secondary: #ddd;
+$text-muted: #aaa;
+$accent-white: #ffffff;
 
-.hero-container {
+/* === CONTENEDOR PRINCIPAL === */
+.landing-container {
+  min-height: 100vh;
   width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  text-align: center;
-
-  // Fondo original
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(0, 0, 0, 0.9)), 
+  /* Misma imagen de trading que el login */
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), 
               url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Parallax sutil */
+  position: relative;
+  overflow: hidden;
 }
 
-.content-wrapper {
-  max-width: 700px;
-  width: 90%; // Asegura buen ancho en móviles
-  animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1); // Animación más fluida "tipo Apple"
-  
-  // === EFECTO CRISTAL PREMIUM ===
-  background: rgba(20, 20, 20, 0.4); // Un poco más oscuro para contraste
-  backdrop-filter: blur(12px);         // Blur más fuerte
-  -webkit-backdrop-filter: blur(12px); // Soporte Safari
-  padding: 3rem 2rem;
-  border-radius: 24px;                 // Bordes más redondeados
-  border: 1px solid rgba(255, 255, 255, 0.08); // Borde ultra fino
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); // Sombra profunda para que "flote"
-}
+/* === LOGO SUPERIOR === */
+.logo-wrapper {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 10;
+  animation: fadeInDown 0.8s ease;
 
-h1 {
-  // Cambio a fuente moderna del sistema (Mucho más limpio que Arial Black)
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  text-transform: uppercase;
-  color: $text-color;
-  font-weight: 800;
-  font-size: 3.5rem; 
-  line-height: 1.05;
-  margin-bottom: 1.5rem;
-  letter-spacing: -1px; // Las letras más juntas se ven más modernas
-  
-  // Sutil degradado en el texto blanco para darle brillo
-  background: linear-gradient(to bottom right, #ffffff, #cbd5e1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  
-  // Fallback si el degradado no carga
-  text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  .logo-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+  }
+
+  .logo-text {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text-primary;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
 
   @media (max-width: 768px) {
-    font-size: 2.2rem; 
-    letter-spacing: 0px;
+    top: 1.5rem;
+    left: 1.5rem;
+    
+    .logo-icon {
+      font-size: 1.5rem;
+    }
+    
+    .logo-text {
+      font-size: 1rem;
+    }
   }
 }
 
-.subtitle {
-  font-family: system-ui, sans-serif;
-  color: #94a3b8; // Un gris azulado elegante en lugar de gris plano
-  font-size: 1.1rem;
-  font-weight: 400;
-  margin-bottom: 3rem;
-  letter-spacing: 2px; // Espaciado amplio para subtítulos (estilo cine)
-  text-transform: uppercase;
+/* === CONTENIDO HERO === */
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 5%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 8rem 5% 4rem;
+    text-align: center;
+  }
+}
+
+/* === TEXTO PRINCIPAL === */
+.text-content {
+  animation: fadeInLeft 1s ease;
+
+  @media (max-width: 1024px) {
+    animation: fadeIn 1s ease;
+  }
+}
+
+.main-title {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: $text-primary;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1.5px;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+
+  @media (max-width: 1024px) {
+    font-size: 3rem;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 2.25rem;
+  }
+}
+
+.description {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: $text-muted;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 640px) {
+    font-size: 1rem;
     margin-bottom: 2rem;
   }
 }
 
-// === BOTÓN PREMIUM ===
-.btn-primary {
-  background-color: $btn-bg;
-  color: $btn-text;
+.cta-button {
+  background: $accent-white;
+  color: #000;
+  font-family: system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 1rem 3rem;
   border: none;
-  padding: 16px 48px;
-  font-size: 1rem;
-  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 12px; // Radio moderno (ni cuadrado ni pastilla completa)
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  
-  // Transiciones suaves
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); // Resplandor blanco elegante
-    background-color: #f8fafc; // Blanco ligerísimamente gris al hover
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
   }
 
   &:active {
-    transform: translateY(0);
     transform: scale(0.98);
+  }
+
+  @media (max-width: 640px) {
+    width: 100%;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
   }
 }
 
-// === ANIMACIÓN SUAVE ===
-@keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(40px) scale(0.95); // Entra desde abajo y un poco pequeño
+/* === SHOWCASE DE TARJETAS (GLASSMORPHISM) === */
+.cards-showcase {
+  position: relative;
+  height: 600px;
+  animation: fadeInRight 1s ease;
+
+  @media (max-width: 1024px) {
+    display: none;
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
+}
+
+.card {
+  position: absolute;
+  /* EFECTO GLASSMORPHISM IGUAL QUE EL LOGIN */
+  background: $glass-bg;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid $glass-border;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Tarjeta 1: Balance */
+.card-balance {
+  width: 320px;
+  top: 50px;
+  left: 50px;
+  animation: float 6s ease-in-out infinite;
+
+  .card-label {
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+
+  .card-amount {
+    font-size: 3rem;
+    font-weight: 800;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .mini-btn {
+    flex: 1;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+/* Tarjeta 2: Resumen */
+.card-summary {
+  width: 280px;
+  top: 200px;
+  right: 80px;
+  animation: float 6s ease-in-out infinite 1s;
+
+  .card-date {
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin-bottom: 1rem;
+  }
+
+  .card-highlight {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #4caf50;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  }
+
+  .card-subtitle {
+    font-size: 1rem;
+    color: $text-secondary;
+  }
+}
+
+/* Tarjeta 3: Acción */
+.card-action {
+  width: 240px;
+  top: 420px;
+  left: 180px;
+  animation: float 6s ease-in-out infinite 2s;
+  cursor: pointer;
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* === ANIMACIONES === */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
   }
 }
