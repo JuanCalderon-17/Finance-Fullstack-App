@@ -108,7 +108,7 @@ namespace FinanceManager.API.Controllers
 
             // 2. CORREGIDO: El link debe apuntar a tu FRONTEND (Vercel), no al backend
             // Usé la URL que vi en tus logs: https://finanancemanagerpp.vercel.app
-            var resetLink = $"https://finanancemanagerpp.vercel.app/auth/reset-password?token={token}&email={request.Email}";
+            var resetLink = $"https://finanzasbr.com/auth/reset-password?token={token}&email={request.Email}";
 
             var body = $@"
                 <div style='font-family: Arial, sans-serif; padding: 20px;'>

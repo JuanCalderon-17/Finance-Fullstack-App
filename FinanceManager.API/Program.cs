@@ -63,15 +63,16 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularApp", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:4200",               // Para tus pruebas locales
-                "https://finanancemanagerpp.vercel.app" // <--- ¡LA CLAVE! Tu URL de Vercel
+                "http://localhost:4200",
+                "https://finanzasbr.com",           
+                "https://www.finanzasbr.com",      
+                "https://finanancemanagerpp.vercel.app"
               )
               .AllowAnyHeader()
               .AllowAnyMethod();
-        // .AllowCredentials(); // Opcional: Solo si usas cookies, pero con Tokens suele no hacer falta, prueba sin esto primero.
     });
 });
-// 👆👆👆 FIN DEL CAMBIO 👆👆👆
+
 
 builder.Services.AddSwaggerGen(options =>
 {
