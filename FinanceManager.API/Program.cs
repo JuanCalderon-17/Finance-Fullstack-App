@@ -69,7 +69,8 @@ builder.Services.AddCors(options =>
                 "https://finanancemanagerpp.vercel.app"
               )
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
