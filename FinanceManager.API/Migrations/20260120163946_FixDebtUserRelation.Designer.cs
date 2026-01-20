@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceManager.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260112000943_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260120163946_FixDebtUserRelation")]
+    partial class FixDebtUserRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,11 +111,9 @@ namespace FinanceManager.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
                     b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -128,8 +126,9 @@ namespace FinanceManager.API.Migrations
                     b.Property<int>("Installments")
                         .HasColumnType("integer");
 
-                    b.Property<double>("InterestRate")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("InterestRate")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -138,11 +137,49 @@ namespace FinanceManager.API.Migrations
                     b.Property<int>("PaidInstallments")
                         .HasColumnType("integer");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Debts");
+                });
+
+            modelBuilder.Entity("FinanceManager.API.Models.Installment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<int>("DebtId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("InstallmentNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DebtId");
+
+                    b.ToTable("Installments");
                 });
 
             modelBuilder.Entity("FinanceManager.API.Models.SavingsAccount", b =>
@@ -157,6 +194,7 @@ namespace FinanceManager.API.Migrations
                         .HasColumnType("text");
 
                     b.Property<decimal>("Balance")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Color")
@@ -164,6 +202,7 @@ namespace FinanceManager.API.Migrations
                         .HasColumnType("text");
 
                     b.Property<decimal?>("Goal")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Icon")
@@ -349,11 +388,24 @@ namespace FinanceManager.API.Migrations
 
             modelBuilder.Entity("FinanceManager.API.Models.Debt", b =>
                 {
-                    b.HasOne("FinanceManager.API.Models.AppUser", "AppUser")
+                    b.HasOne("FinanceManager.API.Models.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FinanceManager.API.Models.Installment", b =>
+                {
+                    b.HasOne("FinanceManager.API.Models.Debt", "Debt")
+                        .WithMany("InstallmentsList")
+                        .HasForeignKey("DebtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Debt");
                 });
 
             modelBuilder.Entity("FinanceManager.API.Models.SavingsAccount", b =>
@@ -425,6 +477,11 @@ namespace FinanceManager.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FinanceManager.API.Models.Debt", b =>
+                {
+                    b.Navigation("InstallmentsList");
                 });
 #pragma warning restore 612, 618
         }

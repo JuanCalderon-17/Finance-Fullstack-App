@@ -1,0 +1,37 @@
+﻿namespace FinanceManager.API.DTOs
+{
+    public class DebtDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+        public decimal InterestRate { get; set; }
+        public int Installments { get; set; }
+        public int PaidInstallments { get; set; }
+        public string Color { get; set; }
+        public string Icon { get; set; }
+
+        // NUEVO
+        public List<InstallmentDto> InstallmentsList { get; set; } = new List<InstallmentDto>();
+    }
+
+    public class CreateDebtDto
+    {
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+        public decimal InterestRate { get; set; }
+        public int Installments { get; set; }
+        public string Color { get; set; }
+        public string Icon { get; set; }
+    }
+
+    public class UpdateDebtDto
+    {
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+        public decimal InterestRate { get; set; }
+        public int Installments { get; set; }
+        public string Color { get; set; }
+        public string Icon { get; set; }
+    }
+}

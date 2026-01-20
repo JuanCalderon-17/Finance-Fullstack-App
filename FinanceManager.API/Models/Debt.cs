@@ -6,25 +6,20 @@ namespace FinanceManager.API.Models
 {
     public class Debt
     {
-        [Key]
         public int Id { get; set; }
+        public string UserId { get; set; }
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+        public decimal InterestRate { get; set; }
+        public int Installments { get; set; }
+        public int PaidInstallments { get; set; } // Ya no se usa pero se mantiene
+        public string Color { get; set; }
+        public string Icon { get; set; }
 
-        [Required]
-        public string Name { get; set; } = string.Empty;
+        // NUEVA RELACIÓN
+        public List<Installment> InstallmentsList { get; set; } = new List<Installment>();
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Balance { get; set; } // Monto Total Original
-
-        public double InterestRate { get; set; } // % Interés Anual
-        public int Installments { get; set; }    // Número de Cuotas (Plazo)
-        public int PaidInstallments { get; set; } // Cuotas ya pagadas
-
-        public string Color { get; set; } = string.Empty;
-        public string Icon { get; set; } = "bi-credit-card";
-
-        public string? AppUserId { get; set; }
-
-        [JsonIgnore]
-        public AppUser? AppUser { get; set; }
+        // Navegación
+        public AppUser? User { get; set; }
     }
 }
