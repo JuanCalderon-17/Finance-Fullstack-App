@@ -27,7 +27,7 @@ export interface Debt {
   providedIn: 'root'
 })
 export class DebtsService {
-  private apiUrl = 'https://finanzasbr-api.onrender.com/api/debts';
+  private apiUrl = 'https://api.finanzasbr.com/api/debts';
 
   constructor(private http: HttpClient) {}
 
