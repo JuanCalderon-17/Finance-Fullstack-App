@@ -31,7 +31,7 @@ namespace FinanceManager.API.Controllers
 
             var debts = await _context.Debts
                 .Include(d => d.InstallmentsList.OrderBy(i => i.InstallmentNumber))
-                .Where(d => d.UserId == userId)
+                .Where(d => d.AppUserId == userId) // ← CAMBIADO
                 .ToListAsync();
 
             return Ok(debts.Select(MapToDto));
@@ -45,7 +45,7 @@ namespace FinanceManager.API.Controllers
 
             var debt = await _context.Debts
                 .Include(d => d.InstallmentsList.OrderBy(i => i.InstallmentNumber))
-                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.Id == id && d.AppUserId == userId); // ← CAMBIADO
 
             if (debt == null) return NotFound();
 
@@ -60,7 +60,7 @@ namespace FinanceManager.API.Controllers
 
             var debt = new Debt
             {
-                UserId = userId,
+                AppUserId = userId, // ← CAMBIADO
                 Name = dto.Name,
                 Balance = dto.Balance,
                 InterestRate = dto.InterestRate,
@@ -85,7 +85,7 @@ namespace FinanceManager.API.Controllers
 
             var debt = await _context.Debts
                 .Include(d => d.InstallmentsList)
-                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.Id == id && d.AppUserId == userId); // ← CAMBIADO
 
             if (debt == null) return NotFound();
 
@@ -95,7 +95,6 @@ namespace FinanceManager.API.Controllers
             debt.Color = dto.Color;
             debt.Icon = dto.Icon;
 
-            // Si cambia el número de cuotas → regenerar
             if (debt.Installments != dto.Installments)
             {
                 debt.Installments = dto.Installments;
@@ -114,7 +113,7 @@ namespace FinanceManager.API.Controllers
             var userId = GetUserId();
 
             var debt = await _context.Debts
-                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.Id == id && d.AppUserId == userId); // ← CAMBIADO
 
             if (debt == null) return NotFound();
 
@@ -135,7 +134,7 @@ namespace FinanceManager.API.Controllers
 
             var debt = await _context.Debts
                 .Include(d => d.InstallmentsList)
-                .FirstOrDefaultAsync(d => d.Id == debtId && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.Id == debtId && d.AppUserId == userId); // ← CAMBIADO
 
             if (debt == null) return NotFound("Debt not found");
 
@@ -149,6 +148,28 @@ namespace FinanceManager.API.Controllers
                 installment.IsPaid = dto.IsPaid.Value;
                 installment.PaidDate = dto.IsPaid.Value ? DateTime.UtcNow : null;
             }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // PUT: api/debts/{debtId}/installments/{installmentId}/toggle
+        [HttpPut("{debtId}/installments/{installmentId}/toggle")]
+        public async Task<IActionResult> ToggleInstallmentPaid(int debtId, int installmentId)
+        {
+            var userId = GetUserId();
+
+            var debt = await _context.Debts
+                .Include(d => d.InstallmentsList)
+                .FirstOrDefaultAsync(d => d.Id == debtId && d.AppUserId == userId); // ← CAMBIADO
+
+            if (debt == null) return NotFound();
+
+            var installment = debt.InstallmentsList.FirstOrDefault(i => i.Id == installmentId);
+            if (installment == null) return NotFound();
+
+            installment.IsPaid = !installment.IsPaid;
+            installment.PaidDate = installment.IsPaid ? DateTime.UtcNow : null;
 
             await _context.SaveChangesAsync();
             return NoContent();

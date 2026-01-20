@@ -16,12 +16,16 @@ namespace FinanceManager.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // NO quitar nunca
+            base.OnModelCreating(modelBuilder);
 
-            // Transaction
-            modelBuilder.Entity<Transaction>()
-                .Property(t => t.Amount)
-                .HasPrecision(18, 4);
+            // ============ RELACIONES ============
+
+            // Debt -> User (AppUserId)
+            modelBuilder.Entity<Debt>()
+                .HasOne(d => d.User)
+                .WithMany()
+                .HasForeignKey(d => d.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Debt -> Installments (1 a muchos)
             modelBuilder.Entity<Debt>()
@@ -30,7 +34,14 @@ namespace FinanceManager.API.Data
                 .HasForeignKey(i => i.DebtId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Decimales (PostgreSQL)
+            // ============ DECIMALES (PostgreSQL) ============
+
+            // Transaction
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.Amount)
+                .HasPrecision(18, 4);
+
+            // Debt
             modelBuilder.Entity<Debt>()
                 .Property(d => d.Balance)
                 .HasPrecision(18, 2);
@@ -39,10 +50,12 @@ namespace FinanceManager.API.Data
                 .Property(d => d.InterestRate)
                 .HasPrecision(5, 2);
 
+            // Installment
             modelBuilder.Entity<Installment>()
                 .Property(i => i.Amount)
                 .HasPrecision(18, 2);
 
+            // SavingsAccount
             modelBuilder.Entity<SavingsAccount>()
                 .Property(s => s.Balance)
                 .HasPrecision(18, 2);
