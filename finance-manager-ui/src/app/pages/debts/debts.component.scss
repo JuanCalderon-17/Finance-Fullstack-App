@@ -1,0 +1,156 @@
+.installments-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+
+  /* Scrollbar personalizado */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+.installments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.installment-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  &.paid {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: #86efac;
+
+    .toggle-btn i {
+      color: #22c55e;
+    }
+
+    .installment-number {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+  }
+
+  .toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #d1d5db;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+
+    &:hover {
+      transform: scale(1.1);
+      color: #22c55e;
+    }
+
+    i {
+      transition: color 0.2s;
+    }
+  }
+
+  .installment-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    .installment-number {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #111827;
+    }
+
+    .installment-date {
+      font-size: 0.75rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      i {
+        font-size: 0.7rem;
+      }
+    }
+  }
+
+  .installment-amount {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    strong {
+      font-size: 1rem;
+      color: #111827;
+    }
+
+    .paid-badge {
+      font-size: 0.7rem;
+      color: #22c55e;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .installments-container {
+    max-height: 300px;
+  }
+
+  .installment-item {
+    padding: 8px 10px;
+    gap: 8px;
+
+    .toggle-btn {
+      font-size: 1.3rem;
+    }
+
+    .installment-info {
+      .installment-number {
+        font-size: 0.85rem;
+      }
+
+      .installment-date {
+        font-size: 0.7rem;
+      }
+    }
+
+    .installment-amount {
+      strong {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

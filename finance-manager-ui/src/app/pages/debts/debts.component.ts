@@ -14,9 +14,8 @@ import { DebtsService, Debt } from '../../services/debts.service';
 export class DebtsComponent implements OnInit {
 
   debts: any[] = [];
-  isEditing: boolean = false; // ¿Estamos editando?
+  isEditing: boolean = false;
   
-  // Modelo para el formulario (Nuevo o Edición)
   currentDebt: Debt = {
     name: '',
     balance: 0,
@@ -38,22 +37,25 @@ export class DebtsComponent implements OnInit {
   loadData() {
     this.debtsService.getDebts().subscribe({
       next: (data) => {
-        // Calculamos los datos visuales para cada deuda que llega
         this.debts = data.map(d => this.calculateMetrics(d));
         this.calculateTotal();
       }
     });
   }
 
-  // 🧮 ZONA MATEMÁTICA
+  // 🧮 ZONA MATEMÁTICA - ACTUALIZADA
   calculateMetrics(debt: Debt): any {
-    const d = { ...debt } as any; // Copia extensible
+    const d = { ...debt } as any;
     
-    // Cálculo de cuota simple (con interés compuesto básico si existe)
+    // ✅ NUEVO: Calcular paidInstallments desde installmentsList
+    if (d.installmentsList && d.installmentsList.length > 0) {
+      d.paidInstallments = d.installmentsList.filter((i: any) => i.isPaid).length;
+    }
+
+    // Cálculo de cuota mensual
     if (d.interestRate > 0) {
-       const r = d.interestRate / 12 / 100; // Tasa mensual
+       const r = d.interestRate / 12 / 100;
        const n = d.installments;
-       // Fórmula de anualidad
        const numerator = r * Math.pow(1 + r, n);
        const denominator = Math.pow(1 + r, n) - 1;
        d.monthlyPayment = d.balance * (numerator / denominator);
@@ -75,13 +77,10 @@ export class DebtsComponent implements OnInit {
     this.totalDebt = this.debts.reduce((sum, d) => sum + d.remainingAmount, 0);
   }
 
-  // --- ACCIONES ---
-
   saveDebt() {
     if (!this.currentDebt.name || this.currentDebt.balance <= 0) return;
 
     if (this.isEditing && this.currentDebt.id) {
-      // MODO EDICIÓN
       this.debtsService.updateDebt(this.currentDebt.id, this.currentDebt).subscribe({
         next: () => {
           this.loadData();
@@ -89,7 +88,6 @@ export class DebtsComponent implements OnInit {
         }
       });
     } else {
-      // MODO CREACIÓN
       this.debtsService.createDebt(this.currentDebt).subscribe({
         next: () => {
           this.loadData();
@@ -99,11 +97,10 @@ export class DebtsComponent implements OnInit {
     }
   }
 
-  // Cargar datos en el formulario para editar
   startEdit(debt: Debt) {
     this.isEditing = true;
-    this.currentDebt = { ...debt }; // Copia para no modificar la lista directamente
-    window.scrollTo(0, 0); // Subir para ver el form
+    this.currentDebt = { ...debt };
+    window.scrollTo(0, 0);
   }
 
   deleteDebt(id: number) {
@@ -114,23 +111,13 @@ export class DebtsComponent implements OnInit {
     }
   }
 
-  // Slider en tiempo real
-  onSliderChange(debt: any, newValue: number) {
-    debt.paidInstallments = newValue;
-    // Guardamos el cambio en la BD automáticamente al soltar el slider (opcional)
-    // O simplemente actualizamos visualmente:
-    const updated = this.calculateMetrics(debt);
-    Object.assign(debt, updated);
-    
-    // Si quieres guardar en BD cada vez que mueven el slider:
-    // this.debtsService.updateDebt(debt.id, debt).subscribe();
-  }
-  
-  // Guardar el cambio del slider al soltarlo
-  saveSliderChange(debt: any) {
-     if(debt.id) {
-         this.debtsService.updateDebt(debt.id, debt).subscribe();
-     }
+
+
+  // ✅ NUEVO: Toggle de cuota individual
+  toggleInstallment(debtId: number, installmentId: number) {
+    this.debtsService.toggleInstallment(debtId, installmentId).subscribe({
+      next: () => this.loadData()
+    });
   }
 
   resetForm() {

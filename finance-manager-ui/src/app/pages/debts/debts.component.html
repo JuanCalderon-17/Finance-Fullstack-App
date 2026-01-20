@@ -105,28 +105,59 @@
                </div>
             </div>
 
-            <div class="col-md-7 d-flex flex-column justify-content-center">
+            <div class="col-md-7">
               
-              <div class="d-flex justify-content-between small mb-2">
-                <span class="fw-bold text-success">Pagado: {{ d.paidInstallments }} cuotas</span>
-                <span class="text-muted">Total: {{ d.installments }}</span>
-              </div>
-
-              <input type="range" class="form-range" 
-                     [min]="0" [max]="d.installments" 
-                     [(ngModel)]="d.paidInstallments"
-                     (input)="onSliderChange(d, d.paidInstallments)"
-                     (change)="saveSliderChange(d)">
-              
-              <div class="progress mt-2" style="height: 10px;">
-                <div class="progress-bar bg-success" role="progressbar" 
-                     [style.width.%]="d.progress">
+              <!-- ✅ NUEVO: Barra de progreso general -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between small mb-2">
+                  <span class="fw-bold text-success">Pagado: {{ d.paidInstallments }} cuotas</span>
+                  <span class="text-muted">Total: {{ d.installments }}</span>
+                </div>
+                
+                <div class="progress" style="height: 12px;">
+                  <div class="progress-bar bg-success" role="progressbar" 
+                       [style.width.%]="d.progress">
+                  </div>
                 </div>
               </div>
-              
-              <small class="text-center text-muted mt-2 fst-italic">
-                Desliza para actualizar tu avance 👆
-              </small>
+
+              <!-- ✅ NUEVO: Lista de cuotas individuales -->
+              <div class="installments-container">
+                <h6 class="fw-bold mb-2 text-muted small">📋 Detalle de Cuotas:</h6>
+                
+                <div class="installments-list" *ngIf="d.installmentsList && d.installmentsList.length > 0">
+                  <div class="installment-item" 
+                       *ngFor="let inst of d.installmentsList"
+                       [class.paid]="inst.isPaid">
+                    
+                    <button (click)="toggleInstallment(d.id, inst.id)"
+                            class="toggle-btn"
+                            type="button">
+                      <i [class]="inst.isPaid ? 'bi bi-check-circle-fill' : 'bi bi-circle'"></i>
+                    </button>
+
+                    <div class="installment-info">
+                      <span class="installment-number">Cuota #{{ inst.installmentNumber }}</span>
+                      <span class="installment-date">
+                        <i class="bi bi-calendar3"></i>
+                        {{ inst.dueDate | date:'dd/MM/yyyy' }}
+                      </span>
+                    </div>
+
+                    <div class="installment-amount">
+                      <strong>{{ inst.amount | currency }}</strong>
+                      <small *ngIf="inst.isPaid && inst.paidDate" class="paid-badge">
+                        ✓ {{ inst.paidDate | date:'dd/MM' }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="!d.installmentsList || d.installmentsList.length === 0" 
+                     class="alert alert-warning small mb-0">
+                  ⚠️ Esta deuda no tiene cuotas generadas. Edítala para crearlas.
+                </div>
+              </div>
 
             </div>
           </div>
