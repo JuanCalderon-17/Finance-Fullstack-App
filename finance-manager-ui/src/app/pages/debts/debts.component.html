@@ -1,4 +1,4 @@
-<!-- HEADER ORIGINAL (NO TOCAR) -->
+<!-- HEADER -->
 <div class="bg-dark text-white py-4 mb-4 shadow">
   <div class="container d-flex justify-content-between align-items-center">
     <div>
@@ -14,11 +14,10 @@
 <div class="container pb-5">
   <div class="row g-4">
 
-    <!-- FORMULARIO LATERAL MEJORADO -->
+    <!-- FORMULARIO LATERAL -->
     <div class="col-lg-4 mb-4">
-      <div class="card shadow-lg border-0 sticky-top" style="top: 20px; border-radius: 20px; overflow: hidden;">
-        <div class="card-header fw-bold text-white" 
-             style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); padding: 1.5rem;">
+      <div class="card shadow-lg border-0 sticky-top debt-form-card">
+        <div class="card-header fw-bold text-white debt-form-header">
           <i [class]="isEditing ? 'bi bi-pencil-square' : 'bi bi-plus-circle-fill'"></i>
           {{ isEditing ? ' Editar Deuda' : ' Nueva Deuda' }}
         </div>
@@ -89,8 +88,7 @@
 
             <div class="d-grid gap-2">
               <button type="submit" 
-                      class="btn btn-lg"
-                      style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); border: none; border-radius: 12px; color: white; font-weight: 600;"
+                      class="btn btn-lg debt-submit-btn"
                       [disabled]="!currentDebt.name || currentDebt.balance <= 0">
                 <i [class]="isEditing ? 'bi bi-check-circle' : 'bi bi-plus-lg'"></i>
                 {{ isEditing ? ' Guardar Cambios' : ' Crear Deuda' }}
@@ -125,7 +123,7 @@
            *ngFor="let d of debts"
            style="border-radius: 24px; overflow: hidden;">
         
-        <!-- HEADER -->
+        <!-- HEADER CON BOTONES MEJORADOS -->
         <div class="card-header" style="background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-bottom: 2px solid #f3f4f6; padding: 2rem;">
           <div class="d-flex justify-content-between align-items-start">
             <div class="flex-grow-1">
@@ -146,18 +144,17 @@
               </div>
             </div>
             
-            <div class="d-flex gap-2">
-              <button class="btn btn-sm" 
+            <!-- BOTONES COMPACTOS E INTUITIVOS -->
+            <div class="d-flex gap-2 ms-3">
+              <button class="btn-action btn-action-edit" 
                       (click)="startEdit(d)"
-                      style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; border: none; border-radius: 12px; width: 40px; height: 40px;"
-                      title="Editar">
-                <i class="bi bi-pencil"></i>
+                      title="Editar deuda">
+                <i class="bi bi-pencil-fill"></i>
               </button>
-              <button class="btn btn-sm" 
+              <button class="btn-action btn-action-delete" 
                       (click)="deleteDebt(d.id)"
-                      style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; border: none; border-radius: 12px; width: 40px; height: 40px;"
-                      title="Eliminar">
-                <i class="bi bi-trash"></i>
+                      title="Eliminar deuda">
+                <i class="bi bi-x-lg"></i>
               </button>
             </div>
           </div>
@@ -165,46 +162,40 @@
 
         <div class="card-body" style="padding: 1.5rem;">
           
-          <!-- STATS CARDS -->
+          <!-- STATS CARDS SIN CÍRCULOS -->
           <div class="row g-3 mb-3">
             <div class="col-md-4">
-              <div class="stat-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1e40af; padding: 1.5rem; border-radius: 16px;">
-                <div class="d-flex align-items-center gap-3">
-                  <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-wallet2" style="font-size: 1.5rem; color: #3b82f6;"></i>
-                  </div>
-                  <div>
-                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.8;">Cuota Mensual</div>
-                    <div style="font-size: 1.5rem; font-weight: 800;">{{ d.monthlyPayment | currency }}</div>
-                  </div>
+              <div class="stat-card-clean stat-card-primary">
+                <div class="stat-icon-clean">
+                  <i class="bi bi-wallet2"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-label-clean">Cuota Mensual</div>
+                  <div class="stat-value-clean">{{ d.monthlyPayment | currency }}</div>
                 </div>
               </div>
             </div>
 
             <div class="col-md-4">
-              <div class="stat-card" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; padding: 1.5rem; border-radius: 16px;">
-                <div class="d-flex align-items-center gap-3">
-                  <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-exclamation-triangle" style="font-size: 1.5rem; color: #ef4444;"></i>
-                  </div>
-                  <div>
-                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.8;">Saldo Pendiente</div>
-                    <div style="font-size: 1.5rem; font-weight: 800;">{{ d.remainingAmount | currency }}</div>
-                  </div>
+              <div class="stat-card-clean stat-card-danger">
+                <div class="stat-icon-clean">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-label-clean">Saldo Pendiente</div>
+                  <div class="stat-value-clean">{{ d.remainingAmount | currency }}</div>
                 </div>
               </div>
             </div>
 
             <div class="col-md-4">
-              <div class="stat-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; padding: 1.5rem; border-radius: 16px;">
-                <div class="d-flex align-items-center gap-3">
-                  <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-graph-up-arrow" style="font-size: 1.5rem; color: #10b981;"></i>
-                  </div>
-                  <div>
-                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.8;">Progreso</div>
-                    <div style="font-size: 1.5rem; font-weight: 800;">{{ d.progress | number:'1.0-0' }}%</div>
-                  </div>
+              <div class="stat-card-clean stat-card-success">
+                <div class="stat-icon-clean">
+                  <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-label-clean">Progreso</div>
+                  <div class="stat-value-clean">{{ d.progress | number:'1.0-0' }}%</div>
                 </div>
               </div>
             </div>

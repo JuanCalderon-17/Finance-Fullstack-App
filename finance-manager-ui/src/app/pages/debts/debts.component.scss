@@ -1,423 +1,191 @@
-// ============ VARIABLES PROFESIONALES ============
-$primary: #2563eb;        // Azul profesional (antes púrpura)
-$secondary: #475569;      // Gris azulado
-$success: #059669;        // Verde esmeralda (más serio)
-$danger: #dc2626;         // Rojo más sobrio
-$warning: #d97706;        // Naranja ámbar
-$info: #0284c7;          // Azul cielo profesional
-$dark: #1e293b;          // Gris oscuro azulado
-$light: #f8fafc;         // Gris muy claro
-
-// ============ ESTILOS PARA CHECKBOX CHECKED ============
-.checked {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
-  border-color: #059669 !important;
-  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.25) !important;
-}
-
-// ============ HEADER PROFESIONAL ============
-.header-gradient {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  box-shadow: 0 4px 20px rgba(30, 64, 175, 0.15);
-
-  .display-5 {
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-}
-
-// ============ FORMULARIO PROFESIONAL ============
-.form-card {
+// ============ 1. CAMBIO DE COLOR DEL FORMULARIO ============
+.debt-form-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: none;
   position: sticky;
   top: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  .form-header {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-    color: white;
-    padding: 1.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-
-    i {
-      font-size: 1.5rem;
-    }
-  }
-
-  .form-body {
-    padding: 2rem;
-
-    .form-floating {
-      label {
-        color: #64748b;
-        font-weight: 500;
-
-        i {
-          margin-right: 0.5rem;
-        }
-      }
-
-      .form-control {
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 1rem;
-        padding: 1rem 0.75rem;
-
-        &:focus {
-          border-color: #2563eb !important;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
-        }
-      }
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      padding: 0.875rem;
-      transition: all 0.3s ease;
-
-      &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        transform: none;
-      }
-    }
-  }
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-// ============ EMPTY STATE ============
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  .empty-icon {
-    font-size: 5rem;
-    color: #cbd5e1;
-    margin-bottom: 1.5rem;
-  }
-
-  .empty-title {
-    color: $dark;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  .empty-text {
-    color: #64748b;
-    font-size: 1.1rem;
-  }
-}
-
-// ============ TARJETAS DE DEUDA PROFESIONALES ============
-.debt-card-modern {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    border-color: #cbd5e1;
-  }
-}
-
-.debt-card-header {
-  padding: 2rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-  border-bottom: 1px solid #e2e8f0;
+.debt-form-header {
+  background: #0D0D4C !important; // ← Color solicitado
+  color: white;
+  padding: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.75rem;
 
-  .debt-title-section {
-    flex: 1;
-  }
-
-  .debt-title {
+  i {
     font-size: 1.5rem;
-    font-weight: 700;
-    color: $dark;
-    margin-bottom: 1rem;
-  }
-
-  .debt-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .debt-actions {
-    display: flex;
-    gap: 0.5rem;
   }
 }
 
-// ============ BADGES PROFESIONALES ============
-.badge-modern {
-  padding: 0.4rem 0.875rem;
-  border-radius: 6px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &.badge-primary {
-    background: #dbeafe;
-    color: #1e40af;
-    border: 1px solid #bfdbfe;
-  }
-
-  &.badge-info {
-    background: #e0e7ff;
-    color: #4338ca;
-    border: 1px solid #c7d2fe;
-  }
-
-  &.badge-success {
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
-  }
-
-  &.badge-warning {
-    background: #fef3c7;
-    color: #92400e;
-    border: 1px solid #fde68a;
-  }
-}
-
-// ============ BOTONES ICON PROFESIONALES ============
-.btn-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: white;
-
-  &.btn-icon-warning {
-    color: #d97706;
-    border-color: #fde68a;
-
-    &:hover {
-      background: #fffbeb;
-      border-color: #fbbf24;
-      transform: scale(1.05);
-    }
-  }
-
-  &.btn-icon-danger {
-    color: #dc2626;
-    border-color: #fecaca;
-
-    &:hover {
-      background: #fef2f2;
-      border-color: #f87171;
-      transform: scale(1.05);
-    }
-  }
-}
-
-// ============ STATS GRID PROFESIONAL ============
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
-}
-
-.stat-card {
-  padding: 1.5rem;
+.debt-submit-btn {
+  background: #0D0D4C !important; // ← Color solicitado
+  border: none;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  color: white;
+  font-weight: 600;
+  padding: 0.875rem;
   transition: all 0.3s ease;
-  background: white;
 
-  &:hover {
+  &:hover:not(:disabled) {
+    background: #1a1a6e !important; // Versión más clara para hover
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    border-color: #cbd5e1;
+    box-shadow: 0 10px 25px rgba(13, 13, 76, 0.3);
   }
 
-  .stat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .stat-content {
-    flex: 1;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #64748b;
-    margin-bottom: 0.25rem;
-  }
-
-  .stat-value {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: $dark;
-  }
-
-  &.stat-primary {
-    background: #eff6ff;
-    border-color: #dbeafe;
-
-    .stat-icon {
-      background: #2563eb;
-      color: white;
-    }
-  }
-
-  &.stat-danger {
-    background: #fef2f2;
-    border-color: #fecaca;
-
-    .stat-icon {
-      background: #dc2626;
-      color: white;
-    }
-  }
-
-  &.stat-success {
-    background: #f0fdf4;
-    border-color: #d1fae5;
-
-    .stat-icon {
-      background: #059669;
-      color: white;
-    }
+  &:disabled {
+    opacity: 0.5;
+    transform: none;
   }
 }
 
-// ============ BARRA DE PROGRESO PROFESIONAL ============
-.progress-section {
-  padding: 0 1.5rem 1.5rem;
-}
-
-.progress-modern {
-  height: 8px;
-  background: #e2e8f0;
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative;
-}
-
-.progress-bar-modern {
-  height: 100%;
-  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
-  border-radius: 4px;
-  transition: width 0.8s ease;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 0.5rem;
-
-  &.progress-complete {
-    background: linear-gradient(90deg, #047857 0%, #059669 100%);
-  }
-
-  .progress-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: white;
-  }
-}
-
-// ============ CUOTAS EXPANDIBLES ============
-.installments-wrapper {
-  border-top: 1px solid #e2e8f0;
-}
-
-.installments-toggle {
-  width: 100%;
-  padding: 1.5rem;
-  background: none;
+// ============ 2. BOTONES DE ACCIÓN COMPACTOS E INTUITIVOS ============
+.btn-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: none;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: $dark;
+  justify-content: center;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  
+  i {
+    line-height: 1;
+  }
+
+  &.btn-action-edit {
+    background: #f0f9ff;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+
+    &:hover {
+      background: #0284c7;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+  }
+
+  &.btn-action-delete {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+
+    &:hover {
+      background: #dc2626;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+  }
+}
+
+// ============ 3. STATS CARDS SIN CÍRCULOS ============
+.stat-card-clean {
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
 
   &:hover {
-    background: #f8fafc;
-  }
-
-  .toggle-icon {
-    margin-left: auto;
-    transition: transform 0.3s ease;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
   }
 }
 
-.installments-content {
-  max-height: 0;
+.stat-icon-clean {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-label-clean {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
   overflow: hidden;
-  transition: max-height 0.5s ease;
+  text-overflow: ellipsis;
+}
 
-  &.show {
-    max-height: 2000px;
+.stat-value-clean {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Variantes de color
+.stat-card-primary {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-color: #bfdbfe;
+
+  .stat-icon-clean {
+    color: #2563eb;
   }
 }
 
-.installments-grid {
-  padding: 0 1.5rem 1.5rem;
-  display: grid;
-  gap: 0.75rem;
+.stat-card-danger {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #fecaca;
+
+  .stat-icon-clean {
+    color: #dc2626;
+  }
 }
 
-// ============ TARJETAS DE CUOTA PROFESIONALES ============
+.stat-card-success {
+  background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+  border-color: #a7f3d0;
+
+  .stat-icon-clean {
+    color: #059669;
+  }
+}
+
+// ============ ESTILOS EXISTENTES (mantener) ============
+.checked {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+}
+
 .installment-card {
   background: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
+  border: 3px solid #e5e7eb;
+  border-radius: 16px;
   padding: 1.25rem;
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 1.25rem;
   align-items: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 
@@ -427,182 +195,57 @@ $light: #f8fafc;         // Gris muy claro
     left: 0;
     top: 0;
     bottom: 0;
-    width: 4px;
+    width: 6px;
     background: transparent;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
   }
 
   &:hover {
     border-color: #cbd5e1 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transform: translateX(2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateX(4px);
 
     &::before {
-      background: $primary;
+      background: #4f46e5;
     }
   }
 
   &.paid {
-    background: #f0fdf4 !important;
-    border-color: #86efac !important;
+    background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%) !important;
+    border-color: #10b981 !important;
 
     &::before {
-      background: $success;
+      background: #10b981;
     }
   }
 
   &.overdue {
-    background: #fef2f2 !important;
-    border-color: #fca5a5 !important;
-    
+    background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%) !important;
+    border-color: #ef4444 !important;
+    animation: pulse-soft 2s infinite;
+
     &::before {
-      background: $danger;
+      background: #ef4444;
     }
   }
-}
-
-.installment-check {
-  cursor: pointer;
-
-  .check-circle {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 2px solid #cbd5e1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    background: white;
-
-    i {
-      font-size: 1.5rem;
-      color: #94a3b8;
-      transition: all 0.2s ease;
-    }
-
-    &:hover {
-      border-color: $success;
-      transform: scale(1.05);
-
-      i {
-        color: $success;
-      }
-    }
-
-    &.checked {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      border-color: #059669;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-
-      i {
-        color: white;
-        animation: checkPop 0.3s ease;
-      }
-    }
-  }
-}
-
-.installment-details {
-  .installment-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .installment-num {
-    font-size: 1rem;
-    font-weight: 700;
-    color: $dark;
-  }
-
-  .installment-status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    background: #d1fae5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
-
-    &.overdue-badge {
-      background: #fee2e2;
-      color: #991b1b;
-      border-color: #fecaca;
-    }
-  }
-
-  .installment-date,
-  .installment-paid-date {
-    font-size: 0.8125rem;
-    color: #64748b;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.25rem;
-  }
-
-  .installment-paid-date {
-    color: #059669;
-    font-weight: 600;
-  }
-}
-
-.installment-amount-section {
-  .amount-display {
-    .amount-value {
-      font-size: 1.375rem;
-      font-weight: 700;
-      color: $dark;
-    }
-  }
-
-  .amount-edit {
-    position: relative;
-    display: flex;
-    align-items: center;
-
-    .amount-input {
-      width: 130px;
-      padding: 0.625rem 2.5rem 0.625rem 0.75rem;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 1.125rem;
-      font-weight: 700;
-      text-align: right;
-      transition: all 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: $primary;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-    }
-
-    .amount-currency {
-      position: absolute;
-      right: 0.75rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #94a3b8;
-    }
-  }
-}
-
-// ============ BUTTON HOVER GENERAL ============
-.btn:not(:disabled):hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 // ============ ANIMACIONES ============
+@keyframes pulse-soft {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
 @keyframes checkPop {
   0% {
     transform: scale(0);
   }
   50% {
-    transform: scale(1.2);
+    transform: scale(1.3);
   }
   100% {
     transform: scale(1);
@@ -611,30 +254,27 @@ $light: #f8fafc;         // Gris muy claro
 
 // ============ RESPONSIVE ============
 @media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
   .installment-card {
     grid-template-columns: auto 1fr !important;
     gap: 1rem !important;
-
-    .installment-amount-section {
-      grid-column: 1 / -1;
-      margin-top: 1rem;
-
-      .amount-edit {
-        width: 100%;
-
-        .amount-input {
-          width: 100%;
-        }
-      }
-    }
 
     > div:last-child {
       grid-column: 1 / -1;
       margin-top: 1rem;
     }
+  }
+
+  .btn-action {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .stat-value-clean {
+    font-size: 1.25rem;
+  }
+
+  .stat-label-clean {
+    font-size: 0.65rem;
   }
 }
