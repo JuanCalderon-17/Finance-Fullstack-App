@@ -1,8 +1,9 @@
+<!-- HEADER ORIGINAL (NO TOCAR) -->
 <div class="bg-dark text-white py-4 mb-4 shadow">
   <div class="container d-flex justify-content-between align-items-center">
     <div>
       <h2 class="fw-bold mb-0">💳 Mis Deudas</h2>
-      <p class="text-white-50 mb-0 small">Control total: Plazos, Intereses y Avance.</p>
+      <p class="text-white-50 mb-0 small">Control total de plazos, intereses y pagos.</p>
     </div>
     <a routerLink="/dashboard" class="btn btn-outline-light btn-sm">
       <i class="bi bi-arrow-left"></i> Volver
@@ -10,48 +11,97 @@
   </div>
 </div>
 
-<div class="container">
-  <div class="row">
+<div class="container pb-5">
+  <div class="row g-4">
 
+    <!-- FORMULARIO LATERAL MEJORADO -->
     <div class="col-lg-4 mb-4">
-      <div class="card shadow-sm border-0 sticky-top" style="top: 20px; z-index: 1;">
+      <div class="card shadow-lg border-0 sticky-top" style="top: 20px; border-radius: 20px; overflow: hidden;">
         <div class="card-header fw-bold text-white" 
-             [ngClass]="isEditing ? 'bg-warning' : 'bg-primary'">
-          {{ isEditing ? '✏️ Editando Deuda' : '➕ Nueva Deuda' }}
+             style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); padding: 1.5rem;">
+          <i [class]="isEditing ? 'bi bi-pencil-square' : 'bi bi-plus-circle-fill'"></i>
+          {{ isEditing ? ' Editar Deuda' : ' Nueva Deuda' }}
         </div>
-        <div class="card-body">
+        <div class="card-body" style="padding: 2rem;">
           <form (ngSubmit)="saveDebt()">
             
-            <div class="mb-3">
-              <label class="form-label small fw-bold">Nombre</label>
-              <input type="text" class="form-control" [(ngModel)]="currentDebt.name" name="name" required>
+            <div class="form-floating mb-3">
+              <input type="text" 
+                     class="form-control" 
+                     id="debtName"
+                     [(ngModel)]="currentDebt.name" 
+                     name="name" 
+                     placeholder="Nombre"
+                     style="border-radius: 12px; border: 2px solid #e5e7eb;"
+                     required>
+              <label for="debtName">
+                <i class="bi bi-tag"></i> Nombre de la deuda
+              </label>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label small fw-bold">Monto Total Prestado ($)</label>
-              <input type="number" class="form-control" [(ngModel)]="currentDebt.balance" name="balance" required>
+            <div class="form-floating mb-3">
+              <input type="number" 
+                     class="form-control" 
+                     id="debtBalance"
+                     [(ngModel)]="currentDebt.balance" 
+                     name="balance" 
+                     placeholder="Monto"
+                     style="border-radius: 12px; border: 2px solid #e5e7eb;"
+                     step="0.01"
+                     required>
+              <label for="debtBalance">
+                <i class="bi bi-cash-stack"></i> Monto Total ($)
+              </label>
             </div>
 
-            <div class="row">
-              <div class="col-6 mb-3">
-                <label class="form-label small fw-bold">Interés Anual (%)</label>
-                <input type="number" class="form-control" [(ngModel)]="currentDebt.interestRate" name="rate">
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <div class="form-floating">
+                  <input type="number" 
+                         class="form-control" 
+                         id="debtRate"
+                         [(ngModel)]="currentDebt.interestRate" 
+                         name="rate"
+                         placeholder="Interés"
+                         style="border-radius: 12px; border: 2px solid #e5e7eb;"
+                         step="0.1">
+                  <label for="debtRate">
+                    <i class="bi bi-percent"></i> Interés %
+                  </label>
+                </div>
               </div>
-              <div class="col-6 mb-3">
-                <label class="form-label small fw-bold">Plazo (Meses)</label>
-                <input type="number" class="form-control" [(ngModel)]="currentDebt.installments" name="installments">
+              <div class="col-6">
+                <div class="form-floating">
+                  <input type="number" 
+                         class="form-control" 
+                         id="debtInstallments"
+                         [(ngModel)]="currentDebt.installments" 
+                         name="installments"
+                         placeholder="Plazo"
+                         style="border-radius: 12px; border: 2px solid #e5e7eb;"
+                         min="1">
+                  <label for="debtInstallments">
+                    <i class="bi bi-calendar3"></i> Meses
+                  </label>
+                </div>
               </div>
             </div>
 
             <div class="d-grid gap-2">
-              <button type="submit" class="btn" 
-                      [ngClass]="isEditing ? 'btn-warning text-dark' : 'btn-primary'"
+              <button type="submit" 
+                      class="btn btn-lg"
+                      style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); border: none; border-radius: 12px; color: white; font-weight: 600;"
                       [disabled]="!currentDebt.name || currentDebt.balance <= 0">
-                {{ isEditing ? 'Guardar Cambios' : 'Crear Deuda' }}
+                <i [class]="isEditing ? 'bi bi-check-circle' : 'bi bi-plus-lg'"></i>
+                {{ isEditing ? ' Guardar Cambios' : ' Crear Deuda' }}
               </button>
               
-              <button *ngIf="isEditing" type="button" class="btn btn-outline-secondary" (click)="resetForm()">
-                Cancelar Edición
+              <button *ngIf="isEditing" 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      style="border-radius: 12px;"
+                      (click)="resetForm()">
+                <i class="bi bi-x-circle"></i> Cancelar
               </button>
             </div>
 
@@ -60,105 +110,203 @@
       </div>
     </div>
 
+    <!-- LISTA DE DEUDAS -->
     <div class="col-lg-8">
       
-      <div *ngIf="debts.length === 0" class="alert alert-info text-center">
-        No hay deudas registradas.
+      <!-- EMPTY STATE -->
+      <div *ngIf="debts.length === 0" class="text-center py-5" style="background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <i class="bi bi-inbox" style="font-size: 5rem; color: #d1d5db;"></i>
+        <h3 class="mt-3" style="color: #1f2937; font-weight: 700;">No hay deudas registradas</h3>
+        <p class="text-muted">Crea tu primera deuda usando el formulario</p>
       </div>
 
-      <div class="card shadow-sm border-0 mb-3" *ngFor="let d of debts">
-        <div class="card-body">
-          
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-              <h4 class="fw-bold mb-0 text-dark">{{ d.name }}</h4>
-              <div class="mt-1">
-                <span class="badge bg-light text-dark border me-1">
-                  {{ d.interestRate }}% Interés
+      <!-- CADA TARJETA DE DEUDA -->
+      <div class="card shadow-sm border-0 mb-4" 
+           *ngFor="let d of debts"
+           style="border-radius: 24px; overflow: hidden;">
+        
+        <!-- HEADER -->
+        <div class="card-header" style="background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-bottom: 2px solid #f3f4f6; padding: 2rem;">
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+              <h3 class="fw-bold mb-2" style="color: #1f2937; font-size: 1.75rem;">{{ d.name }}</h3>
+              <div class="d-flex gap-2 flex-wrap">
+                <span class="badge" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1e40af; padding: 0.5rem 1rem; border-radius: 50px; font-weight: 600;">
+                  <i class="bi bi-percent"></i> {{ d.interestRate }}% interés
                 </span>
-                <span class="badge bg-light text-dark border">
-                  {{ d.installments }} Cuotas
+                <span class="badge" style="background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); color: #5b21b6; padding: 0.5rem 1rem; border-radius: 50px; font-weight: 600;">
+                  <i class="bi bi-calendar-check"></i> {{ d.installments }} cuotas
+                </span>
+                <span class="badge" 
+                      [style.background]="d.paidInstallments === d.installments ? 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)' : 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)'"
+                      [style.color]="d.paidInstallments === d.installments ? '#065f46' : '#92400e'"
+                      style="padding: 0.5rem 1rem; border-radius: 50px; font-weight: 600;">
+                  <i class="bi bi-check2-circle"></i> {{ d.paidInstallments }}/{{ d.installments }} pagadas
                 </span>
               </div>
             </div>
             
-            <div>
-              <button class="btn btn-outline-warning btn-sm me-2" (click)="startEdit(d)">
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm" 
+                      (click)="startEdit(d)"
+                      style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; border: none; border-radius: 12px; width: 40px; height: 40px;"
+                      title="Editar">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-outline-danger btn-sm" (click)="deleteDebt(d.id)">
+              <button class="btn btn-sm" 
+                      (click)="deleteDebt(d.id)"
+                      style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; border: none; border-radius: 12px; width: 40px; height: 40px;"
+                      title="Eliminar">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
           </div>
+        </div>
 
-          <div class="row g-3">
-            <div class="col-md-5">
-               <div class="p-3 bg-light rounded-3">
-                 <small class="text-muted d-block">Cuota Mensual</small>
-                 <span class="fs-4 fw-bold text-primary">{{ d.monthlyPayment | currency }}</span>
-                 
-                 <hr class="my-2">
-                 
-                 <small class="text-muted d-block">Saldo Pendiente</small>
-                 <span class="fs-4 fw-bold text-danger">{{ d.remainingAmount | currency }}</span>
-               </div>
+        <div class="card-body" style="padding: 1.5rem;">
+          
+          <!-- STATS CARDS -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <div class="stat-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1e40af; padding: 1.5rem; border-radius: 16px;">
+                <div class="d-flex align-items-center gap-3">
+                  <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-wallet2" style="font-size: 1.5rem; color: #3b82f6;"></i>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.8;">Cuota Mensual</div>
+                    <div style="font-size: 1.5rem; font-weight: 800;">{{ d.monthlyPayment | currency }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="col-md-7">
-              
-              <!-- ✅ NUEVO: Barra de progreso general -->
-              <div class="mb-3">
-                <div class="d-flex justify-content-between small mb-2">
-                  <span class="fw-bold text-success">Pagado: {{ d.paidInstallments }} cuotas</span>
-                  <span class="text-muted">Total: {{ d.installments }}</span>
-                </div>
-                
-                <div class="progress" style="height: 12px;">
-                  <div class="progress-bar bg-success" role="progressbar" 
-                       [style.width.%]="d.progress">
+            <div class="col-md-4">
+              <div class="stat-card" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; padding: 1.5rem; border-radius: 16px;">
+                <div class="d-flex align-items-center gap-3">
+                  <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-exclamation-triangle" style="font-size: 1.5rem; color: #ef4444;"></i>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.8;">Saldo Pendiente</div>
+                    <div style="font-size: 1.5rem; font-weight: 800;">{{ d.remainingAmount | currency }}</div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- ✅ NUEVO: Lista de cuotas individuales -->
-              <div class="installments-container">
-                <h6 class="fw-bold mb-2 text-muted small">📋 Detalle de Cuotas:</h6>
+            <div class="col-md-4">
+              <div class="stat-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; padding: 1.5rem; border-radius: 16px;">
+                <div class="d-flex align-items-center gap-3">
+                  <div style="width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-graph-up-arrow" style="font-size: 1.5rem; color: #10b981;"></i>
+                  </div>
+                  <div>
+                    <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.8;">Progreso</div>
+                    <div style="font-size: 1.5rem; font-weight: 800;">{{ d.progress | number:'1.0-0' }}%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BARRA DE PROGRESO -->
+          <div class="mb-3">
+            <div style="height: 12px; background: #e5e7eb; border-radius: 50px; overflow: hidden; position: relative;">
+              <div [style.width.%]="d.progress" 
+                   style="height: 100%; background: linear-gradient(90deg, #10b981 0%, #34d399 100%); border-radius: 50px; transition: width 0.8s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 0.5rem;">
+                <span style="font-size: 0.7rem; font-weight: 700; color: white;">{{ d.progress | number:'1.0-0' }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CUOTAS EXPANDIBLES -->
+          <div style="border-top: 2px solid #f3f4f6; margin-top: 1rem;">
+            <button (click)="d.expanded = !d.expanded"
+                    class="w-100 d-flex align-items-center gap-3 border-0 bg-transparent py-3"
+                    style="cursor: pointer; font-size: 1.1rem; font-weight: 700; color: #1f2937;">
+              <i class="bi bi-list-check"></i>
+              <span>Detalle de Cuotas</span>
+              <i class="bi ms-auto" 
+                 [class.bi-chevron-down]="!d.expanded"
+                 [class.bi-chevron-up]="d.expanded"
+                 style="transition: transform 0.3s ease;"></i>
+            </button>
+
+            <!-- CONTENIDO EXPANDIBLE -->
+            <div [style.max-height]="d.expanded ? '2000px' : '0'" 
+                 style="overflow: hidden; transition: max-height 0.5s ease;">
+              
+              <div class="installments-grid" style="display: grid; gap: 1rem; padding: 0 1rem 1rem;"
+                   *ngIf="d.installmentsList && d.installmentsList.length > 0">
                 
-                <div class="installments-list" *ngIf="d.installmentsList && d.installmentsList.length > 0">
-                  <div class="installment-item" 
-                       *ngFor="let inst of d.installmentsList"
-                       [class.paid]="inst.isPaid">
-                    
-                    <button (click)="toggleInstallment(d.id, inst.id)"
-                            class="toggle-btn"
-                            type="button">
-                      <i [class]="inst.isPaid ? 'bi bi-check-circle-fill' : 'bi bi-circle'"></i>
-                    </button>
+                <div *ngFor="let inst of d.installmentsList"
+                     class="installment-card"
+                     [class.paid]="inst.isPaid"
+                     [class.overdue]="!inst.isPaid && isOverdue(inst.dueDate)"
+                     style="background: white; border: 3px solid #e5e7eb; border-radius: 16px; padding: 1.25rem; display: grid; grid-template-columns: auto 1fr auto; gap: 1.25rem; align-items: center; position: relative; overflow: hidden;">
+                  
+                  <!-- Barra lateral -->
+                  <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: transparent; transition: all 0.3s ease;"
+                       [style.background]="inst.isPaid ? '#10b981' : (!inst.isPaid && isOverdue(inst.dueDate) ? '#ef4444' : 'transparent')"></div>
 
-                    <div class="installment-info">
-                      <span class="installment-number">Cuota #{{ inst.installmentNumber }}</span>
-                      <span class="installment-date">
-                        <i class="bi bi-calendar3"></i>
-                        {{ inst.dueDate | date:'dd/MM/yyyy' }}
+                  <!-- CHECKBOX -->
+                  <div (click)="toggleInstallment(d.id, inst.id)" style="cursor: pointer;">
+                    <div [class.checked]="inst.isPaid"
+                         style="width: 48px; height: 48px; border-radius: 50%; border: 3px solid #d1d5db; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; background: white;">
+                      <i class="bi" 
+                         [class.bi-check-lg]="inst.isPaid"
+                         [class.bi-circle]="!inst.isPaid"
+                         style="font-size: 1.75rem; color: #9ca3af; transition: all 0.3s ease;"
+                         [style.color]="inst.isPaid ? 'white' : '#9ca3af'"></i>
+                    </div>
+                  </div>
+
+                  <!-- INFO -->
+                  <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <span style="font-size: 1.1rem; font-weight: 800; color: #1f2937;">Cuota #{{ inst.installmentNumber }}</span>
+                      <span *ngIf="inst.isPaid" 
+                            style="padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46;">
+                        <i class="bi bi-check-circle-fill"></i> Pagada
+                      </span>
+                      <span *ngIf="!inst.isPaid && isOverdue(inst.dueDate)" 
+                            style="padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b;">
+                        <i class="bi bi-exclamation-circle-fill"></i> Vencida
                       </span>
                     </div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">
+                      <i class="bi bi-calendar3"></i> Vence: {{ inst.dueDate | date:'dd/MM/yyyy' }}
+                    </div>
+                    <div *ngIf="inst.isPaid && inst.paidDate" style="font-size: 0.875rem; color: #10b981; font-weight: 600; margin-top: 0.25rem;">
+                      <i class="bi bi-check2-circle"></i> Pagada: {{ inst.paidDate | date:'dd/MM/yyyy' }}
+                    </div>
+                  </div>
 
-                    <div class="installment-amount">
-                      <strong>{{ inst.amount | currency }}</strong>
-                      <small *ngIf="inst.isPaid && inst.paidDate" class="paid-badge">
-                        ✓ {{ inst.paidDate | date:'dd/MM' }}
-                      </small>
+                  <!-- MONTO -->
+                  <div>
+                    <div *ngIf="inst.isPaid" style="font-size: 1.5rem; font-weight: 800; color: #1f2937;">
+                      {{ inst.amount | currency }}
+                    </div>
+                    <div *ngIf="!inst.isPaid" style="position: relative;">
+                      <input type="number" 
+                             [(ngModel)]="inst.amount"
+                             (blur)="updateInstallmentAmount(d.id, inst.id, inst.amount)"
+                             (click)="$event.stopPropagation()"
+                             step="0.01"
+                             min="0"
+                             style="width: 140px; padding: 0.75rem 3rem 0.75rem 0.75rem; border: 3px solid #e5e7eb; border-radius: 12px; font-size: 1.25rem; font-weight: 700; text-align: right;">
+                      <span style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.875rem; font-weight: 700; color: #9ca3af;">USD</span>
                     </div>
                   </div>
                 </div>
-
-                <div *ngIf="!d.installmentsList || d.installmentsList.length === 0" 
-                     class="alert alert-warning small mb-0">
-                  ⚠️ Esta deuda no tiene cuotas generadas. Edítala para crearlas.
-                </div>
               </div>
 
+              <div *ngIf="!d.installmentsList || d.installmentsList.length === 0" 
+                   class="alert alert-warning m-3">
+                <i class="bi bi-exclamation-triangle"></i>
+                Esta deuda no tiene cuotas. Edítala para generarlas.
+              </div>
             </div>
           </div>
 

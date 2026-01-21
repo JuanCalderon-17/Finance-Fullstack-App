@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-
 
 export interface Installment {
   id: number;
@@ -19,17 +17,17 @@ export interface Debt {
   balance: number;
   interestRate: number;
   installments: number;
-  paidInstallments: number; // Calculado desde installmentsList
+  paidInstallments: number;
   color: string;
   icon: string;
-  installmentsList?: Installment[]; // ← NUEVO
+  installmentsList?: Installment[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class DebtsService {
-  private apiUrl = environment.apiUrl + 'debts'; 
+  private apiUrl = 'https://api.finanzasbr.com/api/debts';
 
   constructor(private http: HttpClient) {}
 
@@ -53,11 +51,19 @@ export class DebtsService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  // ← NUEVO: Toggle de cuota
+  // ✅ NUEVO: Marcar cuota como pagada/no pagada
   toggleInstallment(debtId: number, installmentId: number): Observable<any> {
     return this.http.put(
       `${this.apiUrl}/${debtId}/installments/${installmentId}/toggle`,
       {}
+    );
+  }
+
+  // ✅ NUEVO: Actualizar monto de una cuota
+  updateInstallment(debtId: number, installmentId: number, data: { amount?: number }): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/${debtId}/installments/${installmentId}`,
+      data
     );
   }
 }
