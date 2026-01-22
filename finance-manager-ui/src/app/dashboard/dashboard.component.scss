@@ -1,0 +1,354 @@
+// ============================================
+// DASHBOARD COMPONENT STYLES - FINAL
+// ============================================
+
+// ============ NAVBAR ============
+.dashboard-navbar {
+  background-color: var(--bg-navbar) !important;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--divider);
+
+  // NAVBAR ALIGNMENT FIX
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // Links del centro
+  .d-flex.gap-3.mx-auto {
+    flex: 1;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  // Controles de la derecha (Light/Dark, USD, Log Out)
+  .container > .d-flex.align-items-center.gap-3:last-child {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}
+
+.navbar-divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--divider);
+}
+
+.currency-toggle {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: none;
+  padding: 6px 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .currency-flag {
+    width: 22px;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .currency-code {
+    letter-spacing: 0.5px;
+  }
+
+  .currency-arrow {
+    font-size: 0.7em;
+    opacity: 0.7;
+  }
+}
+
+.logout-btn {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  }
+}
+
+// ============ SUMMARY CARD ============
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.stats-section {
+  border-color: var(--divider) !important;
+  text-align: center;
+}
+
+.stat-label {
+  color: var(--text-secondary) !important;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.balance-card {
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.balance-label {
+  opacity: 0.8;
+}
+
+.balance-amount {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+// ============ CHART ============
+.chart-container {
+  padding: 1rem;
+  background: var(--bg-card);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 320px;
+}
+
+.chart-wrapper {
+  height: 200px;
+}
+
+.empty-chart {
+  color: var(--text-muted) !important;
+  opacity: 0.6;
+}
+
+// ============ FORM CARD ============
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.form-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary) !important;
+}
+
+.submit-btn {
+  transition: all 0.3s ease;
+
+  &.btn-primary-custom {
+    background-color: var(--color-primary);
+    border: none;
+    color: white !important;
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ============ HISTORY CARD ============
+.history-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.history-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary) !important;
+}
+
+.filter-select {
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-primary) !important;
+  min-width: 80px;
+
+  &:focus {
+    background-color: var(--input-bg);
+    border-color: var(--input-focus-border);
+    color: var(--text-primary) !important;
+  }
+
+  option {
+    background-color: var(--input-bg);
+    color: var(--text-primary) !important;
+  }
+}
+
+// ============ TRANSACTIONS TABLE ============
+.transactions-table {
+  color: var(--text-primary) !important;
+
+  // ===== THEAD (Headers) =====
+  thead {
+    background-color: var(--bg-secondary) !important;
+    
+    th {
+      color: var(--text-secondary) !important;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border-color) !important;
+      padding: 0.875rem 0.75rem;
+    }
+  }
+
+  // ===== TBODY (Filas) =====
+  tbody {
+    tr {
+      background-color: var(--bg-card) !important;
+      border-bottom: 1px solid var(--border-color) !important;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: var(--bg-hover) !important;
+      }
+
+      &:last-child {
+        border-bottom: none !important;
+      }
+
+      td {
+        border-color: var(--border-color) !important;
+        padding: 0.875rem 0.75rem;
+      }
+    }
+  }
+}
+
+// ===== CELDAS ESPECÍFICAS =====
+.transaction-date {
+  color: var(--text-muted) !important;
+  font-size: 0.875rem;
+}
+
+.transaction-desc {
+  color: var(--text-primary) !important;
+  max-width: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.category-badge {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+}
+
+// ===== MONTO (Mantener colores originales verde/rojo) =====
+.transaction-amount {
+  font-size: 1rem;
+  font-weight: 700;
+  // Los colores se aplican inline desde el HTML
+  // Verde: #198754 para ingresos
+  // Rojo: #dc3545 para gastos
+}
+
+// ===== BOTONES DE ACCIÓN =====
+.action-btn {
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  background-color: transparent;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &.btn-outline-danger {
+    border-color: var(--color-danger) !important;
+    color: var(--color-danger) !important;
+
+    &:hover {
+      background-color: var(--color-danger) !important;
+      border-color: var(--color-danger) !important;
+      color: white !important;
+    }
+  }
+
+  &.btn-outline-dark {
+    border-color: var(--border-strong) !important;
+    color: var(--text-primary) !important;
+
+    &:hover {
+      background-color: var(--text-primary) !important;
+      border-color: var(--text-primary) !important;
+      color: var(--bg-card) !important;
+    }
+  }
+}
+
+.empty-state {
+  color: var(--text-muted) !important;
+  padding: 3rem 1rem;
+}
+
+// ============ RESPONSIVE ============
+@media (max-width: 768px) {
+  .stats-section {
+    border-right: none !important;
+    border-bottom: 1px solid var(--divider);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-container {
+    max-width: 100%;
+  }
+
+  .navbar-divider {
+    display: none;
+  }
+
+  .dashboard-navbar {
+    .d-flex.gap-3.mx-auto {
+      display: none !important;
+    }
+
+    // En móvil, apilar los controles
+    .container > .d-flex.align-items-center.gap-3:last-child {
+      margin-left: 0;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .transactions-table {
+    font-size: 0.875rem;
+
+    thead th {
+      padding: 0.75rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    tbody td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+}

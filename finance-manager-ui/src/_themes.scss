@@ -1,0 +1,146 @@
+// ============================================
+// THEME SYSTEM - Finance Manager PRO
+// Inspirado en X (Twitter) y GitHub
+// ============================================
+
+// ============ LIGHT MODE (Default) ============
+:root {
+  // Backgrounds
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f9f9;          // Gris clarísimo (tipo X)
+  --bg-card: #ffffff;
+  --bg-navbar: #000000;              // Negro puro (tipo X)
+  --bg-sidebar: #16181c;             // Gris muy oscuro
+  --bg-hover: #f7f9f9;               // Hover suave
+  
+  // Glassmorphism (para componentes especiales)
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  
+  // Texts
+  --text-primary: #0f1419;           // Negro suave (tipo X)
+  --text-secondary: #536471;         // Gris medio
+  --text-muted: #8b98a5;            // Gris claro
+  --text-on-dark: #ffffff;
+  --text-inverse: #ffffff;           // NUEVO: Para texto en fondos oscuros
+  
+  // Borders & Dividers
+  --border-color: #eff3f4;          // Borde muy suave
+  --border-strong: #cfd9de;         // Borde más visible
+  --divider: rgba(0, 0, 0, 0.08);
+  
+  // Brand Colors
+  --color-primary: #1d9bf0;         // Azul X (Twitter)
+  --color-primary-hover: #1a8cd8;
+  --color-accent: #1d9bf0;
+  
+  // Status Colors
+  --color-success: #00ba7c;         // Verde tipo X
+  --color-success-light: #d1fae5;
+  --color-danger: #f4212e;          // Rojo tipo X
+  --color-danger-light: #fee2e2;
+  --color-warning: #ffad1f;         // Amarillo tipo X
+  --color-warning-light: #fef3c7;
+  --color-info: #1d9bf0;
+  --color-info-light: #e0f2fe;
+  
+  // Shadows
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+  
+  // Forms
+  --input-bg: #ffffff;
+  --input-border: #eff3f4;
+  --input-focus-border: #1d9bf0;
+  --input-placeholder: #8b98a5;
+  
+  // Charts (colores vibrantes)
+  --chart-cyan: #00d2d3;
+  --chart-orange: #ff9f43;
+  --chart-purple: #794bc4;
+  --chart-red: #f4212e;
+  --chart-green: #00ba7c;
+  --chart-blue: #1d9bf0;
+  --chart-pink: #f91880;
+  --chart-yellow: #ffad1f;
+}
+
+// ============ DARK MODE (estilo X/GitHub) ============
+[data-theme="dark"] {
+  // Backgrounds
+  --bg-primary: #000000;            // Negro puro (tipo X)
+  --bg-secondary: #16181c;          // Gris muy oscuro (tipo X)
+  --bg-card: #16181c;               // Cards oscuras
+  --bg-navbar: #000000;
+  --bg-sidebar: #16181c;
+  --bg-hover: #1c1f23;              // Hover en oscuro
+  
+  // Glassmorphism (para landing/login)
+  --glass-bg: rgba(0, 0, 0, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  
+  // Texts
+  --text-primary: #e7e9ea;          // Blanco suave (tipo X)
+  --text-secondary: #71767b;        // Gris medio
+  --text-muted: #536471;            // Gris oscuro
+  --text-on-dark: #e7e9ea;
+  --text-inverse: #0f1419;          // NUEVO: Para texto en fondos claros
+  
+  // Borders & Dividers
+  --border-color: #2f3336;          // Borde suave en oscuro
+  --border-strong: #3e4144;         // Borde más visible
+  --divider: rgba(255, 255, 255, 0.1);
+  
+  // Brand Colors
+  --color-primary: #1d9bf0;         // Mismo azul X
+  --color-primary-hover: #4ab3f4;
+  --color-accent: #1d9bf0;
+  
+  // Status Colors (más brillantes para contraste)
+  --color-success: #00ba7c;
+  --color-success-light: #0e3625;
+  --color-danger: #f4212e;
+  --color-danger-light: #3a0d11;
+  --color-warning: #ffad1f;
+  --color-warning-light: #3d2c0f;
+  --color-info: #1d9bf0;
+  --color-info-light: #0d2535;
+  
+  // Shadows (más sutiles en oscuro)
+  --shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.5);
+  
+  // Forms
+  --input-bg: #000000;
+  --input-border: #2f3336;
+  --input-focus-border: #1d9bf0;
+  --input-placeholder: #536471;
+  
+  // Charts (mismos colores vibrantes)
+  --chart-cyan: #00d2d3;
+  --chart-orange: #ff9f43;
+  --chart-purple: #794bc4;
+  --chart-red: #f4212e;
+  --chart-green: #00ba7c;
+  --chart-blue: #1d9bf0;
+  --chart-pink: #f91880;
+  --chart-yellow: #ffad1f;
+}
+
+// ============ TRANSITIONS GLOBALES ============
+* {
+  transition: background-color 0.2s ease, 
+              color 0.2s ease, 
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+// ============ BODY BASE ============
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
