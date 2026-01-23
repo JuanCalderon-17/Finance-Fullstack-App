@@ -209,7 +209,9 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       border-bottom: 2px solid var(--border-color) !important;
+      border-top: 1px solid var(--border-color) !important;
       padding: 0.875rem 0.75rem;
+      background-color: transparent !important; // No interferir con thead
     }
   }
 
@@ -230,7 +232,9 @@
 
       td {
         border-color: var(--border-color) !important;
+        border-bottom: 1px solid var(--border-color) !important; // Líneas entre filas
         padding: 0.875rem 0.75rem;
+        background-color: transparent !important;
       }
     }
   }
@@ -349,6 +353,89 @@
 
     tbody td {
       padding: 0.75rem 0.5rem;
+    }
+  }
+}
+
+// ============ FIX GARANTIZADO PARA TEXTOS INVISIBLES ============
+// Fuerza los colores en TODAS las celdas de la tabla
+.transactions-table {
+  tbody {
+    tr {
+      // FORZAR FONDO DE FILA
+      background-color: var(--bg-card) !important;
+
+      &:hover {
+        background-color: var(--bg-hover) !important;
+      }
+
+      // Todas las celdas
+      td {
+        color: var(--text-primary) !important;
+        background-color: transparent !important; // No interferir con el fondo de la fila
+      }
+
+      // Específicamente la descripción
+      td:nth-child(2),
+      td.transaction-desc {
+        color: var(--text-primary) !important;
+        font-weight: 700 !important;
+      }
+
+      // Fecha
+      td:nth-child(1),
+      td.transaction-date {
+        color: var(--text-muted) !important;
+      }
+    }
+  }
+}
+
+// Bootstrap override para fw-bold
+.table tbody tr .fw-bold {
+  color: var(--text-primary) !important;
+}
+
+// Bootstrap override para table-light (esto causa el fondo blanco)
+.table-light {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+// Fix para modo oscuro específico
+[data-theme="dark"] {
+  .transactions-table {
+    // THEAD con fondo oscuro visible
+    thead {
+      background-color: #1a1a2e !important; // Más oscuro que las filas
+      border-bottom: 2px solid #2f3336 !important; // Línea más visible
+
+      th {
+        color: #71767b !important;
+        background-color: transparent !important;
+        border-bottom: 2px solid #2f3336 !important;
+      }
+    }
+
+    // TBODY con líneas visibles
+    tbody tr {
+      background-color: #16181c !important;
+      border-bottom: 1px solid #2f3336 !important; // Líneas visibles
+      
+      &:hover {
+        background-color: #1c1f23 !important;
+      }
+
+      td {
+        color: #e7e9ea !important;
+        background-color: transparent !important;
+        border-bottom: 1px solid #2f3336 !important; // Líneas entre celdas
+        
+        &.transaction-desc,
+        &:nth-child(2) {
+          color: #e7e9ea !important;
+        }
+      }
     }
   }
 }
