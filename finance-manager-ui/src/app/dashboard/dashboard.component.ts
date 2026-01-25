@@ -7,6 +7,8 @@ import { Router, RouterLink } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { ThemeToggleComponent } from '../shared/theme-toggle/theme-toggle.component';
+import { CurrencyService } from '../core/services/currency.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +18,7 @@ import { ThemeToggleComponent } from '../shared/theme-toggle/theme-toggle.compon
     FormsModule, 
     BaseChartDirective, 
     RouterLink,
-    ThemeToggleComponent  // ← NUEVO: Importar el toggle
+    ThemeToggleComponent  
   ], 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
@@ -64,11 +66,13 @@ export class DashboardComponent implements OnInit {
   currencyCode : string = 'USD';
   currencySymbol : string = '$';
   exchangeRate : number = 1;
-  readonly USD_TO_BRL_RATE = 6.5;
+  
+
 
   constructor(
     private transactionService: TransactionService, 
-    private router: Router
+    private router: Router,
+    private currencyService: CurrencyService
   ) { 
     const today = new Date();
     this.selectedMonth = today.getMonth();
@@ -81,18 +85,31 @@ export class DashboardComponent implements OnInit {
   
   ngOnInit(): void {
     this.loadTransactions();
+    this.loadExchangeRate();
+  }
+
+  loadExchangeRate(): void {
+    this.currencyService.getExchangeRate('BRL').subscribe({
+      next: (rate) => {
+        this.exchangeRate = rate;
+        console.log('💱 Tasa cargada:', rate);
+      },
+      error: (err) => {
+        console.error('Error cargando tasa:', err)
+      }
+    });
   }
 
   toggleCurrency() {
     if( this.currencyCode === 'USD') {
       this.currencyCode  = 'BRL';
       this.currencySymbol = 'R$';
-      this.exchangeRate = this.USD_TO_BRL_RATE;
+      this.loadExchangeRate(); 
     }
     else {
       this.currencyCode  = 'USD';
       this.currencySymbol = '$';
-      this.exchangeRate = 1;
+      this.exchangeRate = 1; // USD a USD = 1 , porque un dolar es un dolar
     }
   }
 
