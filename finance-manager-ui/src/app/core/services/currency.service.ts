@@ -17,7 +17,7 @@ interface CurrencyExchangeResponse {
     providedIn: 'root'
 })
 export class CurrencyService {
-    private apiUrl = `${environment.apiUrl}/currency/rate`;
+    private apiUrl = `${environment.apiUrl}currency/rate`;
     private readonly FALLBACK_RATE = 5.7;
 
     constructor(private http: HttpClient) {}

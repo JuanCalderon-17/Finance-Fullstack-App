@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { SavingsService, SavingAccount } from '../../services/savings.service';
+import { CurrencyStateService } from '../../core/services/currency-state.service'; 
 
 
 @Component({
@@ -14,6 +15,8 @@ import { SavingsService, SavingAccount } from '../../services/savings.service';
 })
 export class SavingsComponent implements OnInit {
 
+  currencySymbol: string = '$';
+  exchangeRate: number = 1;
   accounts: SavingAccount[] = [];
   
   newAccount: SavingAccount = {
@@ -25,10 +28,13 @@ export class SavingsComponent implements OnInit {
 
   totalSavings: number = 0;
 
-  // 👇 Inyectamos el servicio aquí
-  constructor(private savingsService: SavingsService) {}
+  constructor(private savingsService: SavingsService, private currencyStateService: CurrencyStateService) {}
 
   ngOnInit(): void {
+    this.currencyStateService.currency$.subscribe(currency => {
+      this.currencySymbol = currency.symbol;
+      this.exchangeRate = currency.rate;
+    });
     this.loadData();
   }
 
@@ -44,7 +50,10 @@ export class SavingsComponent implements OnInit {
       error: (err) => console.error('Error cargando ahorros', err)
     });
   }
-
+  convertAmount(amount: number): number {
+    return amount * this.exchangeRate;
+  }
+  
   calculateTotal() {
     this.totalSavings = this.accounts.reduce((sum, acc) => sum + acc.balance, 0);
   }

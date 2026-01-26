@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DebtsService, Debt } from '../../services/debts.service';
+import { CurrencyStateService } from '../../core/services/currency-state.service'; 
 
 @Component({
   selector: 'app-debts',
@@ -13,6 +14,8 @@ import { DebtsService, Debt } from '../../services/debts.service';
 })
 export class DebtsComponent implements OnInit {
 
+  currencySymbol: string = '$';
+  exchangeRate: number = 1;
   debts: any[] = [];
   isEditing: boolean = false;
   
@@ -28,9 +31,13 @@ export class DebtsComponent implements OnInit {
 
   totalDebt: number = 0;
 
-  constructor(private debtsService: DebtsService) {}
+  constructor(private debtsService: DebtsService, private currencyStateService : CurrencyStateService) {}
 
   ngOnInit(): void {
+    this.currencyStateService.currency$.subscribe(currency => {
+      this.currencySymbol = currency.symbol;
+      this.exchangeRate = currency.rate;
+    })
     this.loadData();
   }
 
@@ -44,6 +51,9 @@ export class DebtsComponent implements OnInit {
         console.error('Error al cargar deudas:', err);
       }
     });
+  }
+  convertAmount(amount: number): number {
+    return amount * this.exchangeRate;
   }
 
   // 🧮 CÁLCULOS FINANCIEROS

@@ -8,7 +8,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { ThemeToggleComponent } from '../shared/theme-toggle/theme-toggle.component';
 import { CurrencyService } from '../core/services/currency.service';
-
+import { CurrencyStateService } from '../core/services/currency-state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -66,13 +66,12 @@ export class DashboardComponent implements OnInit {
   currencyCode : string = 'USD';
   currencySymbol : string = '$';
   exchangeRate : number = 1;
-  
-
 
   constructor(
     private transactionService: TransactionService, 
     private router: Router,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private currencyStateService: CurrencyStateService
   ) { 
     const today = new Date();
     this.selectedMonth = today.getMonth();
@@ -84,32 +83,31 @@ export class DashboardComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.loadTransactions();
-    this.loadExchangeRate();
-  }
-
-  loadExchangeRate(): void {
-    this.currencyService.getExchangeRate('BRL').subscribe({
-      next: (rate) => {
-        this.exchangeRate = rate;
-        console.log('💱 Tasa cargada:', rate);
-      },
-      error: (err) => {
-        console.error('Error cargando tasa:', err)
-      }
+    this.currencyStateService.loadFromStorage();
+    
+    this.currencyStateService.currency$.subscribe(currency => {
+      this.currencyCode = currency.code;
+      this.currencySymbol = currency.symbol;
+      this.exchangeRate = currency.rate;
     });
+
+    this.loadTransactions();
   }
 
   toggleCurrency() {
-    if( this.currencyCode === 'USD') {
-      this.currencyCode  = 'BRL';
-      this.currencySymbol = 'R$';
-      this.loadExchangeRate(); 
+    if(this.currencyCode === 'USD') {
+      this.currencyService.getExchangeRate('BRL').subscribe({
+        next: (rate) => {
+          this.currencyStateService.setCurrency('BRL', 'R$', rate);
+        },
+        error: (err) => {
+          console.error('Error cargando tasa:', err);
+          this.currencyStateService.setCurrency('BRL', 'R$', 5.7);
+        }
+      });
     }
     else {
-      this.currencyCode  = 'USD';
-      this.currencySymbol = '$';
-      this.exchangeRate = 1; // USD a USD = 1 , porque un dolar es un dolar
+      this.currencyStateService.setCurrency('USD', '$', 1);
     }
   }
 
@@ -227,7 +225,6 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.loadTransactions();
           this.cancelEdit();
-          console.log('Actualizado con exito!');
         },
         error: (err) => console.error('Error al actualizar:', err)
       });
@@ -235,7 +232,6 @@ export class DashboardComponent implements OnInit {
     else {
       this.transactionService.createTransaction(this.newTransaction).subscribe({
         next: (res) => {
-          console.log('Transacción creada!', res);
           this.loadTransactions();
           this.newTransaction.description = '';
           this.newTransaction.amount = 0;
@@ -267,7 +263,6 @@ export class DashboardComponent implements OnInit {
     if (confirm('¿Estás seguro de que quieres eliminar esta transacción?')) {
       this.transactionService.deleteTransaction(id).subscribe({
         next: () => {
-          console.log('Transacción eliminada con éxito:', id);
           this.loadTransactions();
         },
         error: (err) => console.error('Error al eliminar', err)
