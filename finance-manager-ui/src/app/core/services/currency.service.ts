@@ -25,6 +25,8 @@ export class CurrencyService {
     getExchangeRate(targetCurrency: string): Observable<number> {
         const url = `${this.apiUrl}/${targetCurrency}`;
         
+        console.log('🌐 URL completa:', url);
+        
         return this.http.get<CurrencyExchangeResponse>(url).pipe(
             map(response => {
                 console.log('📦 Respuesta del backend:', response);
