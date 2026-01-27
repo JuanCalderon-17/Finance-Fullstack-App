@@ -6,5 +6,6 @@
         public decimal Amount { get; set; }
         public DateTime TransactionDate { get; set; }
         public string Category { get; set; }
+        public string Currency { get; set; }
     }
 }

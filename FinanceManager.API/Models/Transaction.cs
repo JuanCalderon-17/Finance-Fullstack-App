@@ -12,6 +12,7 @@ namespace FinanceManager.API.Models
         public decimal Amount { get; set; }
         public DateTime TransactionDate { get; set; }
         public string Category { get; set; } = string.Empty;
+        public string Currency { get; set; } = "USD";   //default to USD for existing records
 
         // Relación con el usuario
         [Required]

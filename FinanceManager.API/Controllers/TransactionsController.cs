@@ -140,6 +140,7 @@ namespace FinanceManager.API.Controllers
                 Amount = transactionDto.Amount,
                 TransactionDate = DateTime.UtcNow,
                 Category = transactionDto.Category,
+                Currency = transactionDto.Currency ?? "USD", 
                 AppUserId = userId
 
                 
