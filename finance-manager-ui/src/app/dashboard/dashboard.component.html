@@ -61,13 +61,13 @@
                 <div class="col-6 border-end">
                     <p class="stat-label">Ingresos</p>
                     <h3 class="fw-bold text-success stat-value">
-                        {{ (totalIncome * exchangeRate) | currency:currencySymbol }}
+                        {{ currencySymbol }}{{ totalIncome | number:'1.2-2' }}
                     </h3>
                 </div>
                 <div class="col-6">
                     <p class="stat-label">Gastos</p>
                     <h3 class="fw-bold text-danger stat-value">
-                        {{ (totalSpent * exchangeRate) | currency:currencySymbol }}
+                        {{ currencySymbol }}{{ totalSpent | number:'1.2-2' }}
                     </h3>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     </p>
 
                     <h2 class="display-6 fw-bold mb-0 text-white balance-amount">
-                        {{ ((totalIncome - totalSpent) * exchangeRate) | currency:currencySymbol }}
+                        {{ currencySymbol }}{{ (totalIncome - totalSpent) | number:'1.2-2' }}
                     </h2>
 
                     <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent <= totalIncome">
@@ -136,7 +136,7 @@
             </div>
             
             <div class="mb-3">
-              <label class="form-label">Monto ($)</label>
+              <label class="form-label">Monto ({{ currencySymbol }})</label>
               <input type="number" class="form-control" placeholder="0.00" 
                      [(ngModel)]="newTransaction.amount" name="amount" required>
             </div>
@@ -236,7 +236,7 @@
                 
                 <td class="text-end fw-bold transaction-amount" 
                   [style.color]="incomeCategories.includes(t.category) ? '#198754' : '#dc3545'">
-                  {{ convertTransactionAmount(t) | number:'1.2-2' }} {{ currencySymbol }}
+                  {{ currencySymbol }}{{ convertTransactionAmount(t) | number:'1.2-2' }}
                 </td>
                 
                 <td class="text-center">
