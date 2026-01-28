@@ -236,7 +236,7 @@
                 
                 <td class="text-end fw-bold transaction-amount" 
                   [style.color]="incomeCategories.includes(t.category) ? '#198754' : '#dc3545'">
-                  {{ (t.amount * exchangeRate) | currency:currencySymbol }}
+                  {{ convertTransactionAmount(t) | number:'1.2-2' }} {{ currencySymbol }}
                 </td>
                 
                 <td class="text-center">

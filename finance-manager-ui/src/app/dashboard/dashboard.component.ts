@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
     description: '',
     amount: 0,
     category: 'Comida',
-    transactionDate: new Date().toISOString().slice(0, 10)
+    transactionDate: new Date().toISOString().slice(0, 10),
+    currency: 'USD'  // ✅ NUEVO CAMPO
   }
 
   public pieChartOptions: ChartConfiguration['options'] = {
@@ -89,6 +90,8 @@ export class DashboardComponent implements OnInit {
       this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
+      this.newTransaction.currency = currency.code;  // ✅ Sincronizar formulario
+      this.calculateStats();  // ✅ Recalcular al cambiar moneda
     });
 
     this.loadTransactions();
@@ -109,6 +112,28 @@ export class DashboardComponent implements OnInit {
     else {
       this.currencyStateService.setCurrency('USD', '$', 1);
     }
+  }
+
+  // ✅ NUEVA FUNCIÓN: Convertir monto según la moneda original
+  convertTransactionAmount(transaction: Transaction): number {
+    const txCurrency = transaction.currency || 'USD';
+    
+    // Si la transacción y la vista están en la misma moneda
+    if (txCurrency === this.currencyCode) {
+      return transaction.amount;
+    }
+    
+    // Si la transacción está en USD y vemos en BRL
+    if (txCurrency === 'USD' && this.currencyCode === 'BRL') {
+      return transaction.amount * this.exchangeRate;
+    }
+    
+    // Si la transacción está en BRL y vemos en USD
+    if (txCurrency === 'BRL' && this.currencyCode === 'USD') {
+      return transaction.amount / this.exchangeRate;
+    }
+    
+    return transaction.amount;
   }
 
   loadTransactions() {
@@ -148,11 +173,14 @@ export class DashboardComponent implements OnInit {
     this.totalSpent = 0;
     this.totalIncome = 0;
 
+    // ✅ USAR CONVERSIÓN INTELIGENTE
     this.filteredTransactions.forEach(t => {
+      const convertedAmount = this.convertTransactionAmount(t);
+      
       if (this.incomeCategories.includes(t.category)) {
-        this.totalIncome += t.amount;
+        this.totalIncome += convertedAmount;
       } else {
-        this.totalSpent += t.amount;
+        this.totalSpent += convertedAmount;
       }
     });
     
@@ -175,12 +203,13 @@ export class DashboardComponent implements OnInit {
   updateChart() {
     const categoryTotals: any = {};
 
+    // ✅ USAR CONVERSIÓN INTELIGENTE EN EL GRÁFICO
     this.filteredTransactions.forEach(t => {
       if(!this.incomeCategories.includes(t.category)) {
         if(!categoryTotals[t.category]) {
           categoryTotals[t.category] = 0;
         }
-        categoryTotals[t.category] += t.amount;
+        categoryTotals[t.category] += this.convertTransactionAmount(t);
       }
     })
 
@@ -211,7 +240,7 @@ export class DashboardComponent implements OnInit {
     this.newTransaction.amount = Number(this.newTransaction.amount);
 
     if (!this.newTransaction.description || this.newTransaction.description.trim() === '') {
-      alert('⚠️Porfavor agrega una descripción para el movimiento.')
+      alert('⚠️ Por favor agrega una descripción para el movimiento.')
       return; 
     }
 
@@ -219,6 +248,11 @@ export class DashboardComponent implements OnInit {
       alert('⚠️ El monto debe ser mayor a 0.')
       return;
     }
+
+    // ✅ GUARDAR LA MONEDA ACTUAL
+    this.newTransaction.currency = this.currencyCode;
+    console.log('🔍 Datos a enviar:', this.newTransaction); //for testing purpose, observe if sends data
+
 
     if (this.isEditing && this.editingId) {
       this.transactionService.updateTransaction(this.editingId, this.newTransaction).subscribe({
@@ -235,6 +269,7 @@ export class DashboardComponent implements OnInit {
           this.loadTransactions();
           this.newTransaction.description = '';
           this.newTransaction.amount = 0;
+          this.newTransaction.currency = this.currencyCode;
           this.cancelEdit();
         },
         error: (err) => console.error('Error al crear:', err)
@@ -255,7 +290,8 @@ export class DashboardComponent implements OnInit {
       description: '', 
       amount: 0, 
       category: 'Comida', 
-      transactionDate: new Date().toISOString().slice(0, 10) 
+      transactionDate: new Date().toISOString().slice(0, 10),
+      currency: this.currencyCode  // ✅ Mantener moneda actual
     };
   }
 
