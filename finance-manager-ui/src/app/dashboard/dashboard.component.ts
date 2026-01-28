@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
     amount: 0,
     category: 'Comida',
     transactionDate: new Date().toISOString().slice(0, 10),
-    currency: 'USD'  // ✅ NUEVO CAMPO
+    currency: 'USD'  
   }
 
   public pieChartOptions: ChartConfiguration['options'] = {
@@ -98,47 +98,69 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleCurrency() {
-    if(this.currencyCode === 'USD') {
-      this.currencyService.getExchangeRate('BRL').subscribe({
-        next: (rate) => {
+    this.currencyService.getExchangeRate('BRL').subscribe({
+      next: (rate) => {
+        console.log(`💱 Tasa USD → BRL obtenida: ${rate}`);
+
+        if(this.currencyCode === 'USD') {// Cambiar a BRL
           this.currencyStateService.setCurrency('BRL', 'R$', rate);
-        },
-        error: (err) => {
-          console.error('Error cargando tasa:', err);
-          this.currencyStateService.setCurrency('BRL', 'R$', 5.7);
+          console.log('🇧🇷 Cambiado a BRL');
+        } else {// Cambiar a USD 
+          this.currencyStateService.setCurrency('USD', '$', rate);
         }
-      });
-    }
-    else {
-      this.currencyStateService.setCurrency('USD', '$', 1);
-    }
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener tasa:', err);
+        const fallbackRate = 5.25;
+        
+        if(this.currencyCode === 'USD') {
+            this.currencyStateService.setCurrency('BRL', 'R$', fallbackRate);
+        } else {
+            this.currencyStateService.setCurrency('USD', '$', fallbackRate);
+        }
+      }
+    });
   }
 
   // ✅ NUEVA FUNCIÓN: Convertir monto según la moneda original
   convertTransactionAmount(transaction: Transaction): number {
-    const txCurrency = transaction.currency || 'USD';
+    const txCurrency = (transaction.currency || 'USD').trim();
+    const targetCurrency = this.currencyCode.trim();
     
-    // Si la transacción y la vista están en la misma moneda
-    if (txCurrency === this.currencyCode) {
-      return transaction.amount;
+    console.log(`🔄 [${transaction.description}] De: "${txCurrency}" → A: "${targetCurrency}" | Monto: ${transaction.amount} | Tasa: ${this.exchangeRate}`);
+    
+    // Misma moneda = no convertir
+    if (txCurrency === targetCurrency) {
+        console.log('   ✅ Misma moneda, devuelve:', transaction.amount);
+        return transaction.amount;
     }
     
-    // Si la transacción está en USD y vemos en BRL
-    if (txCurrency === 'USD' && this.currencyCode === 'BRL') {
-      return transaction.amount * this.exchangeRate;
+    // USD → BRL
+    if (txCurrency === 'USD' && targetCurrency === 'BRL') {
+        const result = transaction.amount * this.exchangeRate;
+        console.log(`   💵 USD → BRL: ${transaction.amount} × ${this.exchangeRate} = ${result}`);
+        return result;
     }
     
-    // Si la transacción está en BRL y vemos en USD
-    if (txCurrency === 'BRL' && this.currencyCode === 'USD') {
-      return transaction.amount / this.exchangeRate;
+    // BRL → USD
+    if (txCurrency === 'BRL' && targetCurrency === 'USD') {
+        const result = transaction.amount / this.exchangeRate;
+        console.log(`   💵 BRL → USD: ${transaction.amount} ÷ ${this.exchangeRate} = ${result}`);
+        return result;
     }
     
+    console.warn(`   ⚠️ No se pudo convertir, devolviendo original:`, transaction.amount);
     return transaction.amount;
-  }
+} 
 
   loadTransactions() {
     this.transactionService.getTransactions().subscribe({
       next: (data) => {
+        console.log('📋 Transacciones cargadas:', data);
+        data.forEach(t => {
+          console.log(`ID: ${t.id} | ${t.description} | Currency  "${t.currency}  (tipo: ${typeof t.currency})`);
+        })
+
         this.allTransactions = data;
         this.applyFilters();
       },
@@ -251,7 +273,7 @@ export class DashboardComponent implements OnInit {
 
     // ✅ GUARDAR LA MONEDA ACTUAL
     this.newTransaction.currency = this.currencyCode;
-    console.log('🔍 Datos a enviar:', this.newTransaction); //for testing purpose, observe if sends data
+        console.log('🚀 Enviando al backend:', this.newTransaction);//for testing purpose, observe if sends data
 
 
     if (this.isEditing && this.editingId) {
