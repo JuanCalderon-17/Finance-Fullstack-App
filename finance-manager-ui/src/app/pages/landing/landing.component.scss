@@ -10,14 +10,13 @@ $accent-white: #ffffff;
 .landing-container {
   min-height: 100vh;
   width: 100%;
-  /* Misma imagen de trading que el login */
   background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), 
               url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Parallax sutil */
+  background-attachment: fixed;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; /* Evita scroll horizontal indeseado en móvil */
 }
 
 /* === LOGO SUPERIOR === */
@@ -31,11 +30,6 @@ $accent-white: #ffffff;
   z-index: 10;
   animation: fadeInDown 0.8s ease;
 
-  .logo-icon {
-    font-size: 2rem;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
-  }
-
   .logo-text {
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 1.25rem;
@@ -48,21 +42,14 @@ $accent-white: #ffffff;
   @media (max-width: 768px) {
     top: 1.5rem;
     left: 1.5rem;
-    
-    .logo-icon {
-      font-size: 1.5rem;
-    }
-    
-    .logo-text {
-      font-size: 1rem;
-    }
+    .logo-text { font-size: 1rem; }
   }
 }
 
 /* === CONTENIDO HERO === */
 .hero-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* PC: Dos columnas */
   gap: 4rem;
   align-items: center;
   min-height: 100vh;
@@ -72,11 +59,13 @@ $accent-white: #ffffff;
   position: relative;
   z-index: 1;
 
+  /* MÓVIL Y TABLET: Una columna */
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
     gap: 3rem;
-    padding: 8rem 5% 4rem;
+    padding: 7rem 5% 4rem; /* Más espacio arriba para el logo */
     text-align: center;
+    align-content: center; /* Centrar verticalmente */
   }
 }
 
@@ -86,6 +75,8 @@ $accent-white: #ffffff;
 
   @media (max-width: 1024px) {
     animation: fadeIn 1s ease;
+    /* En móvil, queremos que el texto esté arriba */
+    order: 1; 
   }
 }
 
@@ -102,9 +93,8 @@ $accent-white: #ffffff;
   @media (max-width: 1024px) {
     font-size: 3rem;
   }
-
   @media (max-width: 640px) {
-    font-size: 2.25rem;
+    font-size: 2.5rem; /* Ajuste para celulares pequeños */
   }
 }
 
@@ -119,6 +109,7 @@ $accent-white: #ffffff;
   @media (max-width: 640px) {
     font-size: 1rem;
     margin-bottom: 2rem;
+    padding: 0 10px; /* Margen para que no toque los bordes */
   }
 }
 
@@ -148,25 +139,33 @@ $accent-white: #ffffff;
 
   @media (max-width: 640px) {
     width: 100%;
-    padding: 0.875rem 2rem;
-    font-size: 1rem;
+    max-width: 300px; /* Que no sea gigante */
+    padding: 1rem;
   }
 }
 
-/* === SHOWCASE DE TARJETAS (GLASSMORPHISM) === */
+/* === SHOWCASE DE TARJETAS (ARREGLADO PARA MÓVIL) === */
 .cards-showcase {
   position: relative;
-  height: 600px;
+  height: 600px; /* Altura fija solo en PC */
   animation: fadeInRight 1s ease;
 
+  /* CAMBIOS PARA MÓVIL */
   @media (max-width: 1024px) {
-    display: none;
+    display: flex !important; /* FORZAMOS QUE SE VEA */
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    height: auto; /* Altura automática */
+    margin-top: 2rem;
+    order: 2; /* Que vaya debajo del texto */
+    padding-bottom: 3rem; /* Espacio al final */
   }
 }
 
 .card {
+  /* Estilos Base PC (Posición Absoluta) */
   position: absolute;
-  /* EFECTO GLASSMORPHISM IGUAL QUE EL LOGIN */
   background: $glass-bg;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -179,7 +178,19 @@ $accent-white: #ffffff;
   &:hover {
     transform: translateY(-10px);
     border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  }
+
+  /* RESET PARA MÓVIL (Posición Relativa) */
+  @media (max-width: 1024px) {
+    position: relative; /* Ya no flotan libremente */
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100%;
+    max-width: 340px; /* Ancho máximo para que no se vea feo */
+    margin: 0;
+    animation: none; /* Quitamos flotación en móvil para ahorrar batería */
+    transform: translateY(0) !important;
   }
 }
 
@@ -190,47 +201,12 @@ $accent-white: #ffffff;
   left: 50px;
   animation: float 6s ease-in-out infinite;
 
-  .card-label {
-    font-size: 0.875rem;
-    color: $text-muted;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: 600;
-  }
-
-  .card-amount {
-    font-size: 3rem;
-    font-weight: 800;
-    color: $text-primary;
-    margin-bottom: 1.5rem;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  }
-
-  .card-actions {
-    display: flex;
-    gap: 0.75rem;
-  }
-
+  .card-label { font-size: 0.875rem; color: $text-muted; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+  .card-amount { font-size: 3rem; font-weight: 800; color: $text-primary; margin-bottom: 1.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+  .card-actions { display: flex; gap: 0.75rem; }
   .mini-btn {
-    flex: 1;
-    padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-    }
+    flex: 1; padding: 0.75rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: white; font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+    &:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
   }
 }
 
@@ -241,24 +217,9 @@ $accent-white: #ffffff;
   right: 80px;
   animation: float 6s ease-in-out infinite 1s;
 
-  .card-date {
-    font-size: 0.875rem;
-    color: $text-muted;
-    margin-bottom: 1rem;
-  }
-
-  .card-highlight {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #4caf50;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-  }
-
-  .card-subtitle {
-    font-size: 1rem;
-    color: $text-secondary;
-  }
+  .card-date { font-size: 0.875rem; color: $text-muted; margin-bottom: 1rem; }
+  .card-highlight { font-size: 2.5rem; font-weight: 800; color: #4caf50; margin-bottom: 0.5rem; }
+  .card-subtitle { font-size: 1rem; color: $text-secondary; }
 }
 
 /* Tarjeta 3: Acción */
@@ -269,72 +230,19 @@ $accent-white: #ffffff;
   animation: float 6s ease-in-out infinite 2s;
   cursor: pointer;
 
-  .card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-  }
-
-  .card-title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: $text-primary;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+  .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .card-title { font-size: 1.125rem; font-weight: 700; color: $text-primary; }
+  &:hover { background: rgba(255, 255, 255, 0.1); }
+  
+  /* En móvil, ocultamos la tarjeta más pequeña si ocupa mucho espacio, o la dejamos */
+  @media (max-width: 640px) {
+    display: none; /* Opcional: Ocultamos la 3ra tarjeta en pantallas MUY pequeñas para no hacer scroll infinito */
   }
 }
 
 /* === ANIMACIONES === */
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }

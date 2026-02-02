@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { SavingsService, SavingAccount } from '../../services/savings.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
+import { TargetMenuAim } from '@angular/cdk/menu';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class SavingsComponent implements OnInit {
     this.loadData();
   }
 
-  // --- CONEXIÓN CON EL BACKEND (BD) ---
+  //CONEXIÓN CON EL BACKEND 
 
   loadData() {
     // Pedimos los datos a la base de datos
@@ -50,12 +51,35 @@ export class SavingsComponent implements OnInit {
       error: (err) => console.error('Error cargando ahorros', err)
     });
   }
-  convertAmount(amount: number): number {
-    return amount * this.exchangeRate;
+
+  convertAmount(acc: SavingAccount): number {
+    const accountCurrency = (acc.currency || 'USD').trim();
+    const targetCurrency = this.currencyStateService.getCurrentCurrency().code.trim();
+
+    //same currency
+    if(accountCurrency === targetCurrency) {
+      return acc.balance
+    }
+
+    // usd => brl
+    if(accountCurrency === 'USD' && targetCurrency === 'BRL') {
+      return acc.balance * this.exchangeRate;
+    }
+    
+    // brl => usd
+    if(accountCurrency === 'BRL' && targetCurrency === 'USD') {
+      return acc.balance / this.exchangeRate;
+    }
+
+    // witouth converting by default
+    return acc.balance;
+
   }
   
   calculateTotal() {
-    this.totalSavings = this.accounts.reduce((sum, acc) => sum + acc.balance, 0);
+    this.totalSavings = this.accounts.reduce((sum, acc) => {
+      return sum + this.convertAmount(acc);
+    }, 0)
   }
 
   addAccount() {
@@ -67,7 +91,7 @@ export class SavingsComponent implements OnInit {
       balance: this.newAccount.balance || 0, // Asegura que sea número
       color: this.newAccount.color,
       icon: this.newAccount.icon,
-      // No enviamos 'Goal' ni 'Id' ni 'isEditing'
+      currency: this.currencyStateService.getCurrentCurrency().code
     };
 
     // 2. Enviamos a la Base de Datos

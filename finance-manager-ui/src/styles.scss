@@ -1,14 +1,12 @@
-// ============================================
 // STYLES GLOBALES - Finance Manager
-// ============================================
 
-// 1. Importar Bootstrap
+// Importar Bootstrap
 @use "bootstrap/scss/bootstrap";
 
-// 2. Importar sistema de temas
-@import 'themes';
+@use 'themes';//importar temas
+;
 
-// 3. Estilos base del body (ya usa variables CSS)
+// Estilos base del body 
 body {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
@@ -17,7 +15,7 @@ body {
   padding: 0;
 }
 
-// ============ OVERRIDES DE BOOTSTRAP PARA DARK MODE ============
+//  OVERRIDES DE BOOTSTRAP PARA DARK MODE 
 
 // Cards
 .card {

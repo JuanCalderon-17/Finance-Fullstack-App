@@ -10,6 +10,7 @@ export interface SavingAccount {
   goal?: number;
   color: string;
   icon: string;
+  currency?: string;
   isEditing?: boolean;
 }
 
@@ -17,7 +18,6 @@ export interface SavingAccount {
   providedIn: 'root'
 })
 export class SavingsService {
-  // Asegúrate de que esta URL coincida con tu backend
   private apiUrl = environment.apiUrl + 'savings'; 
 
   constructor(private http: HttpClient) { }

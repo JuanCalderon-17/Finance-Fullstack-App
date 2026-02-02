@@ -32,7 +32,7 @@
           </h6>
 
           <h1 class="fw-bold text-white text-shadow mb-0" style="font-size: 5rem;">
-            {{ currencySymbol }}{{ convertAmount(totalSavings) | number:'1.2-2' }}
+            {{ currencySymbol }}{{ totalSavings | number:'1.2-2' }}
           </h1>
 
           <p class="text-white-50 mb-0 fst-italic small">
@@ -131,7 +131,7 @@
               <ng-container *ngIf="!acc.isEditing">
                 <h5 class="fw-bold mb-0">{{ acc.name }}</h5>
                 <h2 class="fw-bold mb-3">
-                  {{ currencySymbol }}{{ convertAmount(acc.balance) | number:'1.2-2' }}
+                  {{ currencySymbol }}{{ convertAmount(acc) | number:'1.2-2' }}
                 </h2>
 
                 <div class="d-flex gap-1 pt-2 border-top border-white border-opacity-10">
