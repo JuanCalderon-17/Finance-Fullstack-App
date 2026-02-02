@@ -19,7 +19,7 @@
     <div class="card-body py-4">
       <h6 class="text-uppercase mb-2">Total Deudas Pendientes</h6>
       <h2 class="fw-bold mb-0">
-        {{ currencySymbol }}{{ convertAmount(totalDebt) | number:'1.2-2' }}
+        {{ currencySymbol }}{{ totalDebt | number:'1.2-2' }}
       </h2>
     </div>
   </div>
@@ -190,14 +190,14 @@
             <div class="col-md-4">
               <strong>Cuota Mensual</strong>
               <div class="fs-4">
-                {{ currencySymbol }}{{ convertAmount(d.monthlyPayment) | number:'1.2-2' }}
+                {{ currencySymbol }}{{ convertNumber(d.monthlyPayment, d.currency) | number:'1.2-2' }}
               </div>
             </div>
 
             <div class="col-md-4">
               <strong>Saldo Pendiente</strong>
               <div class="fs-4 text-danger">
-                {{ currencySymbol }}{{ convertAmount(d.remainingAmount) | number:'1.2-2' }}
+                {{ currencySymbol }}{{ convertNumber(d.remainingAmount,  d.currency) | number:'1.2-2' }}
               </div>
             </div>
 
@@ -271,7 +271,7 @@
                 />
 
                 <div *ngIf="inst.isPaid" class="fs-5">
-                  {{ currencySymbol }}{{ convertAmount(inst.amount) | number:'1.2-2' }}
+                  {{ currencySymbol }}{{ convertNumber(inst.amount, d.currency) | number:'1.2-2' }}
                 </div>
               </div>
 

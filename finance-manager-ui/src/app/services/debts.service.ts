@@ -20,6 +20,7 @@ export interface Debt {
   paidInstallments: number;
   color: string;
   icon: string;
+  currency?: string;
   installmentsList?: Installment[];
 }
 

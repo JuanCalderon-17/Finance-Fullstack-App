@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DebtsService, Debt } from '../../services/debts.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
+import { NumericLiteral } from 'typescript';
 
 @Component({
   selector: 'app-debts',
@@ -52,8 +53,43 @@ export class DebtsComponent implements OnInit {
       }
     });
   }
-  convertAmount(amount: number): number {
-    return amount * this.exchangeRate;
+  convertAmount(acc: Debt) : number {
+    const accountCurrency = (acc.currency || 'USD').trim()
+    const targetCurrency = this.currencyStateService.getCurrentCurrency().code.trim();
+
+    if(accountCurrency === targetCurrency) {
+      return acc.balance; 
+    }
+
+    //usd to brl
+    if(accountCurrency === 'USD' && targetCurrency === 'BRL') {
+      return acc.balance * this.exchangeRate;
+    }
+
+     //brl to usd
+    if(accountCurrency === 'BRL' && targetCurrency === 'USD') {
+      return acc.balance / this.exchangeRate;
+    }
+     
+    return acc.balance;
+  }
+
+  convertNumber(amount:number, fromCurrency: string = 'USD') : number {
+    const targetCurrency = this.currencyStateService.getCurrentCurrency().code.trim();
+
+    if(fromCurrency === targetCurrency) {
+      return amount; 
+    }
+
+    if (fromCurrency === 'USD' && targetCurrency === 'BRL') {
+      return amount * this.exchangeRate;
+    }
+
+     if (fromCurrency === 'BRL' && targetCurrency === 'USD') {
+      return amount / this.exchangeRate;
+    }
+
+    return amount;
   }
 
   // 🧮 CÁLCULOS FINANCIEROS
@@ -87,8 +123,12 @@ export class DebtsComponent implements OnInit {
   }
 
   calculateTotal() {
-    this.totalDebt = this.debts.reduce((sum, d) => sum + d.remainingAmount, 0);
-  }
+  this.totalDebt = this.debts.reduce((sum, d) => {
+    const convertedAmount = this.convertNumber(d.remainingAmount, d.currency); // Convertir el monto de cada deuda según su moneda
+
+    return sum + convertedAmount;
+  }, 0);
+}
 
   // 💾 GUARDAR DEUDA (CREAR O EDITAR)
   saveDebt() {
