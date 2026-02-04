@@ -1,3 +1,144 @@
 {
-  "TITLE": "Gerente Financiero"
+  "LANDING": {
+    "TITLE": "La app de finanzas,",
+    "SUBTITLE": "a tu manera.",
+    "DESCRIPTION": "Tu cuenta para gestionar gastos, ahorros y deudas. Sin comisiones. Sin complicaciones. Total control.",
+    "CTA_BUTTON": "EMPEZAR AHORA"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Iniciar Sesión",
+      "EMAIL": "Correo Electrónico",
+      "EMAIL_PLACEHOLDER": "tu@email.com",
+      "PASSWORD": "Contraseña",
+      "PASSWORD_PLACEHOLDER": "Tu contraseña",
+      "BUTTON": "Entrar",
+      "NO_ACCOUNT": "¿No tienes cuenta?",
+      "REGISTER_LINK": "Regístrate aquí",
+      "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?"
+    },
+    "REGISTER": {
+      "TITLE": "Crear Cuenta",
+      "FULL_NAME": "Nombre Completo",
+      "USERNAME": "Nombre de Usuario",
+      "BUTTON": "Registrarse",
+      "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?",
+      "LOGIN_LINK": "Inicia sesión aquí"
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Panel de Control",
+    "WELCOME": "Bienvenido",
+    "TOTAL_INCOME": "Ingresos Totales",
+    "TOTAL_SPENT": "Gastos Totales",
+    "ADD_TRANSACTION": "Agregar Transacción",
+    "MONTH": "Mes",
+    "YEAR": "Año",
+    "PERIOD": "Período",
+    "ALL": "Todo el mes",
+    "FIRST_HALF": "Primera quincena",
+    "SECOND_HALF": "Segunda quincena",
+    "ALERTS": {
+      "GOOD": "Vamos bien. ¡Estás dentro de tus posibilidades!",
+      "WARNING": "Cuidado: Te has pasado un poco. ¡Frena los gastos!",
+      "DANGER": "¡ALERTA ROJA! Has superado tu límite de seguridad del 10%."
+    }
+  },
+  "TRANSACTIONS": {
+    "DESCRIPTION": "Descripción",
+    "AMOUNT": "Monto",
+    "CATEGORY": "Categoría",
+    "DATE": "Fecha",
+    "ACTIONS": "Acciones",
+    "NO_TRANSACTIONS": "No hay transacciones para este período",
+    "ADD_DESCRIPTION": "Por favor agrega una descripción para el movimiento.",
+    "INVALID_AMOUNT": "El monto debe ser mayor a 0."
+  },
+  "CATEGORIES": {
+    "FOOD": "Comida",
+    "TRANSPORT": "Transporte",
+    "HEALTH": "Salud",
+    "HOME": "Casa",
+    "ENTERTAINMENT": "Entretenimiento",
+    "EDUCATION": "Educación",
+    "SHOPPING": "Compras",
+    "SALARY": "Sueldo",
+    "BUSINESS": "Negocio",
+    "SALE": "Venta",
+    "EXTRA_INCOME": "Ingreso Extra",
+    "OTHER": "Otros"
+  },
+  "SAVINGS": {
+    "TITLE": "Mis Ahorros",
+    "SUBTITLE": "Gestión de Patrimonio",
+    "TOTAL_AVAILABLE": "Patrimonio Total Disponible",
+    "GROWING_MESSAGE": "Tu libertad financiera está creciendo",
+    "ADD_ACCOUNT": "Agregar Cuenta",
+    "BANK_SOURCE": "Banco / Fuente",
+    "INITIAL_BALANCE": "Saldo Inicial",
+    "COLOR": "Color",
+    "CREATE": "Crear",
+    "NO_ACCOUNTS": "Aún no hay cuentas. ¡Empieza a sumar!",
+    "EDIT": "Editar",
+    "DELETE": "Borrar",
+    "SAVE": "Guardar",
+    "CONFIRM_DELETE": "¿Seguro que quieres borrar esta cuenta?",
+    "COLORS": {
+      "RED": "🔴 Rojo",
+      "PURPLE": "🟣 Morado",
+      "GREEN": "🟢 Verde",
+      "BLACK": "⚫ Negro"
+    }
+  },
+  "DEBTS": {
+    "TITLE": "Mis Deudas",
+    "SUBTITLE": "Control total de plazos, intereses y pagos.",
+    "TOTAL_PENDING": "Total Deudas Pendientes",
+    "NEW_DEBT": "Nueva Deuda",
+    "EDIT_DEBT": "Editar Deuda",
+    "DEBT_NAME": "Nombre de la deuda",
+    "TOTAL_AMOUNT": "Monto Total",
+    "INTEREST_RATE": "Interés %",
+    "MONTHS": "Meses",
+    "CREATE_DEBT": "Crear Deuda",
+    "SAVE_CHANGES": "Guardar Cambios",
+    "CANCEL": "Cancelar",
+    "NO_DEBTS": "No hay deudas registradas",
+    "CREATE_FIRST": "Crea tu primera deuda usando el formulario",
+    "MONTHLY_PAYMENT": "Cuota Mensual",
+    "REMAINING_BALANCE": "Saldo Pendiente",
+    "PROGRESS": "Progreso",
+    "INSTALLMENT_DETAILS": "Detalle de Cuotas",
+    "INSTALLMENT": "Cuota",
+    "DUE_DATE": "Vence",
+    "PAID": "Pagada",
+    "OVERDUE": "Vencida",
+    "MARK_AS_PAID": "Marcar pagada",
+    "MARK_AS_UNPAID": "Marcar como no pagada",
+    "CONFIRM_DELETE": "¿Estás seguro de eliminar esta deuda? Esta acción no se puede deshacer.",
+    "INTEREST": "interés",
+    "INSTALLMENTS": "cuotas",
+    "PAID_INSTALLMENTS": "pagadas"
+  },
+  "BUTTONS": {
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "EDIT": "Editar",
+    "DELETE": "Eliminar",
+    "LOGOUT": "Cerrar Sesión",
+    "BACK": "Volver",
+    "CREATE": "Crear",
+    "UPDATE": "Actualizar"
+  },
+  "NAVIGATION": {
+    "DASHBOARD": "Panel",
+    "SAVINGS": "Ahorros",
+    "DEBTS": "Deudas",
+    "SETTINGS": "Ajustes"
+  },
+  "CURRENCY": {
+    "USD": "Dólar",
+    "BRL": "Real Brasileño",
+    "TOGGLE": "Cambiar Moneda"
+  }
 }

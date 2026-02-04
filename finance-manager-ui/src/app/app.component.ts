@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +11,14 @@ import { ThemeService } from './services/theme.service';
 })
 export class AppComponent implements OnInit {
   title = 'finance-manager-ui';
+  constructor(private themeService: ThemeService, private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
 
-  constructor(private themeService: ThemeService) {}
+  }
+
 
   ngOnInit(): void {
-    // Cargar el tema guardado al iniciar la app
-    this.themeService.loadTheme();
+    this.themeService.loadTheme(); // Cargar el tema guardado al iniciar la app
+
   }
 }

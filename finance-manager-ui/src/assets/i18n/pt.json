@@ -1,0 +1,144 @@
+{
+  "LANDING": {
+    "TITLE": "O app financeiro,",
+    "SUBTITLE": "do seu jeito.",
+    "DESCRIPTION": "Sua conta para gerenciar gastos, economias e dívidas. Sem taxas. Sem complicações. Controle total.",
+    "CTA_BUTTON": "COMEÇAR AGORA"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Entrar",
+      "EMAIL": "E-mail",
+      "EMAIL_PLACEHOLDER": "seu@email.com",
+      "PASSWORD": "Senha",
+      "PASSWORD_PLACEHOLDER": "Sua senha",
+      "BUTTON": "Entrar",
+      "NO_ACCOUNT": "Não tem uma conta?",
+      "REGISTER_LINK": "Cadastre-se aqui",
+      "FORGOT_PASSWORD": "Esqueceu sua senha?"
+    },
+    "REGISTER": {
+      "TITLE": "Criar Conta",
+      "FULL_NAME": "Nome Completo",
+      "USERNAME": "Nome de Usuário",
+      "BUTTON": "Cadastrar",
+      "ALREADY_HAVE_ACCOUNT": "Já tem uma conta?",
+      "LOGIN_LINK": "Entre aqui"
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Painel",
+    "WELCOME": "Bem-vindo",
+    "TOTAL_INCOME": "Receita Total",
+    "TOTAL_SPENT": "Gastos Totais",
+    "ADD_TRANSACTION": "Adicionar Transação",
+    "MONTH": "Mês",
+    "YEAR": "Ano",
+    "PERIOD": "Período",
+    "ALL": "Mês inteiro",
+    "FIRST_HALF": "Primeira quinzena",
+    "SECOND_HALF": "Segunda quinzena",
+    "ALERTS": {
+      "GOOD": "Indo bem. Você está dentro das suas possibilidades!",
+      "WARNING": "Cuidado: Você gastou um pouco a mais. Diminua os gastos!",
+      "DANGER": "ALERTA VERMELHO! Você ultrapassou seu limite de segurança de 10%."
+    }
+  },
+  "TRANSACTIONS": {
+    "DESCRIPTION": "Descrição",
+    "AMOUNT": "Valor",
+    "CATEGORY": "Categoria",
+    "DATE": "Data",
+    "ACTIONS": "Ações",
+    "NO_TRANSACTIONS": "Não há transações para este período",
+    "ADD_DESCRIPTION": "Por favor, adicione uma descrição para a transação.",
+    "INVALID_AMOUNT": "O valor deve ser maior que 0."
+  },
+  "CATEGORIES": {
+    "FOOD": "Comida",
+    "TRANSPORT": "Transporte",
+    "HEALTH": "Saúde",
+    "HOME": "Casa",
+    "ENTERTAINMENT": "Entretenimento",
+    "EDUCATION": "Educação",
+    "SHOPPING": "Compras",
+    "SALARY": "Salário",
+    "BUSINESS": "Negócio",
+    "SALE": "Venda",
+    "EXTRA_INCOME": "Renda Extra",
+    "OTHER": "Outros"
+  },
+  "SAVINGS": {
+    "TITLE": "Minhas Economias",
+    "SUBTITLE": "Gestão de Patrimônio",
+    "TOTAL_AVAILABLE": "Patrimônio Total Disponível",
+    "GROWING_MESSAGE": "Sua liberdade financeira está crescendo",
+    "ADD_ACCOUNT": "Adicionar Conta",
+    "BANK_SOURCE": "Banco / Fonte",
+    "INITIAL_BALANCE": "Saldo Inicial",
+    "COLOR": "Cor",
+    "CREATE": "Criar",
+    "NO_ACCOUNTS": "Ainda não há contas. Comece a economizar!",
+    "EDIT": "Editar",
+    "DELETE": "Excluir",
+    "SAVE": "Salvar",
+    "CONFIRM_DELETE": "Tem certeza de que deseja excluir esta conta?",
+    "COLORS": {
+      "RED": "🔴 Vermelho",
+      "PURPLE": "🟣 Roxo",
+      "GREEN": "🟢 Verde",
+      "BLACK": "⚫ Preto"
+    }
+  },
+  "DEBTS": {
+    "TITLE": "Minhas Dívidas",
+    "SUBTITLE": "Controle total de prazos, juros e pagamentos.",
+    "TOTAL_PENDING": "Total de Dívidas Pendentes",
+    "NEW_DEBT": "Nova Dívida",
+    "EDIT_DEBT": "Editar Dívida",
+    "DEBT_NAME": "Nome da dívida",
+    "TOTAL_AMOUNT": "Valor Total",
+    "INTEREST_RATE": "Juros %",
+    "MONTHS": "Meses",
+    "CREATE_DEBT": "Criar Dívida",
+    "SAVE_CHANGES": "Salvar Alterações",
+    "CANCEL": "Cancelar",
+    "NO_DEBTS": "Não há dívidas registradas",
+    "CREATE_FIRST": "Crie sua primeira dívida usando o formulário",
+    "MONTHLY_PAYMENT": "Parcela Mensal",
+    "REMAINING_BALANCE": "Saldo Pendente",
+    "PROGRESS": "Progresso",
+    "INSTALLMENT_DETAILS": "Detalhes das Parcelas",
+    "INSTALLMENT": "Parcela",
+    "DUE_DATE": "Vencimento",
+    "PAID": "Paga",
+    "OVERDUE": "Vencida",
+    "MARK_AS_PAID": "Marcar como paga",
+    "MARK_AS_UNPAID": "Marcar como não paga",
+    "CONFIRM_DELETE": "Tem certeza de que deseja excluir esta dívida? Esta ação não pode ser desfeita.",
+    "INTEREST": "juros",
+    "INSTALLMENTS": "parcelas",
+    "PAID_INSTALLMENTS": "pagas"
+  },
+  "BUTTONS": {
+    "SAVE": "Salvar",
+    "CANCEL": "Cancelar",
+    "EDIT": "Editar",
+    "DELETE": "Excluir",
+    "LOGOUT": "Sair",
+    "BACK": "Voltar",
+    "CREATE": "Criar",
+    "UPDATE": "Atualizar"
+  },
+  "NAVIGATION": {
+    "DASHBOARD": "Painel",
+    "SAVINGS": "Economias",
+    "DEBTS": "Dívidas",
+    "SETTINGS": "Configurações"
+  },
+  "CURRENCY": {
+    "USD": "Dólar",
+    "BRL": "Real Brasileiro",
+    "TOGGLE": "Alternar Moeda"
+  }
+}

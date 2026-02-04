@@ -19,31 +19,156 @@ $accent-white: #ffffff;
   overflow-x: hidden; /* Evita scroll horizontal indeseado en móvil */
 }
 
-/* === LOGO SUPERIOR === */
+/* === LOGO SUPERIOR (IZQUIERDA) === */
 .logo-wrapper {
   position: absolute;
-  top: 2rem;
-  left: 2rem;
+  
+  /* Volvemos a posiciones normales y positivas */
+  top: 2rem;   
+  left: 2rem;  
+  
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   z-index: 10;
   animation: fadeInDown 0.8s ease;
 
-  .logo-text {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: $text-primary;
-    letter-spacing: -0.5px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  .app-logo {
+    /* TAMAÑO NORMAL: 
+       55px es un tamaño ideal para que se lea bien sin invadir todo.
+       Si lo quieres un pelín más grande, prueba 65px. */
+    height: 55px; 
+    width: auto;
+    
+    /* Mantenemos el filtro blanco */
+    filter: brightness(0) invert(1); 
+    
+    transition: transform 0.3s ease;
   }
 
+  &:hover .app-logo {
+    transform: scale(1.05);
+  }
+
+  /* === AJUSTE PARA MÓVIL === */
   @media (max-width: 768px) {
     top: 1.5rem;
     left: 1.5rem;
-    .logo-text { font-size: 1rem; }
+    
+    .app-logo {
+      height: 40px; /* Tamaño perfecto para celular */
+    }
   }
+}
+
+/* === SELECTOR DE IDIOMA (DERECHA - NUEVO) === */
+/* === SELECTOR DE IDIOMA (DROPDOWN) === */
+.language-switcher {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 50; /* Muy alto para estar encima de todo */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Alineado a la derecha */
+  animation: fadeInDown 0.8s ease;
+
+  /* Botón Principal */
+  .current-lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+
+    img {
+      width: 20px;
+      height: 15px;
+      border-radius: 2px;
+      object-fit: cover;
+    }
+
+    .arrow {
+      font-size: 0.7rem;
+      margin-left: 4px;
+      transition: transform 0.3s ease;
+      
+      &.rotate {
+        transform: rotate(180deg); /* Gira la flecha al abrir */
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  /* Menú Desplegable (Flotante) */
+  .lang-dropdown {
+    position: absolute;
+    top: 100%; /* Justo debajo del botón */
+    right: 0;
+    margin-top: 8px; /* Espacio separador */
+    background: rgba(20, 20, 20, 0.95); /* Fondo oscuro sólido */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: fadeIn 0.2s ease;
+
+    button {
+      background: transparent;
+      border: none;
+      color: #ccc;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      width: 100%;
+      text-align: left;
+      transition: all 0.2s;
+
+      img {
+        width: 20px;
+        height: 15px;
+        border-radius: 2px;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+    }
+  }
+
+  /* Ajuste Móvil */
+  @media (max-width: 768px) {
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+/* Animación suave para el menú */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* === CONTENIDO HERO === */

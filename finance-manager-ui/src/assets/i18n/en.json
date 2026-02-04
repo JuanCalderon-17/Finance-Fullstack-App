@@ -1,0 +1,144 @@
+{
+  "LANDING": {
+    "TITLE": "The finance app,",
+    "SUBTITLE": "your way.",
+    "DESCRIPTION": "Your account to manage expenses, savings, and debts. No fees. No hassle. Total control.",
+    "CTA_BUTTON": "START NOW"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Log In",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "your@email.com",
+      "PASSWORD": "Password",
+      "PASSWORD_PLACEHOLDER": "Your password",
+      "BUTTON": "Sign In",
+      "NO_ACCOUNT": "Don't have an account?",
+      "REGISTER_LINK": "Register here",
+      "FORGOT_PASSWORD": "Forgot your password?"
+    },
+    "REGISTER": {
+      "TITLE": "Create Account",
+      "FULL_NAME": "Full Name",
+      "USERNAME": "Username",
+      "BUTTON": "Sign Up",
+      "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+      "LOGIN_LINK": "Log in here"
+    }
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "WELCOME": "Welcome",
+    "TOTAL_INCOME": "Total Income",
+    "TOTAL_SPENT": "Total Spent",
+    "ADD_TRANSACTION": "Add Transaction",
+    "MONTH": "Month",
+    "YEAR": "Year",
+    "PERIOD": "Period",
+    "ALL": "Entire month",
+    "FIRST_HALF": "First half",
+    "SECOND_HALF": "Second half",
+    "ALERTS": {
+      "GOOD": "Doing well. You're within your means!",
+      "WARNING": "Careful: You've overspent a bit. Slow down!",
+      "DANGER": "RED ALERT! You've exceeded your 10% safety limit."
+    }
+  },
+  "TRANSACTIONS": {
+    "DESCRIPTION": "Description",
+    "AMOUNT": "Amount",
+    "CATEGORY": "Category",
+    "DATE": "Date",
+    "ACTIONS": "Actions",
+    "NO_TRANSACTIONS": "No transactions for this period",
+    "ADD_DESCRIPTION": "Please add a description for the transaction.",
+    "INVALID_AMOUNT": "Amount must be greater than 0."
+  },
+  "CATEGORIES": {
+    "FOOD": "Food",
+    "TRANSPORT": "Transport",
+    "HEALTH": "Health",
+    "HOME": "Home",
+    "ENTERTAINMENT": "Entertainment",
+    "EDUCATION": "Education",
+    "SHOPPING": "Shopping",
+    "SALARY": "Salary",
+    "BUSINESS": "Business",
+    "SALE": "Sale",
+    "EXTRA_INCOME": "Extra Income",
+    "OTHER": "Other"
+  },
+  "SAVINGS": {
+    "TITLE": "My Savings",
+    "SUBTITLE": "Wealth Management",
+    "TOTAL_AVAILABLE": "Total Available Assets",
+    "GROWING_MESSAGE": "Your financial freedom is growing",
+    "ADD_ACCOUNT": "Add Account",
+    "BANK_SOURCE": "Bank / Source",
+    "INITIAL_BALANCE": "Initial Balance",
+    "COLOR": "Color",
+    "CREATE": "Create",
+    "NO_ACCOUNTS": "No accounts yet. Start saving!",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SAVE": "Save",
+    "CONFIRM_DELETE": "Are you sure you want to delete this account?",
+    "COLORS": {
+      "RED": "🔴 Red",
+      "PURPLE": "🟣 Purple",
+      "GREEN": "🟢 Green",
+      "BLACK": "⚫ Black"
+    }
+  },
+  "DEBTS": {
+    "TITLE": "My Debts",
+    "SUBTITLE": "Complete control of deadlines, interest, and payments.",
+    "TOTAL_PENDING": "Total Pending Debts",
+    "NEW_DEBT": "New Debt",
+    "EDIT_DEBT": "Edit Debt",
+    "DEBT_NAME": "Debt name",
+    "TOTAL_AMOUNT": "Total Amount",
+    "INTEREST_RATE": "Interest %",
+    "MONTHS": "Months",
+    "CREATE_DEBT": "Create Debt",
+    "SAVE_CHANGES": "Save Changes",
+    "CANCEL": "Cancel",
+    "NO_DEBTS": "No debts registered",
+    "CREATE_FIRST": "Create your first debt using the form",
+    "MONTHLY_PAYMENT": "Monthly Payment",
+    "REMAINING_BALANCE": "Remaining Balance",
+    "PROGRESS": "Progress",
+    "INSTALLMENT_DETAILS": "Installment Details",
+    "INSTALLMENT": "Installment",
+    "DUE_DATE": "Due",
+    "PAID": "Paid",
+    "OVERDUE": "Overdue",
+    "MARK_AS_PAID": "Mark as paid",
+    "MARK_AS_UNPAID": "Mark as unpaid",
+    "CONFIRM_DELETE": "Are you sure you want to delete this debt? This action cannot be undone.",
+    "INTEREST": "interest",
+    "INSTALLMENTS": "installments",
+    "PAID_INSTALLMENTS": "paid"
+  },
+  "BUTTONS": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "LOGOUT": "Log Out",
+    "BACK": "Back",
+    "CREATE": "Create",
+    "UPDATE": "Update"
+  },
+  "NAVIGATION": {
+    "DASHBOARD": "Dashboard",
+    "SAVINGS": "Savings",
+    "DEBTS": "Debts",
+    "SETTINGS": "Settings"
+  },
+  "CURRENCY": {
+    "USD": "Dollar",
+    "BRL": "Brazilian Real",
+    "TOGGLE": "Toggle Currency"
+  }
+}

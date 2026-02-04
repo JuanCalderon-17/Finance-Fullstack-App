@@ -8,9 +8,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 
-
-
-export function HttpLoaderFactory(http: HttpClient) {
+export function HttpLoaderFactory(http: HttpClient): TranslateLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -19,11 +17,15 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([jwtInterceptor])), 
     provideCharts(withDefaultRegisterables()),
+
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'es',
-        useFactory: HttpLoaderFactory, 
-        deps: [HttpClient]
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory, 
+          deps: [HttpClient]
+        }
       })
     )
   ]   
