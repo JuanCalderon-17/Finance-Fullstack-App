@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms'; // <-- 1. IMPORTAR FormsModule
 import { AuthService } from '../../core/services/auth.service'; // <-- 1. IMPORTA EL SERVICIO
 import { Router } from '@angular/router'; //Importo router para mover al usuario de paginas
 import { RouterModule } from '@angular/router'; // Añade RouterModule
+import {TranslateModule} from '@ngx-translate/core'
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

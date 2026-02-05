@@ -1,29 +1,37 @@
 {
   "LANDING": {
     "TITLE": "O app financeiro,",
-    "SUBTITLE": "do seu jeito.",
+    "SUBTITLE": "de seu jeito.",
     "DESCRIPTION": "Sua conta para gerenciar gastos, economias e dívidas. Sem taxas. Sem complicações. Controle total.",
     "CTA_BUTTON": "COMEÇAR AGORA"
   },
   "AUTH": {
     "LOGIN": {
-      "TITLE": "Entrar",
-      "EMAIL": "E-mail",
-      "EMAIL_PLACEHOLDER": "seu@email.com",
+      "TITLE": "Entre no seu terminal financeiro",
+      "EMAIL": "Usuário",
+      "EMAIL_PLACEHOLDER": "Seu usuário",
       "PASSWORD": "Senha",
-      "PASSWORD_PLACEHOLDER": "Sua senha",
-      "BUTTON": "Entrar",
+      "PASSWORD_PLACEHOLDER": "••••••••",
+      "BUTTON": "ENTRAR",
       "NO_ACCOUNT": "Não tem uma conta?",
-      "REGISTER_LINK": "Cadastre-se aqui",
-      "FORGOT_PASSWORD": "Esqueceu sua senha?"
+      "REGISTER_LINK": "Criar nova",
+      "FORGOT_PASSWORD": "Esqueceu sua senha?",
+      "HERO_TITLE": "Assuma o controle",
+      "HERO_TEXT": "Bem-vindo ao Finance Manager. A ferramenta projetada para rastrear seus gastos, otimizar seu capital e evitar surpresas financeiras. Seu dinheiro, suas regras."
     },
-    "REGISTER": {
-      "TITLE": "Criar Conta",
+  "REGISTER": {
+    "TITLE": "NOVA CONTA",
       "FULL_NAME": "Nome Completo",
-      "USERNAME": "Nome de Usuário",
-      "BUTTON": "Cadastrar",
+      "NAME_PLACEHOLDER": "Ex. João Silva",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER":"email@gmail.com", 
+      "PASSWORD": "Senha",
+      "CONFIRM_PASSWORD": "Confirmar Senha",
+      "BUTTON": "CADASTRAR",
       "ALREADY_HAVE_ACCOUNT": "Já tem uma conta?",
-      "LOGIN_LINK": "Entre aqui"
+      "LOGIN_LINK": "Entrar",
+      "HERO_TITLE": "Comece seu legado",
+      "HERO_TEXT": "\"O primeiro passo para a liberdade financeira é tomar a decisão de controlar seu destino. Cadastre-se hoje e comece a construir o futuro que você merece.\""
     }
   },
   "DASHBOARD": {

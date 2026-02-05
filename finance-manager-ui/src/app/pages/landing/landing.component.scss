@@ -33,9 +33,7 @@ $accent-white: #ffffff;
   animation: fadeInDown 0.8s ease;
 
   .app-logo {
-    /* TAMAÑO NORMAL: 
-       55px es un tamaño ideal para que se lea bien sin invadir todo.
-       Si lo quieres un pelín más grande, prueba 65px. */
+    /* TAMAÑO NORMAL*/
     height: 55px; 
     width: auto;
     
@@ -60,7 +58,6 @@ $accent-white: #ffffff;
   }
 }
 
-/* === SELECTOR DE IDIOMA (DERECHA - NUEVO) === */
 /* === SELECTOR DE IDIOMA (DROPDOWN) === */
 .language-switcher {
   position: absolute;

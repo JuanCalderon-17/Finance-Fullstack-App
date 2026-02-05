@@ -6,25 +6,32 @@
     "CTA_BUTTON": "EMPEZAR AHORA"
   },
   "AUTH": {
-    "LOGIN": {
-      "TITLE": "Iniciar Sesión",
-      "EMAIL": "Correo Electrónico",
-      "EMAIL_PLACEHOLDER": "tu@email.com",
-      "PASSWORD": "Contraseña",
-      "PASSWORD_PLACEHOLDER": "Tu contraseña",
-      "BUTTON": "Entrar",
-      "NO_ACCOUNT": "¿No tienes cuenta?",
-      "REGISTER_LINK": "Regístrate aquí",
-      "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?"
-    },
-    "REGISTER": {
-      "TITLE": "Crear Cuenta",
-      "FULL_NAME": "Nombre Completo",
-      "USERNAME": "Nombre de Usuario",
-      "BUTTON": "Registrarse",
-      "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?",
-      "LOGIN_LINK": "Inicia sesión aquí"
-    }
+  "LOGIN": {
+    "TITLE": "Ingresa a tu terminal financiera",
+    "EMAIL": "Usuario",
+    "EMAIL_PLACEHOLDER": "Tu usuario",
+    "PASSWORD": "Contraseña",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "BUTTON": "INICIAR SESIÓN",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "NO_ACCOUNT": "¿No tienes cuenta?",
+    "REGISTER_LINK": "Crear nueva",
+    "HERO_TITLE": "Toma el control",
+    "HERO_TEXT": "Bienvenido a Finance Manager. La herramienta diseñada para rastrear tus gastos, optimizar tu capital y evitar sorpresas financieras. Tu dinero, bajo tus reglas."
+  },
+  "REGISTER": {
+    "TITLE": "Crear Cuenta",
+    "FULL_NAME": "Nombre Completo",
+    "NAME_PLACEHOLDER": "Ej.Juan Perez",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "usuario@gmail.com",
+    "PASSWORD":"Contraseña",
+    "CONFIRM_PASSWORD": "Confirmar Contraseña",
+    "BUTTON": "Registrarse",
+    "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?",
+    "LOGIN_LINK": "Inicia sesión aquí",
+    "HERO_TITLE": "Empieza tu legado",
+    "HERO_TEXT": "\"El primer paso para la libertad financiera es tomar la decisión de controlar tu destino. Regístrate hoy y comienza a construir el futuro que mereces.\"" }
   },
   "DASHBOARD": {
     "TITLE": "Panel de Control",

@@ -6,25 +6,33 @@
     "CTA_BUTTON": "START NOW"
   },
   "AUTH": {
-    "LOGIN": {
-      "TITLE": "Log In",
-      "EMAIL": "Email",
-      "EMAIL_PLACEHOLDER": "your@email.com",
-      "PASSWORD": "Password",
-      "PASSWORD_PLACEHOLDER": "Your password",
-      "BUTTON": "Sign In",
-      "NO_ACCOUNT": "Don't have an account?",
-      "REGISTER_LINK": "Register here",
-      "FORGOT_PASSWORD": "Forgot your password?"
-    },
-    "REGISTER": {
-      "TITLE": "Create Account",
-      "FULL_NAME": "Full Name",
-      "USERNAME": "Username",
-      "BUTTON": "Sign Up",
-      "ALREADY_HAVE_ACCOUNT": "Already have an account?",
-      "LOGIN_LINK": "Log in here"
-    }
+  "LOGIN": {
+    "TITLE": "Login to your financial terminal",
+    "EMAIL": "Username",
+    "EMAIL_PLACEHOLDER": "Your username",
+    "PASSWORD": "Password",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "BUTTON": "LOG IN",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER_LINK": "Create new",
+    "HERO_TITLE": "Take Control",
+    "HERO_TEXT": "Welcome to Finance Manager. The tool designed to track your expenses, optimize your capital, and avoid financial surprises. Your money, your rules."
+  },
+  "REGISTER": {
+    "TITLE": "NEW ACCOUNT",
+    "FULL_NAME": "Full Name",
+    "NAME_PLACEHOLDER": "Ex. John Doe",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Your username",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "BUTTON": "REGISTER",
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+    "LOGIN_LINK": "Log In",
+    "HERO_TITLE": "Start your legacy",
+    "HERO_TEXT": "\"The first step to financial freedom is deciding to control your destiny. Sign up today and start building the future you deserve.\""
+  }
   },
   "DASHBOARD": {
     "TITLE": "Dashboard",
