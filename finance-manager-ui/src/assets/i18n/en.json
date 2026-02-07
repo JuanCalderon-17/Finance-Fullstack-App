@@ -6,77 +6,80 @@
     "CTA_BUTTON": "START NOW"
   },
   "AUTH": {
-  "LOGIN": {
-    "TITLE": "Login to your financial terminal",
-    "EMAIL": "Username",
-    "EMAIL_PLACEHOLDER": "Your username",
-    "PASSWORD": "Password",
-    "PASSWORD_PLACEHOLDER": "••••••••",
-    "BUTTON": "LOG IN",
-    "FORGOT_PASSWORD": "Forgot password?",
-    "NO_ACCOUNT": "Don't have an account?",
-    "REGISTER_LINK": "Create new",
-    "HERO_TITLE": "Take Control",
-    "HERO_TEXT": "Welcome to Finance Manager. The tool designed to track your expenses, optimize your capital, and avoid financial surprises. Your money, your rules."
-  },
-  "REGISTER": {
-    "TITLE": "NEW ACCOUNT",
-    "FULL_NAME": "Full Name",
-    "NAME_PLACEHOLDER": "Ex. John Doe",
-    "EMAIL": "Email",
-    "EMAIL_PLACEHOLDER": "Your username",
-    "PASSWORD": "Password",
-    "CONFIRM_PASSWORD": "Confirm Password",
-    "BUTTON": "REGISTER",
-    "ALREADY_HAVE_ACCOUNT": "Already have an account?",
-    "LOGIN_LINK": "Log In",
-    "HERO_TITLE": "Start your legacy",
-    "HERO_TEXT": "\"The first step to financial freedom is deciding to control your destiny. Sign up today and start building the future you deserve.\""
-  }
+    "LOGIN": {
+      "TITLE": "Login to your financial terminal",
+      "EMAIL": "Username",
+      "EMAIL_PLACEHOLDER": "Your username",
+      "PASSWORD": "Password",
+      "PASSWORD_PLACEHOLDER": "••••••••",
+      "BUTTON": "LOG IN",
+      "FORGOT_PASSWORD": "Forgot password?",
+      "NO_ACCOUNT": "Don't have an account?",
+      "REGISTER_LINK": "Create new",
+      "HERO_TITLE": "Take Control",
+      "HERO_TEXT": "Welcome to Finance Manager. The tool designed to track your expenses, optimize your capital, and avoid financial surprises. Your money, your rules."
+    },
+    "REGISTER": {
+      "TITLE": "NEW ACCOUNT",
+      "FULL_NAME": "Full Name",
+      "NAME_PLACEHOLDER": "Ex. John Doe",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "email@gmail.com",
+      "PASSWORD": "Password",
+      "CONFIRM_PASSWORD": "Confirm Password",
+      "BUTTON": "REGISTER",
+      "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+      "LOGIN_LINK": "Log In",
+      "HERO_TITLE": "Start your legacy",
+      "HERO_TEXT": "\"The first step to financial freedom is deciding to control your destiny. Sign up today and start building the future you deserve.\""
+    }
   },
   "DASHBOARD": {
     "TITLE": "Dashboard",
-    "WELCOME": "Welcome",
     "TOTAL_INCOME": "Total Income",
     "TOTAL_SPENT": "Total Spent",
-    "ADD_TRANSACTION": "Add Transaction",
-    "AVAILABLE": "Available money",
-    "MONTH": "Month",
-    "YEAR": "Year",
-    "PERIOD": "Period",
-    "ALL": "Entire month",
-    "NEW_TRANSACTION":"New transaction",
-    "HISTORY": "History Record",
-    "FIRST_HALF": "First half",
-    "SECOND_HALF": "Second half",
+    "AVAILABLE": "Available",
+    "DEBT_LABEL": "Debt",
+    "SAVING_MSG": "You are saving",
+    "OVERSPENT_MSG": "You overspent",
+    "NO_EXPENSES": "No expenses to show",
+    "EDITING": "✏️ Editing",
+    "NEW_TRANSACTION": "➕ New Transaction",
+    "INCOME_GROUP": "Income 🤑",
+    "EXPENSE_GROUP": "Expenses 💸",
+    "HISTORY": "History",
+    "ALL": "Entire Month",
+    "FIRST_HALF": "1st Half",
+    "SECOND_HALF": "2nd Half",
     "ALERTS": {
       "GOOD": "Doing well. You're within your means!",
-      "WARNING": "Careful: You've overspent a bit. Slow down!",
-      "DANGER": "RED ALERT! You've exceeded your 10% safety limit."
+      "WARNING": "Careful: You've overspent a bit.",
+      "DANGER": "RED ALERT! You've exceeded your limit."
     }
   },
-  "TRANSACTION": {
+  "TRANSACTION": { 
     "DESCRIPTION": "Description",
     "AMOUNT": "Amount",
     "CATEGORY": "Category",
     "DATE": "Date",
     "ACTIONS": "Actions",
-    "NO_TRANSACTION": "No transactions for this period",
-    "ADD_DESCRIPTION": "Please add a description for the transaction.",
-    "INVALID_AMOUNT": "Amount must be greater than 0."
+    "NO_TRANSACTIONS": "No transactions found",
+    "ADD_DESCRIPTION": "Please add a description",
+    "INVALID_AMOUNT": "Amount must be greater than 0"
   },
   "CATEGORIES": {
-    "FOOD": "Food",
-    "TRANSPORT": "Transport",
-    "HEALTH": "Health",
-    "HOME": "Home",
-    "ENTERTAINMENT": "Entertainment",
-    "EDUCATION": "Education",
-    "SHOPPING": "Shopping",
     "SALARY": "Salary",
     "BUSINESS": "Business",
     "SALE": "Sale",
     "EXTRA_INCOME": "Extra Income",
+    "SAVING": "Savings",
+    "FOOD": "Food",
+    "TRANSPORT": "Transport",
+    "EDUCATION": "Education",
+    "HEALTH": "Health",
+    "ENTERTAINMENT": "Entertainment",
+    "HOME": "Home",
+    "SHOPPING": "Shopping",
     "OTHER": "Other"
   },
   "SAVINGS": {
@@ -126,20 +129,21 @@
     "OVERDUE": "Overdue",
     "MARK_AS_PAID": "Mark as paid",
     "MARK_AS_UNPAID": "Mark as unpaid",
-    "CONFIRM_DELETE": "Are you sure you want to delete this debt? This action cannot be undone.",
+    "CONFIRM_DELETE": "Are you sure you want to delete this debt?",
     "INTEREST": "interest",
     "INSTALLMENTS": "installments",
     "PAID_INSTALLMENTS": "paid"
   },
   "BUTTONS": {
-    "ADD": "Agregar",
-    "UPDATE": "Actualizar",
-    "CANCEL": "Cancelar",
-    "LOGOUT": "Cerrar Sesión"
-  },
-  "MONTHS": {
-    "JAN": "Ene", "FEB": "Feb", "MAR": "Mar", "APR": "Abr", "MAY": "May", "JUN": "Jun",
-    "JUL": "Jul", "AUG": "Ago", "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dic"
+    "ADD": "Add",
+    "UPDATE": "Update",
+    "CANCEL": "Cancel",
+    "LOGOUT": "Log Out",
+    "SAVE": "Save",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "BACK": "Back",
+    "CREATE": "Create"
   },
   "NAVIGATION": {
     "DASHBOARD": "Dashboard",
@@ -151,5 +155,9 @@
     "USD": "Dollar",
     "BRL": "Brazilian Real",
     "TOGGLE": "Toggle Currency"
+  },
+  "MONTHS": {
+    "JAN": "Jan", "FEB": "Feb", "MAR": "Mar", "APR": "Apr", "MAY": "May", "JUN": "Jun",
+    "JUL": "Jul", "AUG": "Aug", "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dec"
   }
 }

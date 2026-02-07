@@ -6,42 +6,31 @@
     </a>
     
     <div class="d-flex gap-3 mx-auto">
-        <a routerLink="/savings" 
-          class="nav-link text-white-50 hover-light transition">
+        <a routerLink="/savings" class="nav-link text-white-50 hover-light transition">
            {{'NAVIGATION.SAVINGS' | translate}}
         </a>
-        <a routerLink="/dashboard" 
-           class="nav-link text-white fw-bold border-bottom border-2 border-primary">
+        <a routerLink="/dashboard" class="nav-link text-white fw-bold border-bottom border-2 border-primary">
            📊 {{ 'NAVIGATION.DASHBOARD' | translate }}
         </a>
-        <a routerLink="/debts" 
-           class="nav-link text-white-50 hover-light transition">
+        <a routerLink="/debts" class="nav-link text-white-50 hover-light transition">
             {{ 'NAVIGATION.DEBTS' | translate }}
         </a>
     </div>
     
     <div class="d-flex align-items-center gap-3">
-        <!-- Theme Toggle -->
         <app-theme-toggle></app-theme-toggle>
         <div class="navbar-divider"></div>
 
-        <!-- Toggle de moneda -->
-        <button (click)="toggleCurrency()" 
-          class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 currency-toggle"
-          title="Cambiar divisa">
-          <img [src]="currencyCode === 'USD' ? 'https://flagcdn.com/w40/us.png' : 'https://flagcdn.com/w40/br.png'" 
-              alt="flag" 
-              class="currency-flag">
+        <button (click)="toggleCurrency()" class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 currency-toggle">
+          <img [src]="currencyCode === 'USD' ? 'https://flagcdn.com/w40/us.png' : 'https://flagcdn.com/w40/br.png'" class="currency-flag">
           <span class="fw-bold small currency-code">{{ currencyCode }}</span>
           <i class="fas fa-chevron-down currency-arrow"></i>
         </button>
 
-        <!-- Divisor visual -->
         <div class="navbar-divider"></div>
 
-        <!-- Log out button -->
         <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 rounded-pill px-3 logout-btn" (click)="logout()">
-          <span class="small fw-bold">{{'BUTTON.LOGOUT'| translate}}</span>
+          <span class="small fw-bold">{{'BUTTONS.LOGOUT'| translate}}</span>
           <i class="bi bi-box-arrow-right"></i> 
         </button>
     </div>
@@ -55,7 +44,6 @@
       <div class="row align-items-center">
         
         <div class="col-md-6 border-end stats-section">
-            
             <div class="row mb-4">
                 <div class="col-6 border-end">
                     <p class="stat-label">{{ 'DASHBOARD.TOTAL_INCOME' | translate }}</p>
@@ -85,7 +73,7 @@
                 
                 <div class="card-body py-3">
                     <p class="small text-uppercase text-white-50 mb-1 fw-bold balance-label">
-                        {{ totalIncome >= totalSpent ? 'DASHBOARD.AVAILABLE' : '⚠️DASHBOARD.DEBT_LABEL' | translate }}
+                        {{ (totalIncome >= totalSpent ? 'DASHBOARD.AVAILABLE' : 'DASHBOARD.DEBT_LABEL') | translate }}
                     </p>
 
                     <h2 class="display-6 fw-bold mb-0 text-white balance-amount">
@@ -97,11 +85,10 @@
                     </p>
 
                     <p class="small text-white mt-2 mb-0 fw-bold" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
-                         {{'DASHBOARD.OVERSPENT_MSG' | translate}} {{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}
+                          {{'DASHBOARD.OVERSPENT_MSG' | translate}} {{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}
                     </p>
                 </div>
             </div>
-
         </div>
 
         <div class="col-md-6 d-flex justify-content-center align-items-center mt-4 mt-md-0">
@@ -111,7 +98,7 @@
                 </div>
             </div>
             <div *ngIf="totalSpent === 0" class="empty-chart">
-                <p class="mb-0">{{'DASHBOARD.NO_EXPENSES' | translate}}📉</p>
+                <p class="mb-0">{{'DASHBOARD.NO_EXPENSES' | translate}}</p>
             </div>
         </div>
 
@@ -130,7 +117,7 @@
           <form (ngSubmit)="addTransaction()">
             <div class="mb-3">
               <label class="form-label">{{'TRANSACTION.DESCRIPTION' | translate}}</label>
-              <input type="text" class="form-control" placeholder="Ej: Pizza..." 
+              <input type="text" class="form-control" placeholder="..." 
                      [(ngModel)]="newTransaction.description" name="desc" required>
             </div>
             
@@ -146,6 +133,7 @@
                 <optgroup [label]="'DASHBOARD.INCOME_GROUP' | translate">
                   <option value="Sueldo">{{ 'CATEGORIES.SALARY' | translate }}</option>
                   <option value="Negocio">{{ 'CATEGORIES.BUSINESS' | translate }}</option>
+                  <option value="Venta">{{ 'CATEGORIES.SALE' | translate }}</option>
                   <option value="Ingreso Extra">{{ 'CATEGORIES.EXTRA_INCOME' | translate }}</option>
                 </optgroup>
                 <optgroup [label]="'DASHBOARD.EXPENSE_GROUP' | translate">
@@ -156,6 +144,7 @@
                   <option value="Salud">{{ 'CATEGORIES.HEALTH' | translate }}</option>
                   <option value="Ocio">{{ 'CATEGORIES.ENTERTAINMENT' | translate }}</option>
                   <option value="Casa">{{ 'CATEGORIES.HOME' | translate }}</option>
+                  <option value="Compras">{{ 'CATEGORIES.SHOPPING' | translate }}</option>
                   <option value="Otros">{{ 'CATEGORIES.OTHER' | translate }}</option>
                 </optgroup>
               </select>
@@ -261,3 +250,5 @@
 
   </div> 
 </div>
+
+```

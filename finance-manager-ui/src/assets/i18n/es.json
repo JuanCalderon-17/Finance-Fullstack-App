@@ -39,10 +39,10 @@
     "TOTAL_INCOME": "Ingresos",
     "TOTAL_SPENT": "Gastos",
     "AVAILABLE": "Disponible",
-    "DEBT_LABEL": "⚠️ Deuda",
+    "DEBT_LABEL": "Deuda",
     "SAVING_MSG": "Estás ahorrando el",
     "OVERSPENT_MSG": "Te has excedido un",
-    "NO_EXPENSES": "Sin gastos para mostrar 📉",
+    "NO_EXPENSES": "Sin gastos para mostrar",
     "EDITING": "✏️ Editando",
     "NEW_TRANSACTION": "➕ Nuevo Movimiento",
     "INCOME_GROUP": "Ingresos 🤑",
@@ -57,7 +57,7 @@
       "DANGER": "¡ALERTA ROJA! Has superado tu límite de seguridad del 10%."
     }
   },
-  "TRANSACTIONS": {
+  "TRANSACTION": {
     "DESCRIPTION": "Descripción",
     "AMOUNT": "Monto",
     "CATEGORY": "Categoría",
@@ -129,7 +129,7 @@
     "OVERDUE": "Vencida",
     "MARK_AS_PAID": "Marcar pagada",
     "MARK_AS_UNPAID": "Marcar como no pagada",
-    "CONFIRM_DELETE": "¿Estás seguro de eliminar esta deuda? Esta acción no se puede deshacer.",
+    "CONFIRM_DELETE": "¿Estás seguro de eliminar esta deuda?",
     "INTEREST": "interés",
     "INSTALLMENTS": "cuotas",
     "PAID_INSTALLMENTS": "pagadas"
@@ -142,7 +142,7 @@
     "LOGOUT": "Cerrar Sesión",
     "BACK": "Volver",
     "CREATE": "Crear",
-    "UPDATE": "Atualizar",
+    "UPDATE": "Actualizar",
     "ADD": "Agregar"
   },
   "NAVIGATION": {

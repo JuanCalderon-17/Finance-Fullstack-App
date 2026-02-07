@@ -39,10 +39,10 @@
     "TOTAL_INCOME": "Receita Total",
     "TOTAL_SPENT": "Gastos Totais",
     "AVAILABLE": "Disponível",
-    "DEBT_LABEL": "⚠️ Dívida",
+    "DEBT_LABEL": "Dívida",
     "SAVING_MSG": "Você está economizando",
     "OVERSPENT_MSG": "Você excedeu",
-    "NO_EXPENSES": "Sem gastos para mostrar 📉",
+    "NO_EXPENSES": "Sem gastos para mostrar",
     "EDITING": "✏️ Editando",
     "NEW_TRANSACTION": "➕ Nova Transação",
     "INCOME_GROUP": "Receitas 🤑",
@@ -68,19 +68,19 @@
     "INVALID_AMOUNT": "Valor inválido"
   },
   "CATEGORIES": {
-    "FOOD": "Comida",
-    "TRANSPORT": "Transporte",
-    "HEALTH": "Saúde",
-    "HOME": "Casa",
-    "ENTERTAINMENT": "Lazer",
-    "EDUCATION": "Educação",
-    "SHOPPING": "Compras",
     "SALARY": "Salário",
     "BUSINESS": "Negócio",
     "SALE": "Venda",
     "EXTRA_INCOME": "Renda Extra",
-    "OTHER": "Outros",
-    "SAVING": "Poupança"
+    "SAVING": "Poupança",
+    "FOOD": "Comida",
+    "TRANSPORT": "Transporte",
+    "EDUCATION": "Educação",
+    "HEALTH": "Saúde",
+    "ENTERTAINMENT": "Lazer",
+    "HOME": "Casa",
+    "SHOPPING": "Compras",
+    "OTHER": "Outros"
   },
   "SAVINGS": {
     "TITLE": "Minhas Economias",
@@ -135,15 +135,15 @@
     "PAID_INSTALLMENTS": "pagas"
   },
   "BUTTONS": {
-    "SAVE": "Salvar",
+    "ADD": "Adicionar",
+    "UPDATE": "Atualizar",
     "CANCEL": "Cancelar",
+    "LOGOUT": "Sair",
+    "SAVE": "Salvar",
     "EDIT": "Editar",
     "DELETE": "Excluir",
-    "LOGOUT": "Sair",
     "BACK": "Voltar",
-    "CREATE": "Criar",
-    "UPDATE": "Atualizar",
-    "ADD": "Adicionar"
+    "CREATE": "Criar"
   },
   "NAVIGATION": {
     "DASHBOARD": "Painel",
