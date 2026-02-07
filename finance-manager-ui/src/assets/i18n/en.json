@@ -31,7 +31,19 @@
       "ALREADY_HAVE_ACCOUNT": "Already have an account?",
       "LOGIN_LINK": "Log In",
       "HERO_TITLE": "Start your legacy",
-      "HERO_TEXT": "\"The first step to financial freedom is deciding to control your destiny. Sign up today and start building the future you deserve.\""
+      "HERO_TEXT": "\"The first step to financial freedom is deciding to control your destiny. Sign up today and start building the future you deserve.\"",
+      "ERRORS": {
+        "EMPTY_NAME": "⛔ Please enter your full name.",
+        "EMPTY_EMAIL": "⛔ Email is required.",
+        "EMPTY_PASSWORD": "⛔ Password is required.",
+        "PASSWORD_COMPLEXITY": "⛔ Password must have at least one Uppercase letter and one Number.",
+        "INVALID_USER": "⛔ Invalid username.",
+        "PASSWORD_SHORT": "⛔ Password is too short.",
+        "PASSWORD_UPPER": "⛔ Missing an uppercase letter.",
+        "PASSWORD_DIGIT": "⛔ Missing a number.",
+        "GENERIC": "An unexpected error occurred.",
+        "PASSWORD_MISMATCH": "⛔ Passwords do not match."
+      }
     }
   },
   "DASHBOARD": {

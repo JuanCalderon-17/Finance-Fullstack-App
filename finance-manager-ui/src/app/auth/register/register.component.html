@@ -14,43 +14,60 @@
                   <h4 class="mt-1 mb-4 pb-1 title-text">{{'AUTH.REGISTER.TITLE' | translate }}</h4>
                 </div>
 
+                <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                  <div>{{ errorMessage }}</div>
+                </div>
+
                 <form (ngSubmit)="register()">
                   
                   <div class="form-group mb-3">
                     <label class="form-label" for="fullName">{{ 'AUTH.REGISTER.FULL_NAME' | translate }}</label>
                     <input type="text" id="fullName" name="fullName" class="form-control custom-input"
-                          [placeholder]="'AUTH.REGISTER.NAME_PLACEHOLDER' | translate" [(ngModel)]="model.fullName" required />
+                           [placeholder]="'AUTH.REGISTER.NAME_PLACEHOLDER' | translate" 
+                           [(ngModel)]="model.fullName" required />
                   </div>
 
                   <div class="form-group mb-3"> 
                     <label class="form-label" for="email">{{'AUTH.REGISTER.EMAIL' | translate}}</label>
                     <input type="email" id="email" name="email" class="form-control custom-input"
-                            [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate" [(ngModel)]="model.email" required />
+                           [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate" 
+                           [(ngModel)]="model.email" required />
                   </div>
 
                   <div class="form-group mb-3">
                     <label class="form-label" for="password">{{ 'AUTH.REGISTER.PASSWORD' | translate }}</label>
                     <input type="password" id="password" name="password" class="form-control custom-input"
-                          [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" [(ngModel)]="model.password" required />
+                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" 
+                           [(ngModel)]="model.password" required />
                   </div>
 
                   <div class="form-group mb-4">
                     <label class="form-label" for="confirmPassword">{{ 'AUTH.REGISTER.CONFIRM_PASSWORD' | translate }}</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" class="form-control custom-input"
-                          [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"[(ngModel)]="model.confirmPassword" required />
+                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" 
+                           [(ngModel)]="model.confirmPassword" required />
                   </div>
 
                   <div class="text-center pt-1 mb-4 pb-1">
                     <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3 btn-register" 
-                            type="submit" [disabled]="isLoading">
+                            type="submit" 
+                            [disabled]="isLoading"> 
+                      
                       <span *ngIf="!isLoading">{{ 'AUTH.REGISTER.BUTTON' | translate }}</span>
-                      <span *ngIf="isLoading">Creating account...</span>
+                      
+                      <span *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </span>
                     </button>
                   </div>
 
                   <div class="d-flex align-items-center justify-content-center pb-4">
                     <p class="mb-0 me-2 text-muted">{{'AUTH.REGISTER.ALREADY_HAVE_ACCOUNT' | translate }}</p>
-                    <button type="button" class="btn btn-outline-light btn-sm" routerLink="/auth/login">{{'AUTH.REGISTER.LOGIN_LINK' | translate }}</button>
+                    <button type="button" class="btn btn-outline-light btn-sm" routerLink="/auth/login">
+                        {{'AUTH.REGISTER.LOGIN_LINK' | translate }}
+                    </button>
                   </div>
 
                 </form>

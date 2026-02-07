@@ -31,7 +31,20 @@
       "ALREADY_HAVE_ACCOUNT": "Já tem uma conta?",
       "LOGIN_LINK": "Entrar",
       "HERO_TITLE": "Comece seu legado",
-      "HERO_TEXT": "\"O primeiro passo para a liberdade financeira é tomar a decisão de controlar seu destino. Cadastre-se hoje e comece a construir o futuro que você merece.\""
+      "HERO_TEXT": "\"O primeiro passo para a liberdade financeira é tomar a decisão de controlar seu destino. Cadastre-se hoje e comece a construir o futuro que você merece.\"",
+      
+      "ERRORS": {
+        "EMPTY_NAME": "⛔ Por favor insira seu nome completo.",
+        "EMPTY_EMAIL": "⛔ O e-mail é obrigatório.",
+        "EMPTY_PASSWORD": "⛔ A senha é obrigatória.",
+        "PASSWORD_COMPLEXITY": "⛔ A senha deve ter pelo menos uma letra Maiúscula e um Número.",
+        "INVALID_USER": "⛔ Nome de usuário inválido.",
+        "PASSWORD_SHORT": "⛔ A senha é muito curta.",
+        "PASSWORD_UPPER": "⛔ Falta uma letra maiúscula.",
+        "PASSWORD_DIGIT": "⛔ Falta um número.",
+        "GENERIC": "Ocorreu um erro inesperado.",
+        "PASSWORD_MISMATCH": "⛔ As senhas não coincidem."
+      }
     }
   },
   "DASHBOARD": {

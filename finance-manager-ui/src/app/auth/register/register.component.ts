@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { AuthService } from "../../core/services/auth.service";
 import { RouterModule, Router } from '@angular/router';
-import { TranslateModule } from "@ngx-translate/core";
+import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { AuthService } from "../../core/services/auth.service";
 
 @Component({
   selector: 'app-register',
@@ -14,49 +14,89 @@ import { TranslateModule } from "@ngx-translate/core";
 })
 export class RegisterComponent {
   
-  model: any = {};
+  model: any = { fullName: '', email: '', password: '', confirmPassword: '' };
   isLoading: boolean = false;
   errorMessage: string | null = null;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private translate: TranslateService 
+  ) { }
   
   register() {
-    console.log('Enviando datos del registro:', this.model);  
-    this.isLoading = true;
+    // 1. Limpiamos errores anteriores
     this.errorMessage = null;
+
+    // 2. Validamos manual. Si algo falla, la función 'validateForm' pone el mensaje en 'errorMessage'
+    // y devuelve FALSE. Entonces hacemos return para no seguir.
+    if (!this.validateForm()) {
+        return; 
+    }
+
+    // 3. Si todo está bien, activamos carga y enviamos
+    this.isLoading = true;
 
     this.authService.register(this.model).subscribe({
       next: (response) => {
-        console.log('Usuario registrado exitosamente', response);
-        
-        // 🛑 PASO 1: Guardar manualmente el usuario/token que nos dio el registro
-        // Esto es crucial para que el AuthGuard encuentre la llave.
         localStorage.setItem('user', JSON.stringify(response));
-
-        // 🛑 PASO 2: Forzar la recarga de la página hacia el dashboard
-        // Usamos window.location.href en lugar de router.navigate para reiniciar la memoria del AuthGuard
         window.location.href = '/dashboard';
       },
       error: (err) => {
-        console.error("Error : ", err);
-
-        if (typeof err.error === 'string') {
-          this.errorMessage = err.error;
-        } else if (Array.isArray(err.error)) { 
-          this.errorMessage = err.error.map((e: any) => {
-            if (e.code === 'InvalidUserName') return "⛔ El nombre de usuario NO puede tener espacios ni símbolos.";
-            if (e.code === 'PasswordTooShort') return "⛔ La contraseña es muy corta.";
-            return e.description; 
-          }).join(' ');
-        } else {
-          this.errorMessage = "Ocurrió un error inesperado. Intenta de nuevo.";
-        }
-
+        this.handleError(err);
         this.isLoading = false;
       }
     });
   }
 
-  // ¡AQUÍ YA NO HAY NINGUNA FUNCIÓN loginAfterRegister! 🗑️
-  // Si tenías código aquí abajo, asegúrate de que esté borrado.
+  // Esta función verifica todo y configura el mensaje de error si encuentra algo mal
+  validateForm(): boolean {
+    
+    // A. Campos Vacíos
+    if (!this.model.fullName?.trim()) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.EMPTY_NAME');
+      return false;
+    }
+
+    if (!this.model.email?.trim()) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.EMPTY_EMAIL');
+      return false;
+    }
+
+    if (!this.model.password?.trim()) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.EMPTY_PASSWORD');
+      return false;
+    }
+
+    // B. Complejidad Contraseña (Mayúscula y Número)
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(this.model.password)) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_COMPLEXITY');
+      return false;
+    }
+
+    // C. Coincidencia de Contraseñas
+    if (this.model.password !== this.model.confirmPassword) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_MISMATCH');
+      return false;
+    }
+
+    return true; // Todo correcto
+  }
+
+  handleError(err: any) {
+    if (Array.isArray(err.error)) {
+      this.errorMessage = err.error.map((e: any) => {
+        if (e.code === 'InvalidUserName') return this.translate.instant('AUTH.REGISTER.ERRORS.INVALID_USER');
+        if (e.code === 'PasswordTooShort') return this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_SHORT');
+        if (e.code === 'PasswordRequiresUpper') return this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_UPPER');
+        if (e.code === 'PasswordRequiresDigit') return this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_DIGIT');
+        return e.description; 
+      }).join(' ');
+    } else if (typeof err.error === 'string') {
+      this.errorMessage = err.error;
+    } else {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.GENERIC');
+    }
+  }
 }

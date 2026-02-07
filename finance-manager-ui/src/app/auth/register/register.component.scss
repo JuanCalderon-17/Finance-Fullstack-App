@@ -2,7 +2,7 @@
 .register-container {
   min-height: 100vh;
   width: 100%;
-  /* Misma imagen de trading */
+  /* Imagen de trading de fondo */
   background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
               url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
   background-size: cover;
@@ -53,7 +53,7 @@
   font-weight: bold;
 }
 
-/* === BOTÓN REGISTRO === */
+/* === BOTÓN REGISTRO (CON ESTADO DISABLED) === */
 .btn-register {
   background: white;
   color: black;
@@ -64,11 +64,22 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s ease;
-}
 
-.btn-register:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  /* Efecto Hover solo cuando NO está deshabilitado */
+  &:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+
+  /* ESTADO DESHABILITADO (OSCURO) */
+  &:disabled {
+    background: rgba(128, 128, 128, 0.3); /* Gris oscuro translúcido */
+    color: rgba(255, 255, 255, 0.4);      /* Texto apagado */
+    cursor: not-allowed;                  /* Icono de prohibido */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    transform: none;
+  }
 }
 
 /* === LADO DERECHO === */

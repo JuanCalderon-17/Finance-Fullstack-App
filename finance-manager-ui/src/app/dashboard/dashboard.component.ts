@@ -29,23 +29,47 @@ export class DashboardComponent implements OnInit {
   
   allTransactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
-  incomeCategories: string[] = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra'];
+
+  // ✅ MAPA DE CATEGORÍAS: Base de Datos -> Clave JSON
+  categoryMap: { [key: string]: string } = {
+    // Gastos
+    'Comida': 'FOOD', 'Food': 'FOOD',
+    'Transporte': 'TRANSPORT', 'Transport': 'TRANSPORT',
+    'Salud': 'HEALTH', 'Health': 'HEALTH',
+    'Educacion': 'EDUCATION', 'Education': 'EDUCATION',
+    'Ocio': 'ENTERTAINMENT', 'Entertainment': 'ENTERTAINMENT',
+    'Casa': 'HOME', 'Home': 'HOME',
+    'Compras': 'SHOPPING', 'Shopping': 'SHOPPING',
+    'Otros': 'OTHER', 'Other': 'OTHER',
+    'Ahorro': 'SAVING', 'Savings': 'SAVING', 'Poupança': 'SAVING',
+    'Lazer': 'ENTERTAINMENT', 
+
+    // Ingresos
+    'Sueldo': 'SALARY', 'Salary': 'SALARY', 'Salário': 'SALARY',
+    'Negocio': 'BUSINESS', 'Business': 'BUSINESS', 'Negócio': 'BUSINESS',
+    'Venta': 'SALE', 'Sale': 'SALE', 'Venda': 'SALE',
+    'Ingreso Extra': 'EXTRA_INCOME', 'Extra Income': 'EXTRA_INCOME', 'Renda Extra': 'EXTRA_INCOME'
+  };
+
+  // ✅ CORREGIDO: Todo en mayúsculas para coincidir con el mapa
+  incomeKeys: string[] = ['SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
+
+  // ✅ AGREGADO: Para que el HTML pueda pintar de verde/rojo sin errores
+  incomeCategories: string[] = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra', 'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
 
   newTransaction: any = {
     description: '',
     amount: 0,
-    category: 'Comida',
+    category: 'Comida', 
     transactionDate: new Date().toISOString().slice(0, 10),
     currency: 'USD'  
-  }
+  };
 
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        position: 'right',
-      }
+      legend: { position: 'right' }
     }
   };
   public pieChartType: ChartType = 'pie';
@@ -95,8 +119,13 @@ export class DashboardComponent implements OnInit {
       this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
-      this.newTransaction.currency = currency.code;  //  Sincronizar formulario
-      this.calculateStats();  // Recalcular al cambiar moneda
+      this.newTransaction.currency = currency.code; 
+      this.calculateStats(); 
+    });
+    
+    // Actualizar gráfico al cambiar idioma
+    this.translate.onLangChange.subscribe(() => {
+      this.updateChart();
     });
 
     this.loadTransactions();
@@ -105,73 +134,39 @@ export class DashboardComponent implements OnInit {
   toggleCurrency() {
     this.currencyService.getExchangeRate('BRL').subscribe({
       next: (rate) => { 
-        console.log(`💱 Tasa USD → BRL obtenida: ${rate}`);
-
-        if(this.currencyCode === 'USD') {// Cambiar a BRL
+        if(this.currencyCode === 'USD') {
           this.currencyStateService.setCurrency('BRL', 'R$', rate);
-          console.log('🇧🇷 Cambiado a BRL');
-        } else {// Cambiar a USD 
+        } else {
           this.currencyStateService.setCurrency('USD', '$', rate);
         }
       },
       error: (err) => {
-        console.error(err);
         const fallbackRate = 5.25;
-        
-        if(this.currencyCode === 'USD') {
-            this.currencyStateService.setCurrency('BRL', 'R$', fallbackRate);
-        } else {
-            this.currencyStateService.setCurrency('USD', '$', fallbackRate);
-        }
+        this.currencyStateService.setCurrency(this.currencyCode === 'USD' ? 'BRL' : 'USD', this.currencyCode === 'USD' ? 'R$' : '$', fallbackRate);
       }
     });
   }
 
-  // ✅ NUEVA FUNCIÓN: Convertir monto según la moneda original
   convertTransactionAmount(transaction: Transaction): number {
     const txCurrency = (transaction.currency || 'USD').trim();
     const targetCurrency = this.currencyCode.trim();
     
-    console.log(`🔄 [${transaction.description}] De: "${txCurrency}" → A: "${targetCurrency}" | Monto: ${transaction.amount} | Tasa: ${this.exchangeRate}`);
+    if (txCurrency === targetCurrency) return transaction.amount;
     
-    // Misma moneda = no convertir
-    if (txCurrency === targetCurrency) {
-        console.log('   ✅ Misma moneda, devuelve:', transaction.amount);
-        return transaction.amount;
-    }
+    if (txCurrency === 'USD' && targetCurrency === 'BRL') return transaction.amount * this.exchangeRate;
     
-    // USD → BRL
-    if (txCurrency === 'USD' && targetCurrency === 'BRL') {
-        const result = transaction.amount * this.exchangeRate;
-        console.log(`   💵 USD → BRL: ${transaction.amount} × ${this.exchangeRate} = ${result}`);
-        return result;
-    }
+    if (txCurrency === 'BRL' && targetCurrency === 'USD') return transaction.amount / this.exchangeRate;
     
-    // BRL → USD
-    if (txCurrency === 'BRL' && targetCurrency === 'USD') {
-        const result = transaction.amount / this.exchangeRate;
-        console.log(`   💵 BRL → USD: ${transaction.amount} ÷ ${this.exchangeRate} = ${result}`);
-        return result;
-    }
-    
-    console.warn(`   ⚠️ No se pudo convertir, devolviendo original:`, transaction.amount);
     return transaction.amount;
-} 
+  } 
 
   loadTransactions() {
     this.transactionService.getTransactions().subscribe({
       next: (data) => {
-        console.log('📋 Transacciones cargadas:', data);
-        data.forEach(t => {
-          console.log(`ID: ${t.id} | ${t.description} | Currency  "${t.currency}  (tipo: ${typeof t.currency})`);
-        })
-
         this.allTransactions = data;
         this.applyFilters();
       },
-      error: (err) => {
-        console.error('Error al cargar transacciones:', err);
-      }
+      error: (err) => console.error('Error al cargar transacciones:', err)
     });
   }
 
@@ -184,13 +179,9 @@ export class DashboardComponent implements OnInit {
 
       if (!matchesMonthYear) return false;
 
-      if(this.selectedPeriod === 'all') {
-        return true;
-      } else if (this.selectedPeriod === '1') {
-        return transactionDay <= 15;
-      } else {
-        return transactionDay > 15;
-      }
+      if(this.selectedPeriod === 'all') return true;
+      if (this.selectedPeriod === '1') return transactionDay <= 15;
+      return transactionDay > 15;
     });
 
     this.calculateStats();
@@ -202,8 +193,11 @@ export class DashboardComponent implements OnInit {
 
     this.filteredTransactions.forEach(t => {
       const convertedAmount = this.convertTransactionAmount(t);
+      // ✅ Obtenemos la KEY real (ej: 'SALARY') en lugar del texto crudo
+      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase();
       
-      if (this.incomeCategories.includes(t.category)) {
+      // ✅ Comparamos con la KEY mapeada
+      if (this.incomeKeys.includes(categoryKey)) {
         this.totalIncome += convertedAmount;
       } else {
         this.totalSpent += convertedAmount;
@@ -229,19 +223,22 @@ export class DashboardComponent implements OnInit {
   updateChart() {
     const categoryTotals: any = {};
 
-    //convertion for pie graphic
     this.filteredTransactions.forEach(t => {
-      if(!this.incomeCategories.includes(t.category)) {
-        if(!categoryTotals[t.category]) {
-          categoryTotals[t.category] = 0;
-        }
-        categoryTotals[t.category] += this.convertTransactionAmount(t);
-      }
-    })
+      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase();
 
-    const labels = Object.keys(categoryTotals).map(cat => {
-       return this.translate.instant('CATEGORIES.' + cat.toUpperCase().replace(' ', '_')) || cat;
+      // Solo graficamos gastos (NO ingresos)
+      if(!this.incomeKeys.includes(categoryKey)) { 
+        if(!categoryTotals[categoryKey]) {
+          categoryTotals[categoryKey] = 0;
+        }
+        categoryTotals[categoryKey] += this.convertTransactionAmount(t);
+      }
     });
+
+    const labels = Object.keys(categoryTotals).map(catKey => {
+       return this.translate.instant('CATEGORIES.' + catKey);
+    });
+
     const data = Object.values(categoryTotals) as number[];
 
     this.pieChartData = {
@@ -249,14 +246,8 @@ export class DashboardComponent implements OnInit {
       datasets: [{
         data: data,
         backgroundColor: [
-          '#00d2d3',
-          '#ff9f43',
-          '#5f27cd',
-          '#ff6b6b',
-          '#10ac84',
-          '#2e86de',
-          '#f368e0',
-          '#feca57'
+          '#00d2d3', '#ff9f43', '#5f27cd', '#ff6b6b', '#10ac84', 
+          '#2e86de', '#f368e0', '#feca57', '#341f97', '#48dbfb'
         ],
         borderColor: '#1a1a2e',
         borderWidth: 2
@@ -268,19 +259,18 @@ export class DashboardComponent implements OnInit {
     this.newTransaction.amount = Number(this.newTransaction.amount);
 
     if (!this.newTransaction.description || this.newTransaction.description.trim() === '') {
-      alert('⚠️ Por favor agrega una descripción para el movimiento.')
+      alert(this.translate.instant('TRANSACTION.ADD_DESCRIPTION'));
       return; 
     }
 
     if (!this.newTransaction.amount || this.newTransaction.amount <= 0) {
-      alert('⚠️ El monto debe ser mayor a 0.')
+      alert(this.translate.instant('TRANSACTION.INVALID_AMOUNT'));
       return;
     }
 
-    // ✅ GUARDAR LA MONEDA ACTUAL
-    this.newTransaction.currency = this.currencyCode;
-        console.log('🚀 Enviando al backend:', this.newTransaction);//for testing purpose, observe if sends data
-
+    if (!this.isEditing) {
+      this.newTransaction.currency = this.currencyCode;
+    }
 
     if (this.isEditing && this.editingId) {
       this.transactionService.updateTransaction(this.editingId, this.newTransaction).subscribe({
@@ -295,9 +285,6 @@ export class DashboardComponent implements OnInit {
       this.transactionService.createTransaction(this.newTransaction).subscribe({
         next: (res) => {
           this.loadTransactions();
-          this.newTransaction.description = '';
-          this.newTransaction.amount = 0;
-          this.newTransaction.currency = this.currencyCode;
           this.cancelEdit();
         },
         error: (err) => console.error('Error al crear:', err)
@@ -310,11 +297,11 @@ export class DashboardComponent implements OnInit {
     this.editingId = transaction.id;
     this.newTransaction = { ...transaction }; 
   }
+
   getCategoryKey(category: string): string {
     if (!category) return '';
-    // Convierte Ingreso Extra en "INGRESO_EXTRA"
-    const formattedCategory = category.trim().toUpperCase().replace(/ /g, '_');
-    return `CATEGORIES.${formattedCategory}`;
+    const mappedKey = this.categoryMap[category] || category.trim().toUpperCase().replace(/ /g, '_');
+    return `CATEGORIES.${mappedKey}`;
   }
 
   cancelEdit() {
@@ -325,12 +312,14 @@ export class DashboardComponent implements OnInit {
       amount: 0, 
       category: 'Comida', 
       transactionDate: new Date().toISOString().slice(0, 10),
-      currency: this.currencyCode  // Mantener moneda actual
+      currency: this.currencyCode 
     };
   }
 
   deleteTransaction(id: number) {
-    if (confirm("DASHBOARD.CONFIRM_DELETE")) {
+    // ✅ CORREGIDO: Traducir mensaje de confirmación
+    const msg = this.translate.instant("DASHBOARD.CONFIRM_DELETE") || "Are you sure?";
+    if (confirm(msg)) {
       this.transactionService.deleteTransaction(id).subscribe({
         next: () => {
           this.loadTransactions();
