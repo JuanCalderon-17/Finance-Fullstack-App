@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceManager.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260127170516_AddCurrencyToTransactions")]
-    partial class AddCurrencyToTransactions
+    [Migration("20260207051800_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
