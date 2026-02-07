@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DebtsService, Debt } from '../../services/debts.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
-import { NumericLiteral } from 'typescript';
+import { TranslateModule } from '@ngx-translate/core';
+import { TransactionService } from '../../core/services/transaction.service';
 
 @Component({
   selector: 'app-debts',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule],
   templateUrl: './debts.component.html',
   styleUrls: ['./debts.component.scss']
 })
@@ -32,7 +33,7 @@ export class DebtsComponent implements OnInit {
 
   totalDebt: number = 0;
 
-  constructor(private debtsService: DebtsService, private currencyStateService : CurrencyStateService) {}
+  constructor(private debtsService: DebtsService, private currencyStateService : CurrencyStateService, private translateService: TransactionService) {}
 
   ngOnInit(): void {
     this.currencyStateService.currency$.subscribe(currency => {

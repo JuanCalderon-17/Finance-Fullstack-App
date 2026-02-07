@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { SavingsService, SavingAccount } from '../../services/savings.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
-import { TargetMenuAim } from '@angular/cdk/menu';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-savings',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule],
   templateUrl: './savings.component.html',
   styleUrls: ['./savings.component.scss']
 })
@@ -29,7 +29,7 @@ export class SavingsComponent implements OnInit {
 
   totalSavings: number = 0;
 
-  constructor(private savingsService: SavingsService, private currencyStateService: CurrencyStateService) {}
+  constructor(private savingsService: SavingsService, private currencyStateService: CurrencyStateService, private translateService: TranslateService) {}
 
   ngOnInit(): void {
     this.currencyStateService.currency$.subscribe(currency => {
@@ -118,7 +118,7 @@ export class SavingsComponent implements OnInit {
     const account = this.accounts[index];
     if(!account.id) return; // Si no tiene ID no podemos borrar de la BD
 
-    if(confirm('¿Seguro que quieres borrar esta cuenta?')) {
+    if(confirm('SAVINGS.CONFIRM_DELETE')) {
       this.savingsService.deleteSaving(account.id).subscribe({
         next: () => {
           this.accounts.splice(index, 1);

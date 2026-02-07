@@ -312,7 +312,7 @@ export class DashboardComponent implements OnInit {
   }
   getCategoryKey(category: string): string {
     if (!category) return '';
-    // Convierte Ingreso Extra en ingeso extra
+    // Convierte Ingreso Extra en "INGRESO_EXTRA"
     const formattedCategory = category.trim().toUpperCase().replace(/ /g, '_');
     return `CATEGORIES.${formattedCategory}`;
   }

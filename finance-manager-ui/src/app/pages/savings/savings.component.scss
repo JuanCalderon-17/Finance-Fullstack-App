@@ -1,0 +1,73 @@
+// --- TARJETA PRINCIPAL (BALANCE TOTAL) ---
+// INTACTA: Potente y dorada.
+.gold-card {
+  background: linear-gradient(135deg, #DBA337 0%, #F5D25C 100%);
+  box-shadow: 0 8px 20px rgba(219, 163, 55, 0.4);
+  z-index: 10;
+}
+
+// --- ESTILOS BASE PARA LAS TARJETAS DE CUENTAS ---
+.saving-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 0; // Sin bordes, el gradiente define la forma
+  // Sombra suave y difuminada que toma un poco el color de la tarjeta
+  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2); 
+
+  &:hover {
+    transform: translateY(-5px) scale(1.02); // Un pequeño "pop" al pasar el mouse
+    box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  // Aseguramos que el texto blanco se lea perfecto
+  .card-body {
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  }
+}
+
+// --- NUEVOS GRADIENTES "PREMIUM DIFUMINADOS" ---
+// Estos colores son más ricos, profundos y elegantes que los originales.
+
+// ROJO -> Ahora es un "Coral Atardecer" (Combina hermoso con el dorado)
+.card-red {
+    background-color: #FF9A8B;
+    background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+}
+
+// MORADO -> Ahora es un "Índigo Profundo" (Muy fintech y moderno)
+.card-purple {
+    background-color: #8EC5FC;
+    background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    // Opción alternativa más oscura si prefieres:
+    // background-image: linear-gradient( 135deg, #667eea 0%, #764ba2 100%);
+}
+
+// VERDE -> Ahora es um "Esmeralda Oceánico" (Fresco pero serio)
+.card-green {
+    background-color: #8BC6EC;
+    background-image: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+    // Opción alternativa más "verde dinero":
+    // background-image: linear-gradient(135deg, #134E5E 0%, #71B280 100%);
+}
+
+// NEGRO -> Agora es um "Carbón Nocturno" (Elegante y neutro)
+.card-black {
+    background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+}
+
+
+// --- UTILIDADES Y AJUSTES ---
+.x-small {
+  font-size: 0.75rem;
+}
+
+// Botones internos ligeramente translúcidos para integrarse al gradiente
+.saving-card .btn-light {
+    background-color: rgba(255, 255, 255, 0.2); // Blanco semitransparente
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    backdrop-filter: blur(5px); // Pequeño efecto vidrio SOLO en los botones
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+}

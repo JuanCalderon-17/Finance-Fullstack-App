@@ -1,23 +1,21 @@
-<!-- HEADER -->
 <div class="bg-dark text-white py-4 mb-4 shadow">
   <div class="container d-flex justify-content-between align-items-center">
     <div>
-      <h2 class="fw-bold mb-0">💳 Mis Deudas</h2>
+      <h2 class="fw-bold mb-0">💳 {{'DEBTS.TITLE' | translate}}</h2>
       <p class="text-white-50 mb-0 small">
-        Control total de plazos, intereses y pagos.
+        {{'DEBTS.SUBTITLE' | translate}}
       </p>
     </div>
     <a routerLink="/dashboard" class="btn btn-outline-light btn-sm">
-      <i class="bi bi-arrow-left"></i> Volver
+      <i class="bi bi-arrow-left"></i> {{'BUTTONS.BACK' | translate}}
     </a>
   </div>
 </div>
 
-<!-- TOTAL DEUDAS -->
 <div class="container mb-4">
   <div class="card bg-danger text-white text-center shadow">
     <div class="card-body py-4">
-      <h6 class="text-uppercase mb-2">Total Deudas Pendientes</h6>
+      <h6 class="text-uppercase mb-2">{{'DEBTS.TOTAL_PENDING' | translate}}</h6>
       <h2 class="fw-bold mb-0">
         {{ currencySymbol }}{{ totalDebt | number:'1.2-2' }}
       </h2>
@@ -28,12 +26,11 @@
 <div class="container pb-5">
   <div class="row g-4">
 
-    <!-- FORMULARIO -->
     <div class="col-lg-4 mb-4">
       <div class="card shadow-lg border-0 sticky-top debt-form-card">
         <div class="card-header fw-bold text-white debt-form-header">
           <i [class]="isEditing ? 'bi bi-pencil-square' : 'bi bi-plus-circle-fill'"></i>
-          {{ isEditing ? ' Editar Deuda' : ' Nueva Deuda' }}
+          {{ (isEditing ? 'DEBTS.EDIT_DEBT' : 'DEBTS.NEW_DEBT') | translate }}
         </div>
 
         <div class="card-body p-4">
@@ -49,7 +46,7 @@
                 required
               />
               <label for="debtName">
-                <i class="bi bi-tag"></i> Nombre de la deuda
+                <i class="bi bi-tag"></i> {{'DEBTS.DEBT_NAME' | translate}}
               </label>
             </div>
 
@@ -64,7 +61,7 @@
                 required
               />
               <label for="debtBalance">
-                <i class="bi bi-cash-stack"></i> Monto Total ({{ currencySymbol }})
+                <i class="bi bi-cash-stack"></i> {{'DEBTS.TOTAL_AMOUNT' | translate}} ({{ currencySymbol }})
               </label>
             </div>
 
@@ -79,7 +76,7 @@
                     step="0.1"
                   />
                   <label>
-                    <i class="bi bi-percent"></i> Interés %
+                    <i class="bi bi-percent"></i> {{'DEBTS.INTEREST_RATE' | translate}} 
                   </label>
                 </div>
               </div>
@@ -94,7 +91,7 @@
                     min="1"
                   />
                   <label>
-                    <i class="bi bi-calendar3"></i> Meses
+                    <i class="bi bi-calendar3"></i> {{'DEBTS.MONTHS' | translate}}
                   </label>
                 </div>
               </div>
@@ -107,7 +104,7 @@
                 [disabled]="!currentDebt.name || currentDebt.balance <= 0"
               >
                 <i [class]="isEditing ? 'bi bi-check-circle' : 'bi bi-plus-lg'"></i>
-                {{ isEditing ? ' Guardar Cambios' : ' Crear Deuda' }}
+                {{ (isEditing ? 'DEBTS.SAVE_CHANGES' : 'DEBTS.CREATE_DEBT') | translate }}
               </button>
 
               <button
@@ -116,7 +113,7 @@
                 class="btn btn-outline-secondary"
                 (click)="resetForm()"
               >
-                <i class="bi bi-x-circle"></i> Cancelar
+                <i class="bi bi-x-circle"></i> {{'DEBTS.CANCEL' | translate}}
               </button>
             </div>
 
@@ -125,29 +122,25 @@
       </div>
     </div>
 
-    <!-- LISTA DE DEUDAS -->
     <div class="col-lg-8">
 
-      <!-- EMPTY STATE -->
       <div
         *ngIf="debts.length === 0"
         class="text-center py-5 bg-white rounded shadow-sm"
       >
         <i class="bi bi-inbox fs-1 text-muted"></i>
-        <h3 class="mt-3 fw-bold">No hay deudas registradas</h3>
+        <h3 class="mt-3 fw-bold">{{'DEBTS.NO_DEBTS' | translate}}</h3>
         <p class="text-muted">
-          Crea tu primera deuda usando el formulario
+          {{'DEBTS.CREATE_FIRST' | translate}}
         </p>
       </div>
 
-      <!-- DEUDA -->
       <div
         *ngFor="let d of debts"
         class="card shadow-sm border-0 mb-4"
         style="border-radius: 24px; overflow: hidden;"
       >
 
-        <!-- HEADER -->
         <div class="card-header p-4 bg-light border-bottom">
           <div class="d-flex justify-content-between align-items-start">
             <div>
@@ -155,17 +148,17 @@
 
               <div class="d-flex gap-2 flex-wrap">
                 <span class="badge bg-primary">
-                  {{ d.interestRate }}% interés
+                  {{ d.interestRate }}% {{'DEBTS.INTEREST' | translate}}
                 </span>
                 <span class="badge bg-secondary">
-                  {{ d.installments }} cuotas
+                  {{ d.installments }} {{'DEBTS.INSTALLMENTS' | translate}}
                 </span>
                 <span
                   class="badge"
                   [class.bg-success]="d.paidInstallments === d.installments"
                   [class.bg-warning]="d.paidInstallments !== d.installments"
                 >
-                  {{ d.paidInstallments }}/{{ d.installments }} pagadas
+                  {{ d.paidInstallments }}/{{ d.installments }} {{'DEBTS.PAID_INSTALLMENTS' | translate}}
                 </span>
               </div>
             </div>
@@ -183,33 +176,31 @@
           </div>
         </div>
 
-        <!-- BODY -->
         <div class="card-body p-4">
 
           <div class="row g-3 mb-3">
             <div class="col-md-4">
-              <strong>Cuota Mensual</strong>
+              <strong>{{'DEBTS.MONTHLY_PAYMENT' | translate}}</strong>
               <div class="fs-4">
                 {{ currencySymbol }}{{ convertNumber(d.monthlyPayment, d.currency) | number:'1.2-2' }}
               </div>
             </div>
 
             <div class="col-md-4">
-              <strong>Saldo Pendiente</strong>
+              <strong>{{'DEBTS.REMAINING_BALANCE' | translate}}</strong>
               <div class="fs-4 text-danger">
                 {{ currencySymbol }}{{ convertNumber(d.remainingAmount,  d.currency) | number:'1.2-2' }}
               </div>
             </div>
 
             <div class="col-md-4">
-              <strong>Progreso</strong>
+              <strong>{{'DEBTS.PROGRESS' | translate}}</strong>
               <div class="fs-4">
                 {{ d.progress | number:'1.0-0' }}%
               </div>
             </div>
           </div>
 
-          <!-- PROGRESS BAR -->
           <div class="mb-3">
             <div class="progress" style="height: 12px;">
               <div
@@ -220,12 +211,11 @@
             </div>
           </div>
 
-          <!-- INSTALLMENTS -->
           <button
             class="btn btn-link fw-bold"
             (click)="d.expanded = !d.expanded"
           >
-            Detalle de Cuotas
+            {{'DEBTS.INSTALLMENT_DETAILS' | translate}}
             <i class="bi"
                [class.bi-chevron-down]="!d.expanded"
                [class.bi-chevron-up]="d.expanded">
@@ -236,7 +226,7 @@
 
             <div *ngIf="!d.installmentsList?.length"
                  class="alert alert-warning">
-              Esta deuda no tiene cuotas.
+              No installments found.
             </div>
 
             <div *ngFor="let inst of d.installmentsList"
@@ -244,19 +234,19 @@
 
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <strong>Cuota #{{ inst.installmentNumber }}</strong>
+                  <strong>{{'DEBTS.INSTALLMENT' | translate}} #{{ inst.installmentNumber }}</strong>
                   <div class="small text-muted">
-                    Vence: {{ inst.dueDate | date:'dd/MM/yyyy' }}
+                    {{'DEBTS.DUE_DATE' | translate}}: {{ inst.dueDate | date:'dd/MM/yyyy' }}
                   </div>
                 </div>
 
                 <div>
                   <span *ngIf="inst.isPaid" class="badge bg-success">
-                    Pagada
+                    {{'DEBTS.PAID' | translate}}
                   </span>
                   <span *ngIf="!inst.isPaid && isOverdue(inst.dueDate)"
                         class="badge bg-danger">
-                    Vencida
+                    {{'DEBTS.OVERDUE' | translate}}
                   </span>
                 </div>
               </div>
@@ -279,7 +269,7 @@
                 class="btn btn-sm btn-outline-success mt-2"
                 (click)="toggleInstallment(d.id, inst.id)"
               >
-                {{ inst.isPaid ? 'Marcar como no pagada' : 'Marcar pagada' }}
+                {{ (inst.isPaid ? 'DEBTS.MARK_AS_UNPAID' : 'DEBTS.MARK_AS_PAID') | translate }}
               </button>
 
             </div>
