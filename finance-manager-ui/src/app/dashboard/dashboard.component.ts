@@ -9,6 +9,7 @@ import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { ThemeToggleComponent } from '../shared/theme-toggle/theme-toggle.component';
 import { CurrencyService } from '../core/services/currency.service';
 import { CurrencyStateService } from '../core/services/currency-state.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,8 @@ import { CurrencyStateService } from '../core/services/currency-state.service';
     FormsModule, 
     BaseChartDirective, 
     RouterLink,
-    ThemeToggleComponent  
+    ThemeToggleComponent,
+    TranslateModule
   ], 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
@@ -60,8 +62,10 @@ export class DashboardComponent implements OnInit {
 
   totalSpent: number = 0;
   totalIncome: number = 0;
-  alertMessage: string = "";
+
+  alertMessageKey: string = "";
   alertColor: string = 'green';
+
   isEditing : boolean = false;
   editingId : number | null = null;
   currencyCode : string = 'USD';
@@ -72,7 +76,8 @@ export class DashboardComponent implements OnInit {
     private transactionService: TransactionService, 
     private router: Router,
     private currencyService: CurrencyService,
-    private currencyStateService: CurrencyStateService
+    private currencyStateService: CurrencyStateService,
+    private translate: TranslateService
   ) { 
     const today = new Date();
     this.selectedMonth = today.getMonth();
@@ -90,8 +95,8 @@ export class DashboardComponent implements OnInit {
       this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
-      this.newTransaction.currency = currency.code;  // ✅ Sincronizar formulario
-      this.calculateStats();  // ✅ Recalcular al cambiar moneda
+      this.newTransaction.currency = currency.code;  //  Sincronizar formulario
+      this.calculateStats();  // Recalcular al cambiar moneda
     });
 
     this.loadTransactions();
@@ -99,7 +104,7 @@ export class DashboardComponent implements OnInit {
 
   toggleCurrency() {
     this.currencyService.getExchangeRate('BRL').subscribe({
-      next: (rate) => {
+      next: (rate) => { 
         console.log(`💱 Tasa USD → BRL obtenida: ${rate}`);
 
         if(this.currencyCode === 'USD') {// Cambiar a BRL
@@ -110,7 +115,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('❌ Error al obtener tasa:', err);
+        console.error(err);
         const fallbackRate = 5.25;
         
         if(this.currencyCode === 'USD') {
@@ -195,7 +200,6 @@ export class DashboardComponent implements OnInit {
     this.totalSpent = 0;
     this.totalIncome = 0;
 
-    // ✅ USAR CONVERSIÓN INTELIGENTE
     this.filteredTransactions.forEach(t => {
       const convertedAmount = this.convertTransactionAmount(t);
       
@@ -209,13 +213,13 @@ export class DashboardComponent implements OnInit {
     const limitWithBuffer = this.totalIncome * 1.10; 
 
     if (this.totalSpent <= this.totalIncome) {
-      this.alertMessage = "Vamos bien. ¡Estás dentro de tus posibilidades!";
+      this.alertMessageKey = "DASHBOARD.ALERTS.GOOD";
       this.alertColor = 'green';
     } else if (this.totalSpent > this.totalIncome && this.totalSpent <= limitWithBuffer) {
-      this.alertMessage = `Cuidado: Te has pasado un poco. ¡Frena los gastos!`;
+      this.alertMessageKey = "DASHBOARD.ALERTS.WARNING";
       this.alertColor = 'orange';
     } else {
-      this.alertMessage = '¡ALERTA ROJA! Has superado tu límite de seguridad del 10%.';
+      this.alertMessageKey = "DASHBOARD.ALERTS.DANGER";
       this.alertColor = 'red';
     }
 
@@ -225,7 +229,7 @@ export class DashboardComponent implements OnInit {
   updateChart() {
     const categoryTotals: any = {};
 
-    // ✅ USAR CONVERSIÓN INTELIGENTE EN EL GRÁFICO
+    //convertion for pie graphic
     this.filteredTransactions.forEach(t => {
       if(!this.incomeCategories.includes(t.category)) {
         if(!categoryTotals[t.category]) {
@@ -235,7 +239,9 @@ export class DashboardComponent implements OnInit {
       }
     })
 
-    const labels = Object.keys(categoryTotals)
+    const labels = Object.keys(categoryTotals).map(cat => {
+       return this.translate.instant('CATEGORIES.' + cat.toUpperCase().replace(' ', '_')) || cat;
+    });
     const data = Object.values(categoryTotals) as number[];
 
     this.pieChartData = {
@@ -304,6 +310,12 @@ export class DashboardComponent implements OnInit {
     this.editingId = transaction.id;
     this.newTransaction = { ...transaction }; 
   }
+  getCategoryKey(category: string): string {
+    if (!category) return '';
+    // Convierte Ingreso Extra en ingeso extra
+    const formattedCategory = category.trim().toUpperCase().replace(/ /g, '_');
+    return `CATEGORIES.${formattedCategory}`;
+  }
 
   cancelEdit() {
     this.isEditing = false;
@@ -313,12 +325,12 @@ export class DashboardComponent implements OnInit {
       amount: 0, 
       category: 'Comida', 
       transactionDate: new Date().toISOString().slice(0, 10),
-      currency: this.currencyCode  // ✅ Mantener moneda actual
+      currency: this.currencyCode  // Mantener moneda actual
     };
   }
 
   deleteTransaction(id: number) {
-    if (confirm('¿Estás seguro de que quieres eliminar esta transacción?')) {
+    if (confirm("DASHBOARD.CONFIRM_DELETE")) {
       this.transactionService.deleteTransaction(id).subscribe({
         next: () => {
           this.loadTransactions();

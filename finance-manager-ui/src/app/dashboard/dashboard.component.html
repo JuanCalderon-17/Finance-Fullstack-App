@@ -1,29 +1,28 @@
 <nav class="navbar navbar-expand-lg navbar-dark mb-4 shadow dashboard-navbar">
   <div class="container">
     <a class="navbar-brand fw-bold text-white fs-4 d-flex align-items-center gap-2" href="#">
-      <span>💰</span> Finance Manager
+      <img src="favicon.png" alt="finanzaslogo" height="28"/>
+      <span>Finanzas</span> 
     </a>
     
     <div class="d-flex gap-3 mx-auto">
         <a routerLink="/savings" 
           class="nav-link text-white-50 hover-light transition">
-          💰 Ahorros
+           {{'NAVIGATION.SAVINGS' | translate}}
         </a>
         <a routerLink="/dashboard" 
            class="nav-link text-white fw-bold border-bottom border-2 border-primary">
-           📊 Resumen
+           📊 {{ 'NAVIGATION.DASHBOARD' | translate }}
         </a>
         <a routerLink="/debts" 
            class="nav-link text-white-50 hover-light transition">
-           💳 Deudas
+            {{ 'NAVIGATION.DEBTS' | translate }}
         </a>
     </div>
     
     <div class="d-flex align-items-center gap-3">
         <!-- Theme Toggle -->
         <app-theme-toggle></app-theme-toggle>
-
-        <!-- Divisor visual -->
         <div class="navbar-divider"></div>
 
         <!-- Toggle de moneda -->
@@ -40,9 +39,9 @@
         <!-- Divisor visual -->
         <div class="navbar-divider"></div>
 
-        <!-- Botón Log Out -->
+        <!-- Log out button -->
         <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 rounded-pill px-3 logout-btn" (click)="logout()">
-          <span class="small fw-bold">Log Out</span>
+          <span class="small fw-bold">{{'BUTTON.LOGOUT'| translate}}</span>
           <i class="bi bi-box-arrow-right"></i> 
         </button>
     </div>
@@ -59,13 +58,13 @@
             
             <div class="row mb-4">
                 <div class="col-6 border-end">
-                    <p class="stat-label">Ingresos</p>
+                    <p class="stat-label">{{ 'DASHBOARD.TOTAL_INCOME' | translate }}</p>
                     <h3 class="fw-bold text-success stat-value">
                         {{ currencySymbol }}{{ totalIncome | number:'1.2-2' }}
                     </h3>
                 </div>
                 <div class="col-6">
-                    <p class="stat-label">Gastos</p>
+                    <p class="stat-label">{{ 'DASHBOARD.TOTAL_SPENT' | translate }}</p>
                     <h3 class="fw-bold text-danger stat-value">
                         {{ currencySymbol }}{{ totalSpent | number:'1.2-2' }}
                     </h3>
@@ -78,7 +77,7 @@
                     'alert-warning': alertColor === 'orange',
                     'alert-danger': alertColor === 'red'
                  }" role="alert">
-                <small><i class="bi bi-info-circle me-1"></i> {{ alertMessage }}</small>
+                <small><i class="bi bi-info-circle me-1"></i> {{ alertMessageKey | translate }}</small>
             </div>
 
             <div class="card border-0 shadow-sm balance-card"
@@ -86,7 +85,7 @@
                 
                 <div class="card-body py-3">
                     <p class="small text-uppercase text-white-50 mb-1 fw-bold balance-label">
-                        {{ totalIncome >= totalSpent ? 'Disponible' : '⚠️Deuda' }}
+                        {{ totalIncome >= totalSpent ? 'DASHBOARD.AVAILABLE' : '⚠️DASHBOARD.DEBT_LABEL' | translate }}
                     </p>
 
                     <h2 class="display-6 fw-bold mb-0 text-white balance-amount">
@@ -94,11 +93,11 @@
                     </h2>
 
                     <p class="small text-white-50 mt-2 mb-0" *ngIf="totalIncome > 0 && totalSpent <= totalIncome">
-                        Estás ahorrando el <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong>
+                       {{'DASHBOARD.SAVING_MSG' | translate}} <strong>{{ ((totalIncome - totalSpent) / totalIncome) | percent:'1.0-1' }}</strong>
                     </p>
 
                     <p class="small text-white mt-2 mb-0 fw-bold" *ngIf="totalIncome > 0 && totalSpent > totalIncome">
-                        Te has excedido un {{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}
+                         {{'DASHBOARD.OVERSPENT_MSG' | translate}} {{ ((totalSpent - totalIncome) / totalIncome) | percent:'1.0-1' }}
                     </p>
                 </div>
             </div>
@@ -112,7 +111,7 @@
                 </div>
             </div>
             <div *ngIf="totalSpent === 0" class="empty-chart">
-                <p class="mb-0">Sin gastos para mostrar 📉</p>
+                <p class="mb-0">{{'DASHBOARD.NO_EXPENSES' | translate}}📉</p>
             </div>
         </div>
 
@@ -124,39 +123,40 @@
     <div class="col-lg-4 col-md-5 mb-4">
       <div class="card shadow-sm border-0 h-100 form-card">
         <div class="card-header fw-bold form-header" [class.text-primary]="isEditing">
-          {{ isEditing ? '✏️ Editando' : '➕ Nuevo Movimiento' }}
+          {{ (isEditing ? 'DASHBOARD.EDITING' : 'DASHBOARD.NEW_TRANSACTION') | translate }}
         </div>
 
         <div class="card-body">
           <form (ngSubmit)="addTransaction()">
             <div class="mb-3">
-              <label class="form-label">Descripción</label>
+              <label class="form-label">{{'TRANSACTION.DESCRIPTION' | translate}}</label>
               <input type="text" class="form-control" placeholder="Ej: Pizza..." 
                      [(ngModel)]="newTransaction.description" name="desc" required>
             </div>
             
             <div class="mb-3">
-              <label class="form-label">Monto ({{ currencySymbol }})</label>
+              <label class="form-label">{{'TRANSACTION.AMOUNT' | translate}} ({{ currencySymbol }})</label>
               <input type="number" class="form-control" placeholder="0.00" 
                      [(ngModel)]="newTransaction.amount" name="amount" required>
             </div>
 
             <div class="mb-3">
-              <label class="form-label">Categoría</label>
+              <label class="form-label">{{ 'TRANSACTION.CATEGORY' | translate }}</label>
               <select class="form-select" [(ngModel)]="newTransaction.category" name="cat">
-                <optgroup label="Ingresos 🤑">
-                  <option value="Sueldo">Sueldo</option>
-                  <option value="Negocio">Negocio</option>
-                  <option value="Ingreso Extra">Ingreso Extra</option>
+                <optgroup [label]="'DASHBOARD.INCOME_GROUP' | translate">
+                  <option value="Sueldo">{{ 'CATEGORIES.SALARY' | translate }}</option>
+                  <option value="Negocio">{{ 'CATEGORIES.BUSINESS' | translate }}</option>
+                  <option value="Ingreso Extra">{{ 'CATEGORIES.EXTRA_INCOME' | translate }}</option>
                 </optgroup>
-                <optgroup label="Gastos 💸">
-                  <option value="Ahorro">Ahorro</option>
-                  <option value="Comida">Comida</option>
-                  <option value="Transporte">Transporte</option>
-                  <option value="Otros">Otros</option>
-                  <option value="Salud">Salud</option>
-                  <option value="Ocio">Ocio</option>
-                  <option value="Casa">Casa</option>
+                <optgroup [label]="'DASHBOARD.EXPENSE_GROUP' | translate">
+                  <option value="Ahorro">{{ 'CATEGORIES.SAVING' | translate }}</option>
+                  <option value="Comida">{{ 'CATEGORIES.FOOD' | translate }}</option>
+                  <option value="Educacion">{{ 'CATEGORIES.EDUCATION' | translate }}</option>
+                  <option value="Transporte">{{ 'CATEGORIES.TRANSPORT' | translate }}</option>
+                  <option value="Salud">{{ 'CATEGORIES.HEALTH' | translate }}</option>
+                  <option value="Ocio">{{ 'CATEGORIES.ENTERTAINMENT' | translate }}</option>
+                  <option value="Casa">{{ 'CATEGORIES.HOME' | translate }}</option>
+                  <option value="Otros">{{ 'CATEGORIES.OTHER' | translate }}</option>
                 </optgroup>
               </select>
             </div>
@@ -165,12 +165,12 @@
               <button type="submit" class="btn text-white submit-btn"
                 [ngClass]="isEditing ? 'btn-warning text-dark' : 'btn-primary-custom'"
                 [disabled]="!newTransaction.description || newTransaction.amount <= 0">
-                {{ isEditing ? 'Actualizar' : 'Agregar' }}
+                {{ (isEditing ? 'BUTTONS.UPDATE' : 'BUTTONS.ADD') | translate }}
               </button>
 
               <button type="button" class="btn btn-secondary" 
                       *ngIf="isEditing" (click)="cancelEdit()">
-                Cancelar
+                {{ 'BUTTONS.CANCEL' | translate }}
               </button>
             </div>
 
@@ -182,28 +182,28 @@
     <div class="col-lg-8 col-md-7 mb-4">
       <div class="card shadow-sm border-0 h-100 history-card">
         <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 history-header">
-          <span class="fw-bold">📜 Historial</span>
+          <span class="fw-bold">📜 {{ 'DASHBOARD.HISTORY' | translate }}</span>
           
           <div class="d-flex gap-2">
              <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedPeriod" (change)="applyFilters()">
-              <option value="all">Mes</option>
-              <option value="1">1ª Pago Fin Mes.</option>
-              <option value="2">2ª Quincena.</option>
+              <option value="all">{{ 'DASHBOARD.ALL' | translate }}</option>
+              <option value="1">{{ 'DASHBOARD.FIRST_HALF' | translate }}</option>
+              <option value="2">{{ 'DASHBOARD.SECOND_HALF' | translate }}</option>
             </select>
 
             <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedMonth" (change)="applyFilters()">
-              <option [value]="0">Ene</option>
-              <option [value]="1">Feb</option>
-              <option [value]="2">Mar</option>
-              <option [value]="3">Abr</option>
-              <option [value]="4">May</option>
-              <option [value]="5">Jun</option>
-              <option [value]="6">Jul</option>
-              <option [value]="7">Ago</option>
-              <option [value]="8">Sep</option>
-              <option [value]="9">Oct</option>
-              <option [value]="10">Nov</option>
-              <option [value]="11">Dic</option>
+               <option [value]="0">{{ 'MONTHS.JAN' | translate }}</option>
+               <option [value]="1">{{ 'MONTHS.FEB' | translate }}</option>
+               <option [value]="2">{{ 'MONTHS.MAR' | translate }}</option>
+               <option [value]="3">{{ 'MONTHS.APR' | translate }}</option>
+               <option [value]="4">{{ 'MONTHS.MAY' | translate }}</option>
+               <option [value]="5">{{ 'MONTHS.JUN' | translate }}</option>
+               <option [value]="6">{{ 'MONTHS.JUL' | translate }}</option>
+               <option [value]="7">{{ 'MONTHS.AUG' | translate }}</option>
+               <option [value]="8">{{ 'MONTHS.SEP' | translate }}</option>
+               <option [value]="9">{{ 'MONTHS.OCT' | translate }}</option>
+               <option [value]="10">{{ 'MONTHS.NOV' | translate }}</option>
+               <option [value]="11">{{ 'MONTHS.DEC' | translate }}</option>
             </select>
             
             <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedYear" (change)="applyFilters()">
@@ -215,24 +215,29 @@
         <div class="card-body p-0 table-responsive"> 
           
           <div *ngIf="filteredTransactions.length === 0" class="text-center py-5 empty-state">
-            <p>Sin datos este mes.</p>
+            <p>{{ 'TRANSACTION.NO_TRANSACTIONS' | translate }}</p>
           </div>
 
           <table class="table table-hover mb-0 align-middle transactions-table" *ngIf="filteredTransactions.length > 0">
             <thead class="table-light">
               <tr>
-                <th>Fecha</th>
-                <th>Desc.</th>
-                <th>Cat.</th>
-                <th class="text-end">Monto</th>
-                <th class="text-center">Acción</th>
+                <th>{{ 'TRANSACTION.DATE' | translate }}</th>
+                <th>{{ 'TRANSACTION.DESCRIPTION' | translate }}</th>
+                <th>{{ 'TRANSACTION.CATEGORY' | translate }}</th>
+                <th class="text-end">{{ 'TRANSACTION.AMOUNT' | translate }}</th>
+                <th class="text-center">{{ 'TRANSACTION.ACTIONS' | translate }}</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let t of filteredTransactions">
                 <td class="transaction-date">{{ t.transactionDate | date:'dd/MM' }}</td>
                 <td class="fw-bold transaction-desc">{{ t.description }}</td>
-                <td><span class="badge bg-secondary rounded-pill category-badge">{{ t.category }}</span></td>
+
+                <td>
+                  <span class="badge bg-secondary rounded-pill category-badge">
+                    {{ getCategoryKey(t.category) | translate }}
+                  </span>
+                </td>
                 
                 <td class="text-end fw-bold transaction-amount" 
                   [style.color]="incomeCategories.includes(t.category) ? '#198754' : '#dc3545'">

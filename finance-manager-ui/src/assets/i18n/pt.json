@@ -1,7 +1,7 @@
 {
   "LANDING": {
     "TITLE": "O app financeiro,",
-    "SUBTITLE": "de seu jeito.",
+    "SUBTITLE": "do seu jeito.",
     "DESCRIPTION": "Sua conta para gerenciar gastos, economias e dívidas. Sem taxas. Sem complicações. Controle total.",
     "CTA_BUTTON": "COMEÇAR AGORA"
   },
@@ -19,12 +19,12 @@
       "HERO_TITLE": "Assuma o controle",
       "HERO_TEXT": "Bem-vindo ao Finance Manager. A ferramenta projetada para rastrear seus gastos, otimizar seu capital e evitar surpresas financeiras. Seu dinheiro, suas regras."
     },
-  "REGISTER": {
-    "TITLE": "NOVA CONTA",
+    "REGISTER": {
+      "TITLE": "NOVA CONTA",
       "FULL_NAME": "Nome Completo",
       "NAME_PLACEHOLDER": "Ex. João Silva",
       "EMAIL": "Email",
-      "EMAIL_PLACEHOLDER":"email@gmail.com", 
+      "EMAIL_PLACEHOLDER": "email@gmail.com",
       "PASSWORD": "Senha",
       "CONFIRM_PASSWORD": "Confirmar Senha",
       "BUTTON": "CADASTRAR",
@@ -36,45 +36,51 @@
   },
   "DASHBOARD": {
     "TITLE": "Painel",
-    "WELCOME": "Bem-vindo",
     "TOTAL_INCOME": "Receita Total",
     "TOTAL_SPENT": "Gastos Totais",
-    "ADD_TRANSACTION": "Adicionar Transação",
-    "MONTH": "Mês",
-    "YEAR": "Ano",
-    "PERIOD": "Período",
+    "AVAILABLE": "Disponível",
+    "DEBT_LABEL": "⚠️ Dívida",
+    "SAVING_MSG": "Você está economizando",
+    "OVERSPENT_MSG": "Você excedeu",
+    "NO_EXPENSES": "Sem gastos para mostrar 📉",
+    "EDITING": "✏️ Editando",
+    "NEW_TRANSACTION": "➕ Nova Transação",
+    "INCOME_GROUP": "Receitas 🤑",
+    "EXPENSE_GROUP": "Despesas 💸",
+    "HISTORY": "Histórico",
     "ALL": "Mês inteiro",
-    "FIRST_HALF": "Primeira quinzena",
-    "SECOND_HALF": "Segunda quinzena",
+    "FIRST_HALF": "1ª Quinzena",
+    "SECOND_HALF": "2ª Quinzena",
     "ALERTS": {
       "GOOD": "Indo bem. Você está dentro das suas possibilidades!",
-      "WARNING": "Cuidado: Você gastou um pouco a mais. Diminua os gastos!",
-      "DANGER": "ALERTA VERMELHO! Você ultrapassou seu limite de segurança de 10%."
+      "WARNING": "Cuidado: Você gastou um pouco a mais.",
+      "DANGER": "ALERTA VERMELHO! Você ultrapassou seu limite."
     }
   },
-  "TRANSACTIONS": {
+  "TRANSACTION": {
     "DESCRIPTION": "Descrição",
     "AMOUNT": "Valor",
     "CATEGORY": "Categoria",
     "DATE": "Data",
     "ACTIONS": "Ações",
-    "NO_TRANSACTIONS": "Não há transações para este período",
-    "ADD_DESCRIPTION": "Por favor, adicione uma descrição para a transação.",
-    "INVALID_AMOUNT": "O valor deve ser maior que 0."
+    "NO_TRANSACTIONS": "Nenhuma transação encontrada",
+    "ADD_DESCRIPTION": "Adicione uma descrição",
+    "INVALID_AMOUNT": "Valor inválido"
   },
   "CATEGORIES": {
     "FOOD": "Comida",
     "TRANSPORT": "Transporte",
     "HEALTH": "Saúde",
     "HOME": "Casa",
-    "ENTERTAINMENT": "Entretenimento",
+    "ENTERTAINMENT": "Lazer",
     "EDUCATION": "Educação",
     "SHOPPING": "Compras",
     "SALARY": "Salário",
     "BUSINESS": "Negócio",
     "SALE": "Venda",
     "EXTRA_INCOME": "Renda Extra",
-    "OTHER": "Outros"
+    "OTHER": "Outros",
+    "SAVING": "Poupança"
   },
   "SAVINGS": {
     "TITLE": "Minhas Economias",
@@ -123,7 +129,7 @@
     "OVERDUE": "Vencida",
     "MARK_AS_PAID": "Marcar como paga",
     "MARK_AS_UNPAID": "Marcar como não paga",
-    "CONFIRM_DELETE": "Tem certeza de que deseja excluir esta dívida? Esta ação não pode ser desfeita.",
+    "CONFIRM_DELETE": "Tem certeza de que deseja excluir esta dívida?",
     "INTEREST": "juros",
     "INSTALLMENTS": "parcelas",
     "PAID_INSTALLMENTS": "pagas"
@@ -136,7 +142,8 @@
     "LOGOUT": "Sair",
     "BACK": "Voltar",
     "CREATE": "Criar",
-    "UPDATE": "Atualizar"
+    "UPDATE": "Atualizar",
+    "ADD": "Adicionar"
   },
   "NAVIGATION": {
     "DASHBOARD": "Painel",
@@ -148,5 +155,9 @@
     "USD": "Dólar",
     "BRL": "Real Brasileiro",
     "TOGGLE": "Alternar Moeda"
+  },
+  "MONTHS": {
+    "JAN": "Jan", "FEB": "Fev", "MAR": "Mar", "APR": "Abr", "MAY": "Mai", "JUN": "Jun",
+    "JUL": "Jul", "AUG": "Ago", "SEP": "Set", "OCT": "Out", "NOV": "Nov", "DEC": "Dez"
   }
 }

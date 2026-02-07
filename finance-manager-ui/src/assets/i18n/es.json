@@ -6,45 +6,51 @@
     "CTA_BUTTON": "EMPEZAR AHORA"
   },
   "AUTH": {
-  "LOGIN": {
-    "TITLE": "Ingresa a tu terminal financiera",
-    "EMAIL": "Usuario",
-    "EMAIL_PLACEHOLDER": "Tu usuario",
-    "PASSWORD": "Contraseña",
-    "PASSWORD_PLACEHOLDER": "••••••••",
-    "BUTTON": "INICIAR SESIÓN",
-    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
-    "NO_ACCOUNT": "¿No tienes cuenta?",
-    "REGISTER_LINK": "Crear nueva",
-    "HERO_TITLE": "Toma el control",
-    "HERO_TEXT": "Bienvenido a Finance Manager. La herramienta diseñada para rastrear tus gastos, optimizar tu capital y evitar sorpresas financieras. Tu dinero, bajo tus reglas."
-  },
-  "REGISTER": {
-    "TITLE": "Crear Cuenta",
-    "FULL_NAME": "Nombre Completo",
-    "NAME_PLACEHOLDER": "Ej.Juan Perez",
-    "EMAIL": "Email",
-    "EMAIL_PLACEHOLDER": "usuario@gmail.com",
-    "PASSWORD":"Contraseña",
-    "CONFIRM_PASSWORD": "Confirmar Contraseña",
-    "BUTTON": "Registrarse",
-    "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?",
-    "LOGIN_LINK": "Inicia sesión aquí",
-    "HERO_TITLE": "Empieza tu legado",
-    "HERO_TEXT": "\"El primer paso para la libertad financiera es tomar la decisión de controlar tu destino. Regístrate hoy y comienza a construir el futuro que mereces.\"" }
+    "LOGIN": {
+      "TITLE": "Ingresa a tu terminal financiera",
+      "EMAIL": "Usuario",
+      "EMAIL_PLACEHOLDER": "Tu usuario",
+      "PASSWORD": "Contraseña",
+      "PASSWORD_PLACEHOLDER": "••••••••",
+      "BUTTON": "INICIAR SESIÓN",
+      "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+      "NO_ACCOUNT": "¿No tienes cuenta?",
+      "REGISTER_LINK": "Crear nueva",
+      "HERO_TITLE": "Toma el control",
+      "HERO_TEXT": "Bienvenido a Finance Manager. La herramienta diseñada para rastrear tus gastos, optimizar tu capital y evitar sorpresas financieras. Tu dinero, bajo tus reglas."
+    },
+    "REGISTER": {
+      "TITLE": "Crear Cuenta",
+      "FULL_NAME": "Nombre Completo",
+      "NAME_PLACEHOLDER": "Ej. Juan Pérez",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "usuario@gmail.com",
+      "PASSWORD": "Contraseña",
+      "CONFIRM_PASSWORD": "Confirmar Contraseña",
+      "BUTTON": "REGISTRARSE",
+      "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?",
+      "LOGIN_LINK": "Inicia sesión aquí",
+      "HERO_TITLE": "Empieza tu legado",
+      "HERO_TEXT": "\"El primer paso para la libertad financiera es tomar la decisión de controlar tu destino. Regístrate hoy y comienza a construir el futuro que mereces.\""
+    }
   },
   "DASHBOARD": {
     "TITLE": "Panel de Control",
-    "WELCOME": "Bienvenido",
-    "TOTAL_INCOME": "Ingresos Totales",
-    "TOTAL_SPENT": "Gastos Totales",
-    "ADD_TRANSACTION": "Agregar Transacción",
-    "MONTH": "Mes",
-    "YEAR": "Año",
-    "PERIOD": "Período",
-    "ALL": "Todo el mes",
-    "FIRST_HALF": "Primera quincena",
-    "SECOND_HALF": "Segunda quincena",
+    "TOTAL_INCOME": "Ingresos",
+    "TOTAL_SPENT": "Gastos",
+    "AVAILABLE": "Disponible",
+    "DEBT_LABEL": "⚠️ Deuda",
+    "SAVING_MSG": "Estás ahorrando el",
+    "OVERSPENT_MSG": "Te has excedido un",
+    "NO_EXPENSES": "Sin gastos para mostrar 📉",
+    "EDITING": "✏️ Editando",
+    "NEW_TRANSACTION": "➕ Nuevo Movimiento",
+    "INCOME_GROUP": "Ingresos 🤑",
+    "EXPENSE_GROUP": "Gastos 💸",
+    "HISTORY": "Historial",
+    "ALL": "Mes",
+    "FIRST_HALF": "1ª Quincena",
+    "SECOND_HALF": "2ª Quincena",
     "ALERTS": {
       "GOOD": "Vamos bien. ¡Estás dentro de tus posibilidades!",
       "WARNING": "Cuidado: Te has pasado un poco. ¡Frena los gastos!",
@@ -58,21 +64,22 @@
     "DATE": "Fecha",
     "ACTIONS": "Acciones",
     "NO_TRANSACTIONS": "No hay transacciones para este período",
-    "ADD_DESCRIPTION": "Por favor agrega una descripción para el movimiento.",
+    "ADD_DESCRIPTION": "Por favor agrega una descripción.",
     "INVALID_AMOUNT": "El monto debe ser mayor a 0."
   },
   "CATEGORIES": {
-    "FOOD": "Comida",
-    "TRANSPORT": "Transporte",
-    "HEALTH": "Salud",
-    "HOME": "Casa",
-    "ENTERTAINMENT": "Entretenimiento",
-    "EDUCATION": "Educación",
-    "SHOPPING": "Compras",
     "SALARY": "Sueldo",
     "BUSINESS": "Negocio",
     "SALE": "Venta",
     "EXTRA_INCOME": "Ingreso Extra",
+    "SAVING": "Ahorro",
+    "FOOD": "Comida",
+    "TRANSPORT": "Transporte",
+    "EDUCATION": "Educación",
+    "HEALTH": "Salud",
+    "ENTERTAINMENT": "Ocio",
+    "HOME": "Casa",
+    "SHOPPING": "Compras",
     "OTHER": "Otros"
   },
   "SAVINGS": {
@@ -135,7 +142,8 @@
     "LOGOUT": "Cerrar Sesión",
     "BACK": "Volver",
     "CREATE": "Crear",
-    "UPDATE": "Actualizar"
+    "UPDATE": "Atualizar",
+    "ADD": "Agregar"
   },
   "NAVIGATION": {
     "DASHBOARD": "Panel",
@@ -147,5 +155,9 @@
     "USD": "Dólar",
     "BRL": "Real Brasileño",
     "TOGGLE": "Cambiar Moneda"
+  },
+  "MONTHS": {
+    "JAN": "Ene", "FEB": "Feb", "MAR": "Mar", "APR": "Abr", "MAY": "May", "JUN": "Jun",
+    "JUL": "Jul", "AUG": "Ago", "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dic"
   }
 }

@@ -40,10 +40,13 @@
     "TOTAL_INCOME": "Total Income",
     "TOTAL_SPENT": "Total Spent",
     "ADD_TRANSACTION": "Add Transaction",
+    "AVAILABLE": "Available money",
     "MONTH": "Month",
     "YEAR": "Year",
     "PERIOD": "Period",
     "ALL": "Entire month",
+    "NEW_TRANSACTION":"New transaction",
+    "HISTORY": "History Record",
     "FIRST_HALF": "First half",
     "SECOND_HALF": "Second half",
     "ALERTS": {
@@ -52,13 +55,13 @@
       "DANGER": "RED ALERT! You've exceeded your 10% safety limit."
     }
   },
-  "TRANSACTIONS": {
+  "TRANSACTION": {
     "DESCRIPTION": "Description",
     "AMOUNT": "Amount",
     "CATEGORY": "Category",
     "DATE": "Date",
     "ACTIONS": "Actions",
-    "NO_TRANSACTIONS": "No transactions for this period",
+    "NO_TRANSACTION": "No transactions for this period",
     "ADD_DESCRIPTION": "Please add a description for the transaction.",
     "INVALID_AMOUNT": "Amount must be greater than 0."
   },
@@ -129,14 +132,14 @@
     "PAID_INSTALLMENTS": "paid"
   },
   "BUTTONS": {
-    "SAVE": "Save",
-    "CANCEL": "Cancel",
-    "EDIT": "Edit",
-    "DELETE": "Delete",
-    "LOGOUT": "Log Out",
-    "BACK": "Back",
-    "CREATE": "Create",
-    "UPDATE": "Update"
+    "ADD": "Agregar",
+    "UPDATE": "Actualizar",
+    "CANCEL": "Cancelar",
+    "LOGOUT": "Cerrar Sesión"
+  },
+  "MONTHS": {
+    "JAN": "Ene", "FEB": "Feb", "MAR": "Mar", "APR": "Abr", "MAY": "May", "JUN": "Jun",
+    "JUL": "Jul", "AUG": "Ago", "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dic"
   },
   "NAVIGATION": {
     "DASHBOARD": "Dashboard",
