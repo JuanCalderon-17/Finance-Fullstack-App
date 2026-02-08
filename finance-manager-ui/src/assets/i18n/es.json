@@ -44,6 +44,17 @@
         "GENERIC": "Ocurrió un error inesperado.",
         "PASSWORD_MISMATCH": "⛔ Las contraseñas no coinciden."
       }
+    },
+    "FORGOT_PASSWORD": {
+      "TITLE": "Recuperar Contraseña",
+      "INSTRUCTIONS": "Ingresa tu correo y te enviaremos un enlace.",
+      "EMAIL": "Correo Electrónico",
+      "EMAIL_PLACEHOLDER": "ejemplo@correo.com",
+      "BUTTON_SEND": "ENVIAR ENLACE",
+      "SENDING": "ENVIANDO...",
+      "BACK_TO_LOGIN": "← Volver al inicio",
+      "SUCCESS_MSG": "¡Enlace enviado! Revisa tu correo.",
+      "ERROR_GENERIC": "No se pudo enviar. Intenta de nuevo."
     }
   },
   "DASHBOARD": {
@@ -155,7 +166,8 @@
     "BACK": "Volver",
     "CREATE": "Crear",
     "UPDATE": "Actualizar",
-    "ADD": "Agregar"
+    "ADD": "Agregar",
+    "SENDING": "Enviando..."
   },
   "NAVIGATION": {
     "DASHBOARD": "Panel",
@@ -169,7 +181,17 @@
     "TOGGLE": "Cambiar Moneda"
   },
   "MONTHS": {
-    "JAN": "Ene", "FEB": "Feb", "MAR": "Mar", "APR": "Abr", "MAY": "May", "JUN": "Jun",
-    "JUL": "Jul", "AUG": "Ago", "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dic"
+    "JAN": "Ene",
+    "FEB": "Feb",
+    "MAR": "Mar",
+    "APR": "Abr",
+    "MAY": "May",
+    "JUN": "Jun",
+    "JUL": "Jul",
+    "AUG": "Ago",
+    "SEP": "Sep",
+    "OCT": "Oct",
+    "NOV": "Nov",
+    "DEC": "Dic"
   }
 }

@@ -32,7 +32,6 @@
       "LOGIN_LINK": "Entrar",
       "HERO_TITLE": "Comece seu legado",
       "HERO_TEXT": "\"O primeiro passo para a liberdade financeira é tomar a decisão de controlar seu destino. Cadastre-se hoje e comece a construir o futuro que você merece.\"",
-      
       "ERRORS": {
         "EMPTY_NAME": "⛔ Por favor insira seu nome completo.",
         "EMPTY_EMAIL": "⛔ O e-mail é obrigatório.",
@@ -45,6 +44,17 @@
         "GENERIC": "Ocorreu um erro inesperado.",
         "PASSWORD_MISMATCH": "⛔ As senhas não coincidem."
       }
+    },
+    "FORGOT_PASSWORD": {
+      "TITLE": "Recuperar Senha",
+      "INSTRUCTIONS": "Digite seu e-mail e enviaremos um link de recuperação para você.",
+      "EMAIL": "E-mail",
+      "EMAIL_PLACEHOLDER": "exemplo@email.com",
+      "BUTTON_SEND": "ENVIAR LINK",
+      "SENDING": "ENVIANDO...",
+      "BACK_TO_LOGIN": "← Voltar ao login",
+      "SUCCESS_MSG": "Link enviado! Verifique seu e-mail.",
+      "ERROR_GENERIC": "Não foi possível enviar o e-mail. Tente novamente."
     }
   },
   "DASHBOARD": {
@@ -156,7 +166,8 @@
     "EDIT": "Editar",
     "DELETE": "Excluir",
     "BACK": "Voltar",
-    "CREATE": "Criar"
+    "CREATE": "Criar",
+    "SENDING": "Enviando..."
   },
   "NAVIGATION": {
     "DASHBOARD": "Painel",

@@ -44,6 +44,17 @@
         "GENERIC": "An unexpected error occurred.",
         "PASSWORD_MISMATCH": "⛔ Passwords do not match."
       }
+    },
+    "FORGOT_PASSWORD": {
+      "TITLE": "Forgot Password",
+      "INSTRUCTIONS": "Enter your email and we'll send you a recovery link.",
+      "EMAIL": "Email Address",
+      "EMAIL_PLACEHOLDER": "example@email.com",
+      "BUTTON_SEND": "SEND LINK",
+      "SENDING": "SENDING...",
+      "BACK_TO_LOGIN": "← Back to login",
+      "SUCCESS_MSG": "Link sent! Check your email.",
+      "ERROR_GENERIC": "Could not send email. Please try again."
     }
   },
   "DASHBOARD": {
@@ -155,7 +166,8 @@
     "EDIT": "Edit",
     "DELETE": "Delete",
     "BACK": "Back",
-    "CREATE": "Create"
+    "CREATE": "Create",
+    "SENDING": "Sending..."
   },
   "NAVIGATION": {
     "DASHBOARD": "Dashboard",

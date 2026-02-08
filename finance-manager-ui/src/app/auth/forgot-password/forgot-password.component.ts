@@ -1,23 +1,25 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <--- NECESARIO para *ngIf
-import { FormsModule } from '@angular/forms';   // <--- NECESARIO para [(ngModel)]
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms';   // para [(ngModel)]
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink], // <--- Agregamos los módulos aquí
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule], 
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
   email: string = '';
   isLoading: boolean = false;
-  message: string = '';      // Para mensaje verde (éxito)
-  errorMessage: string = ''; // Para mensaje rojo (error)
+  message: string = '';      
+  errorMessage: string = ''; 
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private translateService: TranslateService) {}
 
   onSubmit() {
     if (!this.email) return;
@@ -27,17 +29,15 @@ export class ForgotPasswordComponent {
     this.errorMessage = '';
 
     this.authService.forgotPassword(this.email).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.message = '¡Enlace enviado! Revisa tu correo electrónico.';
-        this.email = ''; // Limpiamos el campo
-      },
-      error: (error) => {
-        this.isLoading = false;
-        // Si el backend manda un mensaje de error específico, lo mostramos, si no, uno genérico
-        this.errorMessage = error.error || 'No se pudo enviar el correo. Intenta nuevamente.';
-        console.error(error);
-      }
+    next: () => {
+      this.isLoading = false;
+      this.message = this.translateService.instant('AUTH.FORGOT_PASSWORD.SUCCESS_MSG');
+      this.email = '';
+    },
+    error: (error) => {
+      this.isLoading = false;
+      this.errorMessage = error.error || this.translateService.instant('AUTH.FORGOT_PASSWORD.ERROR_GENERIC');
+    }
     });
   }
 }
