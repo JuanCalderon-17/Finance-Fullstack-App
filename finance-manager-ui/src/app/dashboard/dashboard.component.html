@@ -29,6 +29,35 @@
 
         <div class="navbar-divider"></div>
 
+        <!-- ✅ SELECTOR DE IDIOMA -->
+        <div class="position-relative">
+          <button 
+            class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 currency-toggle"
+            (click)="showLangMenu = !showLangMenu">
+            <span>{{ languageService.getCurrentLanguage() === 'en' ? '🇺🇸' : languageService.getCurrentLanguage() === 'pt' ? '🇧🇷' : '🇪🇸' }}</span>
+            <span class="fw-bold small">{{ languageService.getCurrentLanguage().toUpperCase() }}</span>
+            <i class="fas fa-chevron-down currency-arrow"></i>
+          </button>
+          <!-- DROPDOWN -->
+          <div *ngIf="showLangMenu" 
+              class="position-absolute end-0 mt-1 py-1 bg-dark rounded shadow-lg"
+              style="min-width: 140px; z-index: 1000;">
+            <button 
+              *ngFor="let lang of languageService.getAvailableLanguages()"
+              class="btn btn-sm w-100 text-start text-white px-3 py-2 d-flex align-items-center gap-2"
+              [class.opacity-50]="languageService.getCurrentLanguage() === lang.code"
+              (click)="changeLanguage(lang.code)"
+              style="background: transparent; border: none;">
+              <span>{{ lang.flag }}</span>
+              <span class="small">{{ lang.name }}</span>
+              <i *ngIf="languageService.getCurrentLanguage() === lang.code" 
+                class="bi bi-check ms-auto text-success"></i>
+            </button>
+          </div>
+    </div>
+
+    <div class="navbar-divider"></div>
+
         <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 rounded-pill px-3 logout-btn" (click)="logout()">
           <span class="small fw-bold">{{'BUTTONS.LOGOUT'| translate}}</span>
           <i class="bi bi-box-arrow-right"></i> 

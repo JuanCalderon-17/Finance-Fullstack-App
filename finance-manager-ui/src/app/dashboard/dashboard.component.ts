@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../core/services/transaction.service';
@@ -10,6 +10,8 @@ import { ThemeToggleComponent } from '../shared/theme-toggle/theme-toggle.compon
 import { CurrencyService } from '../core/services/currency.service';
 import { CurrencyStateService } from '../core/services/currency-state.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../core/services/language.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +31,7 @@ export class DashboardComponent implements OnInit {
   
   allTransactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
+  showLangMenu : boolean = false; 
 
   // ✅ MAPA DE CATEGORÍAS: Base de Datos -> Clave JSON
   categoryMap: { [key: string]: string } = {
@@ -101,7 +104,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private currencyService: CurrencyService,
     private currencyStateService: CurrencyStateService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public languageService: LanguageService
   ) { 
     const today = new Date();
     this.selectedMonth = today.getMonth();
@@ -112,6 +116,13 @@ export class DashboardComponent implements OnInit {
     }
   }
   
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.position-relative')) {
+      this.showLangMenu = false;
+    }
+  }
   ngOnInit(): void {
     this.currencyStateService.loadFromStorage();
     
@@ -327,6 +338,11 @@ export class DashboardComponent implements OnInit {
         error: (err) => console.error('Error al eliminar', err)
       });
     }
+  } 
+
+  changeLanguage( language: string) {
+    this.languageService.setLanguage(language);
+    this.showLangMenu  = false;
   }
 
   logout() {
