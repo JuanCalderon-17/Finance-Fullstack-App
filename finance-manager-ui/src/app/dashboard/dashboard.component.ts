@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   
   allTransactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
-  showLangMenu : boolean = false; 
+  showSettingsMenu : boolean = false; 
 
   // ✅ MAPA DE CATEGORÍAS: Base de Datos -> Clave JSON
   categoryMap: { [key: string]: string } = {
@@ -54,10 +54,10 @@ export class DashboardComponent implements OnInit {
     'Ingreso Extra': 'EXTRA_INCOME', 'Extra Income': 'EXTRA_INCOME', 'Renda Extra': 'EXTRA_INCOME'
   };
 
-  // ✅ CORREGIDO: Todo en mayúsculas para coincidir con el mapa
+  //  Todo en mayúsculas para coincidir con el mapa
   incomeKeys: string[] = ['SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
 
-  // ✅ AGREGADO: Para que el HTML pueda pintar de verde/rojo sin errores
+  // Para que el HTML pueda pintar de verde/rojo sin errores
   incomeCategories: string[] = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra', 'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
 
   newTransaction: any = {
@@ -119,8 +119,8 @@ export class DashboardComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.position-relative')) {
-      this.showLangMenu = false;
+    if (!target.closest('.settings-dropdown-container')) {
+      this.showSettingsMenu = false;
     }
   }
   ngOnInit(): void {
@@ -340,9 +340,8 @@ export class DashboardComponent implements OnInit {
     }
   } 
 
-  changeLanguage( language: string) {
+  changeLanguage( language: string): void {
     this.languageService.setLanguage(language);
-    this.showLangMenu  = false;
   }
 
   logout() {

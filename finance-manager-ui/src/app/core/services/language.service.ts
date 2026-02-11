@@ -18,7 +18,7 @@ export class LanguageService{
         this.translate.use(lang);
         
         //guardar en localstorage
-         localStorage.setItem('app-language', lang);
+        localStorage.setItem('app-language', lang);
         console.log(`🌐 Idioma cambiado a: ${lang}`);
     }
 

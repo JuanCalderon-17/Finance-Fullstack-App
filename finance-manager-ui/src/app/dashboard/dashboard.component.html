@@ -18,42 +18,79 @@
     </div>
     
     <div class="d-flex align-items-center gap-3">
-        <app-theme-toggle></app-theme-toggle>
-        <div class="navbar-divider"></div>
+    <app-theme-toggle></app-theme-toggle>
+    <div class="navbar-divider"></div>
 
-        <button (click)="toggleCurrency()" class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 currency-toggle">
-          <img [src]="currencyCode === 'USD' ? 'https://flagcdn.com/w40/us.png' : 'https://flagcdn.com/w40/br.png'" class="currency-flag">
-          <span class="fw-bold small currency-code">{{ currencyCode }}</span>
-          <i class="fas fa-chevron-down currency-arrow"></i>
-        </button>
+    <!-- ✅ DROPDOWN COMBINADO -->
+    <div class="position-relative settings-dropdown-container">
+      <button 
+        class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 settings-toggle"
+        (click)="showSettingsMenu = !showSettingsMenu"
+        style="background: rgba(255,255,255,0.1); padding: 6px 12px;">
+        <i class="bi bi-globe2"></i>
+        <span class="fw-bold small">{{ languageService.getCurrentLanguage().toUpperCase() }}</span>
+        <span class="mx-1">|</span>
+        <span class="fw-bold small">{{ currencyCode }}</span>
+        <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
+      </button>
 
-        <div class="navbar-divider"></div>
-
-        <!-- ✅ SELECTOR DE IDIOMA -->
-        <div class="position-relative">
+      <!-- DROPDOWN MENU -->
+      <div *ngIf="showSettingsMenu" 
+           class="position-absolute end-0 mt-2 bg-dark rounded shadow-lg"
+           style="min-width: 200px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1);">
+        
+        <!-- IDIOMA SECTION -->
+        <div class="px-3 py-2 border-bottom border-secondary">
+          <small class="text-white-50 text-uppercase fw-bold" style="font-size: 10px;">
+            {{ 'SETTINGS.LANGUAGE' | translate }}
+          </small>
+        </div>
+        <div class="py-1">
           <button 
-            class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 currency-toggle"
-            (click)="showLangMenu = !showLangMenu">
-            <span>{{ languageService.getCurrentLanguage() === 'en' ? '🇺🇸' : languageService.getCurrentLanguage() === 'pt' ? '🇧🇷' : '🇪🇸' }}</span>
-            <span class="fw-bold small">{{ languageService.getCurrentLanguage().toUpperCase() }}</span>
-            <i class="fas fa-chevron-down currency-arrow"></i>
+            *ngFor="let lang of languageService.getAvailableLanguages()"
+            class="btn btn-sm w-100 text-start text-white px-3 py-2 d-flex align-items-center gap-2 lang-option"
+            [class.bg-primary]="languageService.getCurrentLanguage() === lang.code"
+            (click)="changeLanguage(lang.code)"
+            style="background: transparent; border: none; transition: all 0.2s;">
+            <span>{{ lang.flag }}</span>
+            <span class="small">{{ lang.name }}</span>
+            <i *ngIf="languageService.getCurrentLanguage() === lang.code" 
+               class="bi bi-check-circle-fill ms-auto text-success" style="font-size: 14px;"></i>
           </button>
-          <!-- DROPDOWN -->
-          <div *ngIf="showLangMenu" 
-              class="position-absolute end-0 mt-1 py-1 bg-dark rounded shadow-lg"
-              style="min-width: 140px; z-index: 1000;">
-            <button 
-              *ngFor="let lang of languageService.getAvailableLanguages()"
-              class="btn btn-sm w-100 text-start text-white px-3 py-2 d-flex align-items-center gap-2"
-              [class.opacity-50]="languageService.getCurrentLanguage() === lang.code"
-              (click)="changeLanguage(lang.code)"
-              style="background: transparent; border: none;">
-              <span>{{ lang.flag }}</span>
-              <span class="small">{{ lang.name }}</span>
-              <i *ngIf="languageService.getCurrentLanguage() === lang.code" 
-                class="bi bi-check ms-auto text-success"></i>
-            </button>
-          </div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="border-top border-secondary"></div>
+
+        <!-- MONEDA SECTION -->
+        <div class="px-3 py-2 border-bottom border-secondary">
+          <small class="text-white-50 text-uppercase fw-bold" style="font-size: 10px;">
+            {{ 'SETTINGS.CURRENCY' | translate }}
+          </small>
+        </div>
+        <div class="py-1">
+          <button 
+            class="btn btn-sm w-100 text-start text-white px-3 py-2 d-flex align-items-center gap-2 currency-option"
+            [class.bg-primary]="currencyCode === 'USD'"
+            (click)="toggleCurrency()"
+            style="background: transparent; border: none; transition: all 0.2s;">
+            <img src="https://flagcdn.com/w40/us.png" style="width: 20px; border-radius: 3px;">
+            <span class="small">USD - US Dollar</span>
+            <i *ngIf="currencyCode === 'USD'" 
+               class="bi bi-check-circle-fill ms-auto text-success" style="font-size: 14px;"></i>
+          </button>
+          <button 
+            class="btn btn-sm w-100 text-start text-white px-3 py-2 d-flex align-items-center gap-2 currency-option"
+            [class.bg-primary]="currencyCode === 'BRL'"
+            (click)="toggleCurrency()"
+            style="background: transparent; border: none; transition: all 0.2s;">
+            <img src="https://flagcdn.com/w40/br.png" style="width: 20px; border-radius: 3px;">
+            <span class="small">BRL - Brazilian Real</span>
+            <i *ngIf="currencyCode === 'BRL'" 
+               class="bi bi-check-circle-fill ms-auto text-success" style="font-size: 14px;"></i>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="navbar-divider"></div>
