@@ -21,7 +21,6 @@
     <app-theme-toggle></app-theme-toggle>
     <div class="navbar-divider"></div>
 
-    <!-- ✅ DROPDOWN COMBINADO -->
     <div class="position-relative settings-dropdown-container">
       <button 
         class="btn btn-sm rounded-pill text-white d-flex align-items-center gap-2 settings-toggle"
@@ -34,12 +33,10 @@
         <i class="bi bi-chevron-down" style="font-size: 10px;"></i>
       </button>
 
-      <!-- DROPDOWN MENU -->
       <div *ngIf="showSettingsMenu" 
            class="position-absolute end-0 mt-2 bg-dark rounded shadow-lg"
            style="min-width: 200px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1);">
         
-        <!-- IDIOMA SECTION -->
         <div class="px-3 py-2 border-bottom border-secondary">
           <small class="text-white-50 text-uppercase fw-bold" style="font-size: 10px;">
             {{ 'SETTINGS.LANGUAGE' | translate }}
@@ -59,10 +56,8 @@
           </button>
         </div>
 
-        <!-- DIVIDER -->
         <div class="border-top border-secondary"></div>
 
-        <!-- MONEDA SECTION -->
         <div class="px-3 py-2 border-bottom border-secondary">
           <small class="text-white-50 text-uppercase fw-bold" style="font-size: 10px;">
             {{ 'SETTINGS.CURRENCY' | translate }}
@@ -95,7 +90,8 @@
 
     <div class="navbar-divider"></div>
 
-        <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 rounded-pill px-3 logout-btn" (click)="logout()">
+        <button class="btn btn-sm btn-danger d-flex align-items-center gap-2 rounded-pill px-3 logout 
+        -btn" (click)="logout()">
           <span class="small fw-bold">{{'BUTTONS.LOGOUT'| translate}}</span>
           <i class="bi bi-box-arrow-right"></i> 
         </button>
@@ -289,7 +285,10 @@
                 <td class="fw-bold transaction-desc">{{ t.description }}</td>
 
                 <td>
-                  <span class="badge bg-secondary rounded-pill category-badge">
+                  <span class="badge rounded-pill category-badge"
+                        [ngClass]="incomeCategories.includes(t.category) ? 'badge-income' : 'badge-expense'">
+                    <i class="bi" 
+                       [ngClass]="incomeCategories.includes(t.category) ? 'bi-arrow-up-circle-fill' : 'bi-arrow-down-circle-fill'"></i>
                     {{ getCategoryKey(t.category) | translate }}
                   </span>
                 </td>
@@ -313,8 +312,5 @@
         </div>
       </div>
     </div>
-
   </div> 
 </div>
-
-```

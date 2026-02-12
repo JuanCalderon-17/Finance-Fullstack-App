@@ -147,3 +147,32 @@ body {
     }
   }
 }
+/* =========================================================
+   FIX GLOBAL: BARRA MÓVIL EN DARK MODE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  
+  [data-theme="dark"] .bottom-nav-container {
+    /* 1. Usamos el mismo color del fondo de la app */
+    background-color: var(--bg-secondary) !important; 
+    
+    /* 2. Borde casi invisible, solo para separar sutilmente si hay contenido scrolleable */
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important; 
+    
+    /* 3. Quitamos la sombra fuerte para que parezca parte del mismo plano */
+    box-shadow: none !important;
+  }
+
+  /* Íconos inactivos */
+  [data-theme="dark"] .nav-item {
+    color: #6c757d !important;
+  }
+
+  /* Ícono ACTIVO */
+  [data-theme="dark"] .nav-item.active-link {
+    color: #48dbfb !important; /* Azul Cyan */
+    /* Sin efectos de brillo exagerados, estilo limpio y plano */
+    font-weight: bold;
+  }
+}

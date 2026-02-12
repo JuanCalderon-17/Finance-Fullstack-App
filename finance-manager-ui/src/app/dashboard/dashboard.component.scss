@@ -211,7 +211,7 @@
       border-bottom: 2px solid var(--border-color) !important;
       border-top: 1px solid var(--border-color) !important;
       padding: 0.875rem 0.75rem;
-      background-color: transparent !important; // No interferir con thead
+      background-color: transparent !important; 
     }
   }
 
@@ -232,7 +232,7 @@
 
       td {
         border-color: var(--border-color) !important;
-        border-bottom: 1px solid var(--border-color) !important; // Líneas entre filas
+        border-bottom: 1px solid var(--border-color) !important; 
         padding: 0.875rem 0.75rem;
         background-color: transparent !important;
       }
@@ -254,21 +254,10 @@
   white-space: nowrap;
 }
 
-.category-badge {
-  background-color: var(--bg-secondary) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border-color) !important;
-  font-size: 0.75rem;
-  padding: 0.35rem 0.75rem;
-}
-
-// ===== MONTO (Mantener colores originales verde/rojo) =====
+// ===== MONTO =====
 .transaction-amount {
   font-size: 1rem;
   font-weight: 700;
-  // Los colores se aplican inline desde el HTML
-  // Verde: #198754 para ingresos
-  // Rojo: #dc3545 para gastos
 }
 
 // ===== BOTONES DE ACCIÓN =====
@@ -335,7 +324,6 @@
       display: none !important;
     }
 
-    // En móvil, apilar los controles
     .container > .d-flex.align-items-center.gap-3:last-child {
       margin-left: 0;
       width: 100%;
@@ -358,31 +346,26 @@
 }
 
 // ============ FIX GARANTIZADO PARA TEXTOS INVISIBLES ============
-// Fuerza los colores en TODAS las celdas de la tabla
 .transactions-table {
   tbody {
     tr {
-      // FORZAR FONDO DE FILA
       background-color: var(--bg-card) !important;
 
       &:hover {
         background-color: var(--bg-hover) !important;
       }
 
-      // Todas las celdas
       td {
         color: var(--text-primary) !important;
-        background-color: transparent !important; // No interferir con el fondo de la fila
+        background-color: transparent !important; 
       }
 
-      // Específicamente la descripción
       td:nth-child(2),
       td.transaction-desc {
         color: var(--text-primary) !important;
         font-weight: 700 !important;
       }
 
-      // Fecha
       td:nth-child(1),
       td.transaction-date {
         color: var(--text-muted) !important;
@@ -391,24 +374,20 @@
   }
 }
 
-// Bootstrap override para fw-bold
 .table tbody tr .fw-bold {
   color: var(--text-primary) !important;
 }
 
-// Bootstrap override para table-light (esto causa el fondo blanco)
 .table-light {
   background-color: var(--bg-secondary) !important;
   color: var(--text-primary) !important;
 }
 
-// Fix para modo oscuro específico
 [data-theme="dark"] {
   .transactions-table {
-    // THEAD con fondo oscuro visible
     thead {
-      background-color: #1a1a2e !important; // Más oscuro que las filas
-      border-bottom: 2px solid #2f3336 !important; // Línea más visible
+      background-color: #1a1a2e !important; 
+      border-bottom: 2px solid #2f3336 !important; 
 
       th {
         color: #71767b !important;
@@ -417,10 +396,9 @@
       }
     }
 
-    // TBODY con líneas visibles
     tbody tr {
       background-color: #16181c !important;
-      border-bottom: 1px solid #2f3336 !important; // Líneas visibles
+      border-bottom: 1px solid #2f3336 !important; 
       
       &:hover {
         background-color: #1c1f23 !important;
@@ -429,7 +407,7 @@
       td {
         color: #e7e9ea !important;
         background-color: transparent !important;
-        border-bottom: 1px solid #2f3336 !important; // Líneas entre celdas
+        border-bottom: 1px solid #2f3336 !important; 
         
         &.transaction-desc,
         &:nth-child(2) {
@@ -437,5 +415,48 @@
         }
       }
     }
+  }
+}
+
+// 🔥 AGREGADO AL FINAL: ESTILOS DE BADGES (CHIPS) 🔥
+.category-badge {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+  justify-content: center;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent; 
+}
+
+.badge-income {
+  background-color: rgba(25, 135, 84, 0.1) !important;
+  color: #198754 !important;
+  border-color: rgba(25, 135, 84, 0.2) !important;
+}
+
+.badge-expense {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
+  border-color: rgba(220, 53, 69, 0.2) !important;
+}
+
+// AJUSTE PARA MODO OSCURO (Para que brillen más)
+:host-context(body.dark-mode) {
+  .badge-income {
+    background-color: rgba(25, 135, 84, 0.25) !important;
+    color: #75b798 !important; 
+    border-color: rgba(25, 135, 84, 0.4) !important;
+  }
+  
+  .badge-expense {
+    background-color: rgba(220, 53, 69, 0.25) !important;
+    color: #ea868f !important;
+    border-color: rgba(220, 53, 69, 0.4) !important;
   }
 }

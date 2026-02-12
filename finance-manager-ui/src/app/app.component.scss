@@ -1,15 +1,16 @@
 
-/*  Por defecto OCULTA en PC */
+
+/* 1. Por defecto OCULTA en PC/Laptop */
 .bottom-nav-container {
   display: none;
 }
 
-/*Mostrar SOLO en Celulares */
+/* 2. Mostrar SOLO en Celulares (menos de 768px) */
 @media (max-width: 768px) {
   
   :host {
     display: block;
-    padding-bottom: 80px; 
+    padding-bottom: 80px; /* Espacio para que no tape el contenido */
   }
 
   .bottom-nav-container {
@@ -18,41 +19,66 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 9999; /* ¡Muy importante! Para que flote sobre todo */
+    z-index: 9999; /* Siempre encima */
+    
+    /* ESTILOS BASE (Modo Claro) */
     background: #ffffff;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1); /* Sombra sutil arriba */
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05); 
     border-top: 1px solid #eee;
+    
+    /* Transición suave para el cambio de tema */
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .mobile-nav {
-    display: flex;              /* Esto los pone uno al lado del otro */
-    justify-content: space-around; /* Espacio igual entre ellos */
+    display: flex;            
+    justify-content: space-around; 
     align-items: center;
-    height: 65px;               /* Altura de la barra */
-    padding-bottom: 5px;        /* Ajuste para iPhone con barra abajo */
+    height: 70px; /* Un poco más alto para comodidad */            
+    padding-bottom: 5px;      
   }
 
   .nav-item {
     display: flex;
-    flex-direction: column;     
+    flex-direction: column;    
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: #a0a0a0;             
-    font-size: 11px;            
+    color: #a0a0a0; /* Gris suave (inactivo) */          
+    font-size: 11px;           
     width: 100%;
     height: 100%;
-    transition: color 0.2s;
+    transition: all 0.2s ease;
   }
 
   .nav-item i {
-    font-size: 24px;            /* Tamaño del ícono */
-    margin-bottom: 2px;
+    font-size: 24px;          
+    margin-bottom: 4px;
   }
 
-  /* Color cuando estás en esa página (Activo) */
+  /* Color Activo en Modo Claro */
   .nav-item.active-link {
     color: #0d6efd; 
     font-weight: 600;
+    transform: translateY(-2px); /* Pequeña animación */
+  }
+
+
+  :host-context(body.dark-mode) {
+    
+    .bottom-nav-container {
+      background: #1a1a2e !important; /* Fondo Oscuro Profundo */
+      border-top: 1px solid #2f3336 !important; 
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+    }
+
+    .nav-item {
+      color: #6c757d; /* Iconos inactivos un poco más oscuros */
+    }
+
+    .nav-item.active-link {
+      color: #48dbfb; /* Azul Neón Cyan brillante */
+      text-shadow: 0 0 8px rgba(72, 219, 251, 0.4); /* Efecto brillo */
+    }
   }
 }
