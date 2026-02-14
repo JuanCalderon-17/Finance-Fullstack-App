@@ -86,6 +86,8 @@
     "DONE": "¡Entendido!",
     "WELCOME_TITLE": "👋 ¡Bienvenido a Finanzas!",
     "WELCOME_DESC": "Te mostraremos cómo usar la app en segundos. Puedes saltar el tutorial en cualquier momento.",
+    "HEART_TITLE": "Ingresos y Gastos Mensuales",
+    "HEART_FINANZE": " Aquí verás cuánto ganas, cuánto gastas y lo que te sobra al mes. Es el corazón de tus finanzas.",
     "ADD_TRANSACTION_TITLE": "➕ Agrega transacciones",
     "ADD_TRANSACTION_DESC": "Aquí registras tus ingresos y gastos. Elige la categoría correcta para un mejor análisis.",
     "CURRENCY_TITLE": "💱 Cambia moneda e idioma",
@@ -113,7 +115,7 @@
       "MANAGE_DESC": "Ve cuánto debes y registra tus pagos para ir reduciendo la deuda."
     },
     "FINISH_TITLE": "🎉 ¡Todo listo!",
-    "FINISH_DESC": "Ahora estás listo para tomar control de tus finanzas. Puedes volver a ver este tutorial desde Ajustes."
+    "FINISH_DESC": "Ahora estás listo para tomar control de tus finanzas."
   },
   "TRANSACTION": {
     "DESCRIPTION": "Descripción",

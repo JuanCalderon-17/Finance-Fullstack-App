@@ -64,6 +64,9 @@
     "WELCOME_TITLE": "👋 Welcome to Finanzas!",
     "WELCOME_DESC": "We'll show you how to use the app in seconds. You can skip the tutorial at any time.",
 
+    "HEART_TITLE": "Monthly and Expenses",
+    "HEART_FINANZE": "Here you'll see your monthly expenses and savings. It's the heart of your finances.",
+
     "ADD_TRANSACTION_TITLE": "➕ Add transactions",
     "ADD_TRANSACTION_DESC": "Here you record your income and expenses. Choose the right category for better analysis.",
 
@@ -96,7 +99,7 @@
       "MANAGE_DESC": "See how much you owe and record payments to reduce the debt."
     },
     "FINISH_TITLE": "🎉 All set!",
-    "FINISH_DESC": "You're now ready to take control of your finances. You can see this tutorial again from Settings."
+    "FINISH_DESC": "You're now ready to take control of your finances. "
   },
   "DASHBOARD": {
     "TITLE": "Dashboard",

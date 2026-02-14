@@ -42,11 +42,19 @@ export class TutorialService {
   private getDashboardSteps(): DriveStep[] {
     return [
       {
-        element: '.stats-section', 
         popover: {
           title: this.translate.instant('TUTORIAL.WELCOME_TITLE'),
           description: this.translate.instant('TUTORIAL.WELCOME_DESC'),
-          side: 'bottom',
+          side: 'over',
+          align: 'center'
+        }
+      },
+      {
+        element: '.stats-section',
+        popover: {
+          title: this.translate.instant('TUTORIAL.HEART_TITLE'),
+          description: this.translate.instant('TUTORIAL.HEART_FINANZE'),
+          side: 'over',
           align: 'center'
         }
       },

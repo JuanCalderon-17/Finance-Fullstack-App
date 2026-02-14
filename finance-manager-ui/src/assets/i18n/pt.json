@@ -63,6 +63,8 @@
     "DONE": "Entendi!",
     "WELCOME_TITLE": "👋 Bem-vindo ao Finanzas!",
     "WELCOME_DESC": "Vamos mostrar como usar o app em segundos. Você pode pular o tutorial a qualquer momento.",
+    "HEART_TITLE": "Receitas e Despesas Mensais",
+    "HEART_FINANZE": "Aqui você verá quanto ganha, quanto gasta e o que sobra a cada mês. É o coração das suas finanças.",
     "ADD_TRANSACTION_TITLE": "➕ Adicionar transações",
     "ADD_TRANSACTION_DESC": "Aqui você registra suas receitas e despesas. Escolha a categoria certa para uma melhor análise.",
     "CURRENCY_TITLE": "💱 Mudar moeda e idioma",
@@ -90,7 +92,7 @@
       "MANAGE_DESC": "Veja quanto você deve e registre pagamentos para reduzir a dívida."
     },
     "FINISH_TITLE": "🎉 Tudo pronto!",
-    "FINISH_DESC": "Agora você está pronto para controlar suas finanças. Você pode ver este tutorial novamente nas Configurações."
+    "FINISH_DESC": "Agora você está pronto para controlar suas finanças."
   },
   "DASHBOARD": {
     "TITLE": "Painel",
