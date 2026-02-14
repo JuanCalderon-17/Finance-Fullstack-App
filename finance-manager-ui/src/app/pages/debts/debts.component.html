@@ -27,7 +27,7 @@
   <div class="row g-4">
 
     <div class="col-lg-4 mb-4">
-      <div class="card shadow-lg border-0 sticky-top debt-form-card">
+      <div class="card shadow-lg border-0 sticky-top debt-form-card debts-form">
         <div class="card-header fw-bold text-white debt-form-header">
           <i [class]="isEditing ? 'bi bi-pencil-square' : 'bi bi-plus-circle-fill'"></i>
           {{ (isEditing ? 'DEBTS.EDIT_DEBT' : 'DEBTS.NEW_DEBT') | translate }}
@@ -122,7 +122,7 @@
       </div>
     </div>
 
-    <div class="col-lg-8">
+    <div class="col-lg-8 debts-list">
 
       <div
         *ngIf="debts.length === 0"

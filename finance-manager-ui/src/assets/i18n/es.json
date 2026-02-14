@@ -80,6 +80,41 @@
       "DANGER": "¡ALERTA ROJA! Has superado tu límite de seguridad del 10%."
     }
   },
+  "TUTORIAL": {
+    "NEXT": "Siguiente →",
+    "PREVIOUS": "← Anterior",
+    "DONE": "¡Entendido!",
+    "WELCOME_TITLE": "👋 ¡Bienvenido a Finanzas!",
+    "WELCOME_DESC": "Te mostraremos cómo usar la app en segundos. Puedes saltar el tutorial en cualquier momento.",
+    "ADD_TRANSACTION_TITLE": "➕ Agrega transacciones",
+    "ADD_TRANSACTION_DESC": "Aquí registras tus ingresos y gastos. Elige la categoría correcta para un mejor análisis.",
+    "CURRENCY_TITLE": "💱 Cambia moneda e idioma",
+    "CURRENCY_DESC": "Cambia entre USD y BRL en cualquier momento. También puedes elegir tu idioma preferido.",
+    "FILTERS_TITLE": "📅 Filtra tus transacciones",
+    "FILTERS_DESC": "Filtra por mes, año o quincena para ver exactamente lo que necesitas.",
+    "CHART_TITLE": "📊 Visualiza tus gastos",
+    "CHART_DESC": "El gráfico muestra cómo distribuyes tus gastos por categoría.",
+    "NAVIGATION_TITLE": "🧭 Explora más funciones",
+    "NAVIGATION_DESC": "Gestiona tus ahorros y deudas desde el menú superior.",
+    "SAVINGS": {
+      "WELCOME_TITLE": "💰 Gestiona tus Ahorros",
+      "WELCOME_DESC": "Aquí puedes crear metas de ahorro y hacer seguimiento de tu progreso.",
+      "ADD_GOAL_TITLE": "➕ Crea una meta",
+      "ADD_GOAL_DESC": "Define cuánto quieres ahorrar y para qué. Puedes agregar dinero cuando quieras.",
+      "MANAGE_TITLE": "📊 Haz seguimiento",
+      "MANAGE_DESC": "Ve tu progreso y agrega más dinero a tus metas de ahorro."
+    },
+    "DEBTS": {
+      "WELCOME_TITLE": "💳 Controla tus Deudas",
+      "WELCOME_DESC": "Registra tus deudas y haz seguimiento de tus pagos.",
+      "ADD_DEBT_TITLE": "➕ Registra una deuda",
+      "ADD_DEBT_DESC": "Ingresa el monto total, a quién le debes y la fecha límite.",
+      "MANAGE_TITLE": "📊 Haz seguimiento",
+      "MANAGE_DESC": "Ve cuánto debes y registra tus pagos para ir reduciendo la deuda."
+    },
+    "FINISH_TITLE": "🎉 ¡Todo listo!",
+    "FINISH_DESC": "Ahora estás listo para tomar control de tus finanzas. Puedes volver a ver este tutorial desde Ajustes."
+  },
   "TRANSACTION": {
     "DESCRIPTION": "Descripción",
     "AMOUNT": "Monto",

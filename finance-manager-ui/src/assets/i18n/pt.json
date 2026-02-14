@@ -57,6 +57,41 @@
       "ERROR_GENERIC": "Não foi possível enviar o e-mail. Tente novamente."
     }
   },
+  "TUTORIAL": {
+    "NEXT": "Próximo →",
+    "PREVIOUS": "← Anterior",
+    "DONE": "Entendi!",
+    "WELCOME_TITLE": "👋 Bem-vindo ao Finanzas!",
+    "WELCOME_DESC": "Vamos mostrar como usar o app em segundos. Você pode pular o tutorial a qualquer momento.",
+    "ADD_TRANSACTION_TITLE": "➕ Adicionar transações",
+    "ADD_TRANSACTION_DESC": "Aqui você registra suas receitas e despesas. Escolha a categoria certa para uma melhor análise.",
+    "CURRENCY_TITLE": "💱 Mudar moeda e idioma",
+    "CURRENCY_DESC": "Alterne entre USD e BRL a qualquer momento. Você também pode escolher seu idioma preferido.",
+    "FILTERS_TITLE": "📅 Filtrar suas transações",
+    "FILTERS_DESC": "Filtre por mês, ano ou quinzena para ver exatamente o que você precisa.",
+    "CHART_TITLE": "📊 Visualizar suas despesas",
+    "CHART_DESC": "O gráfico mostra como você distribui suas despesas por categoria.",
+    "NAVIGATION_TITLE": "🧭 Explorar mais recursos",
+    "NAVIGATION_DESC": "Gerencie suas economias e dívidas no menu superior.",
+    "SAVINGS": {
+      "WELCOME_TITLE": "💰 Gerencie suas Economias",
+      "WELCOME_DESC": "Aqui você pode criar metas de economia e acompanhar seu progresso.",
+      "ADD_GOAL_TITLE": "➕ Criar uma meta",
+      "ADD_GOAL_DESC": "Defina quanto você quer economizar e para quê. Você pode adicionar dinheiro quando quiser.",
+      "MANAGE_TITLE": "📊 Acompanhar progresso",
+      "MANAGE_DESC": "Veja seu progresso e adicione mais dinheiro às suas metas de economia."
+    },
+    "DEBTS": {
+      "WELCOME_TITLE": "💳 Controle suas Dívidas",
+      "WELCOME_DESC": "Registre suas dívidas e acompanhe seus pagamentos.",
+      "ADD_DEBT_TITLE": "➕ Registrar uma dívida",
+      "ADD_DEBT_DESC": "Digite o valor total, para quem você deve e a data de vencimento.",
+      "MANAGE_TITLE": "📊 Acompanhar",
+      "MANAGE_DESC": "Veja quanto você deve e registre pagamentos para reduzir a dívida."
+    },
+    "FINISH_TITLE": "🎉 Tudo pronto!",
+    "FINISH_DESC": "Agora você está pronto para controlar suas finanças. Você pode ver este tutorial novamente nas Configurações."
+  },
   "DASHBOARD": {
     "TITLE": "Painel",
     "TOTAL_INCOME": "Receita Total",

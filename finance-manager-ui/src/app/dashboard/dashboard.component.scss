@@ -80,6 +80,10 @@
 .stats-section {
   border-color: var(--divider) !important;
   text-align: center;
+  &.driver-active-element {
+    background-color: var(--bg-card) !important; 
+    border-radius: 8px; 
+  }
 }
 
 .stat-label {

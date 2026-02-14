@@ -42,7 +42,7 @@
   <div class="row">
 
     <div class="col-lg-4 mb-4">
-      <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+      <div class="card shadow-sm border-0 sticky-top savings-form" style="top: 20px;">
         <div class="card-header bg-white fw-bold text-dark border-bottom-0 pt-3">
           ➕ {{'SAVINGS.ADD_ACCOUNT'  | translate }}
         </div>
@@ -99,7 +99,7 @@
       </div>
     </div>
 
-    <div class="col-lg-8">
+    <div class="col-lg-8 savings-list">
 
       <div
         *ngIf="accounts.length === 0"
@@ -165,7 +165,7 @@
                     class="form-control form-control-sm mb-2"
                     [(ngModel)]="acc.balance"
                   />
-                  <<select class="form-select form-select-sm mb-2" [(ngModel)]="acc.color">
+                  <select class="form-select form-select-sm mb-2" [(ngModel)]="acc.color">
                     <option value="RED">🔴 {{'SAVINGS.COLORS.RED' | translate }}</option>
                     <option value="PURPLE">🟣 {{'SAVINGS.COLORS.PURPLE' | translate }}</option>
                     <option value="GREEN">🟢 {{'SAVINGS.COLORS.GREEN' | translate }}</option>

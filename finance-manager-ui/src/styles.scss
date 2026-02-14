@@ -176,3 +176,99 @@ body {
     font-weight: bold;
   }
 }
+// ============ DRIVER.JS TUTORIAL STYLES ============
+
+// Popover (tooltip)
+.driver-popover.custom-driver-popover {
+  background: rgba(26, 26, 46, 0.98);
+  backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  max-width: 400px;
+  z-index: 10000003 !important;
+
+  .driver-popover-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+
+  .driver-popover-description {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .driver-popover-footer {
+    margin-top: 1.5rem;
+    
+    button {
+      background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background: linear-gradient(135deg, #0b5ed7 0%, #084298 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+      }
+
+      &.driver-popover-prev-btn,
+      &.driver-popover-close-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.15);
+          transform: none;
+        }
+      }
+    }
+  }
+
+  .driver-popover-progress-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .driver-popover-arrow {
+    border-top-color: rgba(26, 26, 46, 0.98);
+  }
+}
+
+// ============ OVERLAY (TODO EL TRABAJO) ============
+// WHY: El overlay oscuro hace que el elemento se vea claro por contraste
+.driver-overlay {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  z-index: 10000001 !important;
+}
+
+// ============ ELEMENTO DESTACADO (SIN CAMBIOS) ============
+// WHY: El elemento mantiene su apariencia original
+.driver-active-element {
+  // SOLO aseguramos que esté por encima del overlay
+  position: relative !important;
+  z-index: 10000002 !important;
+  
+  // NO cambiamos colores
+  // NO agregamos bordes de colores
+  // NO agregamos sombras extrañas
+  // El elemento se ve naturalmente porque todo lo demás está oscuro
+}
+
+// Opcional: Borde sutil para delimitar el elemento (apenas visible)
+.driver-active-element {
+  outline: 2px solid rgba(255, 255, 255, 0.15) !important;
+  outline-offset: 4px !important;
+}

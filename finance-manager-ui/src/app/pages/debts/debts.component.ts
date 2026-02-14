@@ -6,6 +6,7 @@ import { DebtsService, Debt } from '../../services/debts.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
 import { TranslateModule } from '@ngx-translate/core';
 import { TransactionService } from '../../core/services/transaction.service';
+import { TutorialService } from '../../core/services/tutorial.service';
 
 @Component({
   selector: 'app-debts',
@@ -33,7 +34,10 @@ export class DebtsComponent implements OnInit {
 
   totalDebt: number = 0;
 
-  constructor(private debtsService: DebtsService, private currencyStateService : CurrencyStateService, private translateService: TransactionService) {}
+  constructor(private debtsService: DebtsService, 
+              private currencyStateService : CurrencyStateService, 
+              private translateService: TransactionService,
+              private tutorialService: TutorialService) {}
 
   ngOnInit(): void {
     this.currencyStateService.currency$.subscribe(currency => {
@@ -41,6 +45,11 @@ export class DebtsComponent implements OnInit {
       this.exchangeRate = currency.rate;
     })
     this.loadData();
+    setTimeout(() => {
+      if (this.tutorialService.shouldShowSavingsTutorial()) {
+        this.tutorialService.startDebtsTutorial();
+      }
+    }, 2000);
   }
 
   loadData() {

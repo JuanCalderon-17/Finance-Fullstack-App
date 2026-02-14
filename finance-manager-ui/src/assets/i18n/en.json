@@ -57,6 +57,47 @@
       "ERROR_GENERIC": "Could not send email. Please try again."
     }
   },
+  "TUTORIAL": {
+    "NEXT": "Next →",
+    "PREVIOUS": "← Previous",
+    "DONE": "Got it!",
+    "WELCOME_TITLE": "👋 Welcome to Finanzas!",
+    "WELCOME_DESC": "We'll show you how to use the app in seconds. You can skip the tutorial at any time.",
+
+    "ADD_TRANSACTION_TITLE": "➕ Add transactions",
+    "ADD_TRANSACTION_DESC": "Here you record your income and expenses. Choose the right category for better analysis.",
+
+    "CURRENCY_TITLE": "💱 Change currency & language",
+    "CURRENCY_DESC": "Switch between USD and BRL anytime. You can also choose your preferred language.",
+
+    "FILTERS_TITLE": "📅 Filter your transactions",
+    "FILTERS_DESC": "Filter by month, year, or fortnight to see exactly what you need.",
+
+    "CHART_TITLE": "📊 Visualize your expenses",
+    "CHART_DESC": "The chart shows how you distribute your expenses by category.",
+
+    "NAVIGATION_TITLE": "🧭 Explore more features",
+    "NAVIGATION_DESC": "Manage your savings and debts from the top menu.",
+
+    "SAVINGS": {
+      "WELCOME_TITLE": "💰 Manage your Savings",
+      "WELCOME_DESC": "Here you can create savings goals and track your progress.",
+      "ADD_GOAL_TITLE": "➕ Create a goal",
+      "ADD_GOAL_DESC": "Define how much you want to save and what for. You can add money anytime.",
+      "MANAGE_TITLE": "📊 Track progress",
+      "MANAGE_DESC": "See your progress and add more money to your savings goals."
+    },
+    "DEBTS": {
+      "WELCOME_TITLE": "💳 Control your Debts",
+      "WELCOME_DESC": "Register your debts and track your payments.",
+      "ADD_DEBT_TITLE": "➕ Register a debt",
+      "ADD_DEBT_DESC": "Enter the total amount, who you owe, and the due date.",
+      "MANAGE_TITLE": "📊 Track it",
+      "MANAGE_DESC": "See how much you owe and record payments to reduce the debt."
+    },
+    "FINISH_TITLE": "🎉 All set!",
+    "FINISH_DESC": "You're now ready to take control of your finances. You can see this tutorial again from Settings."
+  },
   "DASHBOARD": {
     "TITLE": "Dashboard",
     "TOTAL_INCOME": "Total Income",

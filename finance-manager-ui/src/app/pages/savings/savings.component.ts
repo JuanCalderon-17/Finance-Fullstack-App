@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { SavingsService, SavingAccount } from '../../services/savings.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TutorialService } from '../../core/services/tutorial.service';
 
 
 @Component({
@@ -29,7 +30,10 @@ export class SavingsComponent implements OnInit {
 
   totalSavings: number = 0;
 
-  constructor(private savingsService: SavingsService, private currencyStateService: CurrencyStateService, private translateService: TranslateService) {}
+  constructor(private savingsService: SavingsService, 
+              private currencyStateService: CurrencyStateService, 
+              private translateService: TranslateService,
+               private tutorialService: TutorialService) {}
 
   ngOnInit(): void {
     this.currencyStateService.currency$.subscribe(currency => {
@@ -37,6 +41,11 @@ export class SavingsComponent implements OnInit {
       this.exchangeRate = currency.rate;
     });
     this.loadData();
+    setTimeout(() => {
+      if (this.tutorialService.shouldShowSavingsTutorial()) {
+        this.tutorialService.startSavingsTutorial();
+      }
+    }, 1000);
   }
 
   //CONEXIÓN CON EL BACKEND 

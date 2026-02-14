@@ -11,6 +11,7 @@ import { CurrencyService } from '../core/services/currency.service';
 import { CurrencyStateService } from '../core/services/currency-state.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../core/services/language.service';
+import { TutorialService } from '../core/services/tutorial.service';
 
 
 @Component({
@@ -105,7 +106,8 @@ export class DashboardComponent implements OnInit {
     private currencyService: CurrencyService,
     private currencyStateService: CurrencyStateService,
     private translate: TranslateService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
+    private tutorialService: TutorialService
   ) { 
     const today = new Date();
     this.selectedMonth = today.getMonth();
@@ -140,6 +142,12 @@ export class DashboardComponent implements OnInit {
     });
 
     this.loadTransactions();
+    
+    setTimeout(() => {
+      if(this.tutorialService.shouldShowTutorial()) {
+        this.tutorialService.startDashboardTutorial();
+      }
+    },2000); //wait 2 for page to load
   }
 
   toggleCurrency() {
