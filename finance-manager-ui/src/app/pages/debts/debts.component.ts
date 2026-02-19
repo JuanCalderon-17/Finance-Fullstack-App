@@ -25,6 +25,7 @@ export class DebtsComponent implements OnInit {
   currentDebt: Debt = {
     name: '',
     balance: 0,
+    currency: 'USD',
     interestRate: 0,
     installments: 12,
     paidInstallments: 0,
@@ -102,7 +103,7 @@ export class DebtsComponent implements OnInit {
     return amount;
   }
 
-  // 🧮 CÁLCULOS FINANCIEROS
+  //  CÁLCULOS FINANCIEROS
   calculateMetrics(debt: Debt): any {
     const d = { ...debt } as any;
     
@@ -140,13 +141,17 @@ export class DebtsComponent implements OnInit {
   }, 0);
 }
 
-  // 💾 GUARDAR DEUDA (CREAR O EDITAR)
+  // save debt, create or update
   saveDebt() {
     if (!this.currentDebt.name || this.currentDebt.balance <= 0) {
       alert('Completa todos los campos requeridos');
       return;
     }
+    const currentCurrencyCode = this.currencyStateService.getCurrentCurrency().code;
 
+    if(!this.isEditing) {
+      this.currentDebt.currency = currentCurrencyCode;
+    }
     if (this.isEditing && this.currentDebt.id) {
       // MODO EDICIÓN
       this.debtsService.updateDebt(this.currentDebt.id, this.currentDebt).subscribe({
@@ -176,14 +181,14 @@ export class DebtsComponent implements OnInit {
     }
   }
 
-  // ✏️ INICIAR EDICIÓN
+  // start editing
   startEdit(debt: Debt) {
     this.isEditing = true;
     this.currentDebt = { ...debt };
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 🗑️ ELIMINAR DEUDA
+  // delete debt
   deleteDebt(id: number) {
     if (confirm('¿Estás seguro de eliminar esta deuda? Esta acción no se puede deshacer.')) {
       this.debtsService.deleteDebt(id).subscribe({

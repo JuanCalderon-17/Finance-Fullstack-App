@@ -212,10 +212,9 @@ export class DashboardComponent implements OnInit {
 
     this.filteredTransactions.forEach(t => {
       const convertedAmount = this.convertTransactionAmount(t);
-      // ✅ Obtenemos la KEY real (ej: 'SALARY') en lugar del texto crudo
-      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase();
+      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase(); // with this i get actual api 
       
-      // ✅ Comparamos con la KEY mapeada
+      // comparar con api mapeada
       if (this.incomeKeys.includes(categoryKey)) {
         this.totalIncome += convertedAmount;
       } else {
