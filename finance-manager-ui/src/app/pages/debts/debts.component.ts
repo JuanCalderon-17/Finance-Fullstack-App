@@ -18,6 +18,7 @@ import { TutorialService } from '../../core/services/tutorial.service';
 export class DebtsComponent implements OnInit {
 
   currencySymbol: string = '$';
+  currencyCode: string = 'USD';
   exchangeRate: number = 1;
   debts: any[] = [];
   isEditing: boolean = false;
@@ -42,14 +43,17 @@ export class DebtsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currencyStateService.currency$.subscribe(currency => {
+      this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
+      this.currentDebt.currency = currency.code;
     })
     this.loadData();
+
     setTimeout(() => {
-      if (this.tutorialService.shouldShowSavingsTutorial()) {
-        this.tutorialService.startDebtsTutorial();
-      }
+    if (this.tutorialService.shouldShowDebtsTutorial()) { 
+      this.tutorialService.startDebtsTutorial();
+    }
     }, 2000);
   }
 
@@ -64,26 +68,27 @@ export class DebtsComponent implements OnInit {
       }
     });
   }
-  convertAmount(acc: Debt) : number {
-    const accountCurrency = (acc.currency || 'USD').trim()
-    const targetCurrency = this.currencyStateService.getCurrentCurrency().code.trim();
+  convertAmount(acc: Debt): number {
+  const accountCurrency = (acc.currency || 'USD').trim(); // Backend siempre devuelve USD
+  const targetCurrency = this.currencyCode.trim(); // Lo que el usuario ve ahora
 
-    if(accountCurrency === targetCurrency) {
-      return acc.balance; 
-    }
-
-    //usd to brl
-    if(accountCurrency === 'USD' && targetCurrency === 'BRL') {
-      return acc.balance * this.exchangeRate;
-    }
-
-     //brl to usd
-    if(accountCurrency === 'BRL' && targetCurrency === 'USD') {
-      return acc.balance / this.exchangeRate;
-    }
-     
+  // Si ya está en la moneda correcta
+  if (accountCurrency === targetCurrency) {
     return acc.balance;
   }
+
+  // USD (backend) → BRL (usuario)
+  if (accountCurrency === 'USD' && targetCurrency === 'BRL') {
+    return acc.balance * this.exchangeRate;
+  }
+
+  // BRL → USD (no debería pasar, pero por si acaso)
+  if (accountCurrency === 'BRL' && targetCurrency === 'USD') {
+    return acc.balance / this.exchangeRate;
+  }
+
+  return acc.balance;
+}
 
   convertNumber(amount:number, fromCurrency: string = 'USD') : number {
     const targetCurrency = this.currencyStateService.getCurrentCurrency().code.trim();
@@ -143,43 +148,66 @@ export class DebtsComponent implements OnInit {
 
   // save debt, create or update
   saveDebt() {
-    if (!this.currentDebt.name || this.currentDebt.balance <= 0) {
-      alert('Completa todos los campos requeridos');
-      return;
-    }
-    const currentCurrencyCode = this.currencyStateService.getCurrentCurrency().code;
-
-    if(!this.isEditing) {
-      this.currentDebt.currency = currentCurrencyCode;
-    }
-    if (this.isEditing && this.currentDebt.id) {
-      // MODO EDICIÓN
-      this.debtsService.updateDebt(this.currentDebt.id, this.currentDebt).subscribe({
-        next: () => {
-          console.log('✓ Deuda actualizada');
-          this.loadData();
-          this.resetForm();
-        },
-        error: (err) => {
-          console.error('Error al actualizar:', err);
-          alert('No se pudo actualizar la deuda');
-        }
-      });
-    } else {
-      // MODO CREACIÓN
-      this.debtsService.createDebt(this.currentDebt).subscribe({
-        next: () => {
-          console.log('✓ Deuda creada');
-          this.loadData();
-          this.resetForm();
-        },
-        error: (err) => {
-          console.error('Error al crear:', err);
-          alert('No se pudo crear la deuda');
-        }
-      });
-    }
+  if (!this.currentDebt.name || this.currentDebt.balance <= 0) {
+    alert('Complete all the required fields');
+    return;
   }
+
+  // ✅ NUEVO: Crear copia del objeto para no modificar el original
+  const debtToSave = { ...this.currentDebt };
+
+  // ✅ NUEVO: Convertir a USD si está en BRL (el backend solo acepta USD)
+  if (!this.isEditing && this.currencyCode === 'BRL') {
+    debtToSave.balance = this.currentDebt.balance / this.exchangeRate;
+    debtToSave.currency = 'USD'; // Backend siempre guarda en USD
+    
+    console.log(`🔄 Convertido: R$ ${this.currentDebt.balance} → $ ${debtToSave.balance.toFixed(2)}`);
+  } else if (!this.isEditing) {
+    debtToSave.currency = 'USD'; // Por defecto USD
+  }
+
+  // MODO EDICIÓN
+  if (this.isEditing && this.currentDebt.id) {
+    this.debtsService.updateDebt(this.currentDebt.id, debtToSave).subscribe({
+      next: () => {
+        console.log('✓ Debt updated');
+        this.loadData();
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error('Error at updating:', err);
+        alert('Debt could not be updated');
+      }
+    });
+  } 
+  // MODO CREACIÓN
+  else {
+    console.group('📤 ENVIANDO AL BACKEND');
+    console.log('Monto original:', this.currentDebt.balance, this.currencyCode);
+    console.log('Monto convertido:', debtToSave.balance, 'USD');
+    console.log('Objeto completo:', JSON.stringify(debtToSave, null, 2));
+    console.groupEnd();
+    
+    this.debtsService.createDebt(debtToSave).subscribe({
+      next: (response) => {
+        console.log('✓ Debt created');
+        
+        console.group('📥 RESPUESTA DEL BACKEND');
+        console.log('Response completa:', JSON.stringify(response, null, 2));
+        console.log('Currency guardada:', response.currency);
+        console.log('Balance guardado:', response.balance);
+        console.groupEnd();
+        
+        this.loadData();
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error('Error at creating:', err);
+        alert('Debt could not be created');
+      }
+    });
+  }
+}
 
   // start editing
   startEdit(debt: Debt) {
@@ -258,12 +286,13 @@ export class DebtsComponent implements OnInit {
     return due < today;
   }
 
-  // 🔄 RESETEAR FORMULARIO
+  // RESETEAR FORMULARIO
   resetForm() {
     this.isEditing = false;
     this.currentDebt = {
       name: '', 
       balance: 0, 
+      currency: this.currencyCode,
       interestRate: 0, 
       installments: 12, 
       paidInstallments: 0,
