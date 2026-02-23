@@ -1,0 +1,74 @@
+[1mdiff --git a/finance-manager-ui/src/app/dashboard/dashboard.component.ts b/finance-manager-ui/src/app/dashboard/dashboard.component.ts[m
+[1mindex 20f9918..df8bf0d 100644[m
+[1m--- a/finance-manager-ui/src/app/dashboard/dashboard.component.ts[m
+[1m+++ b/finance-manager-ui/src/app/dashboard/dashboard.component.ts[m
+[36m@@ -212,10 +212,9 @@[m [mexport class DashboardComponent implements OnInit {[m
+ [m
+     this.filteredTransactions.forEach(t => {[m
+       const convertedAmount = this.convertTransactionAmount(t);[m
+[31m-      // ✅ Obtenemos la KEY real (ej: 'SALARY') en lugar del texto crudo[m
+[31m-      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase();[m
+[32m+[m[32m      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase(); // with this i get actual api[m[41m [m
+       [m
+[31m-      // ✅ Comparamos con la KEY mapeada[m
+[32m+[m[32m      // comparar con api mapeada[m
+       if (this.incomeKeys.includes(categoryKey)) {[m
+         this.totalIncome += convertedAmount;[m
+       } else {[m
+[1mdiff --git a/finance-manager-ui/src/app/pages/debts/debts.component.ts b/finance-manager-ui/src/app/pages/debts/debts.component.ts[m
+[1mindex 0c7f7da..094028a 100644[m
+[1m--- a/finance-manager-ui/src/app/pages/debts/debts.component.ts[m
+[1m+++ b/finance-manager-ui/src/app/pages/debts/debts.component.ts[m
+[36m@@ -25,6 +25,7 @@[m [mexport class DebtsComponent implements OnInit {[m
+   currentDebt: Debt = {[m
+     name: '',[m
+     balance: 0,[m
+[32m+[m[32m    currency: 'USD',[m
+     interestRate: 0,[m
+     installments: 12,[m
+     paidInstallments: 0,[m
+[36m@@ -102,7 +103,7 @@[m [mexport class DebtsComponent implements OnInit {[m
+     return amount;[m
+   }[m
+ [m
+[31m-  // 🧮 CÁLCULOS FINANCIEROS[m
+[32m+[m[32m  //  CÁLCULOS FINANCIEROS[m
+   calculateMetrics(debt: Debt): any {[m
+     const d = { ...debt } as any;[m
+     [m
+[36m@@ -140,13 +141,17 @@[m [mexport class DebtsComponent implements OnInit {[m
+   }, 0);[m
+ }[m
+ [m
+[31m-  // 💾 GUARDAR DEUDA (CREAR O EDITAR)[m
+[32m+[m[32m  // save debt, create or update[m
+   saveDebt() {[m
+     if (!this.currentDebt.name || this.currentDebt.balance <= 0) {[m
+       alert('Completa todos los campos requeridos');[m
+       return;[m
+     }[m
+[32m+[m[32m    const currentCurrencyCode = this.currencyStateService.getCurrentCurrency().code;[m
+ [m
+[32m+[m[32m    if(!this.isEditing) {[m
+[32m+[m[32m      this.currentDebt.currency = currentCurrencyCode;[m
+[32m+[m[32m    }[m
+     if (this.isEditing && this.currentDebt.id) {[m
+       // MODO EDICIÓN[m
+       this.debtsService.updateDebt(this.currentDebt.id, this.currentDebt).subscribe({[m
+[36m@@ -176,14 +181,14 @@[m [mexport class DebtsComponent implements OnInit {[m
+     }[m
+   }[m
+ [m
+[31m-  // ✏️ INICIAR EDICIÓN[m
+[32m+[m[32m  // start editing[m
+   startEdit(debt: Debt) {[m
+     this.isEditing = true;[m
+     this.currentDebt = { ...debt };[m
+     window.scrollTo({ top: 0, behavior: 'smooth' });[m
+   }[m
+ [m
+[31m-  // 🗑️ ELIMINAR DEUDA[m
+[32m+[m[32m  // delete debt[m
+   deleteDebt(id: number) {[m
+     if (confirm('¿Estás seguro de eliminar esta deuda? Esta acción no se puede deshacer.')) {[m
+       this.debtsService.deleteDebt(id).subscribe({[m

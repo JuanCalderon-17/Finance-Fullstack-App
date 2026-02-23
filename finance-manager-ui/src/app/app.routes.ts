@@ -6,7 +6,7 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
 
 export const routes: Routes = [
   
-  // 1. LA ENTRADA PRINCIPAL (Esto es lo que verá tu familia)
+  // 1. LA ENTRADA PRINCIPAL 
   {
     path: '', 
     component: LandingComponent,
