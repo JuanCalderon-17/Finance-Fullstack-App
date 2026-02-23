@@ -3,7 +3,12 @@
     "TITLE": "La app de finanzas,",
     "SUBTITLE": "a tu manera.",
     "DESCRIPTION": "Tu cuenta para gestionar gastos, ahorros y deudas. Sin comisiones. Sin complicaciones. Total control.",
-    "CTA_BUTTON": "EMPEZAR AHORA"
+    "CTA_BUTTON": "EMPEZAR AHORA",
+    "ITEM_AVALIABLE": "Saldo Disponible",
+    "INCOME": "Ingreso",
+    "EXPENSE": "Gastos",
+    "ADD_TRANSACTION": "Agregar transaccion",
+    "EARLY_INCOME": "Ingreso anticipado"
   },
   "AUTH": {
     "LOGIN": {

@@ -3,7 +3,12 @@
     "TITLE": "O app financeiro,",
     "SUBTITLE": "do seu jeito.",
     "DESCRIPTION": "Sua conta para gerenciar gastos, economias e dívidas. Sem taxas. Sem complicações. Controle total.",
-    "CTA_BUTTON": "COMEÇAR AGORA"
+    "CTA_BUTTON": "COMEÇAR AGORA",
+  "ITEM_AVAILABLE": "Saldo disponível",
+    "INCOME": "Receita",
+    "EXPENSE": "Despesas",
+    "ADD_TRANSACTION": "Adicionar transação",
+    "EARLY_INCOME": "Receita antecipada"
   },
   "AUTH": {
     "LOGIN": {

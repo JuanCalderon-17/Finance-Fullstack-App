@@ -3,7 +3,13 @@
     "TITLE": "The finance app,",
     "SUBTITLE": "your way.",
     "DESCRIPTION": "Your account to manage expenses, savings, and debts. No fees. No hassle. Total control.",
-    "CTA_BUTTON": "START NOW"
+    "CTA_BUTTON": "START NOW",
+    "ITEM_AVALIABLE": "Available Balance",
+    "INCOME": "Income",
+    "EXPENSE": "Expenses",
+    "ADD_TRANSACTION": "Add transaction",
+    "EARLY_INCOME": "Early Income"
+
   },
   "AUTH": {
     "LOGIN": {
