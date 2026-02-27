@@ -71,3 +71,104 @@
         background-color: rgba(255, 255, 255, 0.4);
     }
 }
+
+// ============ SAVINGS FORM — BOOTSTRAP OVERRIDES (theme-aware) ============
+
+.savings-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  // Header: bg-white text-dark hardcoded in HTML
+  .card-header {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    font-size: 1rem;
+  }
+
+  // Labels
+  label {
+    color: var(--text-secondary) !important;
+  }
+
+  // Inputs with bg-light hardcoded in HTML
+  .form-control,
+  .form-select {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-primary) !important;
+
+    &:focus {
+      background-color: var(--input-bg) !important;
+      border-color: var(--input-focus-border) !important;
+      color: var(--text-primary) !important;
+      box-shadow: 0 0 0 0.2rem rgba(29, 155, 240, 0.15);
+    }
+
+    &::placeholder {
+      color: var(--input-placeholder) !important;
+    }
+
+    option {
+      background-color: var(--input-bg);
+      color: var(--text-primary);
+    }
+  }
+
+  // Currency symbol prefix: input-group-text bg-white hardcoded in HTML
+  .input-group-text {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--text-secondary) !important;
+  }
+
+  // Submit button: btn-dark works but let's make it use our brand color
+  .btn-dark {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #ffffff !important;
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-primary-hover) !important;
+      border-color: var(--color-primary-hover) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+// Edit mode inside saving cards: bg-white text-dark hardcoded in HTML
+.saving-card .bg-white {
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  color: white !important;
+  backdrop-filter: blur(8px);
+
+  .form-control,
+  .form-select {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    option {
+      background-color: #16181c;
+      color: white;
+    }
+  }
+
+  .btn-primary {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    color: #000 !important;
+    border: none !important;
+    font-weight: 700;
+  }
+}

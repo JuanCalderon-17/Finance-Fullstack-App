@@ -1,12 +1,12 @@
 // ============ 1. CAMBIO DE COLOR DEL FORMULARIO ============
 .debt-form-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 20px;
   overflow: hidden;
-  border: none;
+  border: 1px solid var(--border-color);
   position: sticky;
   top: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 .debt-form-header {
@@ -63,28 +63,28 @@
   }
 
   &.btn-action-edit {
-    background: #f0f9ff;
-    color: #0284c7;
-    border: 1px solid #bae6fd;
+    background: var(--color-info-light);
+    color: var(--color-info);
+    border: 1px solid var(--color-info);
 
     &:hover {
-      background: #0284c7;
-      color: white;
+      background: var(--color-info);
+      color: var(--bg-card);
       transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
     }
   }
 
   &.btn-action-delete {
-    background: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
+    background: var(--color-danger-light);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
 
     &:hover {
-      background: #dc2626;
+      background: var(--color-danger);
       color: white;
       transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+      box-shadow: 0 4px 12px rgba(244, 33, 46, 0.3);
     }
   }
 }
@@ -93,8 +93,8 @@
 .stat-card-clean {
   padding: 1.25rem;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -102,8 +102,8 @@
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    border-color: #cbd5e1;
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-strong);
   }
 }
 
@@ -125,7 +125,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #64748b;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
@@ -135,7 +135,7 @@
 .stat-value-clean {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -143,29 +143,29 @@
 
 // Variantes de color
 .stat-card-primary {
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border-color: #bfdbfe;
+  background: var(--color-info-light);
+  border-color: var(--color-info);
 
   .stat-icon-clean {
-    color: #2563eb;
+    color: var(--color-info);
   }
 }
 
 .stat-card-danger {
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  border-color: #fecaca;
+  background: var(--color-danger-light);
+  border-color: var(--color-danger);
 
   .stat-icon-clean {
-    color: #dc2626;
+    color: var(--color-danger);
   }
 }
 
 .stat-card-success {
-  background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
-  border-color: #a7f3d0;
+  background: var(--color-success-light);
+  border-color: var(--color-success);
 
   .stat-icon-clean {
-    color: #059669;
+    color: var(--color-success);
   }
 }
 
@@ -177,8 +177,8 @@
 }
 
 .installment-card {
-  background: white;
-  border: 3px solid #e5e7eb;
+  background: var(--bg-card);
+  border: 3px solid var(--border-color);
   border-radius: 16px;
   padding: 1.25rem;
   display: grid;
@@ -201,8 +201,8 @@
   }
 
   &:hover {
-    border-color: #cbd5e1 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: var(--border-strong) !important;
+    box-shadow: var(--shadow-lg);
     transform: translateX(4px);
 
     &::before {
@@ -249,6 +249,47 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+// ============ BOOTSTRAP CLASS OVERRIDES (theme-aware) ============
+
+// Debt card header uses Bootstrap's bg-light — override with CSS vars so it works in both modes
+.card-header.bg-light {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom-color: var(--border-color) !important;
+
+  h3, h4, h5, .fw-bold {
+    color: var(--text-primary) !important;
+  }
+}
+
+// Empty state uses bg-white — override with CSS vars
+.bg-white {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+}
+
+// Floating labels: Bootstrap renders them dark by default — force theme color
+.form-floating label {
+  color: var(--text-secondary);
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: var(--text-muted);
+}
+
+// Cancel button inherits correctly via CSS vars
+.btn-outline-secondary {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+
+  &:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
   }
 }
 

@@ -390,13 +390,13 @@
 [data-theme="dark"] {
   .transactions-table {
     thead {
-      background-color: #1a1a2e !important; 
-      border-bottom: 2px solid #2f3336 !important; 
+      background-color: var(--bg-secondary) !important;
+      border-bottom: 2px solid var(--border-color) !important;
 
       th {
-        color: #71767b !important;
+        color: var(--text-secondary) !important;
         background-color: transparent !important;
-        border-bottom: 2px solid #2f3336 !important;
+        border-bottom: 2px solid var(--border-color) !important;
       }
     }
 
@@ -451,13 +451,13 @@
 }
 
 // AJUSTE PARA MODO OSCURO (Para que brillen más)
-:host-context(body.dark-mode) {
+[data-theme="dark"] {
   .badge-income {
     background-color: rgba(25, 135, 84, 0.25) !important;
-    color: #75b798 !important; 
+    color: #75b798 !important;
     border-color: rgba(25, 135, 84, 0.4) !important;
   }
-  
+
   .badge-expense {
     background-color: rgba(220, 53, 69, 0.25) !important;
     color: #ea868f !important;
