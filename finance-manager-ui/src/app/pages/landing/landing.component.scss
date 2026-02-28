@@ -10,8 +10,9 @@ $accent-white: #ffffff;
 .landing-container {
   min-height: 100vh;
   width: 100%;
-  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), 
-              url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
+  background-color: #3a3a3a; /* Fallback: always charcoal gray regardless of body theme */
+  background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)),
+                    url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

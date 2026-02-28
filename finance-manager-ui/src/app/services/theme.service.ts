@@ -24,9 +24,8 @@ export class ThemeService {
     } else if (savedTheme === 'light') {
       this.setDarkMode(false);
     } else {
-      // Sin preferencia guardada: respetar la preferencia del sistema operativo
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      this.setDarkMode(prefersDark);
+      // Sin preferencia guardada: usar modo claro por defecto
+      this.setDarkMode(false);
     }
   }
 

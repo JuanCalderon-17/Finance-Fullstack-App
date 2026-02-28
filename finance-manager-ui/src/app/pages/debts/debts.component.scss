@@ -211,21 +211,21 @@
   }
 
   &.paid {
-    background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%) !important;
-    border-color: #10b981 !important;
+    background: var(--color-success-light) !important;
+    border-color: var(--color-success) !important;
 
     &::before {
-      background: #10b981;
+      background: var(--color-success);
     }
   }
 
   &.overdue {
-    background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%) !important;
-    border-color: #ef4444 !important;
+    background: var(--color-danger-light) !important;
+    border-color: var(--color-danger) !important;
     animation: pulse-soft 2s infinite;
 
     &::before {
-      background: #ef4444;
+      background: var(--color-danger);
     }
   }
 }

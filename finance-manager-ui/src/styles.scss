@@ -82,6 +82,12 @@ body {
 
 // Alerts (mantener colores originales pero ajustar para dark)
 [data-theme="dark"] {
+  .alert-light {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+  }
+
   .alert-success {
     background-color: rgba(16, 185, 129, 0.15);
     border-color: var(--color-success);
