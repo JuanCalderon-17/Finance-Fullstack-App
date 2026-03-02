@@ -25,6 +25,13 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
+// Input group icons
+.input-group-text {
+  background-color: var(--bg-secondary);
+  border-color: var(--input-border);
+  color: var(--text-secondary);
+}
+
 // Forms
 .form-control,
 .form-select {

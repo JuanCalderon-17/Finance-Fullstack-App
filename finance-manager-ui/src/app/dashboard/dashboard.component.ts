@@ -95,6 +95,8 @@ export class DashboardComponent implements OnInit {
   alertMessageKey: string = "";
   alertColor: string = 'green';
 
+  isLoading: boolean = false;
+  isSubmitting: boolean = false;
   isEditing : boolean = false;
   editingId : number | null = null;
   currencyCode : string = 'USD';
@@ -181,12 +183,17 @@ export class DashboardComponent implements OnInit {
   } 
 
   loadTransactions() {
+    this.isLoading = true;
     this.transactionService.getTransactions().subscribe({
       next: (data) => {
         this.allTransactions = data;
         this.applyFilters();
+        this.isLoading = false;
       },
-      error: (err) => console.error('Error al cargar transacciones:', err)
+      error: (err) => {
+        console.error('Error al cargar transacciones:', err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -291,13 +298,19 @@ export class DashboardComponent implements OnInit {
       this.newTransaction.currency = this.currencyCode;
     }
 
+    this.isSubmitting = true;
+
     if (this.isEditing && this.editingId) {
       this.transactionService.updateTransaction(this.editingId, this.newTransaction).subscribe({
         next: () => {
           this.loadTransactions();
           this.cancelEdit();
+          this.isSubmitting = false;
         },
-        error: (err) => console.error('Error al actualizar:', err)
+        error: (err) => {
+          console.error('Error al actualizar:', err);
+          this.isSubmitting = false;
+        }
       });
     }
     else {
@@ -305,8 +318,12 @@ export class DashboardComponent implements OnInit {
         next: (res) => {
           this.loadTransactions();
           this.cancelEdit();
+          this.isSubmitting = false;
         },
-        error: (err) => console.error('Error al crear:', err)
+        error: (err) => {
+          console.error('Error al crear:', err);
+          this.isSubmitting = false;
+        }
       });
     }
   }

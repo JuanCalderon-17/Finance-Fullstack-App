@@ -139,6 +139,7 @@
 .form-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
+  border-top: 3px solid var(--color-primary);
 }
 
 .form-header {
@@ -262,6 +263,20 @@
 .transaction-amount {
   font-size: 1rem;
   font-weight: 700;
+}
+
+.amount-income {
+  color: var(--color-success) !important;
+}
+
+.amount-expense {
+  color: var(--color-danger) !important;
+}
+
+// ===== LABEL EN BOTÓN EDIT =====
+.btn-label {
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 // ===== BOTONES DE ACCIÓN =====

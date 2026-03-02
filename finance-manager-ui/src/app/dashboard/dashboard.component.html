@@ -179,18 +179,26 @@
           <form (ngSubmit)="addTransaction()">
             <div class="mb-3">
               <label class="form-label">{{'TRANSACTION.DESCRIPTION' | translate}}</label>
-              <input type="text" class="form-control" placeholder="..." 
-                     [(ngModel)]="newTransaction.description" name="desc" required>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
+                <input type="text" class="form-control" placeholder="..."
+                       [(ngModel)]="newTransaction.description" name="desc" required>
+              </div>
             </div>
-            
+
             <div class="mb-3">
-              <label class="form-label">{{'TRANSACTION.AMOUNT' | translate}} ({{ currencySymbol }})</label>
-              <input type="number" class="form-control" placeholder="0.00" 
-                     [(ngModel)]="newTransaction.amount" name="amount" required>
+              <label class="form-label">{{'TRANSACTION.AMOUNT' | translate}}</label>
+              <div class="input-group">
+                <span class="input-group-text fw-bold">{{ currencySymbol }}</span>
+                <input type="number" class="form-control" placeholder="0.00"
+                       [(ngModel)]="newTransaction.amount" name="amount" required>
+              </div>
             </div>
 
             <div class="mb-3">
               <label class="form-label">{{ 'TRANSACTION.CATEGORY' | translate }}</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-tag"></i></span>
               <select class="form-select" [(ngModel)]="newTransaction.category" name="cat">
                 <optgroup [label]="'DASHBOARD.INCOME_GROUP' | translate">
                   <option value="Sueldo">{{ 'CATEGORIES.SALARY' | translate }}</option>
@@ -210,16 +218,18 @@
                   <option value="Otros">{{ 'CATEGORIES.OTHER' | translate }}</option>
                 </optgroup>
               </select>
+              </div>
             </div>
 
             <div class="d-grid gap-2 mt-4">
               <button type="submit" class="btn text-white submit-btn"
                 [ngClass]="isEditing ? 'btn-warning text-dark' : 'btn-primary-custom'"
-                [disabled]="!newTransaction.description || newTransaction.amount <= 0">
+                [disabled]="!newTransaction.description || newTransaction.amount <= 0 || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                 {{ (isEditing ? 'BUTTONS.UPDATE' : 'BUTTONS.ADD') | translate }}
               </button>
 
-              <button type="button" class="btn btn-secondary" 
+              <button type="button" class="btn btn-secondary"
                       *ngIf="isEditing" (click)="cancelEdit()">
                 {{ 'BUTTONS.CANCEL' | translate }}
               </button>
@@ -238,8 +248,8 @@
           <div class="d-flex gap-2">
              <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedPeriod" (change)="applyFilters()">
               <option value="all">{{ 'DASHBOARD.ALL' | translate }}</option>
-              <option value="1">{{ 'DASHBOARD.FIRST_HALF' | translate }}</option>
-              <option value="2">{{ 'DASHBOARD.SECOND_HALF' | translate }}</option>
+              <option value="1">1 – 15</option>
+              <option value="2">16 – 31</option>
             </select>
 
             <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedMonth" (change)="applyFilters()">
@@ -263,13 +273,17 @@
           </div>
         </div>
 
-        <div class="card-body p-0 table-responsive"> 
-          
-          <div *ngIf="filteredTransactions.length === 0" class="text-center py-5 empty-state">
+        <div class="card-body p-0 table-responsive">
+
+          <div *ngIf="isLoading" class="text-center py-5 empty-state">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+
+          <div *ngIf="!isLoading && filteredTransactions.length === 0" class="text-center py-5 empty-state">
             <p>{{ 'TRANSACTION.NO_TRANSACTIONS' | translate }}</p>
           </div>
 
-          <table class="table table-hover mb-0 align-middle transactions-table" *ngIf="filteredTransactions.length > 0">
+          <table class="table table-hover mb-0 align-middle transactions-table" *ngIf="!isLoading && filteredTransactions.length > 0">
             <thead class="table-light">
               <tr>
                 <th>{{ 'TRANSACTION.DATE' | translate }}</th>
@@ -293,14 +307,15 @@
                   </span>
                 </td>
                 
-                <td class="text-end fw-bold transaction-amount" 
-                  [style.color]="incomeCategories.includes(t.category) ? '#198754' : '#dc3545'">
+                <td class="text-end fw-bold transaction-amount"
+                  [ngClass]="incomeCategories.includes(t.category) ? 'amount-income' : 'amount-expense'">
                   {{ currencySymbol }}{{ convertTransactionAmount(t) | number:'1.2-2' }}
                 </td>
-                
+
                 <td class="text-center">
                   <button class="btn btn-outline-dark btn-sm me-1 action-btn" (click)="edit(t)">
-                    <i class="bi bi-pencil-fill"></i>
+                    <i class="bi bi-pencil-fill me-1"></i>
+                    <span class="btn-label">{{ 'BUTTONS.EDIT' | translate }}</span>
                   </button>
                   <button class="btn btn-outline-danger btn-sm action-btn" (click)="deleteTransaction(t.id)">
                     <i class="bi bi-trash-fill"></i>
