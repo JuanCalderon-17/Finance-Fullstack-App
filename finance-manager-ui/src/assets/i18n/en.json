@@ -122,6 +122,8 @@
     "INCOME_GROUP": "Income 🤑",
     "EXPENSE_GROUP": "Expenses 💸",
     "HISTORY": "History",
+    "SERVER_WAKING": "The server is starting up, please wait a moment...",
+    "LOAD_ERROR": "Could not load transactions.",
     "ALL": "Entire Month",
     "FIRST_HALF": "1st Half",
     "SECOND_HALF": "2nd Half",
@@ -218,7 +220,8 @@
     "DELETE": "Delete",
     "BACK": "Back",
     "CREATE": "Create",
-    "SENDING": "Sending..."
+    "SENDING": "Sending...",
+    "RETRY": "Retry"
   },
   "NAVIGATION": {
     "DASHBOARD": "Dashboard",

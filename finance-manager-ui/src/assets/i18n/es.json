@@ -77,6 +77,8 @@
     "INCOME_GROUP": "Ingresos 🤑",
     "EXPENSE_GROUP": "Gastos 💸",
     "HISTORY": "Historial",
+    "SERVER_WAKING": "El servidor está iniciando, por favor espera un momento...",
+    "LOAD_ERROR": "No se pudieron cargar las transacciones.",
     "ALL": "Mes",
     "FIRST_HALF": "1ª Quincena",
     "SECOND_HALF": "2ª Quincena",

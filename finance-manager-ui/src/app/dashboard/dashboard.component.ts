@@ -99,6 +99,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   alertColor: string = 'green';
 
   isLoading: boolean = false;
+  loadingTooLong: boolean = false;
+  loadError: boolean = false;
+  private loadingTimer: any = null;
   isSubmitting: boolean = false;
   isEditing : boolean = false;
   editingId : number | null = null;
@@ -178,15 +181,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   loadTransactions() {
     this.isLoading = true;
+    this.loadingTooLong = false;
+    this.loadError = false;
+    clearTimeout(this.loadingTimer);
+
+    this.loadingTimer = setTimeout(() => {
+      if (this.isLoading) this.loadingTooLong = true;
+    }, 8000);
+
     this.transactionService.getTransactions().subscribe({
       next: (data) => {
+        clearTimeout(this.loadingTimer);
         this.allTransactions = data;
         this.applyFilters();
         this.isLoading = false;
+        this.loadingTooLong = false;
       },
       error: (err) => {
+        clearTimeout(this.loadingTimer);
         console.error('Error al cargar transacciones:', err);
         this.isLoading = false;
+        this.loadingTooLong = false;
+        this.loadError = true;
       }
     });
   }
@@ -364,6 +380,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    clearTimeout(this.loadingTimer);
     this.destroy$.next();
     this.destroy$.complete();
   }

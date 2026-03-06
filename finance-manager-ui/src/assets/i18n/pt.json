@@ -114,6 +114,8 @@
     "INCOME_GROUP": "Receitas 🤑",
     "EXPENSE_GROUP": "Despesas 💸",
     "HISTORY": "Histórico",
+    "SERVER_WAKING": "O servidor está iniciando, aguarde um momento...",
+    "LOAD_ERROR": "Não foi possível carregar as transações.",
     "ALL": "Mês inteiro",
     "FIRST_HALF": "1ª Quinzena",
     "SECOND_HALF": "2ª Quinzena",
