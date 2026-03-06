@@ -36,7 +36,14 @@ export class CurrencyStateService {
         }
     }
 
-    convertAmount(amount: number): number {
-        return amount * this.currencyState.value.rate;
+    convert(amount: number, fromCurrency: string = 'USD'): number {
+        const { code, rate } = this.currencyState.value;
+        const from = fromCurrency.trim();
+        const to = code.trim();
+
+        if (from === to) return amount;
+        if (from === 'USD' && to === 'BRL') return amount * rate;
+        if (from === 'BRL' && to === 'USD') return amount / rate;
+        return amount;
     }
 }

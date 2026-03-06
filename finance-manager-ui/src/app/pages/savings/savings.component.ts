@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -14,7 +16,8 @@ import { TutorialService } from '../../core/services/tutorial.service';
   templateUrl: './savings.component.html',
   styleUrls: ['./savings.component.scss']
 })
-export class SavingsComponent implements OnInit {
+export class SavingsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   currencySymbol: string = '$';
   currencyCode: string = 'USD'; 
@@ -38,8 +41,8 @@ export class SavingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currencyStateService.currency$.subscribe(currency => {
-      this.currencyCode = currency.code;  
+    this.currencyStateService.currency$.pipe(takeUntil(this.destroy$)).subscribe(currency => {
+      this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
     });
@@ -63,27 +66,8 @@ export class SavingsComponent implements OnInit {
     });
   }
 
-  // Backend siempre devuelve USD
   convertAmount(acc: SavingAccount): number {
-    const accountCurrency = (acc.currency || 'USD').trim(); // Backend siempre USD
-    const targetCurrency = this.currencyCode.trim(); // Lo que ve el usuario
-
-    // Mismo currency
-    if (accountCurrency === targetCurrency) {
-      return acc.balance;
-    }
-
-    // USD (backend) → BRL (usuario)
-    if (accountCurrency === 'USD' && targetCurrency === 'BRL') {
-      return acc.balance * this.exchangeRate;
-    }
-
-    // BRL → USD (no debería pasar)
-    if (accountCurrency === 'BRL' && targetCurrency === 'USD') {
-      return acc.balance / this.exchangeRate;
-    }
-
-    return acc.balance;
+    return this.currencyStateService.convert(acc.balance, acc.currency || 'USD');
   }
   
   calculateTotal() {
@@ -191,6 +175,11 @@ export class SavingsComponent implements OnInit {
     
     // Guardamos
     this.updateSavingInDb(account);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   enableEdit(account: SavingAccount) {

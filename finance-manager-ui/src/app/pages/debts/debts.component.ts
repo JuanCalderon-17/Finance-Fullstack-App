@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -15,7 +17,8 @@ import { TutorialService } from '../../core/services/tutorial.service';
   templateUrl: './debts.component.html',
   styleUrls: ['./debts.component.scss']
 })
-export class DebtsComponent implements OnInit {
+export class DebtsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   currencySymbol: string = '$';
   currencyCode: string = 'USD';
@@ -42,12 +45,12 @@ export class DebtsComponent implements OnInit {
               private tutorialService: TutorialService) {}
 
   ngOnInit(): void {
-    this.currencyStateService.currency$.subscribe(currency => {
+    this.currencyStateService.currency$.pipe(takeUntil(this.destroy$)).subscribe(currency => {
       this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
       this.currentDebt.currency = currency.code;
-    })
+    });
     this.loadData();
 
     setTimeout(() => {
@@ -69,43 +72,11 @@ export class DebtsComponent implements OnInit {
     });
   }
   convertAmount(acc: Debt): number {
-  const accountCurrency = (acc.currency || 'USD').trim(); // Backend siempre devuelve USD
-  const targetCurrency = this.currencyCode.trim(); // Lo que el usuario ve ahora
-
-  // Si ya está en la moneda correcta
-  if (accountCurrency === targetCurrency) {
-    return acc.balance;
+    return this.currencyStateService.convert(acc.balance, acc.currency || 'USD');
   }
 
-  // USD (backend) → BRL (usuario)
-  if (accountCurrency === 'USD' && targetCurrency === 'BRL') {
-    return acc.balance * this.exchangeRate;
-  }
-
-  // BRL → USD (no debería pasar, pero por si acaso)
-  if (accountCurrency === 'BRL' && targetCurrency === 'USD') {
-    return acc.balance / this.exchangeRate;
-  }
-
-  return acc.balance;
-}
-
-  convertNumber(amount:number, fromCurrency: string = 'USD') : number {
-    const targetCurrency = this.currencyStateService.getCurrentCurrency().code.trim();
-
-    if(fromCurrency === targetCurrency) {
-      return amount; 
-    }
-
-    if (fromCurrency === 'USD' && targetCurrency === 'BRL') {
-      return amount * this.exchangeRate;
-    }
-
-     if (fromCurrency === 'BRL' && targetCurrency === 'USD') {
-      return amount / this.exchangeRate;
-    }
-
-    return amount;
+  convertNumber(amount: number, fromCurrency: string = 'USD'): number {
+    return this.currencyStateService.convert(amount, fromCurrency);
   }
 
   //  CÁLCULOS FINANCIEROS
@@ -284,6 +255,11 @@ export class DebtsComponent implements OnInit {
     due.setHours(0, 0, 0, 0);
     
     return due < today;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // RESETEAR FORMULARIO

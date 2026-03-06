@@ -1,4 +1,6 @@
-import { Component, OnInit, HostListener, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy} from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../core/services/transaction.service';
@@ -29,7 +31,8 @@ import { TutorialService } from '../core/services/tutorial.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   
   allTransactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
@@ -131,16 +134,16 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.currencyStateService.loadFromStorage();
     
-    this.currencyStateService.currency$.subscribe(currency => {
+    this.currencyStateService.currency$.pipe(takeUntil(this.destroy$)).subscribe(currency => {
       this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
-      this.newTransaction.currency = currency.code; 
-      this.calculateStats(); 
+      this.newTransaction.currency = currency.code;
+      this.calculateStats();
     });
-    
+
     // Actualizar gráfico al cambiar idioma
-    this.translate.onLangChange.subscribe(() => {
+    this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.updateChart();
     });
 
@@ -170,17 +173,8 @@ export class DashboardComponent implements OnInit {
   }
 
   convertTransactionAmount(transaction: Transaction): number {
-    const txCurrency = (transaction.currency || 'USD').trim();
-    const targetCurrency = this.currencyCode.trim();
-    
-    if (txCurrency === targetCurrency) return transaction.amount;
-    
-    if (txCurrency === 'USD' && targetCurrency === 'BRL') return transaction.amount * this.exchangeRate;
-    
-    if (txCurrency === 'BRL' && targetCurrency === 'USD') return transaction.amount / this.exchangeRate;
-    
-    return transaction.amount;
-  } 
+    return this.currencyStateService.convert(transaction.amount, transaction.currency || 'USD');
+  }
 
   loadTransactions() {
     this.isLoading = true;
@@ -367,6 +361,11 @@ export class DashboardComponent implements OnInit {
 
   changeLanguage( language: string): void {
     this.languageService.setLanguage(language);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   logout() {

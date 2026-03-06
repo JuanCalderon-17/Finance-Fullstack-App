@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FinanceManager.API.Models;
 
@@ -63,6 +63,33 @@ namespace FinanceManager.API.Data
             modelBuilder.Entity<SavingsAccount>()
                 .Property(s => s.Goal)
                 .HasPrecision(18, 2);
+
+            // ============ INDICES ============
+
+            // Transaction: el patron mas comun es filtrar por usuario + fecha
+            modelBuilder.Entity<Transaction>()
+                .HasIndex(t => new { t.AppUserId, t.TransactionDate })
+                .HasDatabaseName("IX_Transactions_AppUserId_Date");
+
+            // Transaction: para agrupar por categoria en el grafico de pastel
+            modelBuilder.Entity<Transaction>()
+                .HasIndex(t => new { t.AppUserId, t.Category })
+                .HasDatabaseName("IX_Transactions_AppUserId_Category");
+
+            // Debt: filtrar deudas por usuario
+            modelBuilder.Entity<Debt>()
+                .HasIndex(d => d.AppUserId)
+                .HasDatabaseName("IX_Debts_AppUserId");
+
+            // Installment: filtrar cuotas por deuda
+            modelBuilder.Entity<Installment>()
+                .HasIndex(i => i.DebtId)
+                .HasDatabaseName("IX_Installments_DebtId");
+
+            // SavingsAccount: filtrar cuentas por usuario
+            modelBuilder.Entity<SavingsAccount>()
+                .HasIndex(s => s.AppUserId)
+                .HasDatabaseName("IX_SavingsAccounts_AppUserId");
         }
     }
 }
