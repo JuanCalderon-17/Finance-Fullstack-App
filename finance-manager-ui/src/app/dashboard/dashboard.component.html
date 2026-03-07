@@ -252,7 +252,7 @@
               <option value="2">16 – 31</option>
             </select>
 
-            <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedMonth" (change)="applyFilters()">
+            <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedMonth" (change)="loadTransactions()">
                <option [value]="0">{{ 'MONTHS.JAN' | translate }}</option>
                <option [value]="1">{{ 'MONTHS.FEB' | translate }}</option>
                <option [value]="2">{{ 'MONTHS.MAR' | translate }}</option>
@@ -267,7 +267,7 @@
                <option [value]="11">{{ 'MONTHS.DEC' | translate }}</option>
             </select>
             
-            <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedYear" (change)="applyFilters()">
+            <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedYear" (change)="loadTransactions()">
                 <option *ngFor="let year of years" [value]="year">{{ year }}</option>
             </select>
           </div>

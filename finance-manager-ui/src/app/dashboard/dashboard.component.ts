@@ -189,7 +189,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.isLoading) this.loadingTooLong = true;
     }, 8000);
 
-    this.transactionService.getTransactions().subscribe({
+    this.transactionService.getTransactions(this.selectedMonth, this.selectedYear).subscribe({
       next: (data) => {
         clearTimeout(this.loadingTimer);
         this.allTransactions = data;
@@ -208,15 +208,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
+    // Month/year filtering is done server-side; here we only split by period
     this.filteredTransactions = this.allTransactions.filter(t => {
-      const date = new Date(t.transactionDate);
-      const transactionDay = parseInt(t.transactionDate.toString().slice(8,10));
-      const matchesMonthYear =  date.getMonth() === +this.selectedMonth && 
-                                date.getFullYear() === +this.selectedYear;
-
-      if (!matchesMonthYear) return false;
-
-      if(this.selectedPeriod === 'all') return true;
+      if (this.selectedPeriod === 'all') return true;
+      const transactionDay = parseInt(t.transactionDate.toString().slice(8, 10));
       if (this.selectedPeriod === '1') return transactionDay <= 15;
       return transactionDay > 15;
     });
