@@ -218,7 +218,8 @@
     "DASHBOARD": "Painel",
     "SAVINGS": "Economias",
     "DEBTS": "Dívidas",
-    "SETTINGS": "Configurações"
+    "SETTINGS": "Moeda",
+    "LANGUAGE": "Language"
   },
   "CURRENCY": {
     "USD": "Dólar",
