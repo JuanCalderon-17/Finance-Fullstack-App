@@ -193,6 +193,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.applyFilters();
         this.isLoading = false;
         this.loadingTooLong = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         clearTimeout(this.loadingTimer);
@@ -200,6 +201,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.loadingTooLong = false;
         this.loadError = true;
+        this.cdr.markForCheck();
       }
     });
   }
