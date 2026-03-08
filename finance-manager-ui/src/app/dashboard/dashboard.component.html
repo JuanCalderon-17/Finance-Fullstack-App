@@ -246,13 +246,7 @@
           <span class="fw-bold">📜 {{ 'DASHBOARD.HISTORY' | translate }}</span>
           
           <div class="d-flex gap-2">
-             <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedPeriod" (change)="applyFilters()">
-              <option value="all">{{ 'DASHBOARD.ALL' | translate }}</option>
-              <option value="1">1 – 15</option>
-              <option value="2">16 – 31</option>
-            </select>
-
-            <select class="form-select form-select-sm filter-select" [(ngModel)]="selectedMonth" (change)="loadTransactions()">
+<select class="form-select form-select-sm filter-select" [(ngModel)]="selectedMonth" (change)="loadTransactions()">
                <option [value]="0">{{ 'MONTHS.JAN' | translate }}</option>
                <option [value]="1">{{ 'MONTHS.FEB' | translate }}</option>
                <option [value]="2">{{ 'MONTHS.MAR' | translate }}</option>

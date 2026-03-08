@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -90,8 +90,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedMonth: number;
   selectedYear: number;
   years: number[] = [];
-  selectedPeriod: string = 'all';
-
   totalSpent: number = 0;
   totalIncome: number = 0;
 
@@ -116,7 +114,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private currencyStateService: CurrencyStateService,
     private translate: TranslateService,
     public languageService: LanguageService,
-    private tutorialService: TutorialService
+    private tutorialService: TutorialService,
+    private cdr: ChangeDetectorRef
   ) { 
     const today = new Date();
     this.selectedMonth = today.getMonth();
@@ -143,6 +142,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.exchangeRate = currency.rate;
       this.newTransaction.currency = currency.code;
       this.calculateStats();
+      this.cdr.markForCheck();
     });
 
     // Actualizar gráfico al cambiar idioma
@@ -160,17 +160,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   toggleCurrency() {
+    const targetCode = this.currencyCode === 'USD' ? 'BRL' : 'USD';
+    const targetSymbol = targetCode === 'BRL' ? 'R$' : '$';
     this.currencyService.getExchangeRate('BRL').subscribe({
-      next: (rate) => { 
-        if(this.currencyCode === 'USD') {
-          this.currencyStateService.setCurrency('BRL', 'R$', rate);
-        } else {
-          this.currencyStateService.setCurrency('USD', '$', rate);
-        }
+      next: (rate) => {
+        this.currencyStateService.setCurrency(targetCode, targetSymbol, rate);
       },
-      error: (err) => {
-        const fallbackRate = 5.25;
-        this.currencyStateService.setCurrency(this.currencyCode === 'USD' ? 'BRL' : 'USD', this.currencyCode === 'USD' ? 'R$' : '$', fallbackRate);
+      error: () => {
+        this.currencyStateService.setCurrency(targetCode, targetSymbol, 5.25);
       }
     });
   }
@@ -189,7 +186,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.isLoading) this.loadingTooLong = true;
     }, 8000);
 
-    this.transactionService.getTransactions(this.selectedMonth, this.selectedYear).subscribe({
+    this.transactionService.getTransactions(Number(this.selectedMonth), Number(this.selectedYear)).subscribe({
       next: (data) => {
         clearTimeout(this.loadingTimer);
         this.allTransactions = data;
@@ -208,14 +205,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
-    // Month/year filtering is done server-side; here we only split by period
     this.filteredTransactions = this.allTransactions.filter(t => {
-      if (this.selectedPeriod === 'all') return true;
-      const transactionDay = parseInt(t.transactionDate.toString().slice(8, 10));
-      if (this.selectedPeriod === '1') return transactionDay <= 15;
-      return transactionDay > 15;
+      const date = new Date(t.transactionDate);
+      return date.getMonth() === Number(this.selectedMonth) &&
+             date.getFullYear() === Number(this.selectedYear);
     });
-
     this.calculateStats();
   }
 
