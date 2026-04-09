@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// --- CONFIGURACIÓN 100% POSTGRESQL (PARA RENDER) ---
+//configuration for Render deployment
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -33,6 +33,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
     options.UseNpgsql(connectionString);
 });
+
+
+
 // ----------------------------------------------------
 
 builder.Services.AddIdentityCore<AppUser>(opt => { opt.Password.RequireNonAlphanumeric = false; })
@@ -51,15 +54,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// ============================================
-// ✅ REGISTRAR SERVICIOS
-// ============================================
+
+// register services for user management, token generation, and email sending
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-// ✅ NUEVO: Servicio de divisas con HttpClient
+// service for fetching currency exchange rates from an external API
 builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
-// ============================================
+
+
 
 builder.Services.AddCors(options =>
 {
