@@ -30,3 +30,6 @@ Thumbs.db
 ../StudentManagementSystem/
 ../mandrilAPI/
 
+# AI / tools
+.claude/
+
