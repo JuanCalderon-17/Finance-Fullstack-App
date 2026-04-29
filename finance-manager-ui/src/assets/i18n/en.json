@@ -227,7 +227,8 @@
     "DASHBOARD": "Dashboard",
     "SAVINGS": "Savings",
     "DEBTS": "Debts",
-    "SETTINGS": "Settings"
+    "SETTINGS": "Settings",
+    "LANGUAGE": "Language"
   },
   "CURRENCY": {
     "USD": "Dollar",

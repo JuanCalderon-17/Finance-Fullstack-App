@@ -218,7 +218,8 @@
     "DASHBOARD": "Panel",
     "SAVINGS": "Ahorros",
     "DEBTS": "Deudas",
-    "SETTINGS": "Ajustes"
+    "SETTINGS": "Ajustes",
+    "LANGUAGE": "Idioma"
   },
   "CURRENCY": {
     "USD": "Dólar",
