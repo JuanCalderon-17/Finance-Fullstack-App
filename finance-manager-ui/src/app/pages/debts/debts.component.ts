@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
 import { DebtsService, Debt } from '../../services/debts.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service'; 
 import { TranslateModule } from '@ngx-translate/core';
-import { TransactionService } from '../../core/services/transaction.service';
 import { TutorialService } from '../../core/services/tutorial.service';
 
 @Component({
@@ -39,9 +38,8 @@ export class DebtsComponent implements OnInit, OnDestroy {
 
   totalDebt: number = 0;
 
-  constructor(private debtsService: DebtsService, 
-              private currencyStateService : CurrencyStateService, 
-              private translateService: TransactionService,
+  constructor(private debtsService: DebtsService,
+              private currencyStateService : CurrencyStateService,
               private tutorialService: TutorialService) {}
 
   ngOnInit(): void {
@@ -125,24 +123,16 @@ export class DebtsComponent implements OnInit, OnDestroy {
     return;
   }
 
-  // ✅ NUEVO: Crear copia del objeto para no modificar el original
   const debtToSave = { ...this.currentDebt };
 
-  // ✅ NUEVO: Convertir a USD si está en BRL (el backend solo acepta USD)
-  if (!this.isEditing && this.currencyCode === 'BRL') {
+  if (this.currencyCode === 'BRL') {
     debtToSave.balance = this.currentDebt.balance / this.exchangeRate;
-    debtToSave.currency = 'USD'; // Backend siempre guarda en USD
-    
-    console.log(`🔄 Convertido: R$ ${this.currentDebt.balance} → $ ${debtToSave.balance.toFixed(2)}`);
-  } else if (!this.isEditing) {
-    debtToSave.currency = 'USD'; // Por defecto USD
   }
 
   // MODO EDICIÓN
   if (this.isEditing && this.currentDebt.id) {
     this.debtsService.updateDebt(this.currentDebt.id, debtToSave).subscribe({
       next: () => {
-        console.log('✓ Debt updated');
         this.loadData();
         this.resetForm();
       },
@@ -154,22 +144,8 @@ export class DebtsComponent implements OnInit, OnDestroy {
   } 
   // MODO CREACIÓN
   else {
-    console.group('📤 ENVIANDO AL BACKEND');
-    console.log('Monto original:', this.currentDebt.balance, this.currencyCode);
-    console.log('Monto convertido:', debtToSave.balance, 'USD');
-    console.log('Objeto completo:', JSON.stringify(debtToSave, null, 2));
-    console.groupEnd();
-    
     this.debtsService.createDebt(debtToSave).subscribe({
-      next: (response) => {
-        console.log('✓ Debt created');
-        
-        console.group('📥 RESPUESTA DEL BACKEND');
-        console.log('Response completa:', JSON.stringify(response, null, 2));
-        console.log('Currency guardada:', response.currency);
-        console.log('Balance guardado:', response.balance);
-        console.groupEnd();
-        
+      next: () => {
         this.loadData();
         this.resetForm();
       },
@@ -185,6 +161,8 @@ export class DebtsComponent implements OnInit, OnDestroy {
   startEdit(debt: Debt) {
     this.isEditing = true;
     this.currentDebt = { ...debt };
+    // Show balance in user's active currency so the form value matches what they see
+    this.currentDebt.balance = this.currencyStateService.convert(debt.balance, 'USD');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -193,7 +171,6 @@ export class DebtsComponent implements OnInit, OnDestroy {
     if (confirm('¿Estás seguro de eliminar esta deuda? Esta acción no se puede deshacer.')) {
       this.debtsService.deleteDebt(id).subscribe({
         next: () => {
-          console.log('✓ Deuda eliminada');
           this.loadData();
         },
         error: (err) => {
@@ -208,7 +185,6 @@ export class DebtsComponent implements OnInit, OnDestroy {
   toggleInstallment(debtId: number, installmentId: number) {
     this.debtsService.toggleInstallment(debtId, installmentId).subscribe({
       next: () => {
-        console.log('✓ Estado de cuota actualizado');
         this.loadData();
       },
       error: (err) => {
@@ -236,7 +212,6 @@ export class DebtsComponent implements OnInit, OnDestroy {
     // Actualizar en el backend
     this.debtsService.updateInstallment(debtId, installmentId, { amount: newAmount }).subscribe({
       next: () => {
-        console.log('✓ Monto de cuota actualizado');
         this.loadData();
       },
       error: (err) => {
