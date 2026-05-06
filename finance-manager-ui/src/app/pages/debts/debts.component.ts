@@ -88,13 +88,13 @@ export class DebtsComponent implements OnInit, OnDestroy {
 
     const allInstallments: any[] = d.installmentsList || [];
 
-    // Next unpaid installment amount — replaces the misleading fixed "monthly payment"
+    // Next unpaid installment amount 
     const nextUnpaid = allInstallments
       .filter((i: any) => !i.isPaid)
       .sort((a: any, b: any) => a.installmentNumber - b.installmentNumber)[0];
     d.nextPayment = nextUnpaid ? nextUnpaid.amount : 0;
 
-    // Progress based on amounts, not count — installments are the source of truth
+    // Progress based on amounts, not count, installments are the source of truth
     const totalInstallmentAmount = allInstallments.reduce((s: number, i: any) => s + i.amount, 0);
     const paidAmount = allInstallments.filter((i: any) => i.isPaid).reduce((s: number, i: any) => s + i.amount, 0);
     d.progress = totalInstallmentAmount > 0 ? (paidAmount / totalInstallmentAmount) * 100 : 0;
@@ -180,7 +180,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ✅ MARCAR CUOTA COMO PAGADA/NO PAGADA
+  // mark installment as paid or not paid
   toggleInstallment(debtId: number, installmentId: number) {
     this.debtsService.toggleInstallment(debtId, installmentId).subscribe({
       next: () => {
@@ -193,12 +193,12 @@ export class DebtsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // 💰 ACTUALIZAR MONTO DE CUOTA
+  //update amount of installment 
   updateInstallmentAmount(debtId: number, installmentId: number, newAmount: number) {
     // Validaciones
     if (newAmount <= 0) {
       alert('El monto debe ser mayor a 0');
-      this.loadData(); // Recargar para restaurar valor anterior
+      this.loadData(); 
       return;
     }
 
@@ -208,7 +208,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Actualizar en el backend
+    //update in the backend
     this.debtsService.updateInstallment(debtId, installmentId, { amount: newAmount }).subscribe({
       next: () => {
         this.loadData();
@@ -221,7 +221,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // 📅 VERIFICAR SI UNA CUOTA ESTÁ VENCIDA
+  // verify is installment is overdue 
   isOverdue(dueDate: string): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Normalizar a medianoche
