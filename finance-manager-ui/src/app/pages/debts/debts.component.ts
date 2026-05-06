@@ -86,22 +86,21 @@ export class DebtsComponent implements OnInit, OnDestroy {
       d.paidInstallments = d.installmentsList.filter((i: any) => i.isPaid).length;
     }
 
-    // Calcular cuota mensual
-    if (d.interestRate > 0) {
-       const r = d.interestRate / 12 / 100;
-       const n = d.installments;
-       const numerator = r * Math.pow(1 + r, n);
-       const denominator = Math.pow(1 + r, n) - 1;
-       d.monthlyPayment = d.balance * (numerator / denominator);
-    } else {
-       d.monthlyPayment = d.balance / (d.installments || 1);
-    }
+    const allInstallments: any[] = d.installmentsList || [];
 
-    // Calcular progreso
-    d.progress = (d.paidInstallments / d.installments) * 100;
-    
-    // Calcular saldo restante desde las cuotas reales, no desde la fórmula
-    d.remainingAmount = (d.installmentsList || [])
+    // Next unpaid installment amount — replaces the misleading fixed "monthly payment"
+    const nextUnpaid = allInstallments
+      .filter((i: any) => !i.isPaid)
+      .sort((a: any, b: any) => a.installmentNumber - b.installmentNumber)[0];
+    d.nextPayment = nextUnpaid ? nextUnpaid.amount : 0;
+
+    // Progress based on amounts, not count — installments are the source of truth
+    const totalInstallmentAmount = allInstallments.reduce((s: number, i: any) => s + i.amount, 0);
+    const paidAmount = allInstallments.filter((i: any) => i.isPaid).reduce((s: number, i: any) => s + i.amount, 0);
+    d.progress = totalInstallmentAmount > 0 ? (paidAmount / totalInstallmentAmount) * 100 : 0;
+
+    // Remaining = sum of unpaid installment amounts
+    d.remainingAmount = allInstallments
       .filter((i: any) => !i.isPaid)
       .reduce((sum: number, i: any) => sum + i.amount, 0);
 

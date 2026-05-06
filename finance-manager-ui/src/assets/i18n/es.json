@@ -188,6 +188,7 @@
     "NO_DEBTS": "No hay deudas registradas",
     "CREATE_FIRST": "Crea tu primera deuda usando el formulario",
     "MONTHLY_PAYMENT": "Cuota Mensual",
+    "NEXT_PAYMENT": "Próxima Cuota",
     "REMAINING_BALANCE": "Saldo Pendiente",
     "PROGRESS": "Progreso",
     "INSTALLMENT_DETAILS": "Detalle de Cuotas",

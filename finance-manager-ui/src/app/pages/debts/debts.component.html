@@ -180,9 +180,9 @@
 
           <div class="row g-3 mb-3">
             <div class="col-md-4">
-              <strong>{{'DEBTS.MONTHLY_PAYMENT' | translate}}</strong>
+              <strong>{{'DEBTS.NEXT_PAYMENT' | translate}}</strong>
               <div class="fs-4">
-                {{ currencySymbol }}{{ convertNumber(d.monthlyPayment, d.currency) | number:'1.2-2' }}
+                {{ currencySymbol }}{{ convertNumber(d.nextPayment, d.currency) | number:'1.2-2' }}
               </div>
             </div>
 

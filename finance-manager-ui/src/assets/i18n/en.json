@@ -196,6 +196,7 @@
     "NO_DEBTS": "No debts registered",
     "CREATE_FIRST": "Create your first debt using the form",
     "MONTHLY_PAYMENT": "Monthly Payment",
+    "NEXT_PAYMENT": "Next Payment",
     "REMAINING_BALANCE": "Remaining Balance",
     "PROGRESS": "Progress",
     "INSTALLMENT_DETAILS": "Installment Details",
