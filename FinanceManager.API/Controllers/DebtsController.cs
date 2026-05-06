@@ -85,21 +85,40 @@ namespace FinanceManager.API.Controllers
 
             var debt = await _context.Debts
                 .Include(d => d.InstallmentsList)
-                .FirstOrDefaultAsync(d => d.Id == id && d.AppUserId == userId); // ← CAMBIADO
+                .FirstOrDefaultAsync(d => d.Id == id && d.AppUserId == userId);
 
             if (debt == null) return NotFound();
+
+            int paidCount = debt.InstallmentsList.Count(i => i.IsPaid);
+
+            if (dto.Installments < paidCount)
+                return BadRequest($"Cannot reduce installments to {dto.Installments}: {paidCount} are already paid.");
+
+            bool financialParamsChanged =
+                debt.Balance != dto.Balance ||
+                debt.InterestRate != dto.InterestRate ||
+                debt.Installments != dto.Installments;
 
             debt.Name = dto.Name;
             debt.Balance = dto.Balance;
             debt.InterestRate = dto.InterestRate;
+            debt.Installments = dto.Installments;
             debt.Color = dto.Color;
             debt.Icon = dto.Icon;
 
-            if (debt.Installments != dto.Installments)
+            if (financialParamsChanged)
             {
-                debt.Installments = dto.Installments;
-                _context.Installments.RemoveRange(debt.InstallmentsList);
-                debt.InstallmentsList = GenerateInstallments(debt);
+                // Remove only unpaid installments — paid ones are historical records
+                var unpaid = debt.InstallmentsList.Where(i => !i.IsPaid).ToList();
+                _context.Installments.RemoveRange(unpaid);
+
+                int remainingCount = dto.Installments - paidCount;
+                if (remainingCount > 0)
+                {
+                    var newInstallments = GenerateInstallments(debt, startNumber: paidCount + 1, count: remainingCount);
+                    foreach (var inst in newInstallments)
+                        debt.InstallmentsList.Add(inst);
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -201,11 +220,13 @@ namespace FinanceManager.API.Controllers
             };
         }
 
-        private List<Installment> GenerateInstallments(Debt debt)
+        private List<Installment> GenerateInstallments(Debt debt, int startNumber = 1, int? count = null)
         {
             var installments = new List<Installment>();
+            int totalCount = count ?? debt.Installments;
             decimal monthlyPayment;
 
+            // Monthly payment is always calculated from the full debt (balance + total installments)
             if (debt.InterestRate > 0)
             {
                 var r = (double)(debt.InterestRate / 12 / 100);
@@ -221,21 +242,24 @@ namespace FinanceManager.API.Controllers
 
             var startDate = DateTime.UtcNow.Date;
 
-            for (int i = 1; i <= debt.Installments; i++)
+            for (int i = 0; i < totalCount; i++)
             {
                 installments.Add(new Installment
                 {
-                    InstallmentNumber = i,
+                    InstallmentNumber = startNumber + i,
                     Amount = Math.Round(monthlyPayment, 2),
-                    DueDate = startDate.AddMonths(i),
+                    DueDate = startDate.AddMonths(i + 1),
                     IsPaid = false
                 });
             }
 
-            // Adjust last installment to absorb rounding difference
-            var roundingDiff = Math.Round(monthlyPayment * debt.Installments, 2) - installments.Sum(i => i.Amount);
-            if (roundingDiff != 0)
-                installments[^1].Amount = Math.Round(installments[^1].Amount + roundingDiff, 2);
+            // Rounding adjustment only on full series (not partial regeneration after paid installments)
+            if (startNumber == 1)
+            {
+                var roundingDiff = Math.Round(monthlyPayment * debt.Installments, 2) - installments.Sum(i => i.Amount);
+                if (roundingDiff != 0)
+                    installments[^1].Amount = Math.Round(installments[^1].Amount + roundingDiff, 2);
+            }
 
             return installments;
         }
