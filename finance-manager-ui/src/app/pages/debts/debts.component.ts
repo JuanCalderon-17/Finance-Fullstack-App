@@ -102,9 +102,10 @@ export class DebtsComponent implements OnInit, OnDestroy {
     // Calcular progreso
     d.progress = (d.paidInstallments / d.installments) * 100;
     
-    // Calcular saldo restante
-    const remainingInstallments = d.installments - d.paidInstallments;
-    d.remainingAmount = remainingInstallments * d.monthlyPayment;
+    // Calcular saldo restante desde las cuotas reales, no desde la fórmula
+    d.remainingAmount = (d.installmentsList || [])
+      .filter((i: any) => !i.isPaid)
+      .reduce((sum: number, i: any) => sum + i.amount, 0);
 
     return d;
   }

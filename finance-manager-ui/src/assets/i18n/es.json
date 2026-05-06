@@ -195,6 +195,7 @@
     "DUE_DATE": "Vence",
     "PAID": "Pagada",
     "OVERDUE": "Vencida",
+    "PENDING": "Pendiente",
     "MARK_AS_PAID": "Marcar pagada",
     "MARK_AS_UNPAID": "Marcar como no pagada",
     "CONFIRM_DELETE": "¿Estás seguro de eliminar esta deuda?",

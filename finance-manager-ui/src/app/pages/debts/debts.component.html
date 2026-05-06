@@ -248,6 +248,10 @@
                         class="badge bg-danger">
                     {{'DEBTS.OVERDUE' | translate}}
                   </span>
+                  <span *ngIf="!inst.isPaid && !isOverdue(inst.dueDate)"
+                        class="badge bg-secondary">
+                    {{'DEBTS.PENDING' | translate}}
+                  </span>
                 </div>
               </div>
 

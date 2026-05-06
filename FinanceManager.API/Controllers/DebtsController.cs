@@ -232,6 +232,11 @@ namespace FinanceManager.API.Controllers
                 });
             }
 
+            // Adjust last installment to absorb rounding difference
+            var roundingDiff = Math.Round(monthlyPayment * debt.Installments, 2) - installments.Sum(i => i.Amount);
+            if (roundingDiff != 0)
+                installments[^1].Amount = Math.Round(installments[^1].Amount + roundingDiff, 2);
+
             return installments;
         }
     }
