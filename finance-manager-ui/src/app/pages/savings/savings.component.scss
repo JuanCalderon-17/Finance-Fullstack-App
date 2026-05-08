@@ -104,7 +104,7 @@
       background-color: var(--input-bg) !important;
       border-color: var(--input-focus-border) !important;
       color: var(--text-primary) !important;
-      box-shadow: 0 0 0 0.2rem rgba(29, 155, 240, 0.15);
+      box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.18);
     }
 
     &::placeholder {
@@ -134,7 +134,7 @@
       background-color: var(--color-primary-hover) !important;
       border-color: var(--color-primary-hover) !important;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(29, 155, 240, 0.3);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
     &:disabled {
@@ -160,8 +160,8 @@
     }
 
     option {
-      background-color: #16181c;
-      color: white;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
     }
   }
 

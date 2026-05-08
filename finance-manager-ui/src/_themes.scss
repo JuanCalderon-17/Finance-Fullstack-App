@@ -7,128 +7,128 @@
 :root {
   // Backgrounds
   --bg-primary: #ffffff;
-  --bg-secondary: #f7f9f9;          // Gris clarísimo (tipo X)
+  --bg-secondary: #f4f7f5;          // off-white with faint emerald tint
   --bg-card: #ffffff;
-  --bg-navbar: #000000;              // Negro puro (tipo X)
-  --bg-sidebar: #16181c;             // Gris muy oscuro
-  --bg-hover: #f7f9f9;               // Hover suave
-  
-  // Glassmorphism (para componentes especiales)
+  --bg-navbar: #050d0a;              // deep emerald-black (matches landing)
+  --bg-sidebar: #0a1410;
+  --bg-hover: #ecf5f0;               // subtle emerald-tinted hover
+
+  // Glassmorphism
   --glass-bg: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(0, 0, 0, 0.1);
-  
+
   // Texts
-  --text-primary: #0f1419;           // Negro suave (tipo X)
-  --text-secondary: #536471;         // Gris medio
-  --text-muted: #8b98a5;            // Gris claro
+  --text-primary: #0f1419;
+  --text-secondary: #475a51;         // emerald-tinted grey
+  --text-muted: #8b98a5;
   --text-on-dark: #ffffff;
-  --text-inverse: #ffffff;           // NUEVO: Para texto en fondos oscuros
-  
+  --text-inverse: #ffffff;
+
   // Borders & Dividers
-  --border-color: #eff3f4;          // Borde muy suave
-  --border-strong: #cfd9de;         // Borde más visible
+  --border-color: #e8efeb;          // subtle emerald-tinted
+  --border-strong: #cfd9d3;
   --divider: rgba(0, 0, 0, 0.08);
-  
-  // Brand Colors
-  --color-primary: #1d9bf0;         // Azul X (Twitter)
-  --color-primary-hover: #1a8cd8;
-  --color-accent: #1d9bf0;
-  
-  // Status Colors
-  --color-success: #00ba7c;         // Verde tipo X
+
+  // Brand Colors — emerald
+  --color-primary: #10b981;          // emerald-500 (good contrast on white)
+  --color-primary-hover: #059669;    // emerald-600
+  --color-accent: #10b981;
+
+  // Status Colors (financial conventions preserved)
+  --color-success: #10b981;          // green stays green for income
   --color-success-light: #d1fae5;
-  --color-danger: #f4212e;          // Rojo tipo X
+  --color-danger: #ef4444;           // red stays red for expenses
   --color-danger-light: #fee2e2;
-  --color-warning: #ffad1f;         // Amarillo tipo X
+  --color-warning: #f59e0b;          // gold (matches CTAs across the app)
   --color-warning-light: #fef3c7;
-  --color-info: #1d9bf0;
-  --color-info-light: #e0f2fe;
-  
+  --color-info: #10b981;
+  --color-info-light: #d1fae5;
+
   // Shadows
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
   --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
-  
+
   // Forms
   --input-bg: #ffffff;
-  --input-border: #eff3f4;
-  --input-focus-border: #1d9bf0;
+  --input-border: #e8efeb;
+  --input-focus-border: #10b981;
   --input-placeholder: #8b98a5;
-  
-  // Charts (colores vibrantes)
-  --chart-cyan: #00d2d3;
-  --chart-orange: #ff9f43;
-  --chart-purple: #794bc4;
-  --chart-red: #f4212e;
-  --chart-green: #00ba7c;
-  --chart-blue: #1d9bf0;
-  --chart-pink: #f91880;
-  --chart-yellow: #ffad1f;
+
+  // Charts (vibrant on white)
+  --chart-cyan: #06b6d4;
+  --chart-orange: #f59e0b;
+  --chart-purple: #8b5cf6;
+  --chart-red: #ef4444;
+  --chart-green: #10b981;
+  --chart-blue: #3b82f6;
+  --chart-pink: #ec4899;
+  --chart-yellow: #fbbf24;
 }
 
-// ============ DARK MODE (estilo X/GitHub) ============
+// ============ DARK MODE (Emerald Vault) ============
 [data-theme="dark"] {
-  // Backgrounds
-  --bg-primary: #000000;            // Negro puro (tipo X)
-  --bg-secondary: #16181c;          // Gris muy oscuro (tipo X)
-  --bg-card: #16181c;               // Cards oscuras
-  --bg-navbar: #000000;
-  --bg-sidebar: #16181c;
-  --bg-hover: #1c1f23;              // Hover en oscuro
-  
-  // Glassmorphism (para landing/login)
-  --glass-bg: rgba(0, 0, 0, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  
+  // Backgrounds — slightly lighter than landing for readability on data-heavy screens
+  --bg-primary: #0a1410;            // emerald-tinted near-black
+  --bg-secondary: #0e1c17;          // raised surface
+  --bg-card: #0e1c17;
+  --bg-navbar: #050d0a;             // deepest (matches landing)
+  --bg-sidebar: #050d0a;
+  --bg-hover: #122821;              // hover state
+
+  // Glassmorphism
+  --glass-bg: rgba(10, 20, 16, 0.55);
+  --glass-border: rgba(52, 211, 153, 0.18);
+
   // Texts
-  --text-primary: #e7e9ea;          // Blanco suave (tipo X)
-  --text-secondary: #71767b;        // Gris medio
-  --text-muted: #536471;            // Gris oscuro
-  --text-on-dark: #e7e9ea;
-  --text-inverse: #0f1419;          // NUEVO: Para texto en fondos claros
-  
+  --text-primary: #ecfdf5;          // soft mint-white
+  --text-secondary: #94a3a0;        // emerald-tinted grey
+  --text-muted: #5e6b67;
+  --text-on-dark: #ecfdf5;
+  --text-inverse: #0f1419;
+
   // Borders & Dividers
-  --border-color: #2f3336;          // Borde suave en oscuro
-  --border-strong: #3e4144;         // Borde más visible
-  --divider: rgba(255, 255, 255, 0.1);
-  
-  // Brand Colors
-  --color-primary: #1d9bf0;         // Mismo azul X
-  --color-primary-hover: #4ab3f4;
-  --color-accent: #1d9bf0;
-  
-  // Status Colors (más brillantes para contraste)
-  --color-success: #00ba7c;
-  --color-success-light: #0e3625;
-  --color-danger: #f4212e;
-  --color-danger-light: #3a0d11;
-  --color-warning: #ffad1f;
-  --color-warning-light: #3d2c0f;
-  --color-info: #1d9bf0;
-  --color-info-light: #0d2535;
-  
-  // Shadows (más sutiles en oscuro)
-  --shadow-sm: 0 1px 3px rgba(255, 255, 255, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.5);
-  
+  --border-color: #1e2c27;          // subtle emerald-tinted
+  --border-strong: #2a3d36;
+  --divider: rgba(255, 255, 255, 0.08);
+
+  // Brand Colors — emerald
+  --color-primary: #34d399;          // emerald-400 (matches landing accent)
+  --color-primary-hover: #6ee7b7;    // emerald-300 (lighter on hover)
+  --color-accent: #34d399;
+
+  // Status Colors (financial conventions preserved, tuned for dark contrast)
+  --color-success: #34d399;
+  --color-success-light: rgba(52, 211, 153, 0.15);
+  --color-danger: #f87171;
+  --color-danger-light: rgba(248, 113, 113, 0.15);
+  --color-warning: #fbbf24;          // gold (matches CTAs)
+  --color-warning-light: rgba(251, 191, 36, 0.15);
+  --color-info: #34d399;
+  --color-info-light: rgba(52, 211, 153, 0.15);
+
+  // Shadows
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.55);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
+
   // Forms
-  --input-bg: #000000;
-  --input-border: #2f3336;
-  --input-focus-border: #1d9bf0;
-  --input-placeholder: #71767b;
-  
-  // Charts (mismos colores vibrantes)
-  --chart-cyan: #00d2d3;
-  --chart-orange: #ff9f43;
-  --chart-purple: #794bc4;
-  --chart-red: #f4212e;
-  --chart-green: #00ba7c;
-  --chart-blue: #1d9bf0;
-  --chart-pink: #f91880;
-  --chart-yellow: #ffad1f;
+  --input-bg: #0a1410;
+  --input-border: #1e2c27;
+  --input-focus-border: #34d399;
+  --input-placeholder: #5e6b67;
+
+  // Charts — vibrant but cohesive with emerald theme
+  --chart-cyan: #22d3ee;
+  --chart-orange: #fb923c;
+  --chart-purple: #a78bfa;
+  --chart-red: #f87171;
+  --chart-green: #34d399;
+  --chart-blue: #60a5fa;
+  --chart-pink: #f472b6;
+  --chart-yellow: #fbbf24;
 }
 
 // ============ TRANSITIONS GLOBALES ============

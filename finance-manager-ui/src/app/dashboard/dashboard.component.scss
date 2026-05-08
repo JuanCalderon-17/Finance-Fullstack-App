@@ -416,21 +416,21 @@
     }
 
     tbody tr {
-      background-color: #16181c !important;
-      border-bottom: 1px solid #2f3336 !important; 
-      
+      background-color: var(--bg-card) !important;
+      border-bottom: 1px solid var(--border-color) !important;
+
       &:hover {
-        background-color: #1c1f23 !important;
+        background-color: var(--bg-hover) !important;
       }
 
       td {
-        color: #e7e9ea !important;
+        color: var(--text-primary) !important;
         background-color: transparent !important;
-        border-bottom: 1px solid #2f3336 !important; 
-        
+        border-bottom: 1px solid var(--border-color) !important;
+
         &.transaction-desc,
         &:nth-child(2) {
-          color: #e7e9ea !important;
+          color: var(--text-primary) !important;
         }
       }
     }
