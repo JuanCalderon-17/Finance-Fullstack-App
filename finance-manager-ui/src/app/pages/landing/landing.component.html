@@ -1,83 +1,89 @@
-<div class="landing-container">
-  
+<div class="landing-paths">
+
   <div class="logo-wrapper">
     <img src="finanzascapa.png" alt="Logo Finanzas" class="app-logo">
-  </div>  
+  </div>
 
   <div class="language-switcher">
-  
-  <button class="current-lang-btn" (click)="toggleLangMenu()">
-    @if (languageService.getCurrentLanguage() === 'es') {
-      <img src="https://flagcdn.com/w40/es.png" alt="ES">
-      <span>ES</span>
-    }
-    @if (languageService.getCurrentLanguage() === 'en') {
-      <img src="https://flagcdn.com/w40/us.png" alt="US">
-      <span>EN</span>
-    }
-    @if (languageService.getCurrentLanguage() === 'pt') {
-      <img src="https://flagcdn.com/w40/br.png" alt="BR">
-      <span>PT</span>
-    }
-    <span class="arrow" [class.rotate]="isLangMenuOpen">▼</span>
-  </button>
+    <button class="current-lang-btn" (click)="toggleLangMenu()">
+      @if (languageService.getCurrentLanguage() === 'es') {
+        <img src="https://flagcdn.com/w40/es.png" alt="ES">
+        <span>ES</span>
+      }
+      @if (languageService.getCurrentLanguage() === 'en') {
+        <img src="https://flagcdn.com/w40/us.png" alt="US">
+        <span>EN</span>
+      }
+      @if (languageService.getCurrentLanguage() === 'pt') {
+        <img src="https://flagcdn.com/w40/br.png" alt="BR">
+        <span>PT</span>
+      }
+      <span class="arrow" [class.rotate]="isLangMenuOpen">▼</span>
+    </button>
 
-  @if (isLangMenuOpen) {
-    <div class="lang-dropdown">
-      <button (click)="selectLanguage('es')">
-        <img src="https://flagcdn.com/w40/es.png" alt="ES"> Español
-      </button>
-      <button (click)="selectLanguage('en')">
-        <img src="https://flagcdn.com/w40/us.png" alt="US"> English
-      </button>
-      <button (click)="selectLanguage('pt')">
-        <img src="https://flagcdn.com/w40/br.png" alt="BR"> Português
-      </button>
-    </div>
-  }
-
+    @if (isLangMenuOpen) {
+      <div class="lang-dropdown">
+        <button (click)="selectLanguage('es')">
+          <img src="https://flagcdn.com/w40/es.png" alt="ES"> Español
+        </button>
+        <button (click)="selectLanguage('en')">
+          <img src="https://flagcdn.com/w40/us.png" alt="US"> English
+        </button>
+        <button (click)="selectLanguage('pt')">
+          <img src="https://flagcdn.com/w40/br.png" alt="BR"> Português
+        </button>
+      </div>
+    }
   </div>
-  
-  <div class="hero-content">
-    
-    <div class="text-content">
-      <h1 class="main-title">
-        {{ 'LANDING.TITLE' | translate }} <br>
-        {{ 'LANDING.SUBTITLE' | translate }}
-      </h1>
-      
-      <p class="description">
-        {{ 'LANDING.DESCRIPTION' | translate }}
-      </p>
 
+  <div class="paths-bg" aria-hidden="true">
+    <svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid meet">
+      <path
+        *ngFor="let p of paths1"
+        [attr.d]="p.d"
+        [attr.pathLength]="1"
+        [attr.stroke-width]="p.width"
+        [attr.stroke-opacity]="p.opacity"
+        [style.--duration]="p.duration + 's'"
+        class="flow-path"
+      />
+    </svg>
+    <svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid meet">
+      <path
+        *ngFor="let p of paths2"
+        [attr.d]="p.d"
+        [attr.pathLength]="1"
+        [attr.stroke-width]="p.width"
+        [attr.stroke-opacity]="p.opacity"
+        [style.--duration]="p.duration + 's'"
+        class="flow-path"
+      />
+    </svg>
+  </div>
+
+  <div class="hero">
+    <span class="pill-tag">{{ 'LANDING.PILL_TAG' | translate }}</span>
+
+    <h1 class="hero-title">
+      <span *ngFor="let word of titleWords" class="word">
+        <span
+          *ngFor="let letter of word.letters"
+          class="letter"
+          [style.animation-delay]="letter.delay + 's'"
+        >{{ letter.char === ' ' ? ' ' : letter.char }}</span>
+      </span>
+    </h1>
+
+    <p class="hero-description">{{ 'LANDING.DESCRIPTION' | translate }}</p>
+
+    <div class="cta-shell">
       <button routerLink="/auth/login" class="cta-button">
-        {{ 'LANDING.CTA_BUTTON' | translate }}
+        <span class="cta-text">{{ 'LANDING.CTA_BUTTON' | translate }}</span>
+        <span class="cta-arrow">→</span>
       </button>
     </div>
-    <div class="cards-showcase">
-      
-      <div class="card card-balance">
-        <div class="card-label">{{ 'LANDING.ITEM_AVALIABLE' | translate }}</div>
-        <div class="card-amount">$1,248.50</div>
-        <div class="card-actions">
-          <button class="mini-btn">{{ 'LANDING.INCOME' | translate }}s</button>
-          <button class="mini-btn">{{ 'LANDING.EXPENSE' | translate }}</button>
-        </div>
-      </div>
 
-      <div class="card card-summary">
-        <div class="card-date">{{  'LANDING.JANUARY_DATE' | translate }}</div>
-        <div class="card-highlight">+$350.00</div>
-        <div class="card-subtitle">{{ 'LANDING.EARLY_INCOME' | translate }}</div>
-      </div>
-
-      <div class="card card-action">
-        <div class="card-icon">💰</div>
-        <div class="card-title">{{ 'LANDING.ADD_TRANSACTION' | translate }}</div>
-      </div>
-
-    </div>
-
+    <p class="trust-microcopy">{{ 'LANDING.TRUST_MICROCOPY' | translate }}</p>
   </div>
 
 </div>
