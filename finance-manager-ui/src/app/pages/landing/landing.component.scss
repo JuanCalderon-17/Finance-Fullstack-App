@@ -1,84 +1,78 @@
-/* === PALETA DE COLORES ELEGANTE OSCURA === */
-$glass-bg: rgba(0, 0, 0, 0.6);
-$glass-border: rgba(255, 255, 255, 0.1);
-$text-primary: #ffffff;
-$text-secondary: #ddd;
-$text-muted: #aaa;
-$accent-white: #ffffff;
+/* === LANDING — Emerald Vault (darker variant) === */
 
-/* === CONTENEDOR PRINCIPAL === */
-.landing-container {
+$bg: #050d0a;             /* near-black with the faintest emerald undertone */
+$ink: #ffffff;
+$muted: rgba(255, 255, 255, 0.62);
+$accent: #34d399;         /* emerald-400 */
+$accent-soft: rgba(52, 211, 153, 0.55);
+$gold-1: #fbbf24;
+$gold-2: #f59e0b;
+
+.landing-paths {
+  position: relative;
   min-height: 100vh;
   width: 100%;
-  background-color: #3a3a3a; /* Fallback: always charcoal gray regardless of body theme */
-  background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)),
-                    url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  position: relative;
-  overflow-x: hidden; /* Evita scroll horizontal indeseado en móvil */
-}
-
-/* === LOGO SUPERIOR (IZQUIERDA) === */
-.logo-wrapper {
-  position: absolute;
-  
-  /* Volvemos a posiciones normales y positivas */
-  top: 2rem;   
-  left: 2rem;  
-  
+  background: $bg;
+  color: $ink;
+  overflow: hidden;
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  /* Vignette */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.55) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+/* === LOGO === */
+.logo-wrapper {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
   z-index: 10;
   animation: fadeInDown 0.8s ease;
 
   .app-logo {
-    /* TAMAÑO NORMAL*/
-    height: 80px; 
+    height: 80px;
     width: auto;
-    
-    /* Mantenemos el filtro blanco */
-    filter: brightness(0) invert(1); 
-    
+    filter: brightness(0) invert(1);
     transition: transform 0.3s ease;
   }
 
-  &:hover .app-logo {
-    transform: scale(1.05);
-  }
+  &:hover .app-logo { transform: scale(1.05); }
 
-  /* === AJUSTE PARA MÓVIL === */
   @media (max-width: 768px) {
     top: 1.5rem;
     left: 1.5rem;
-    
-    .app-logo {
-      height: 40px; /* Tamaño perfecto para celular */
-    }
+    .app-logo { height: 40px; }
   }
 }
 
-/* === SELECTOR DE IDIOMA (DROPDOWN) === */
+/* === LANGUAGE SWITCHER === */
 .language-switcher {
   position: absolute;
   top: 2rem;
   right: 2rem;
-  z-index: 50; /* Muy alto para estar encima de todo */
+  z-index: 50;
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Alineado a la derecha */
+  align-items: flex-end;
   animation: fadeInDown 0.8s ease;
 
-  /* Botón Principal */
   .current-lang-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     padding: 8px 16px;
     border-radius: 30px;
     color: #fff;
@@ -86,45 +80,36 @@ $accent-white: #ffffff;
     font-weight: 700;
     transition: all 0.3s ease;
 
-    img {
-      width: 20px;
-      height: 15px;
-      border-radius: 2px;
-      object-fit: cover;
-    }
+    img { width: 20px; height: 15px; border-radius: 2px; object-fit: cover; }
 
     .arrow {
       font-size: 0.7rem;
       margin-left: 4px;
       transition: transform 0.3s ease;
-      
-      &.rotate {
-        transform: rotate(180deg); /* Gira la flecha al abrir */
-      }
+      &.rotate { transform: rotate(180deg); }
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(52, 211, 153, 0.12);
+      border-color: rgba(52, 211, 153, 0.4);
     }
   }
 
-  /* Menú Desplegable (Flotante) */
   .lang-dropdown {
     position: absolute;
-    top: 100%; /* Justo debajo del botón */
+    top: 100%;
     right: 0;
-    margin-top: 8px; /* Espacio separador */
-    background: rgba(20, 20, 20, 0.95); /* Fondo oscuro sólido */
+    margin-top: 8px;
+    background: rgba(8, 16, 13, 0.96);
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 8px;
     min-width: 150px;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     animation: fadeIn 0.2s ease;
 
     button {
@@ -143,229 +128,226 @@ $accent-white: #ffffff;
       text-align: left;
       transition: all 0.2s;
 
-      img {
-        width: 20px;
-        height: 15px;
-        border-radius: 2px;
-      }
+      img { width: 20px; height: 15px; border-radius: 2px; }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
+        background: rgba(52, 211, 153, 0.12);
+        color: $accent;
       }
     }
   }
 
-  /* Ajuste Móvil */
   @media (max-width: 768px) {
     top: 1.5rem;
     right: 1.5rem;
   }
 }
 
-/* Animación suave para el menú */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* === ANIMATED SVG PATHS BACKGROUND === */
+.paths-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: $accent-soft;
+  z-index: 0;
+
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
-/* === CONTENIDO HERO === */
-.hero-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* PC: Dos columnas */
-  gap: 4rem;
-  align-items: center;
-  min-height: 100vh;
-  padding: 0 5%;
-  max-width: 1400px;
-  margin: 0 auto;
+.flow-path {
+  fill: none;
+  stroke: currentColor;
+}
+
+/* === HERO === */
+.hero {
   position: relative;
   z-index: 1;
+  max-width: 56rem;
+  padding: 0 1.5rem;
+  text-align: center;
+  animation: fadeIn 1.2s ease;
 
-  /* MÓVIL Y TABLET: Una columna */
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    padding: 7rem 5% 4rem; /* Más espacio arriba para el logo */
-    text-align: center;
-    align-content: center; /* Centrar verticalmente */
+  /* Soft emerald glow behind the title */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    width: 70%;
+    height: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at center,
+                rgba(52, 211, 153, 0.16) 0%,
+                rgba(52, 211, 153, 0.05) 40%,
+                transparent 70%);
+    filter: blur(48px);
+    z-index: -1;
+    pointer-events: none;
   }
 }
 
-/* === TEXTO PRINCIPAL === */
-.text-content {
-  animation: fadeInLeft 1s ease;
+/* === PILL TAG === */
+.pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.95rem;
+  border-radius: 9999px;
+  background: rgba(52, 211, 153, 0.07);
+  border: 1px solid rgba(52, 211, 153, 0.22);
+  color: rgba(167, 243, 208, 0.95);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+  animation: fadeIn 1.2s ease both;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
-  @media (max-width: 1024px) {
-    animation: fadeIn 1s ease;
-    /* En móvil, queremos que el texto esté arriba */
-    order: 1; 
+  &::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    background: $accent;
+    border-radius: 50%;
+    box-shadow: 0 0 10px $accent, 0 0 4px $accent;
+    animation: dotPulse 2.4s ease-in-out infinite;
   }
 }
 
-.main-title {
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* === TITLE === */
+.hero-title {
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-size: 4rem;
   font-weight: 800;
-  line-height: 1.1;
-  color: $text-primary;
-  margin-bottom: 1.5rem;
-  letter-spacing: -1.5px;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  font-size: clamp(2.75rem, 7vw, 6.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin: 0 0 1.5rem;
 
-  @media (max-width: 1024px) {
-    font-size: 3rem;
+  .word {
+    display: inline-block;
+    margin-right: 0.6rem;
+    &:last-child { margin-right: 0; }
   }
-  @media (max-width: 640px) {
-    font-size: 2.5rem; /* Ajuste para celulares pequeños */
+
+  .letter {
+    display: inline-block;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.78) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transform: translateY(80px);
+    animation: letterRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    will-change: transform, opacity;
   }
 }
 
-.description {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: $text-muted;
-  margin-bottom: 2.5rem;
-  font-weight: 400;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+@keyframes letterRise {
+  0%   { opacity: 0; transform: translateY(80px); }
+  60%  { opacity: 1; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
-  @media (max-width: 640px) {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    padding: 0 10px; /* Margen para que no toque los bordes */
+/* === DESCRIPTION === */
+.hero-description {
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.65;
+  color: $muted;
+  max-width: 32rem;
+  margin: 0 auto 2.25rem;
+  animation: fadeIn 1.5s ease 0.6s both;
+}
+
+/* === CTA — gold gradient === */
+.cta-shell {
+  display: inline-block;
+  padding: 1px;
+  border-radius: 0.85rem;
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.55), rgba(245, 158, 11, 0.25));
+  box-shadow: 0 8px 30px rgba(245, 158, 11, 0.22);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  animation: fadeIn 1.5s ease 0.9s both;
+
+  &:hover {
+    box-shadow: 0 14px 44px rgba(245, 158, 11, 0.42);
   }
 }
 
 .cta-button {
-  background: $accent-white;
-  color: #000;
-  font-family: system-ui, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 800;
-  padding: 1rem 3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1a1300;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.78rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, filter 0.3s ease;
+
+  .cta-text  { transition: opacity 0.3s ease; }
+  .cta-arrow {
+    display: inline-block;
+    opacity: 0.85;
+    transform: translateX(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
 
   &:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    .cta-arrow { opacity: 1; transform: translateX(5px); }
   }
 
-  &:active {
-    transform: scale(0.98);
-  }
+  &:active { transform: translateY(0); }
 
   @media (max-width: 640px) {
-    width: 100%;
-    max-width: 300px; /* Que no sea gigante */
-    padding: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.92rem;
   }
 }
 
-/* === SHOWCASE DE TARJETAS (ARREGLADO PARA MÓVIL) === */
-.cards-showcase {
-  position: relative;
-  height: 600px; /* Altura fija solo en PC */
-  animation: fadeInRight 1s ease;
-
-  /* CAMBIOS PARA MÓVIL */
-  @media (max-width: 1024px) {
-    display: flex !important; /* FORZAMOS QUE SE VEA */
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    height: auto; /* Altura automática */
-    margin-top: 2rem;
-    order: 2; /* Que vaya debajo del texto */
-    padding-bottom: 3rem; /* Espacio al final */
-  }
+/* === TRUST MICROCOPY === */
+.trust-microcopy {
+  margin: 1.25rem 0 0;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.42);
+  letter-spacing: 0.04em;
+  animation: fadeIn 1.5s ease 1.2s both;
 }
 
-.card {
-  /* Estilos Base PC (Posición Absoluta) */
-  position: absolute;
-  background: $glass-bg;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid $glass-border;
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-10px);
-    border-color: rgba(255, 255, 255, 0.15);
-  }
-
-  /* RESET PARA MÓVIL (Posición Relativa) */
-  @media (max-width: 1024px) {
-    position: relative; /* Ya no flotan libremente */
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    width: 100%;
-    max-width: 340px; /* Ancho máximo para que no se vea feo */
-    margin: 0;
-    animation: none; /* Quitamos flotación en móvil para ahorrar batería */
-    transform: translateY(0) !important;
-  }
+/* === ANIMATIONS === */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Tarjeta 1: Balance */
-.card-balance {
-  width: 320px;
-  top: 50px;
-  left: 50px;
-  animation: float 6s ease-in-out infinite;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
-  .card-label { font-size: 0.875rem; color: $text-muted; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
-  .card-amount { font-size: 3rem; font-weight: 800; color: $text-primary; margin-bottom: 1.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
-  .card-actions { display: flex; gap: 0.75rem; }
-  .mini-btn {
-    flex: 1; padding: 0.75rem; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; color: white; font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase;
-    &:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) {
+  .hero-title .letter {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
+  .pill-tag::before { animation: none; }
 }
-
-/* Tarjeta 2: Resumen */
-.card-summary {
-  width: 280px;
-  top: 200px;
-  right: 80px;
-  animation: float 6s ease-in-out infinite 1s;
-
-  .card-date { font-size: 0.875rem; color: $text-muted; margin-bottom: 1rem; }
-  .card-highlight { font-size: 2.5rem; font-weight: 800; color: #4caf50; margin-bottom: 0.5rem; }
-  .card-subtitle { font-size: 1rem; color: $text-secondary; }
-}
-
-/* Tarjeta 3: Acción */
-.card-action {
-  width: 240px;
-  top: 420px;
-  left: 180px;
-  animation: float 6s ease-in-out infinite 2s;
-  cursor: pointer;
-
-  .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-  .card-title { font-size: 1.125rem; font-weight: 700; color: $text-primary; }
-  &:hover { background: rgba(255, 255, 255, 0.1); }
-  
-  /* En móvil, ocultamos la tarjeta más pequeña si ocupa mucho espacio, o la dejamos */
-  @media (max-width: 640px) {
-    display: none; /* Opcional: Ocultamos la 3ra tarjeta en pantallas MUY pequeñas para no hacer scroll infinito */
-  }
-}
-
-/* === ANIMACIONES === */
-@keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
