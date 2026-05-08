@@ -62,7 +62,8 @@ Built end-to-end (backend, frontend, database, deployment) by **[Juan Calderón]
 - Multiple accounts with goals, color-coding, and progress tracking
 
 ### Currency
-- Live USD ↔ BRL exchange rates fetched at runtime
+- Live USD ↔ BRL exchange rates fetched at runtime via [**ExchangeRate-API**](https://www.exchangerate-api.com/) (`/v4/latest/USD`)
+- Backend `CurrencyService` registered with `AddHttpClient` for connection pooling
 - Per-user currency preference, with conversion handled centrally on the frontend
 
 ### Internationalization & UX
