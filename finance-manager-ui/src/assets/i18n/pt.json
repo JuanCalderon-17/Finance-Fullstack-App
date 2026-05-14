@@ -206,7 +206,9 @@
     "INSTALLMENTS": "parcelas",
     "PAID_INSTALLMENTS": "pagas",
     "ORIGINAL": "Original",
-    "ADJUSTED": "Ajustado"
+    "ADJUSTED": "Ajustado",
+    "PAID_IN_FULL": "Quitada",
+    "OVERPAID_BY": "Pagou a mais"
   },
   "BUTTONS": {
     "ADD": "Adicionar",

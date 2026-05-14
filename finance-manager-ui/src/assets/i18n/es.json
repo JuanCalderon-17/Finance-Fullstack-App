@@ -206,7 +206,9 @@
     "INSTALLMENTS": "cuotas",
     "PAID_INSTALLMENTS": "pagadas",
     "ORIGINAL": "Original",
-    "ADJUSTED": "Ajustado"
+    "ADJUSTED": "Ajustado",
+    "PAID_IN_FULL": "Pagada por completo",
+    "OVERPAID_BY": "Pagaste de más"
   },
   "BUTTONS": {
     "SAVE": "Guardar",
