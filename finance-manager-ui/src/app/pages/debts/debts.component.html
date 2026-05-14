@@ -101,7 +101,7 @@
               <button
                 type="submit"
                 class="btn btn-lg debt-submit-btn"
-                [disabled]="!currentDebt.name || currentDebt.balance <= 0"
+                [disabled]="!currentDebt.name || currentDebt.originalBalance <= 0"
               >
                 <i [class]="isEditing ? 'bi bi-check-circle' : 'bi bi-plus-lg'"></i>
                 {{ (isEditing ? 'DEBTS.SAVE_CHANGES' : 'DEBTS.CREATE_DEBT') | translate }}
