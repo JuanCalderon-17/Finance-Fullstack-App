@@ -204,7 +204,9 @@
     "CONFIRM_DELETE": "Tem certeza de que deseja excluir esta dívida?",
     "INTEREST": "juros",
     "INSTALLMENTS": "parcelas",
-    "PAID_INSTALLMENTS": "pagas"
+    "PAID_INSTALLMENTS": "pagas",
+    "ORIGINAL": "Original",
+    "ADJUSTED": "Ajustado"
   },
   "BUTTONS": {
     "ADD": "Adicionar",

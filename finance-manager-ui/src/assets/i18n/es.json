@@ -204,7 +204,9 @@
     "CONFIRM_DELETE": "¿Estás seguro de eliminar esta deuda?",
     "INTEREST": "interés",
     "INSTALLMENTS": "cuotas",
-    "PAID_INSTALLMENTS": "pagadas"
+    "PAID_INSTALLMENTS": "pagadas",
+    "ORIGINAL": "Original",
+    "ADJUSTED": "Ajustado"
   },
   "BUTTONS": {
     "SAVE": "Guardar",

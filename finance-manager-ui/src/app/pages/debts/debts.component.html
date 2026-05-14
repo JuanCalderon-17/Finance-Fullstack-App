@@ -55,8 +55,8 @@
                 type="number"
                 class="form-control"
                 id="debtBalance"
-                [(ngModel)]="currentDebt.balance"
-                name="balance"
+                [(ngModel)]="currentDebt.originalBalance"
+                name="originalBalance"
                 step="0.01"
                 required
               />
@@ -145,6 +145,17 @@
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h3 class="fw-bold mb-2">{{ d.name }}</h3>
+
+              <div class="debt-balance-row small mb-2">
+                <strong>{{ 'DEBTS.ORIGINAL' | translate }}:</strong>
+                <span>{{ currencySymbol }}{{ convertNumber(d.originalBalance, d.currency) | number:'1.2-2' }}</span>
+
+                <ng-container *ngIf="d.hasDelta">
+                  <span class="text-muted mx-2">·</span>
+                  <strong>{{ 'DEBTS.ADJUSTED' | translate }}:</strong>
+                  <span class="text-warning">{{ currencySymbol }}{{ convertNumber(d.currentBalance, d.currency) | number:'1.2-2' }}</span>
+                </ng-container>
+              </div>
 
               <div class="d-flex gap-2 flex-wrap">
                 <span class="badge bg-primary">

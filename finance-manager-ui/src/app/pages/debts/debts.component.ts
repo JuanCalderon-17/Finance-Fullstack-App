@@ -27,7 +27,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
   
   currentDebt: Debt = {
     name: '',
-    balance: 0,
+    originalBalance: 0,
     currency: 'USD',
     interestRate: 0,
     installments: 12,
@@ -70,7 +70,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
     });
   }
   convertAmount(acc: Debt): number {
-    return this.currencyStateService.convert(acc.balance, acc.currency || 'USD');
+    return this.currencyStateService.convert(acc.originalBalance, acc.currency || 'USD');
   }
 
   convertNumber(amount: number, fromCurrency: string = 'USD'): number {
@@ -104,6 +104,11 @@ export class DebtsComponent implements OnInit, OnDestroy {
       .filter((i: any) => !i.isPaid)
       .reduce((sum: number, i: any) => sum + i.amount, 0);
 
+    // Has the installment-sum drifted from the originalBalance?
+    // (Triggers the "Original $X · Adjusted $Y" display in the template.)
+    const current = d.currentBalance ?? totalInstallmentAmount;
+    d.hasDelta = Math.abs(current - d.originalBalance) > 0.01;
+
     return d;
   }
 
@@ -117,7 +122,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
 
   // save debt, create or update
   saveDebt() {
-  if (!this.currentDebt.name || this.currentDebt.balance <= 0) {
+  if (!this.currentDebt.name || this.currentDebt.originalBalance <= 0) {
     alert('Complete all the required fields');
     return;
   }
@@ -125,7 +130,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
   const debtToSave = { ...this.currentDebt };
 
   if (this.currencyCode === 'BRL') {
-    debtToSave.balance = this.currentDebt.balance / this.exchangeRate;
+    debtToSave.originalBalance = this.currentDebt.originalBalance / this.exchangeRate;
   }
 
   // MODO EDICIÓN
@@ -161,7 +166,7 @@ export class DebtsComponent implements OnInit, OnDestroy {
     this.isEditing = true;
     this.currentDebt = { ...debt };
     // Show balance in user's active currency so the form value matches what they see
-    this.currentDebt.balance = this.currencyStateService.convert(debt.balance, 'USD');
+    this.currentDebt.originalBalance = this.currencyStateService.convert(debt.originalBalance, 'USD');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -241,13 +246,13 @@ export class DebtsComponent implements OnInit, OnDestroy {
   resetForm() {
     this.isEditing = false;
     this.currentDebt = {
-      name: '', 
-      balance: 0, 
+      name: '',
+      originalBalance: 0,
       currency: this.currencyCode,
-      interestRate: 0, 
-      installments: 12, 
+      interestRate: 0,
+      installments: 12,
       paidInstallments: 0,
-      color: '#ff416c', 
+      color: '#ff416c',
       icon: 'bi-credit-card'
     };
   }

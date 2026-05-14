@@ -15,7 +15,8 @@ export interface Installment {
 export interface Debt {
   id?: number;
   name: string;
-  balance: number;
+  originalBalance: number;
+  currentBalance?: number;
   interestRate: number;
   installments: number;
   paidInstallments: number;
