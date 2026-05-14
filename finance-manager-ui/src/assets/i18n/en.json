@@ -212,7 +212,9 @@
     "CONFIRM_DELETE": "Are you sure you want to delete this debt?",
     "INTEREST": "interest",
     "INSTALLMENTS": "installments",
-    "PAID_INSTALLMENTS": "paid"
+    "PAID_INSTALLMENTS": "paid",
+    "ORIGINAL": "Original",
+    "ADJUSTED": "Adjusted"
   },
   "BUTTONS": {
     "ADD": "Add",
