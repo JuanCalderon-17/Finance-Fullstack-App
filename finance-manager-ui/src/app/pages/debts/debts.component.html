@@ -199,9 +199,20 @@
 
             <div class="col-md-4">
               <strong>{{'DEBTS.REMAINING_BALANCE' | translate}}</strong>
-              <div class="fs-4 text-danger">
-                {{ currencySymbol }}{{ convertNumber(d.remainingAmount,  d.currency) | number:'1.2-2' }}
+              <div
+                class="fs-4"
+                [class.text-danger]="!d.isPaidInFull"
+                [class.text-success]="d.isPaidInFull && !d.isOverpaid"
+                [class.text-warning]="d.isOverpaid"
+              >
+                {{ currencySymbol }}{{ convertNumber(d.remainingAmount, d.currency) | number:'1.2-2' }}
               </div>
+              <small *ngIf="d.isPaidInFull && !d.isOverpaid" class="text-success fw-bold">
+                ✓ {{ 'DEBTS.PAID_IN_FULL' | translate }}
+              </small>
+              <small *ngIf="d.isOverpaid" class="text-warning fw-bold">
+                {{ 'DEBTS.OVERPAID_BY' | translate }} {{ currencySymbol }}{{ convertNumber(d.overpaidAmount, d.currency) | number:'1.2-2' }}
+              </small>
             </div>
 
             <div class="col-md-4">
