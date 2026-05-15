@@ -1,4 +1,7 @@
 ﻿using System.Text;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using FinanceManager.API.Data;
 using FinanceManager.API.Interfaces;
 using FinanceManager.API.Models;
@@ -64,6 +67,42 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
 
 
+
+// Rate limiting — bouncer rules for our API endpoints
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = 429;
+
+    // Strict limit for auth endpoints (login, register, forgot-password)
+    // 5 attempts per minute per IP — stops brute-force and email spam
+    options.AddFixedWindowLimiter("auth", o =>
+    {
+        o.PermitLimit = 5;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // Moderate limit for currency endpoint
+    // 30 requests per minute per IP — protects external API quota
+    options.AddFixedWindowLimiter("currency", o =>
+    {
+        o.PermitLimit = 30;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // Default global limit for all other endpoints
+    // 100 requests per minute per IP — general DoS protection
+    options.AddFixedWindowLimiter("general", o =>
+    {
+        o.PermitLimit = 100;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+});
 
 builder.Services.AddCors(options =>
 {
@@ -133,6 +172,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAngularApp");
+
+// Tell ASP.NET to trust X-Forwarded-For from Render's proxy so the rate
+// limiter sees the real client IP, not the proxy's IP.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
