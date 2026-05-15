@@ -293,6 +293,146 @@
   }
 }
 
+// ============ SUMMARY BANNER ============
+.debt-summary-banner {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 60%, #b91c1c 100%);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -8%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+}
+
+.debt-summary-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.debt-summary-amount {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+// ============ DEBT CARD ============
+.debt-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+}
+
+.debt-card-header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.debt-card-title-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.debt-card-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.debt-card-body {
+  padding: 1.5rem;
+}
+
+// ============ PROGRESS BAR ============
+.debt-progress-track {
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.debt-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-success) 0%, var(--color-primary-hover) 100%);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+// ============ STAT CARD WARNING VARIANT ============
+.stat-card-warning {
+  background: var(--color-warning-light);
+  border-color: var(--color-warning);
+
+  .stat-icon-clean {
+    color: var(--color-warning);
+  }
+}
+
+.stat-sub-text {
+  font-size: 0.7rem;
+  margin-top: 0.15rem;
+  display: block;
+}
+
+// ============ INSTALLMENT NUMBER BADGE ============
+.installment-num-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--color-info-light);
+  color: var(--color-info);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--color-info);
+}
+
 // ============ RESPONSIVE ============
 @media (max-width: 768px) {
   .installment-card {
