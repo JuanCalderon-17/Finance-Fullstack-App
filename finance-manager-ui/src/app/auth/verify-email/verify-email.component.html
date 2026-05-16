@@ -1,0 +1,27 @@
+<div class="auth-container">
+  <div class="auth-card">
+
+    <div class="text-center mb-4">
+      <h1 class="display-1">✉️</h1>
+      <h2>VERIFICAR CORREO</h2>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center">
+      <span class="spinner"></span>
+      <p>Verificando tu correo...</p>
+    </div>
+
+    <div *ngIf="message" class="alert alert-success">
+      {{ message }}
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div class="back-link">
+      <a routerLink="/auth/login">← Ir al Login</a>
+    </div>
+
+  </div>
+</div>

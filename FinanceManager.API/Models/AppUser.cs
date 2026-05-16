@@ -8,8 +8,11 @@ namespace FinanceManager.API.Models
      
         public string RecoveryKeyword { get; set; } = string.Empty;
 
+        //email verification
+        public bool IsEmailVerified {get; set; } = false;
+        public string? EmailVerificationToken {get; set; } 
 
-        // === AGREGA ESTO PARA EL RESET DE PASSWORD ===
+        //for the password reset
         public string? PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
     }

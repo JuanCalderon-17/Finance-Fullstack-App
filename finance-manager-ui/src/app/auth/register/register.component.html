@@ -14,12 +14,17 @@
                   <h4 class="mt-1 mb-4 pb-1 title-text">{{'AUTH.REGISTER.TITLE' | translate }}</h4>
                 </div>
 
+                <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                  <i class="bi bi-envelope-check-fill me-2"></i>
+                  <div>{{ successMessage }}</div>
+                </div>
+
                 <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
                   <i class="bi bi-exclamation-triangle-fill me-2"></i>
                   <div>{{ errorMessage }}</div>
                 </div>
 
-                <form (ngSubmit)="register()">
+                <form *ngIf="!successMessage" (ngSubmit)="register()">
                   
                   <div class="form-group mb-3">
                     <label class="form-label" for="fullName">{{ 'AUTH.REGISTER.FULL_NAME' | translate }}</label>

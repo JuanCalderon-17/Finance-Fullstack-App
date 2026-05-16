@@ -36,7 +36,7 @@ namespace FinanceManager.API.Controllers
         // POST: api/account/register
         [HttpPost("register")]
         [EnableRateLimiting("auth")]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult> Register(RegisterDto registerDto)
         {
             if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email.ToLower()))
             {
@@ -54,12 +54,23 @@ namespace FinanceManager.API.Controllers
 
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            return new UserDto
-            {
-                Username = user.Email,
-                FullName = user.FullName,
-                Token = _tokenService.CreateToken(user)
-            };
+            // Generate a verification token and save it — user can't log in until they confirm
+            var verificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            user.EmailVerificationToken = verificationToken;
+            await _userManager.UpdateAsync(user);
+
+            var verifyLink = $"https://finanzasbr.com/auth/verify-email?token={verificationToken}&email={user.Email}";
+            var body = $@"
+                <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                    <h2 style='color: #2c3e50;'>Verifica tu correo</h2>
+                    <p>Gracias por registrarte en Finance Manager. Haz clic en el enlace para activar tu cuenta:</p>
+                    <a href='{verifyLink}' style='background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Verificar correo</a>
+                    <p style='margin-top: 20px; font-size: 12px; color: #7f8c8d;'>Si no creaste esta cuenta, ignora este correo.</p>
+                </div>";
+
+            await _emailService.SendEmailAsync(user.Email, "Verifica tu cuenta", body);
+
+            return Ok(new { message = "Revisa tu correo para verificar tu cuenta." });
         }
 
         // POST: api/account/login
@@ -70,6 +81,9 @@ namespace FinanceManager.API.Controllers
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == loginDto.Username.ToLower());
 
             if (user == null) return Unauthorized("Email o contraseña inválidos.");
+
+            if (!user.IsEmailVerified)
+                return Unauthorized("Debes verificar tu correo antes de iniciar sesión.");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
@@ -83,9 +97,7 @@ namespace FinanceManager.API.Controllers
             };
         }
 
-        // ---------------------------------------------------------
-        // POST: api/account/forgot-password (VERSIÓN BLINDADA)
-        // ---------------------------------------------------------
+        // POST: api/account/forgot-password 
         [HttpPost("forgot-password")]
         [AllowAnonymous]
         [EnableRateLimiting("auth")]
@@ -123,7 +135,7 @@ namespace FinanceManager.API.Controllers
                     <p style='margin-top: 20px; font-size: 12px; color: #7f8c8d;'>Si no solicitaste esto, ignora este correo.</p>
                 </div>";
 
-            // 3. BLINDAJE TRY-CATCH: Esto evita el error de CORS falso
+            // avoid false Cors error
             try
             {
                 await _emailService.SendEmailAsync(request.Email, "Recuperar Contraseña", body);
@@ -137,6 +149,34 @@ namespace FinanceManager.API.Controllers
                 Console.WriteLine($"--> [ERROR CONTROLADO] Falló envío email: {ex.Message}");
                 return BadRequest(new { error = $"No se pudo enviar el correo: {ex.Message}" });
             }
+        }
+
+        // GET: api/account/verify-email?token=xxx&email=xxx
+        [HttpGet("verify-email")]
+        [AllowAnonymous]
+        public async Task<IActionResult> VerifyEmail([FromQuery] string token, [FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+                return BadRequest(new { error = "Token y email son requeridos." });
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest(new { error = "Usuario no encontrado." });
+
+            if (user.IsEmailVerified)
+                return Ok(new { message = "El correo ya fue verificado anteriormente." });
+
+            if (user.EmailVerificationToken != token)
+                return BadRequest(new { error = "Token inválido." });
+
+            user.IsEmailVerified = true;
+            user.EmailVerificationToken = null;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return StatusCode(500, new { error = "Error al verificar el correo." });
+
+            return Ok(new { message = "¡Correo verificado! Ya puedes iniciar sesión." });
         }
 
         // POST: api/account/reset-password
