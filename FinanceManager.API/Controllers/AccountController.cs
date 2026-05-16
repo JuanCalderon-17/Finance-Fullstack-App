@@ -4,10 +4,11 @@ using FinanceManager.API.Models;
 using Microsoft.AspNetCore.Authorization; // <--- IMPORTANTE para [AllowAnonymous]
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography; // Necesario para el Token Random
 using System.Text;
-using FinanceManager.API.Services;  
+using FinanceManager.API.Services;
 
 namespace FinanceManager.API.Controllers
 {
@@ -34,6 +35,7 @@ namespace FinanceManager.API.Controllers
 
         // POST: api/account/register
         [HttpPost("register")]
+        [EnableRateLimiting("auth")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
             if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email.ToLower()))
@@ -73,6 +75,7 @@ namespace FinanceManager.API.Controllers
 
         // POST: api/account/login
         [HttpPost("login")]
+        [EnableRateLimiting("auth")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _userManager.Users.SingleOrDefaultAsync(u => u.UserName == loginDto.Username.ToLower());
@@ -96,7 +99,8 @@ namespace FinanceManager.API.Controllers
 
         // POST: api/account/forgot-password 
         [HttpPost("forgot-password")]
-        [AllowAnonymous] // <--- 1. CRUCIAL: Permite acceso sin login
+        [AllowAnonymous]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
         {
             // Validamos que venga el email
@@ -178,6 +182,7 @@ namespace FinanceManager.API.Controllers
         // POST: api/account/reset-password
         [HttpPost("reset-password")]
         [AllowAnonymous]
+        [EnableRateLimiting("auth")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
         {
             try

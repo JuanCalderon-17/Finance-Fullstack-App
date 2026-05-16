@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LandingComponent } from './pages/landing/landing.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { ShellComponent } from './layout/shell/shell.component';
 
 export const routes: Routes = [
 
@@ -38,21 +39,25 @@ export const routes: Routes = [
     ]
   },
 
-  // Protected
+  // Protected — shell wrapper
   {
-    path: 'dashboard',
-    loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'debts',
-    loadComponent: () => import('./pages/debts/debts.component').then(m => m.DebtsComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'savings',
-    loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent),
-    canActivate: [authGuard]
+    path: '',
+    component: ShellComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'debts',
+        loadComponent: () => import('./pages/debts/debts.component').then(m => m.DebtsComponent)
+      },
+      {
+        path: 'savings',
+        loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent)
+      }
+    ]
   },
 
   {

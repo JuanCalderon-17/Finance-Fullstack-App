@@ -60,9 +60,9 @@ namespace FinanceManager.API.Controllers
 
             var debt = new Debt
             {
-                AppUserId = userId, // ← CAMBIADO
+                AppUserId = userId,
                 Name = dto.Name,
-                Balance = dto.Balance,
+                Balance = dto.OriginalBalance,
                 InterestRate = dto.InterestRate,
                 Installments = dto.Installments,
                 Color = dto.Color,
@@ -95,12 +95,12 @@ namespace FinanceManager.API.Controllers
                 return BadRequest($"Cannot reduce installments to {dto.Installments}: {paidCount} are already paid.");
 
             bool financialParamsChanged =
-                debt.Balance != dto.Balance ||
+                debt.Balance != dto.OriginalBalance ||
                 debt.InterestRate != dto.InterestRate ||
                 debt.Installments != dto.Installments;
 
             debt.Name = dto.Name;
-            debt.Balance = dto.Balance;
+            debt.Balance = dto.OriginalBalance;
             debt.InterestRate = dto.InterestRate;
             debt.Installments = dto.Installments;
             debt.Color = dto.Color;
@@ -202,7 +202,8 @@ namespace FinanceManager.API.Controllers
             {
                 Id = debt.Id,
                 Name = debt.Name,
-                Balance = debt.Balance,
+                OriginalBalance = debt.Balance,
+                CurrentBalance = debt.InstallmentsList.Sum(i => i.Amount),
                 InterestRate = debt.InterestRate,
                 Installments = debt.Installments,
                 PaidInstallments = debt.InstallmentsList.Count(i => i.IsPaid),

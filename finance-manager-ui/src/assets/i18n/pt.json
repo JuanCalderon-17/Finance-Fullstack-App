@@ -111,6 +111,8 @@
     "SAVING_MSG": "Você está economizando",
     "OVERSPENT_MSG": "Você excedeu",
     "NO_EXPENSES": "Sem gastos para mostrar",
+    "SPENDING_BREAKDOWN": "Gastos por Categoria",
+    "OF_INCOME": "da renda",
     "EDITING": "✏️ Editando",
     "NEW_TRANSACTION": "➕ Nova Transação",
     "INCOME_GROUP": "Receitas 🤑",
@@ -204,7 +206,11 @@
     "CONFIRM_DELETE": "Tem certeza de que deseja excluir esta dívida?",
     "INTEREST": "juros",
     "INSTALLMENTS": "parcelas",
-    "PAID_INSTALLMENTS": "pagas"
+    "PAID_INSTALLMENTS": "pagas",
+    "ORIGINAL": "Original",
+    "ADJUSTED": "Ajustado",
+    "PAID_IN_FULL": "Quitada",
+    "OVERPAID_BY": "Pagou a mais"
   },
   "BUTTONS": {
     "ADD": "Adicionar",
