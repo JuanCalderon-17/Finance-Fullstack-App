@@ -37,4 +37,11 @@ namespace FinanceManager.API.DTOs
     {
         public string Email { get; set; } = string.Empty;
     }
+
+    public class ResendVerificationDto
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+    }
 }
