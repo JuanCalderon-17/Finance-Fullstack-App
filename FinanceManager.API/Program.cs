@@ -61,7 +61,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // register services for user management, token generation, and email sending
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddHttpClient<IEmailService, EmailService>();
 
 // service for fetching currency exchange rates from an external API
 builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();

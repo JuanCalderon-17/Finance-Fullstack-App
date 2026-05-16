@@ -68,9 +68,18 @@ namespace FinanceManager.API.Controllers
                     <p style='margin-top: 20px; font-size: 12px; color: #7f8c8d;'>Si no creaste esta cuenta, ignora este correo.</p>
                 </div>";
 
-            await _emailService.SendEmailAsync(user.Email, "Verifica tu cuenta", body);
+            try
+            {
+                await _emailService.SendEmailAsync(user.Email, "Verifica tu cuenta", body);
+            }
+            catch (Exception ex)
+            {
+                // Don't fail registration if email send fails — user can request a resend later
+                Console.WriteLine($"--> [WARN] Verification email failed for {user.Email}: {ex.Message}");
+                return Ok(new { message = "Cuenta creada, pero no pudimos enviar el correo de verificación. Solicita el reenvío.", emailSent = false });
+            }
 
-            return Ok(new { message = "Revisa tu correo para verificar tu cuenta." });
+            return Ok(new { message = "Revisa tu correo para verificar tu cuenta.", emailSent = true });
         }
 
         // POST: api/account/login
@@ -177,6 +186,52 @@ namespace FinanceManager.API.Controllers
                 return StatusCode(500, new { error = "Error al verificar el correo." });
 
             return Ok(new { message = "¡Correo verificado! Ya puedes iniciar sesión." });
+        }
+
+        // POST: api/account/resend-verification
+        [HttpPost("resend-verification")]
+        [AllowAnonymous]
+        [EnableRateLimiting("auth")]
+        public async Task<IActionResult> ResendVerification([FromBody] ResendVerificationDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Email))
+                return BadRequest(new { error = "El email es requerido." });
+
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+
+            // Always return Ok to avoid leaking which emails are registered
+            if (user == null)
+                return Ok(new { message = "Si la cuenta existe, te enviamos un nuevo enlace." });
+
+            if (user.IsEmailVerified)
+                return BadRequest(new { error = "Esta cuenta ya está verificada." });
+
+            // Issue a fresh token (invalidates the previous one)
+            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            user.EmailVerificationToken = token;
+            var update = await _userManager.UpdateAsync(user);
+            if (!update.Succeeded)
+                return StatusCode(500, new { error = "No se pudo generar el token." });
+
+            var verifyLink = $"https://finanzasbr.com/auth/verify-email?token={token}&email={user.Email}";
+            var body = $@"
+                <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                    <h2 style='color: #2c3e50;'>Verifica tu correo</h2>
+                    <p>Solicitaste un nuevo enlace de verificación. Haz clic abajo para activar tu cuenta:</p>
+                    <a href='{verifyLink}' style='background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Verificar correo</a>
+                    <p style='margin-top: 20px; font-size: 12px; color: #7f8c8d;'>Si no solicitaste esto, ignora este correo.</p>
+                </div>";
+
+            try
+            {
+                await _emailService.SendEmailAsync(user.Email, "Verifica tu cuenta", body);
+                return Ok(new { message = "Te enviamos un nuevo enlace de verificación." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> [ERROR] Resend verification email failed for {user.Email}: {ex.Message}");
+                return StatusCode(500, new { error = "No pudimos enviar el correo. Intenta más tarde." });
+            }
         }
 
         // POST: api/account/reset-password
