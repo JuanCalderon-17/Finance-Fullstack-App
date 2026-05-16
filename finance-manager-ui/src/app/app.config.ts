@@ -2,7 +2,11 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideCharts } from 'ng2-charts';
-import { PieController, ArcElement, Tooltip, Legend } from 'chart.js';
+import {
+  PieController, DoughnutController, ArcElement, Tooltip, Legend,
+  LineController, LineElement, PointElement,
+  CategoryScale, LinearScale, Filler
+} from 'chart.js';
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -17,7 +21,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([jwtInterceptor])),
-    provideCharts({ registerables: [PieController, ArcElement, Tooltip, Legend] }),
+    provideCharts({ registerables: [
+      PieController, DoughnutController, ArcElement, Tooltip, Legend,
+      LineController, LineElement, PointElement,
+      CategoryScale, LinearScale, Filler
+    ] }),
 
     importProvidersFrom(
       TranslateModule.forRoot({

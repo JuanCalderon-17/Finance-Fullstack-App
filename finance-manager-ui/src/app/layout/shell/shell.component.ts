@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -73,5 +73,12 @@ export class ShellComponent implements OnInit {
 
   get userInitial(): string {
     return this.username ? this.username.charAt(0).toUpperCase() : 'U';
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.lang-item')) this.showLangMenu = false;
+    if (!target.closest('.currency-item') && !target.closest('.topbar-currency-pill')) this.showCurrencyMenu = false;
   }
 }

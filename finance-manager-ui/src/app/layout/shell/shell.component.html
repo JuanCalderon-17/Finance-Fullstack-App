@@ -29,30 +29,31 @@
         <app-theme-toggle></app-theme-toggle>
       </div>
 
-      <div class="sidebar-footer-item lang-item" (click)="showLangMenu = !showLangMenu">
+      <div class="sidebar-footer-item lang-item" (click)="$event.stopPropagation(); showLangMenu = !showLangMenu; showCurrencyMenu = false">
         <i class="bi bi-globe2"></i>
         <span>{{ languageService.getCurrentLanguage().toUpperCase() }}</span>
         <div class="sidebar-dropdown" *ngIf="showLangMenu" (click)="$event.stopPropagation()">
           <button *ngFor="let lang of languageService.getAvailableLanguages()"
+                  type="button"
                   class="sidebar-dropdown-item"
                   [class.active]="languageService.getCurrentLanguage() === lang.code"
-                  (click)="selectLanguage(lang.code)">
+                  (click)="$event.stopPropagation(); selectLanguage(lang.code)">
             <span>{{ lang.flag }}</span>
             <span>{{ lang.name }}</span>
           </button>
         </div>
       </div>
 
-      <div class="sidebar-footer-item currency-item" (click)="showCurrencyMenu = !showCurrencyMenu">
+      <div class="sidebar-footer-item currency-item" (click)="$event.stopPropagation(); showCurrencyMenu = !showCurrencyMenu; showLangMenu = false">
         <i class="bi bi-currency-exchange"></i>
         <span>{{ currencyCode }}</span>
         <div class="sidebar-dropdown" *ngIf="showCurrencyMenu" (click)="$event.stopPropagation()">
-          <button class="sidebar-dropdown-item" [class.active]="currencyCode === 'USD'"
-                  (click)="toggleCurrency('USD')">
+          <button type="button" class="sidebar-dropdown-item" [class.active]="currencyCode === 'USD'"
+                  (click)="$event.stopPropagation(); toggleCurrency('USD')">
             <span>🇺🇸</span><span>USD</span>
           </button>
-          <button class="sidebar-dropdown-item" [class.active]="currencyCode === 'BRL'"
-                  (click)="toggleCurrency('BRL')">
+          <button type="button" class="sidebar-dropdown-item" [class.active]="currencyCode === 'BRL'"
+                  (click)="$event.stopPropagation(); toggleCurrency('BRL')">
             <span>🇧🇷</span><span>BRL</span>
           </button>
         </div>
