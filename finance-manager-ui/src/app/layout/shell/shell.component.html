@@ -1,0 +1,91 @@
+<div class="app-shell">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+
+    <div class="sidebar-logo">
+      <img src="favicon.png" alt="logo" class="sidebar-logo-img" />
+      <span class="sidebar-logo-text">Finanzas</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="sidebar-nav-item">
+        <i class="bi bi-grid-fill"></i>
+        <span>{{ 'NAVIGATION.DASHBOARD' | translate }}</span>
+      </a>
+      <a routerLink="/debts" routerLinkActive="active" class="sidebar-nav-item">
+        <i class="bi bi-credit-card-2-front-fill"></i>
+        <span>{{ 'NAVIGATION.DEBTS' | translate }}</span>
+      </a>
+      <a routerLink="/savings" routerLinkActive="active" class="sidebar-nav-item">
+        <i class="bi bi-piggy-bank-fill"></i>
+        <span>{{ 'NAVIGATION.SAVINGS' | translate }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+
+      <div class="sidebar-footer-item">
+        <app-theme-toggle></app-theme-toggle>
+      </div>
+
+      <div class="sidebar-footer-item lang-item" (click)="showLangMenu = !showLangMenu">
+        <i class="bi bi-globe2"></i>
+        <span>{{ languageService.getCurrentLanguage().toUpperCase() }}</span>
+        <div class="sidebar-dropdown" *ngIf="showLangMenu" (click)="$event.stopPropagation()">
+          <button *ngFor="let lang of languageService.getAvailableLanguages()"
+                  class="sidebar-dropdown-item"
+                  [class.active]="languageService.getCurrentLanguage() === lang.code"
+                  (click)="selectLanguage(lang.code)">
+            <span>{{ lang.flag }}</span>
+            <span>{{ lang.name }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer-item currency-item" (click)="showCurrencyMenu = !showCurrencyMenu">
+        <i class="bi bi-currency-exchange"></i>
+        <span>{{ currencyCode }}</span>
+        <div class="sidebar-dropdown" *ngIf="showCurrencyMenu" (click)="$event.stopPropagation()">
+          <button class="sidebar-dropdown-item" [class.active]="currencyCode === 'USD'"
+                  (click)="toggleCurrency('USD')">
+            <span>🇺🇸</span><span>USD</span>
+          </button>
+          <button class="sidebar-dropdown-item" [class.active]="currencyCode === 'BRL'"
+                  (click)="toggleCurrency('BRL')">
+            <span>🇧🇷</span><span>BRL</span>
+          </button>
+        </div>
+      </div>
+
+      <button class="sidebar-logout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>{{ 'BUTTONS.LOGOUT' | translate }}</span>
+      </button>
+
+    </div>
+  </aside>
+
+  <!-- ===== MAIN AREA ===== -->
+  <div class="shell-main">
+
+    <header class="shell-topbar">
+      <div class="topbar-greeting">
+        <h2 class="topbar-title">{{ greeting }}, <span class="topbar-name">{{ username }}</span> 👋</h2>
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-currency-pill" (click)="showCurrencyMenu = !showCurrencyMenu">
+          <i class="bi bi-currency-exchange"></i>
+          <span>{{ currencyCode }} · {{ currencySymbol }}</span>
+        </div>
+        <div class="topbar-avatar">{{ userInitial }}</div>
+      </div>
+    </header>
+
+    <main class="shell-content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>

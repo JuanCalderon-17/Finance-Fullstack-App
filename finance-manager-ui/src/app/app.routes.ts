@@ -1,28 +1,27 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { DebtsComponent } from './pages/debts/debts.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { ShellComponent } from './layout/shell/shell.component';
 
 export const routes: Routes = [
-  
-  // 1. LA ENTRADA PRINCIPAL 
+
+  // Public
   {
-    path: '', 
+    path: '',
     component: LandingComponent,
-    pathMatch: 'full' // Agregamos esto por buena práctica
+    pathMatch: 'full'
   },
-  
-  // 2. RUTAS PÚBLICAS (Login y Registro)
+
   {
-    path: 'auth', 
+    path: 'auth',
     children: [
       {
-        path: 'login', 
+        path: 'login',
         loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent)
       },
       {
-        path: 'register', 
+        path: 'register',
         loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent)
       },
       {
@@ -31,31 +30,32 @@ export const routes: Routes = [
       },
       {
         path: 'reset-password',
-        loadComponent : () => import('./auth/reset-password/reset-password.component').then(m => ResetPasswordComponent)
+        loadComponent: () => import('./auth/reset-password/reset-password.component').then(m => ResetPasswordComponent)
       }
     ]
   },
 
-  // 3. RUTAS PRIVADAS (Protegidas por el Guardia)
+  // Protected — shell wrapper
   {
-    path: 'dashboard', 
-    loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
-    canActivate: [authGuard] 
+    path: '',
+    component: ShellComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'debts',
+        loadComponent: () => import('./pages/debts/debts.component').then(m => m.DebtsComponent)
+      },
+      {
+        path: 'savings',
+        loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent)
+      }
+    ]
   },
 
-  {
-    path: 'debts',
-    loadComponent: () => import('./pages/debts/debts.component').then(m => m.DebtsComponent),
-    canActivate: [authGuard]
-  },
-
-  {
-    path: 'savings',
-    loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent),
-    canActivate: [authGuard]
-  },
-    
-  // Si escriben cualquier ruta rara, los mando al login
   {
     path: '**',
     redirectTo: 'auth/login'
