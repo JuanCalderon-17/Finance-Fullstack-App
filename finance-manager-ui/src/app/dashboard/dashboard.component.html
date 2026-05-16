@@ -54,6 +54,33 @@
 
 </div>
 
+<!-- ===== ROW 1.5: CASHFLOW TREND ===== -->
+<div class="row g-4 mb-4">
+  <div class="col-12">
+    <div class="ds-card">
+      <div class="ds-card-header cashflow-header">
+        <span class="ds-card-title">
+          <i class="bi bi-activity"></i>
+          {{ 'DASHBOARD.CASHFLOW_TREND' | translate }}
+        </span>
+        <div class="cashflow-range">
+          <button class="range-pill" [class.active]="chartRange === '1M'" (click)="setChartRange('1M')">1M</button>
+          <button class="range-pill" [class.active]="chartRange === '6M'" (click)="setChartRange('6M')">6M</button>
+          <button class="range-pill" [class.active]="chartRange === '1Y'" (click)="setChartRange('1Y')">1Y</button>
+        </div>
+      </div>
+      <div class="ds-card-body cashflow-body">
+        <div *ngIf="isLoadingTrend" class="ds-empty-state">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+        <div class="cashflow-chart-wrapper" *ngIf="!isLoadingTrend">
+          <canvas baseChart [data]="cashflowChartData" [type]="cashflowChartType" [options]="cashflowChartOptions"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== ROW 2: FORM + TABLE ===== -->
 <div class="row g-4">
 

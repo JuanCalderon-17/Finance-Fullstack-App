@@ -31,43 +31,39 @@ import { ThemeService } from '../../services/theme.service';
     }
 
     .theme-label {
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.5);
-      transition: color 0.3s ease;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
       user-select: none;
-      
+
       &.active {
-        color: rgba(255, 255, 255, 1);
+        color: var(--text-primary);
       }
     }
 
     .theme-switch {
       position: relative;
-      width: 48px;
-      height: 26px;
-      background: rgba(255, 255, 255, 0.2);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50px;
+      width: 44px;
+      height: 24px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       padding: 0;
       overflow: hidden;
+      flex-shrink: 0;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.3);
-        border-color: rgba(255, 255, 255, 0.4);
-        transform: scale(1.05);
+        border-color: var(--border-strong);
       }
 
-      &:active {
-        transform: scale(0.98);
-      }
+      &:active { transform: scale(0.97); }
 
-      // Modo oscuro activado
       &.dark {
-        background: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.4);
+        background: var(--color-primary);
+        border-color: var(--color-primary);
       }
     }
 
@@ -77,36 +73,12 @@ import { ThemeService } from '../../services/theme.service';
       left: 2px;
       width: 18px;
       height: 18px;
-      background: white;
+      background: #ffffff;
       border-radius: 50%;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 
-      .dark & {
-        transform: translateX(22px);
-        background: white;
-      }
-    }
-
-    // Variante para modo oscuro del navbar
-    [data-theme="dark"] .theme-toggle-wrapper {
-      .theme-label {
-        color: rgba(255, 255, 255, 0.5);
-        
-        &.active {
-          color: rgba(255, 255, 255, 1);
-        }
-      }
-
-      .theme-switch {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.25);
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.25);
-          border-color: rgba(255, 255, 255, 0.35);
-        }
-      }
+      .dark & { transform: translateX(20px); }
     }
 
     // Responsive

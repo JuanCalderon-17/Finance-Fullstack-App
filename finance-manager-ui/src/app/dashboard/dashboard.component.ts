@@ -73,19 +73,88 @@ export class DashboardComponent implements OnInit, OnDestroy {
     currency: 'USD'  
   };
 
-  public pieChartOptions: ChartConfiguration['options'] = {
+  public pieChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    cutout: '62%',
     plugins: {
-      legend: { position: 'right' }
+      legend: {
+        position: 'right',
+        align: 'center',
+        labels: {
+          boxWidth: 8,
+          boxHeight: 8,
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 14,
+          font: { size: 12, weight: 500 },
+          color: '#475a51'
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(15, 20, 25, 0.96)',
+        padding: 12,
+        cornerRadius: 10,
+        titleFont: { size: 12, weight: 'bold' },
+        bodyFont: { size: 12 },
+        boxPadding: 4,
+        callbacks: {
+          label: (ctx: any) => ` ${ctx.label}: ${ctx.parsed.toFixed(2)}`
+        }
+      }
     }
   };
-  public pieChartType: ChartType = 'pie';
+  public pieChartType: 'doughnut' = 'doughnut';
 
-  public pieChartData: ChartData<'pie', number[], string | string[]> = {
+  public pieChartData: ChartData<'doughnut', number[], string | string[]> = {
     labels: [],
     datasets: [{ data: []}]
   };
+
+  // ===== Cashflow trend chart =====
+  public chartRange: '1M' | '6M' | '1Y' = '6M';
+  public cashflowChartType: ChartType = 'line';
+  public cashflowChartData: ChartData<'line'> = { labels: [], datasets: [] };
+  public cashflowChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        position: 'top',
+        align: 'end',
+        labels: { boxWidth: 8, boxHeight: 8, usePointStyle: true, pointStyle: 'circle', padding: 16 }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(15, 20, 25, 0.96)',
+        padding: 12,
+        cornerRadius: 10,
+        titleFont: { size: 12, weight: 'bold' },
+        bodyFont: { size: 12 },
+        boxPadding: 4
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        border: { display: false },
+        ticks: { font: { size: 10 }, color: '#94a3a0', padding: 8 }
+      } as any,
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(148,163,184,0.08)' },
+        border: { display: false },
+        ticks: {
+          font: { size: 10 },
+          color: '#94a3a0',
+          padding: 8,
+          maxTicksLimit: 5,
+          callback: (v: any) => v >= 1000 ? (v/1000) + 'K' : v
+        }
+      } as any
+    }
+  };
+  isLoadingTrend: boolean = false;
 
   selectedMonth: number;
   selectedYear: number;
@@ -142,15 +211,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.exchangeRate = currency.rate;
       this.newTransaction.currency = currency.code;
       this.calculateStats();
+      this.loadCashflowTrend();
       this.cdr.markForCheck();
     });
 
     // Actualizar gráfico al cambiar idioma
     this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.updateChart();
+      this.loadCashflowTrend();
     });
 
     this.loadTransactions();
+    this.loadCashflowTrend();
     
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
@@ -273,14 +345,142 @@ export class DashboardComponent implements OnInit, OnDestroy {
       datasets: [{
         data: data,
         backgroundColor: [
-          '#00d2d3', '#ff9f43', '#5f27cd', '#ff6b6b', '#10ac84', 
-          '#2e86de', '#f368e0', '#feca57', '#341f97', '#48dbfb'
+          '#34d399', // emerald (brand)
+          '#60a5fa', // sky
+          '#f59e0b', // amber
+          '#f87171', // soft red
+          '#a78bfa', // soft violet
+          '#fb923c', // soft orange
+          '#2dd4bf', // teal
+          '#f472b6', // soft pink
+          '#94a3b8', // slate
+          '#fbbf24'  // gold
         ],
-        borderColor: '#1a1a2e',
-        borderWidth: 2
+        borderColor: 'transparent',
+        borderWidth: 3,
+        hoverOffset: 6,
+        spacing: 2
       }]
     };
-  }  
+  }
+
+  setChartRange(range: '1M' | '6M' | '1Y'): void {
+    this.chartRange = range;
+    this.loadCashflowTrend();
+  }
+
+  loadCashflowTrend(): void {
+    this.isLoadingTrend = true;
+    this.transactionService.getTransactions().subscribe({
+      next: (all) => {
+        this.buildCashflowChart(all);
+        this.isLoadingTrend = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error loading cashflow trend:', err);
+        this.isLoadingTrend = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  private buildCashflowChart(all: Transaction[]): void {
+    const now = new Date();
+    const monthsToShow = this.chartRange === '1M' ? 1 : this.chartRange === '6M' ? 6 : 12;
+
+    // 1M => daily buckets; 6M/1Y => monthly buckets
+    if (this.chartRange === '1M') {
+      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      const labels: string[] = [];
+      const incomeArr: number[] = [];
+      const expenseArr: number[] = [];
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        labels.push(String(d));
+        incomeArr.push(0);
+        expenseArr.push(0);
+      }
+
+      all.forEach(t => {
+        const date = new Date(t.transactionDate);
+        if (date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear()) return;
+        const day = date.getDate() - 1;
+        const amount = this.convertTransactionAmount(t);
+        const catKey = this.categoryMap[t.category] || t.category.toUpperCase();
+        if (this.incomeKeys.includes(catKey)) incomeArr[day] += amount;
+        else expenseArr[day] += amount;
+      });
+
+      this.applyCashflowData(labels, incomeArr, expenseArr);
+      return;
+    }
+
+    // Monthly buckets
+    const buckets: { label: string; year: number; month: number; income: number; expense: number }[] = [];
+    for (let i = monthsToShow - 1; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      buckets.push({
+        label: date.toLocaleString(undefined, { month: 'short' }),
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        income: 0,
+        expense: 0
+      });
+    }
+
+    all.forEach(t => {
+      const date = new Date(t.transactionDate);
+      const bucket = buckets.find(b => b.month === date.getMonth() && b.year === date.getFullYear());
+      if (!bucket) return;
+      const amount = this.convertTransactionAmount(t);
+      const catKey = this.categoryMap[t.category] || t.category.toUpperCase();
+      if (this.incomeKeys.includes(catKey)) bucket.income += amount;
+      else bucket.expense += amount;
+    });
+
+    this.applyCashflowData(
+      buckets.map(b => b.label),
+      buckets.map(b => b.income),
+      buckets.map(b => b.expense)
+    );
+  }
+
+  private applyCashflowData(labels: string[], income: number[], expense: number[]): void {
+    this.cashflowChartData = {
+      labels,
+      datasets: [
+        {
+          label: this.translate.instant('DASHBOARD.TOTAL_INCOME'),
+          data: income,
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.05)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#10b981',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          borderWidth: 1.75
+        },
+        {
+          label: this.translate.instant('DASHBOARD.TOTAL_SPENT'),
+          data: expense,
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.04)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#ef4444',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          borderWidth: 1.75
+        }
+      ]
+    };
+  }
 
   addTransaction() {
     this.newTransaction.amount = Number(this.newTransaction.amount);
@@ -305,6 +505,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.transactionService.updateTransaction(this.editingId, this.newTransaction).subscribe({
         next: () => {
           this.loadTransactions();
+          this.loadCashflowTrend();
           this.cancelEdit();
           this.isSubmitting = false;
         },
@@ -318,6 +519,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.transactionService.createTransaction(this.newTransaction).subscribe({
         next: (res) => {
           this.loadTransactions();
+          this.loadCashflowTrend();
           this.cancelEdit();
           this.isSubmitting = false;
         },
@@ -360,6 +562,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.transactionService.deleteTransaction(id).subscribe({
         next: () => {
           this.loadTransactions();
+          this.loadCashflowTrend();
         },
         error: (err) => console.error('Error al eliminar', err)
       });
