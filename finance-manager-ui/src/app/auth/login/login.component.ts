@@ -40,13 +40,14 @@ export class LoginComponent {
         }
       },
 
-      // 'error' se ejecuta si la API devuelve un error
       error : (err) => {
-        console.error('Hubo un error en el login', err)
+        console.error('Hubo un error en el login', err);
 
-        //friendly error message
-        if(err.status === 401 ||  err.status === 400) {
-          this.errorMessage = 'Usuario o contraseña incorrectos';  
+        const serverMessage = err.error;
+        if (typeof serverMessage === 'string' && serverMessage.includes('verificar tu correo')) {
+          this.errorMessage = 'Debes verificar tu correo antes de iniciar sesión. Revisa tu bandeja de entrada.';
+        } else if (err.status === 401 || err.status === 400) {
+          this.errorMessage = 'Usuario o contraseña incorrectos';
         } else {
           this.errorMessage = 'Ocurrió un error. Inténtalo más tarde.';
         }
