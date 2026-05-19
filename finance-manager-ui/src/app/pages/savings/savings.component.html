@@ -1,189 +1,183 @@
-<div class="bg-dark text-white py-3 mb-4 shadow-sm">
-  <div class="container d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-2">
-      <span class="fs-4">💰</span>
-      <div>
-        <h5 class="fw-bold mb-0">{{'SAVINGS.TITLE'  | translate }}</h5>
-        <p class="text-white-50 mb-0 x-small">{{'SAVINGS.SUBTITLE'  | translate }}</p>
+<!-- ===== SUMMARY BANNER ===== -->
+<div class="container mb-4">
+  <div class="savings-summary-banner">
+    <div class="savings-summary-icon">
+      <i class="bi bi-piggy-bank-fill"></i>
+    </div>
+    <div class="savings-summary-content">
+      <div class="savings-summary-label">{{ 'SAVINGS.TOTAL_AVAILABLE' | translate }}</div>
+      <div class="savings-summary-amount">{{ currencySymbol }}{{ totalSavings | number:'1.2-2' }}</div>
+      <div class="savings-summary-meta">
+        <span><i class="bi bi-bank2"></i> {{ accounts.length }} accounts</span>
+        <span class="savings-meta-divider">·</span>
+        <span class="savings-meta-italic">{{ 'SAVINGS.GROWING_MESSAGE' | translate }}</span>
       </div>
     </div>
-    <a routerLink="/dashboard" class="btn btn-outline-light btn-sm px-3">
-      <i class="bi bi-arrow-left"></i> {{'BUTTONS.BACK'  | translate }}
-    </a>
   </div>
 </div>
 
-<div class="container">
+<!-- ===== CONTENT ===== -->
+<div class="container pb-5">
+  <div class="row g-4">
 
-  <div class="row justify-content-center mb-5">
-    <div class="col-lg-10">
-      <div
-        class="card text-white text-center shadow-lg border-0 position-relative overflow-hidden gold-card"
-        style="border-radius: 20px;"
-      >
-        <div class="card-body py-5 position-relative">
-          <h6
-            class="text-uppercase fw-bold text-dark opacity-50 mb-0" style="letter-spacing: 3px;">
-            {{'SAVINGS.TOTAL_AVAILABLE'  | translate }}
-          </h6>
-
-          <h1 class="fw-bold text-white text-shadow mb-0" style="font-size: 5rem;">
-            {{ currencySymbol }}{{ totalSavings | number:'1.2-2' }}
-          </h1>
-
-          <p class="text-white-50 mb-0 fst-italic small">
-            {{'SAVINGS.GROWING_MESSAGE'  | translate }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-
+    <!-- ===== FORM ===== -->
     <div class="col-lg-4 mb-4">
-      <div class="card shadow-sm border-0 sticky-top savings-form" style="top: 20px;">
-        <div class="card-header bg-white fw-bold text-dark border-bottom-0 pt-3">
-          ➕ {{'SAVINGS.ADD_ACCOUNT'  | translate }}
+      <div class="savings-form-card sticky-top">
+        <div class="savings-form-header">
+          <i class="bi bi-plus-circle-fill"></i>
+          {{ 'SAVINGS.ADD_ACCOUNT' | translate }}
         </div>
 
-        <div class="card-body">
+        <div class="savings-form-body">
           <form (ngSubmit)="addAccount()">
-            <div class="mb-2">
-              <label class="x-small text-muted fw-bold">{{'SAVINGS.BANK_SOURCE'  | translate }}</label>
+
+            <div class="mb-3">
+              <label class="savings-label">{{ 'SAVINGS.BANK_SOURCE' | translate }}</label>
               <input
                 type="text"
-                class="form-control bg-light"
+                class="form-control savings-input"
                 [(ngModel)]="newAccount.name"
                 name="name"
+                placeholder="e.g. Chase savings"
                 required
               />
             </div>
 
-            <div class="mb-2">
-              <label class="x-small text-muted fw-bold">{{'SAVINGS.INITIAL_BALANCE'  | translate }}</label>
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">{{ currencySymbol }}</span>
+            <div class="mb-3">
+              <label class="savings-label">{{ 'SAVINGS.INITIAL_BALANCE' | translate }}</label>
+              <div class="input-group savings-input-group">
+                <span class="input-group-text">{{ currencySymbol }}</span>
                 <input
                   type="number"
-                  class="form-control bg-light border-start-0"
+                  class="form-control savings-input"
                   [(ngModel)]="newAccount.balance"
                   name="balance"
+                  step="0.01"
+                  placeholder="0.00"
                 />
               </div>
             </div>
 
             <div class="mb-4">
-              <label class="x-small text-muted fw-bold">Color</label>
-              <select
-                class="form-select bg-light"
-                [(ngModel)]="newAccount.color"
-                name="color"
-              >
-                <option value="RED">🔴 {{'SAVINGS.COLORS.RED'  | translate }}</option>
-                <option value="PURPLE">🟣 {{'SAVINGS.COLORS.PURPLE'  | translate }}</option>
-                <option value="GREEN">🟢 {{'SAVINGS.COLORS.GREEN'  | translate }}</option>
-                <option value="BLACK">⚫ {{'SAVINGS.COLORS.BLACK'  | translate }}</option>
-              </select>
+              <label class="savings-label">{{ 'SAVINGS.COLOR' | translate }}</label>
+              <div class="color-picker">
+                <button
+                  *ngFor="let c of colors"
+                  type="button"
+                  class="color-swatch"
+                  [class]="'swatch-' + c.toLowerCase()"
+                  [class.active]="newAccount.color === c"
+                  (click)="newAccount.color = c"
+                  [attr.aria-label]="c"
+                  [title]="c">
+                  <i class="bi bi-check-lg" *ngIf="newAccount.color === c"></i>
+                </button>
+              </div>
             </div>
 
             <button
-              class="btn btn-dark w-100 fw-bold py-2"
+              class="savings-submit-btn"
               type="submit"
-              [disabled]="!newAccount.name"
-            >
-              {{'SAVINGS.CREATE'  | translate }}
+              [disabled]="!newAccount.name">
+              <i class="bi bi-plus-lg"></i>
+              {{ 'SAVINGS.CREATE' | translate }}
             </button>
+
           </form>
         </div>
       </div>
     </div>
 
+    <!-- ===== ACCOUNTS LIST ===== -->
     <div class="col-lg-8 savings-list">
 
-      <div
-        *ngIf="accounts.length === 0"
-        class="alert alert-light text-center py-5 border-0 shadow-sm"
-      >
-        <i class="bi bi-safe fs-1 text-muted mb-3 d-block"></i>
-        <p class="text-muted">{{'SAVINGS.NO_ACCOUNTS'  | translate }}</p>
+      <div *ngIf="accounts.length === 0" class="savings-empty">
+        <i class="bi bi-safe fs-1"></i>
+        <h3>{{ 'SAVINGS.NO_ACCOUNTS' | translate }}</h3>
+        <p>Start by adding your first account on the left.</p>
       </div>
 
-      <div class="row">
-        <div class="col-md-6 mb-3"
-          *ngFor="let acc of accounts; let i = index">
-          
-          <div
-            class="card text-white shadow border-0 h-100 saving-card"
-            [ngClass]="'card-' + (acc.color | lowercase)" 
-            style="border-radius: 12px;"
-          >
-            <div class="card-body p-3">
+      <div class="savings-grid">
 
-              <ng-container *ngIf="!acc.isEditing">
-                <h5 class="fw-bold mb-0">{{ acc.name }}</h5>
-                <h2 class="fw-bold mb-3">
-                  {{ currencySymbol }}{{ convertAmount(acc) | number:'1.2-2' }}
-                </h2>
+        <div
+          *ngFor="let acc of accounts; let i = index"
+          class="savings-account-card"
+          [class]="'accent-' + ((acc.color || 'GREEN') | lowercase)">
 
-                <div class="d-flex gap-1 pt-2 border-top border-white border-opacity-10">
-                  <button class="btn btn-sm btn-light flex-grow-1"
-                          (click)="updateBalance(acc, 10)">
-                    + {{ currencySymbol }}10
-                  </button>
-                  <button class="btn btn-sm btn-light flex-grow-1"
-                          (click)="updateBalance(acc, 50)">
-                    + {{ currencySymbol }}50
-                  </button>
-                  <button class="btn btn-sm bg-black bg-opacity-25 text-white flex-grow-1"
-                          (click)="updateBalance(acc, -10)">
-                    - {{ currencySymbol }}10
-                  </button>
-                </div>
+          <ng-container *ngIf="!acc.isEditing">
 
-                <div class="d-flex gap-2 mt-2">
-                  <button class="btn btn-sm btn-dark bg-opacity-50 border-0"
-                          (click)="enableEdit(acc)">
-                    {{'SAVINGS.EDIT'  | translate }}
-                  </button>
-                  <button class="btn btn-sm btn-danger bg-opacity-50 border-0"
-                          (click)="deleteAccount(i)">
-                    {{'SAVINGS.DELETE'  | translate }}
-                  </button>
-                </div>
-              </ng-container>
-
-              <ng-container *ngIf="acc.isEditing">
-                <div class="bg-white p-2 rounded text-dark shadow-sm">
-                  <input
-                    type="text"
-                    class="form-control form-control-sm mb-1"
-                    [(ngModel)]="acc.name"
-                  />
-                  <input
-                    type="number"
-                    class="form-control form-control-sm mb-2"
-                    [(ngModel)]="acc.balance"
-                  />
-                  <select class="form-select form-select-sm mb-2" [(ngModel)]="acc.color">
-                    <option value="RED">🔴 {{'SAVINGS.COLORS.RED' | translate }}</option>
-                    <option value="PURPLE">🟣 {{'SAVINGS.COLORS.PURPLE' | translate }}</option>
-                    <option value="GREEN">🟢 {{'SAVINGS.COLORS.GREEN' | translate }}</option>
-                    <option value="BLACK">⚫ {{'SAVINGS.COLORS.BLACK' | translate }}</option>
-                  </select>
-
-                  <button class="btn btn-primary btn-sm w-100"
-                          (click)="saveEdit(acc)">
-                    {{'SAVINGS.SAVE'  | translate }}
-                  </button>
-                </div>
-              </ng-container>
-
+            <div class="account-card-top">
+              <div class="account-name-row">
+                <span class="account-color-dot"></span>
+                <h3 class="account-name">{{ acc.name }}</h3>
+              </div>
+              <div class="account-card-actions">
+                <button class="acc-btn-icon acc-btn-edit" (click)="enableEdit(acc)" title="Edit">
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button class="acc-btn-icon acc-btn-delete" (click)="deleteAccount(i)" title="Delete">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </div>
             </div>
-          </div>
+
+            <div class="account-balance">
+              {{ currencySymbol }}{{ convertAmount(acc) | number:'1.2-2' }}
+            </div>
+            <div class="account-balance-label">Current balance</div>
+
+            <div class="account-quick-actions">
+              <button class="quick-btn quick-btn-pos" (click)="updateBalance(acc, 10)">
+                + {{ currencySymbol }}10
+              </button>
+              <button class="quick-btn quick-btn-pos" (click)="updateBalance(acc, 50)">
+                + {{ currencySymbol }}50
+              </button>
+              <button class="quick-btn quick-btn-neg" (click)="updateBalance(acc, -10)">
+                − {{ currencySymbol }}10
+              </button>
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="acc.isEditing">
+            <div class="account-edit-form">
+              <label class="savings-label">Name</label>
+              <input type="text" class="form-control savings-input" [(ngModel)]="acc.name" />
+
+              <label class="savings-label">Balance</label>
+              <input type="number" class="form-control savings-input" [(ngModel)]="acc.balance" />
+
+              <label class="savings-label">Color</label>
+              <div class="color-picker">
+                <button
+                  *ngFor="let c of colors"
+                  type="button"
+                  class="color-swatch"
+                  [class]="'swatch-' + c.toLowerCase()"
+                  [class.active]="acc.color === c"
+                  (click)="acc.color = c"
+                  [attr.aria-label]="c">
+                  <i class="bi bi-check-lg" *ngIf="acc.color === c"></i>
+                </button>
+              </div>
+
+              <div class="edit-actions">
+                <button class="savings-submit-btn savings-submit-btn-sm" (click)="saveEdit(acc)">
+                  <i class="bi bi-check-circle"></i> {{ 'SAVINGS.SAVE' | translate }}
+                </button>
+                <button class="acc-btn-ghost" (click)="acc.isEditing = false">
+                  {{ 'BUTTONS.CANCEL' | translate }}
+                </button>
+              </div>
+            </div>
+          </ng-container>
+
         </div>
+
       </div>
 
     </div>
+
   </div>
 </div>
