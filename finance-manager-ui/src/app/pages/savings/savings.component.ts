@@ -27,11 +27,13 @@ export class SavingsComponent implements OnInit, OnDestroy {
   newAccount: SavingAccount = {
     name: '',
     balance: 0,
-    color: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+    color: 'GREEN',
     icon: 'bi-bank'
   };
 
   totalSavings: number = 0;
+
+  colors: string[] = ['GREEN', 'PURPLE', 'RED', 'BLACK'];
 
   constructor(
     private savingsService: SavingsService, 
@@ -112,7 +114,7 @@ export class SavingsComponent implements OnInit, OnDestroy {
         this.newAccount = { 
           name: '', 
           balance: 0, 
-          color: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)', 
+          color: 'GREEN', 
           icon: 'bi-bank' 
         };
       },

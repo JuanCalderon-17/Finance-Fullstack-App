@@ -11,7 +11,89 @@
     "INCOME": "Receita",
     "EXPENSE": "Despesas",
     "ADD_TRANSACTION": "Adicionar transação",
-    "EARLY_INCOME": "Receita antecipada"
+    "EARLY_INCOME": "Receita antecipada",
+    "NAV": {
+      "FEATURES": "Recursos",
+      "HOW": "Como funciona",
+      "PRICING": "Preços",
+      "SIGN_IN": "Entrar",
+      "START_FREE": "Começar grátis"
+    },
+    "PREVIEW": {
+      "GREETING": "Bom dia, Juan 👋",
+      "SAVING_PERCENT": "Você está economizando 27% este mês",
+      "OF_INCOME": "11% da renda"
+    },
+    "TRUST": {
+      "LEAD": "Feito para quem gerencia dinheiro de verdade",
+      "LANGUAGES": "3 idiomas",
+      "FREE_FOREVER": "Grátis para sempre"
+    },
+    "FEATURES": {
+      "EYEBROW": "Finanças pessoais, do jeito certo.",
+      "HEADLINE_1": "Gerenciar dinheiro",
+      "HEADLINE_2": "nunca foi tão claro.",
+      "MOCK_SALARY": "Salário",
+      "MOCK_GROCERIES": "Mercado",
+      "MOCK_RENT": "Aluguel",
+      "MOCK_REMAINING": "restantes",
+      "MOCK_OF_INSTALLMENTS": "8 de 12 parcelas",
+      "MOCK_EMERGENCY": "Reserva de emergência",
+      "F1_TITLE": "Acompanhe cada transação",
+      "F1_DESC": "Categorize receitas e despesas. Veja para onde seu dinheiro vai — diariamente, mensalmente, anualmente.",
+      "F2_TITLE": "Domine suas dívidas",
+      "F2_DESC": "Acompanhe parcelas, juros e progresso. Saiba exatamente quando estará livre de dívidas.",
+      "F3_TITLE": "Crie metas de economia",
+      "F3_DESC": "Defina objetivos, veja-os crescer. Suporte multi-moeda com taxas em tempo real.",
+      "F4_TITLE": "Insights inteligentes",
+      "F4_DESC": "Tendências de fluxo. Análise de gastos. Compare meses em um piscar de olhos."
+    },
+    "HOW": {
+      "EYEBROW": "Feito para a velocidade.",
+      "HEADLINE_1": "Comece em 2 minutos.",
+      "HEADLINE_2": "E nunca olhe para trás.",
+      "STEP1_TITLE": "Cadastre-se com seu e-mail",
+      "STEP1_DESC": "Sem cartão de crédito. Sem compromisso. Apenas uma conta.",
+      "STEP2_TITLE": "Adicione sua primeira transação",
+      "STEP2_DESC": "Receita, despesa, economia, dívida — categorizado em segundos.",
+      "STEP3_TITLE": "Veja seu dinheiro trabalhar por você",
+      "STEP3_DESC": "Insights em tempo real, tendências de fluxo, progresso de dívidas.",
+      "CTA": "Começar grátis"
+    },
+    "MULTI_CURRENCY": {
+      "EYEBROW": "Pronto para qualquer fronteira.",
+      "HEADLINE_1": "Seu dinheiro,",
+      "HEADLINE_2": "na sua moeda.",
+      "USD_NAME": "Dólar Americano",
+      "BRL_NAME": "Real Brasileiro",
+      "LIVE_RATES": "Taxas de câmbio em tempo real",
+      "POINT1_TITLE": "USD e BRL — troque instantaneamente",
+      "POINT1_DESC": "Cada valor é convertido em tempo real com taxas reais.",
+      "POINT2_TITLE": "Três idiomas integrados",
+      "POINT2_DESC": "Español · English · Português. Troque quando quiser.",
+      "POINT3_TITLE": "Uma conta, em qualquer lugar",
+      "POINT3_DESC": "Seus dados sincronizam no momento em que você faz login."
+    },
+    "STATS": {
+      "EYEBROW": "Em números.",
+      "HEADLINE": "Feito para ser seu.",
+      "FOREVER": "Para sempre",
+      "TO_SETUP": "Para configurar",
+      "LANGUAGES_LABEL": "Idiomas",
+      "TRANSACTIONS_LABEL": "Transações"
+    },
+    "FINAL": {
+      "HEADLINE_1": "Finanças pessoais —",
+      "HEADLINE_2": "redesenhadas do zero.",
+      "SUBTITLE": "Grátis para sempre. Sem cartão de crédito. Pronto em 2 minutos."
+    },
+    "FOOTER": {
+      "TAGLINE": "O app de finanças, do seu jeito.",
+      "PRODUCT": "Produto",
+      "SIGN_UP": "Cadastrar",
+      "BUILT_WITH": "Construído com",
+      "LANGUAGE": "Idioma"
+    }
   },
   "AUTH": {
     "LOGIN": {

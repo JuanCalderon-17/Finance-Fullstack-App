@@ -11,8 +11,89 @@
     "INCOME": "Income",
     "EXPENSE": "Expenses",
     "ADD_TRANSACTION": "Add transaction",
-    "EARLY_INCOME": "Early Income"
-
+    "EARLY_INCOME": "Early Income",
+    "NAV": {
+      "FEATURES": "Features",
+      "HOW": "How it works",
+      "PRICING": "Pricing",
+      "SIGN_IN": "Sign in",
+      "START_FREE": "Start free"
+    },
+    "PREVIEW": {
+      "GREETING": "Good Morning, Juan 👋",
+      "SAVING_PERCENT": "You're saving 27% this month",
+      "OF_INCOME": "11% of income"
+    },
+    "TRUST": {
+      "LEAD": "Built for everyone managing real money",
+      "LANGUAGES": "3 languages",
+      "FREE_FOREVER": "Free forever"
+    },
+    "FEATURES": {
+      "EYEBROW": "Personal finance, properly.",
+      "HEADLINE_1": "Money management has",
+      "HEADLINE_2": "never felt this clean.",
+      "MOCK_SALARY": "Salary",
+      "MOCK_GROCERIES": "Groceries",
+      "MOCK_RENT": "Rent",
+      "MOCK_REMAINING": "remaining",
+      "MOCK_OF_INSTALLMENTS": "8 of 12 installments",
+      "MOCK_EMERGENCY": "Emergency Fund",
+      "F1_TITLE": "Track every transaction",
+      "F1_DESC": "Categorize income and expenses. See where your money goes — daily, monthly, yearly.",
+      "F2_TITLE": "Master your debts",
+      "F2_DESC": "Track installments, interest, and progress. Know exactly when you'll be debt-free.",
+      "F3_TITLE": "Build savings goals",
+      "F3_DESC": "Set targets, watch them grow. Multi-currency support with live exchange rates.",
+      "F4_TITLE": "Smart insights",
+      "F4_DESC": "Cashflow trends. Spending breakdowns. Compare months at a glance."
+    },
+    "HOW": {
+      "EYEBROW": "Built for speed.",
+      "HEADLINE_1": "Start in 2 minutes.",
+      "HEADLINE_2": "Never look back.",
+      "STEP1_TITLE": "Sign up with your email",
+      "STEP1_DESC": "No credit card. No commitment. Just an account.",
+      "STEP2_TITLE": "Add your first transaction",
+      "STEP2_DESC": "Income, expense, savings, debt — categorized in seconds.",
+      "STEP3_TITLE": "Watch your money work for you",
+      "STEP3_DESC": "Real-time insights, cashflow trends, debt progress.",
+      "CTA": "Start free"
+    },
+    "MULTI_CURRENCY": {
+      "EYEBROW": "Cross-border ready.",
+      "HEADLINE_1": "Your money,",
+      "HEADLINE_2": "in your currency.",
+      "USD_NAME": "US Dollar",
+      "BRL_NAME": "Brazilian Real",
+      "LIVE_RATES": "Live exchange rates",
+      "POINT1_TITLE": "USD and BRL — switch instantly",
+      "POINT1_DESC": "Every value converts on the fly with real rates.",
+      "POINT2_TITLE": "Three languages built-in",
+      "POINT2_DESC": "Español · English · Português. Switch anytime.",
+      "POINT3_TITLE": "One account, everywhere",
+      "POINT3_DESC": "Your data syncs the moment you log in."
+    },
+    "STATS": {
+      "EYEBROW": "By the numbers.",
+      "HEADLINE": "Built to be yours.",
+      "FOREVER": "Forever",
+      "TO_SETUP": "To set up",
+      "LANGUAGES_LABEL": "Languages",
+      "TRANSACTIONS_LABEL": "Transactions"
+    },
+    "FINAL": {
+      "HEADLINE_1": "Personal finance —",
+      "HEADLINE_2": "redesigned from the ground up.",
+      "SUBTITLE": "Free forever. No credit card. Set up in 2 minutes."
+    },
+    "FOOTER": {
+      "TAGLINE": "The finance app, your way.",
+      "PRODUCT": "Product",
+      "SIGN_UP": "Sign up",
+      "BUILT_WITH": "Built with",
+      "LANGUAGE": "Language"
+    }
   },
   "AUTH": {
     "LOGIN": {

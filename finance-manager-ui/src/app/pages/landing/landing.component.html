@@ -8,9 +8,9 @@
     </a>
 
     <nav class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#how">How it works</a>
-      <a href="#pricing">Pricing</a>
+      <a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+      <a href="#how">{{ 'LANDING.NAV.HOW' | translate }}</a>
+      <a href="#pricing">{{ 'LANDING.NAV.PRICING' | translate }}</a>
     </nav>
 
     <div class="nav-actions">
@@ -37,8 +37,8 @@
         }
       </div>
 
-      <a routerLink="/auth/login" class="nav-link-btn">Sign in</a>
-      <a routerLink="/auth/register" class="nav-cta-btn">Start free</a>
+      <a routerLink="/auth/login" class="nav-link-btn">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
+      <a routerLink="/auth/register" class="nav-cta-btn">{{ 'LANDING.NAV.START_FREE' | translate }}</a>
     </div>
   </header>
 
@@ -111,40 +111,40 @@
 
         <div class="preview-body">
           <div class="preview-greeting">
-            <span class="preview-greeting-text">Good Morning, Juan 👋</span>
+            <span class="preview-greeting-text">{{ 'LANDING.PREVIEW.GREETING' | translate }}</span>
             <span class="preview-currency-pill">💱 USD · $</span>
           </div>
 
           <div class="preview-stats-row">
             <div class="preview-stat-card">
               <div class="preview-stat-top">
-                <span class="preview-stat-label">Available</span>
+                <span class="preview-stat-label">{{ 'DASHBOARD.AVAILABLE' | translate }}</span>
                 <span class="preview-stat-badge badge-pos">▲ 12%</span>
               </div>
               <div class="preview-stat-value">$2,847.50</div>
-              <div class="preview-stat-sub">You're saving 27% this month</div>
+              <div class="preview-stat-sub">{{ 'LANDING.PREVIEW.SAVING_PERCENT' | translate }}</div>
             </div>
             <div class="preview-stat-card">
               <div class="preview-stat-top">
-                <span class="preview-stat-label">Income</span>
+                <span class="preview-stat-label">{{ 'DASHBOARD.TOTAL_INCOME' | translate }}</span>
                 <span class="preview-stat-icon-wrap preview-icon-up"><i class="bi bi-arrow-up-circle-fill"></i></span>
               </div>
               <div class="preview-stat-value">$3,200.00</div>
-              <div class="preview-stat-sub">May · 2026</div>
+              <div class="preview-stat-sub">{{ 'MONTHS.MAY' | translate }} · 2026</div>
             </div>
             <div class="preview-stat-card">
               <div class="preview-stat-top">
-                <span class="preview-stat-label">Spent</span>
+                <span class="preview-stat-label">{{ 'DASHBOARD.TOTAL_SPENT' | translate }}</span>
                 <span class="preview-stat-icon-wrap preview-icon-down"><i class="bi bi-arrow-down-circle-fill"></i></span>
               </div>
               <div class="preview-stat-value">$352.50</div>
-              <div class="preview-stat-sub">11% of income</div>
+              <div class="preview-stat-sub">{{ 'LANDING.PREVIEW.OF_INCOME' | translate }}</div>
             </div>
           </div>
 
           <div class="preview-chart-card">
             <div class="preview-chart-header">
-              <span class="preview-chart-title">📊 Cashflow Trend</span>
+              <span class="preview-chart-title">📊 {{ 'DASHBOARD.CASHFLOW_TREND' | translate }}</span>
               <div class="preview-range">
                 <span class="preview-range-pill">1M</span>
                 <span class="preview-range-pill active">6M</span>
@@ -163,26 +163,22 @@
                     <stop offset="100%" stop-color="#f87171" stop-opacity="0"/>
                   </linearGradient>
                 </defs>
-                <!-- Income area -->
                 <path d="M0,90 C60,75 100,60 160,55 C220,50 260,80 320,65 C380,50 420,30 480,40 C540,50 580,30 600,25 L600,160 L0,160 Z" fill="url(#grad-income)"/>
                 <path d="M0,90 C60,75 100,60 160,55 C220,50 260,80 320,65 C380,50 420,30 480,40 C540,50 580,30 600,25" stroke="#34d399" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <!-- Expense area -->
                 <path d="M0,120 C60,115 100,125 160,118 C220,110 260,128 320,120 C380,112 420,128 480,118 C540,108 580,118 600,112 L600,160 L0,160 Z" fill="url(#grad-expense)"/>
                 <path d="M0,120 C60,115 100,125 160,118 C220,110 260,128 320,120 C380,112 420,128 480,118 C540,108 580,118 600,112" stroke="#f87171" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <!-- Dot indicators -->
                 <circle cx="480" cy="40" r="4" fill="#34d399" stroke="#0e1c17" stroke-width="2"/>
                 <circle cx="480" cy="118" r="4" fill="#f87171" stroke="#0e1c17" stroke-width="2"/>
               </svg>
               <div class="preview-chart-legend">
-                <span class="legend-item"><span class="legend-dot dot-income"></span>Income</span>
-                <span class="legend-item"><span class="legend-dot dot-expense"></span>Spent</span>
+                <span class="legend-item"><span class="legend-dot dot-income"></span>{{ 'DASHBOARD.TOTAL_INCOME' | translate }}</span>
+                <span class="legend-item"><span class="legend-dot dot-expense"></span>{{ 'DASHBOARD.TOTAL_SPENT' | translate }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Glow under the preview -->
       <div class="preview-glow" aria-hidden="true"></div>
 
     </div>
@@ -191,15 +187,15 @@
   <!-- ===== TRUST BAR ===== -->
   <section class="landing-section section-trust">
     <div class="section-container">
-      <p class="trust-lead">Built for everyone managing real money</p>
+      <p class="trust-lead">{{ 'LANDING.TRUST.LEAD' | translate }}</p>
       <div class="trust-row">
         <div class="trust-item"><span class="trust-flag">🇺🇸</span> USD</div>
         <div class="trust-divider"></div>
         <div class="trust-item"><span class="trust-flag">🇧🇷</span> BRL</div>
         <div class="trust-divider"></div>
-        <div class="trust-item"><span class="trust-flag">🌎</span> 3 languages</div>
+        <div class="trust-item"><span class="trust-flag">🌎</span> {{ 'LANDING.TRUST.LANGUAGES' | translate }}</div>
         <div class="trust-divider"></div>
-        <div class="trust-item"><i class="bi bi-shield-check"></i> Free forever</div>
+        <div class="trust-item"><i class="bi bi-shield-check"></i> {{ 'LANDING.TRUST.FREE_FOREVER' | translate }}</div>
       </div>
     </div>
   </section>
@@ -207,19 +203,19 @@
   <!-- ===== FEATURES GRID ===== -->
   <section class="landing-section section-features" id="features">
     <div class="section-container">
-      <p class="section-eyebrow">Personal finance, properly.</p>
-      <h2 class="section-headline">Money management has<br />never felt this clean.</h2>
+      <p class="section-eyebrow">{{ 'LANDING.FEATURES.EYEBROW' | translate }}</p>
+      <h2 class="section-headline">{{ 'LANDING.FEATURES.HEADLINE_1' | translate }}<br />{{ 'LANDING.FEATURES.HEADLINE_2' | translate }}</h2>
 
       <div class="features-grid">
 
         <div class="feature-card">
           <div class="feature-card-visual feature-visual-transactions">
-            <div class="mock-row income"><span class="mock-dot"></span><span class="mock-label">Salary</span><span class="mock-amount">+$3,200</span></div>
-            <div class="mock-row expense"><span class="mock-dot"></span><span class="mock-label">Groceries</span><span class="mock-amount">−$240</span></div>
-            <div class="mock-row expense"><span class="mock-dot"></span><span class="mock-label">Rent</span><span class="mock-amount">−$1,100</span></div>
+            <div class="mock-row income"><span class="mock-dot"></span><span class="mock-label">{{ 'LANDING.FEATURES.MOCK_SALARY' | translate }}</span><span class="mock-amount">+$3,200</span></div>
+            <div class="mock-row expense"><span class="mock-dot"></span><span class="mock-label">{{ 'LANDING.FEATURES.MOCK_GROCERIES' | translate }}</span><span class="mock-amount">−$240</span></div>
+            <div class="mock-row expense"><span class="mock-dot"></span><span class="mock-label">{{ 'LANDING.FEATURES.MOCK_RENT' | translate }}</span><span class="mock-amount">−$1,100</span></div>
           </div>
-          <h3 class="feature-title">Track every transaction</h3>
-          <p class="feature-desc">Categorize income and expenses. See where your money goes — daily, monthly, yearly.</p>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F1_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F1_DESC' | translate }}</p>
         </div>
 
         <div class="feature-card">
@@ -228,12 +224,12 @@
               <div class="mock-debt-fill"></div>
             </div>
             <div class="mock-debt-stats">
-              <span class="mock-stat"><strong>$2,450</strong> remaining</span>
-              <span class="mock-stat-meta">8 of 12 installments</span>
+              <span class="mock-stat"><strong>$2,450</strong> {{ 'LANDING.FEATURES.MOCK_REMAINING' | translate }}</span>
+              <span class="mock-stat-meta">{{ 'LANDING.FEATURES.MOCK_OF_INSTALLMENTS' | translate }}</span>
             </div>
           </div>
-          <h3 class="feature-title">Master your debts</h3>
-          <p class="feature-desc">Track installments, interest, and progress. Know exactly when you'll be debt-free.</p>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F2_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F2_DESC' | translate }}</p>
         </div>
 
         <div class="feature-card">
@@ -245,10 +241,10 @@
               </svg>
               <span class="mock-ring-text">65%</span>
             </div>
-            <div class="mock-savings-label">Emergency Fund</div>
+            <div class="mock-savings-label">{{ 'LANDING.FEATURES.MOCK_EMERGENCY' | translate }}</div>
           </div>
-          <h3 class="feature-title">Build savings goals</h3>
-          <p class="feature-desc">Set targets, watch them grow. Multi-currency support with live exchange rates.</p>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F3_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F3_DESC' | translate }}</p>
         </div>
 
         <div class="feature-card">
@@ -259,8 +255,8 @@
               <path d="M0,55 Q30,65 50,55 T100,60 T150,50 T200,55" stroke="#f87171" stroke-width="2" fill="none"/>
             </svg>
           </div>
-          <h3 class="feature-title">Smart insights</h3>
-          <p class="feature-desc">Cashflow trends. Spending breakdowns. Compare months at a glance.</p>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F4_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F4_DESC' | translate }}</p>
         </div>
 
       </div>
@@ -272,33 +268,33 @@
     <div class="section-container detail-layout">
 
       <div class="detail-content">
-        <p class="section-eyebrow">Built for speed.</p>
-        <h2 class="section-headline section-headline-left">Start in 2 minutes.<br />Never look back.</h2>
+        <p class="section-eyebrow">{{ 'LANDING.HOW.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left">{{ 'LANDING.HOW.HEADLINE_1' | translate }}<br />{{ 'LANDING.HOW.HEADLINE_2' | translate }}</h2>
         <ul class="detail-checklist">
           <li>
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
-              <strong>Sign up with your email</strong>
-              <span>No credit card. No commitment. Just an account.</span>
+              <strong>{{ 'LANDING.HOW.STEP1_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.HOW.STEP1_DESC' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
-              <strong>Add your first transaction</strong>
-              <span>Income, expense, savings, debt — categorized in seconds.</span>
+              <strong>{{ 'LANDING.HOW.STEP2_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.HOW.STEP2_DESC' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
-              <strong>Watch your money work for you</strong>
-              <span>Real-time insights, cashflow trends, debt progress.</span>
+              <strong>{{ 'LANDING.HOW.STEP3_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.HOW.STEP3_DESC' | translate }}</span>
             </div>
           </li>
         </ul>
         <a routerLink="/auth/register" class="detail-cta">
-          Start free <span>→</span>
+          {{ 'LANDING.HOW.CTA' | translate }} <span>→</span>
         </a>
       </div>
 
@@ -327,7 +323,7 @@
             <span class="currency-flag">🇺🇸</span>
             <div class="currency-info">
               <span class="currency-code">USD</span>
-              <span class="currency-name">US Dollar</span>
+              <span class="currency-name">{{ 'LANDING.MULTI_CURRENCY.USD_NAME' | translate }}</span>
             </div>
             <span class="currency-active">✓</span>
           </div>
@@ -336,40 +332,40 @@
             <span class="currency-flag">🇧🇷</span>
             <div class="currency-info">
               <span class="currency-code">BRL</span>
-              <span class="currency-name">Brazilian Real</span>
+              <span class="currency-name">{{ 'LANDING.MULTI_CURRENCY.BRL_NAME' | translate }}</span>
             </div>
             <span class="currency-rate">5.25</span>
           </div>
           <div class="currency-bottom">
             <i class="bi bi-arrow-left-right"></i>
-            <span>Live exchange rates</span>
+            <span>{{ 'LANDING.MULTI_CURRENCY.LIVE_RATES' | translate }}</span>
           </div>
         </div>
       </div>
 
       <div class="detail-content">
-        <p class="section-eyebrow">Cross-border ready.</p>
-        <h2 class="section-headline section-headline-left">Your money,<br />in your currency.</h2>
+        <p class="section-eyebrow">{{ 'LANDING.MULTI_CURRENCY.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left">{{ 'LANDING.MULTI_CURRENCY.HEADLINE_1' | translate }}<br />{{ 'LANDING.MULTI_CURRENCY.HEADLINE_2' | translate }}</h2>
         <ul class="detail-checklist">
           <li>
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
-              <strong>USD and BRL — switch instantly</strong>
-              <span>Every value converts on the fly with real rates.</span>
+              <strong>{{ 'LANDING.MULTI_CURRENCY.POINT1_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.MULTI_CURRENCY.POINT1_DESC' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
-              <strong>Three languages built-in</strong>
-              <span>Español · English · Português. Switch anytime.</span>
+              <strong>{{ 'LANDING.MULTI_CURRENCY.POINT2_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.MULTI_CURRENCY.POINT2_DESC' | translate }}</span>
             </div>
           </li>
           <li>
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
-              <strong>One account, everywhere</strong>
-              <span>Your data syncs the moment you log in.</span>
+              <strong>{{ 'LANDING.MULTI_CURRENCY.POINT3_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.MULTI_CURRENCY.POINT3_DESC' | translate }}</span>
             </div>
           </li>
         </ul>
@@ -381,25 +377,25 @@
   <!-- ===== STATS ===== -->
   <section class="landing-section section-stats" id="pricing">
     <div class="section-container">
-      <p class="section-eyebrow stats-eyebrow">By the numbers.</p>
-      <h2 class="section-headline">Built to be yours.</h2>
+      <p class="section-eyebrow stats-eyebrow">{{ 'LANDING.STATS.EYEBROW' | translate }}</p>
+      <h2 class="section-headline">{{ 'LANDING.STATS.HEADLINE' | translate }}</h2>
 
       <div class="stats-grid">
         <div class="stat-item">
           <div class="stat-value">$0</div>
-          <div class="stat-label">Forever</div>
+          <div class="stat-label">{{ 'LANDING.STATS.FOREVER' | translate }}</div>
         </div>
         <div class="stat-item">
           <div class="stat-value">2 min</div>
-          <div class="stat-label">To set up</div>
+          <div class="stat-label">{{ 'LANDING.STATS.TO_SETUP' | translate }}</div>
         </div>
         <div class="stat-item">
           <div class="stat-value">3</div>
-          <div class="stat-label">Languages</div>
+          <div class="stat-label">{{ 'LANDING.STATS.LANGUAGES_LABEL' | translate }}</div>
         </div>
         <div class="stat-item">
           <div class="stat-value">∞</div>
-          <div class="stat-label">Transactions</div>
+          <div class="stat-label">{{ 'LANDING.STATS.TRANSACTIONS_LABEL' | translate }}</div>
         </div>
       </div>
     </div>
@@ -408,14 +404,14 @@
   <!-- ===== FINAL CTA ===== -->
   <section class="landing-section section-final-cta">
     <div class="section-container final-cta-content">
-      <h2 class="final-cta-headline">Personal finance —<br />redesigned from the ground up.</h2>
-      <p class="final-cta-subtitle">Free forever. No credit card. Set up in 2 minutes.</p>
+      <h2 class="final-cta-headline">{{ 'LANDING.FINAL.HEADLINE_1' | translate }}<br />{{ 'LANDING.FINAL.HEADLINE_2' | translate }}</h2>
+      <p class="final-cta-subtitle">{{ 'LANDING.FINAL.SUBTITLE' | translate }}</p>
       <div class="final-cta-actions">
         <a routerLink="/auth/register" class="cta-button cta-button-big">
-          <span class="cta-text">Start free</span>
+          <span class="cta-text">{{ 'LANDING.NAV.START_FREE' | translate }}</span>
           <span class="cta-arrow">→</span>
         </a>
-        <a routerLink="/auth/login" class="cta-button-ghost">Sign in</a>
+        <a routerLink="/auth/login" class="cta-button-ghost">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
       </div>
     </div>
   </section>
@@ -428,24 +424,24 @@
           <img src="finanzascapa.png" alt="Finanzas" />
           <span class="nav-logo-text">Finanzas</span>
         </a>
-        <p class="footer-tagline">The finance app, your way.</p>
+        <p class="footer-tagline">{{ 'LANDING.FOOTER.TAGLINE' | translate }}</p>
       </div>
 
       <div class="footer-cols">
         <div class="footer-col">
-          <h4>Product</h4>
-          <a routerLink="/auth/register">Sign up</a>
-          <a routerLink="/auth/login">Sign in</a>
-          <a href="#features">Features</a>
+          <h4>{{ 'LANDING.FOOTER.PRODUCT' | translate }}</h4>
+          <a routerLink="/auth/register">{{ 'LANDING.FOOTER.SIGN_UP' | translate }}</a>
+          <a routerLink="/auth/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
+          <a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
         </div>
         <div class="footer-col">
-          <h4>Built with</h4>
+          <h4>{{ 'LANDING.FOOTER.BUILT_WITH' | translate }}</h4>
           <a>Angular</a>
           <a>ASP.NET</a>
           <a>PostgreSQL</a>
         </div>
         <div class="footer-col">
-          <h4>Language</h4>
+          <h4>{{ 'LANDING.FOOTER.LANGUAGE' | translate }}</h4>
           <a (click)="selectLanguage('es')">Español</a>
           <a (click)="selectLanguage('en')">English</a>
           <a (click)="selectLanguage('pt')">Português</a>

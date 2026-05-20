@@ -12,7 +12,7 @@ npm-debug.log
 yarn-error.log
 
 # Local screenshot artifacts (from screenshot.js dev tool)
-landing-v*.png
+landing-*.png
 *-screenshot.png
 
 # IDEs and editors
