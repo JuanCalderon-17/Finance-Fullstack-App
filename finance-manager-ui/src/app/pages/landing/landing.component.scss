@@ -51,7 +51,6 @@ $danger: #f87171;
   img {
     height: 28px;
     width: auto;
-    filter: brightness(0) invert(1);
   }
 
   .nav-logo-text {
@@ -1225,65 +1224,75 @@ $danger: #f87171;
   }
 }
 
-/* ============ FOOTER ============ */
+/* ============ FOOTER — premium SaaS scale ============ */
 .landing-footer {
   background: $bg-2;
   border-top: 1px solid $line;
-  padding: 4rem 1.5rem 1.5rem;
+  padding: 3rem 1.5rem 1.25rem;
 }
 
 .footer-layout {
   display: grid;
-  grid-template-columns: 1.5fr 2fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1.6fr 2fr;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 768px) {
-  .footer-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-layout { grid-template-columns: 1fr; gap: 1.75rem; }
 }
 
 .footer-brand {
-  .nav-logo { margin-bottom: 0.75rem; }
+  .nav-logo {
+    margin-bottom: 0.6rem;
+
+    img { height: 22px; }
+    .nav-logo-text { font-size: 0.95rem; }
+  }
 
   .footer-tagline {
-    color: $muted;
-    font-size: 0.9rem;
+    color: $muted-2;
+    font-size: 0.78rem;
+    line-height: 1.5;
     margin: 0;
-    max-width: 280px;
+    max-width: 240px;
   }
 }
 
 .footer-cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 @media (max-width: 600px) {
-  .footer-cols { grid-template-columns: repeat(2, 1fr); }
+  .footer-cols { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 }
 
 .footer-col {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.45rem;
 
   h4 {
-    font-size: 0.78rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: $muted-2;
-    margin: 0 0 0.4rem;
+    color: rgba(255, 255, 255, 0.38);
+    margin: 0 0 0.35rem;
   }
 
   a {
-    color: $muted;
-    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.78rem;
     text-decoration: none;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: color 0.15s ease;
+    line-height: 1.5;
 
     &:hover { color: $ink; }
   }
@@ -1291,10 +1300,15 @@ $danger: #f87171;
 
 .footer-bottom {
   border-top: 1px solid $line;
-  padding-top: 1.5rem;
+  padding-top: 1.25rem;
+  margin-top: 0;
   text-align: center;
-  font-size: 0.78rem;
-  color: $muted-2;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.32);
+  letter-spacing: 0.02em;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ============ ANIMATIONS ============ */

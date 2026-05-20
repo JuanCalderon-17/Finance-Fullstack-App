@@ -65,6 +65,23 @@
   --chart-blue: #3b82f6;
   --chart-pink: #ec4899;
   --chart-yellow: #fbbf24;
+
+  // ============ ANIMATION TOKENS ============
+  // Durations
+  --anim-enter: 700ms;       // scroll-entrance fade-up
+  --anim-hover: 200ms;       // interactive feedback (matches existing global rule)
+  --anim-exit:  300ms;
+  --anim-route: 350ms;       // reserved for route transitions (future)
+
+  // Easings — Mercury-style: decelerate hard at the end, no overshoot
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);    // expo-out, the "Mercury" curve
+  --ease-hover: cubic-bezier(0.4, 0, 0.2, 1);     // standard material
+  --ease-exit:  cubic-bezier(0.4, 0, 1, 1);
+
+  // Scroll-reveal specifics
+  --anim-reveal-distance: 16px;
+  --anim-stagger:         80ms;
+  --anim-stagger-max:     8;
 }
 
 // ============ DARK MODE (Emerald Vault) ============

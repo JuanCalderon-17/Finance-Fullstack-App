@@ -5,6 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { animate } from 'motion';
 import { LanguageService } from '../../core/services/language.service';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
 
 interface FlowPath {
   d: string;
@@ -25,7 +26,7 @@ interface TitleWord {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, RevealDirective],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })
