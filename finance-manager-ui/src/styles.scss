@@ -3,8 +3,8 @@
 // Importar Bootstrap
 @use "bootstrap/scss/bootstrap";
 
-@use 'themes';//importar temas
-;
+@use 'themes';      // importar temas
+@use 'animations';  // scroll-reveal utilities
 
 // Estilos base del body 
 body {
