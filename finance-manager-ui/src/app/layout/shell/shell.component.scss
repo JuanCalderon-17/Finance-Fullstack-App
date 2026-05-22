@@ -96,18 +96,25 @@ $topbar-height: 64px;
 }
 
 .sidebar-footer-item {
+  position: relative;
+  user-select: none;
+}
+
+.sidebar-footer-trigger {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  width: 100%;
   padding: 0.6rem 0.875rem;
+  border: none;
+  background: transparent;
   border-radius: 10px;
   color: var(--text-secondary);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  position: relative;
+  text-align: left;
   transition: all 0.15s ease;
-  user-select: none;
 
   i { font-size: 1rem; flex-shrink: 0; }
 
