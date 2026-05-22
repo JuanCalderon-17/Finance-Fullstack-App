@@ -35,7 +35,8 @@ export class ShellComponent implements OnInit {
     if (raw) {
       try {
         const user = JSON.parse(raw);
-        this.username = user.username || user.email?.split('@')[0] || 'there';
+        const firstName = user.fullName?.trim().split(/\s+/)[0];
+        this.username = firstName || user.username || user.email?.split('@')[0] || 'there';
       } catch {
         this.username = 'there';
       }
