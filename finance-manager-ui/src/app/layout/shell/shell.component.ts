@@ -53,18 +53,32 @@ export class ShellComponent implements OnInit {
     });
   }
 
-  toggleCurrency(code: string): void {
+  toggleLangMenu(event: Event): void {
+    event.stopPropagation();
+    this.showLangMenu = !this.showLangMenu;
+    this.showCurrencyMenu = false;
+  }
+
+  toggleCurrencyMenu(event: Event): void {
+    event.stopPropagation();
+    this.showCurrencyMenu = !this.showCurrencyMenu;
+    this.showLangMenu = false;
+  }
+
+  selectLanguage(lang: string, event: Event): void {
+    event.stopPropagation();
+    this.languageService.setLanguage(lang);
+    this.showLangMenu = false;
+  }
+
+  selectCurrency(code: string, event: Event): void {
+    event.stopPropagation();
     const symbol = code === 'BRL' ? 'R$' : '$';
     this.currencyService.getExchangeRate('BRL').subscribe({
       next: rate => this.currencyStateService.setCurrency(code, symbol, rate),
       error: ()  => this.currencyStateService.setCurrency(code, symbol, 5.25)
     });
     this.showCurrencyMenu = false;
-  }
-
-  selectLanguage(lang: string): void {
-    this.languageService.setLanguage(lang);
-    this.showLangMenu = false;
   }
 
   logout(): void {
