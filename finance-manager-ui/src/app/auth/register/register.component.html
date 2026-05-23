@@ -50,8 +50,19 @@
                   <div class="form-group mb-4">
                     <label class="form-label" for="confirmPassword">{{ 'AUTH.REGISTER.CONFIRM_PASSWORD' | translate }}</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" class="form-control custom-input"
-                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" 
+                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
                            [(ngModel)]="model.confirmPassword" required />
+                  </div>
+
+                  <div class="form-check mb-4 terms-check">
+                    <input type="checkbox" id="acceptedTerms" name="acceptedTerms" class="form-check-input"
+                           [(ngModel)]="model.acceptedTerms" />
+                    <label class="form-check-label small text-muted" for="acceptedTerms">
+                      {{ 'AUTH.REGISTER.ACCEPT_TERMS_PREFIX' | translate }}
+                      <a routerLink="/terms" target="_blank" rel="noopener">{{ 'AUTH.REGISTER.ACCEPT_TERMS_TERMS' | translate }}</a>
+                      {{ 'AUTH.REGISTER.ACCEPT_TERMS_AND' | translate }}
+                      <a routerLink="/privacy" target="_blank" rel="noopener">{{ 'AUTH.REGISTER.ACCEPT_TERMS_PRIVACY' | translate }}</a>.
+                    </label>
                   </div>
 
                   <div class="text-center pt-1 mb-4 pb-1">

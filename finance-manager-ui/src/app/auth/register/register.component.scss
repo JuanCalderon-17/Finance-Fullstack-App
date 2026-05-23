@@ -57,6 +57,43 @@
 .text-muted { color: rgba(255, 255, 255, 0.55) !important; }
 .text-muted-light { color: rgba(255, 255, 255, 0.78) !important; line-height: 1.6; }
 
+.terms-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+
+  .form-check-input {
+    margin-top: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+
+    &:checked {
+      background-color: #34d399;
+      border-color: #34d399;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.18);
+      border-color: #34d399;
+    }
+  }
+
+  .form-check-label {
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.45;
+    cursor: pointer;
+
+    a {
+      color: #34d399;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover { color: #6ee7b7; }
+    }
+  }
+}
+
 .custom-input {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);

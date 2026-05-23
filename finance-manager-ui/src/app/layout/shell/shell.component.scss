@@ -124,6 +124,34 @@ $topbar-height: 64px;
   }
 }
 
+.sidebar-footer-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.875rem;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+
+  i { font-size: 1rem; flex-shrink: 0; width: 18px; text-align: center; }
+
+  &:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  &.active {
+    background: var(--color-info-light);
+    color: var(--color-primary);
+    font-weight: 600;
+
+    i { color: var(--color-primary); }
+  }
+}
+
 .sidebar-dropdown {
   position: absolute;
   bottom: calc(100% + 4px);

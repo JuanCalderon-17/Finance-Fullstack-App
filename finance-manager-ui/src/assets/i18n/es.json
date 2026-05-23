@@ -92,7 +92,10 @@
       "PRODUCT": "Producto",
       "SIGN_UP": "Crear cuenta",
       "BUILT_WITH": "Construido con",
-      "LANGUAGE": "Idioma"
+      "LANGUAGE": "Idioma",
+      "LEGAL": "Legal",
+      "TERMS": "Términos y Condiciones",
+      "PRIVACY": "Política de Privacidad"
     }
   },
   "AUTH": {
@@ -122,6 +125,10 @@
       "LOGIN_LINK": "Inicia sesión aquí",
       "HERO_TITLE": "Empieza tu legado",
       "HERO_TEXT": "\"El primer paso para la libertad financiera es tomar la decisión de controlar tu destino. Regístrate hoy y comienza a construir el futuro que mereces.\"",
+      "ACCEPT_TERMS_PREFIX": "Acepto los",
+      "ACCEPT_TERMS_TERMS": "Términos y Condiciones",
+      "ACCEPT_TERMS_AND": "y la",
+      "ACCEPT_TERMS_PRIVACY": "Política de Privacidad",
       "ERRORS": {
         "EMPTY_NAME": "⛔ Por favor ingresa tu nombre completo.",
         "EMPTY_EMAIL": "⛔ El correo electrónico es obligatorio.",
@@ -132,7 +139,8 @@
         "PASSWORD_UPPER": "⛔ Falta una letra mayúscula.",
         "PASSWORD_DIGIT": "⛔ Falta un número.",
         "GENERIC": "Ocurrió un error inesperado.",
-        "PASSWORD_MISMATCH": "⛔ Las contraseñas no coinciden."
+        "PASSWORD_MISMATCH": "⛔ Las contraseñas no coinciden.",
+        "TERMS_NOT_ACCEPTED": "⛔ Debes aceptar los Términos y la Política de Privacidad."
       }
     },
     "FORGOT_PASSWORD": {
@@ -334,5 +342,92 @@
     "OCT": "Oct",
     "NOV": "Nov",
     "DEC": "Dic"
+  },
+  "SETTINGS": {
+    "TITLE": "Ajustes",
+    "SUBTITLE": "Tu cuenta y tus datos",
+    "EXPORT": {
+      "TITLE": "Exportar datos",
+      "DESC": "Descarga tus transacciones en formato CSV para abrir en Excel, Google Sheets o tu app de contabilidad. Los importes se exportan en su moneda original, sin conversión.",
+      "PRESET_THIS_MONTH": "Este mes",
+      "PRESET_LAST_30": "Últimos 30 días",
+      "PRESET_ALL_TIME": "Todo el histórico",
+      "FROM": "Desde",
+      "TO": "Hasta",
+      "DOWNLOAD_BUTTON": "Descargar CSV",
+      "EXPORTING": "Generando...",
+      "SUCCESS": "✓ Se exportaron {{count}} transacciones.",
+      "NO_DATA": "No hay transacciones en el rango seleccionado.",
+      "ERROR_RANGE_INVALID": "⛔ La fecha 'Desde' no puede ser posterior a 'Hasta'.",
+      "ERROR_GENERIC": "Ocurrió un error al exportar. Intenta de nuevo.",
+      "LGPD_NOTE": "Tienes derecho a la portabilidad de tus datos según la LGPD y normativa equivalente.",
+      "LGPD_LINK": "Ver Política de Privacidad"
+    }
+  },
+  "LEGAL": {
+    "BACK": "← Volver al inicio",
+    "EYEBROW": "Documento legal",
+    "LAST_UPDATED": "Última actualización",
+    "DISCLAIMER_LABEL": "Aviso importante",
+    "DISCLAIMER_BODY": "Este documento es un texto general redactado por el equipo de Finanzas y no constituye asesoramiento legal. Te recomendamos consultar a un abogado para revisar su contenido antes de basar decisiones en él.",
+    "TERMS": {
+      "TITLE": "Términos y Condiciones",
+      "S1_TITLE": "Aceptación de los términos",
+      "S1_BODY": "Al crear una cuenta o usar Finanzas (finanzasbr.com), aceptas estos Términos y nuestra Política de Privacidad. Si no estás de acuerdo, por favor no uses el servicio.",
+      "S2_TITLE": "Descripción del servicio",
+      "S2_BODY": "Finanzas es una aplicación web personal para registrar ingresos, gastos, deudas y ahorros. El servicio se ofrece tal cual, sin garantías de disponibilidad continua, y puede modificarse o suspenderse en cualquier momento.",
+      "S3_TITLE": "Uso aceptable",
+      "S3_BODY": "Al usar Finanzas te comprometes a:",
+      "S3_LI1": "No introducir información falsa o de terceros sin su consentimiento.",
+      "S3_LI2": "No intentar acceder a cuentas ajenas ni alterar el funcionamiento del sistema.",
+      "S3_LI3": "No usar el servicio para actividades ilegales o que violen derechos de terceros.",
+      "S3_LI4": "No realizar ingeniería inversa, scraping masivo ni revender el servicio sin autorización.",
+      "S4_TITLE": "Tu cuenta",
+      "S4_BODY": "Eres responsable de mantener la seguridad de tu contraseña y de toda actividad realizada bajo tu cuenta. Si detectas un acceso no autorizado, escríbenos de inmediato. Podemos suspender o eliminar cuentas que violen estos Términos.",
+      "S5_TITLE": "Tu contenido",
+      "S5_BODY": "Los datos financieros que cargas siguen siendo tuyos. Nos otorgas únicamente el permiso técnico necesario para almacenarlos, procesarlos y mostrártelos dentro del servicio. Puedes pedir su eliminación en cualquier momento (ver Política de Privacidad).",
+      "S6_TITLE": "Propiedad intelectual",
+      "S6_BODY": "El software, marca, diseño y contenidos de Finanzas son propiedad del equipo de Finanzas y están protegidos por las leyes aplicables. No se otorga ninguna licencia sobre ellos más allá del uso permitido del servicio.",
+      "S7_TITLE": "Limitación de responsabilidad",
+      "S7_BODY": "Finanzas es una herramienta de seguimiento personal y no constituye asesoramiento financiero, contable, fiscal ni de inversión. En la medida permitida por la ley, no nos hacemos responsables por pérdidas derivadas de decisiones tomadas con base en los datos mostrados, ni por interrupciones del servicio o pérdida de información por causas ajenas a nuestro control razonable.",
+      "S8_TITLE": "Cambios y terminación",
+      "S8_BODY": "Podemos actualizar estos Términos. Si los cambios son sustanciales lo informaremos por correo o dentro de la app. El uso continuo del servicio luego de la actualización implica aceptación. Puedes cerrar tu cuenta cuando quieras.",
+      "S9_TITLE": "Ley aplicable y contacto",
+      "S9_BODY": "Estos Términos se rigen por las leyes de Brasil. Para usuarios en otros países de Latinoamérica, aplican adicionalmente las normas imperativas locales de protección al consumidor. Para cualquier consulta, escríbenos a"
+    },
+    "PRIVACY": {
+      "TITLE": "Política de Privacidad",
+      "S1_TITLE": "Quiénes somos",
+      "S1_BODY": "Finanzas (finanzasbr.com) es una aplicación operada por el equipo de Finanzas. Esta política explica qué datos recopilamos, por qué y cómo los protegemos.",
+      "S2_TITLE": "Qué datos recopilamos",
+      "S2_BODY": "Recopilamos únicamente lo necesario para que el servicio funcione:",
+      "S2_LI1_LABEL": "Datos de cuenta",
+      "S2_LI1_BODY": "tu nombre, correo electrónico y contraseña (almacenada como hash, nunca en texto plano).",
+      "S2_LI2_LABEL": "Datos financieros",
+      "S2_LI2_BODY": "transacciones, deudas, cuotas, cuentas de ahorro y categorías que tú mismo cargas.",
+      "S2_LI3_LABEL": "Preferencias",
+      "S2_LI3_BODY": "idioma, moneda preferida y modo claro/oscuro.",
+      "S2_LI4_LABEL": "Datos técnicos",
+      "S2_LI4_BODY": "tipo de navegador y fecha del último acceso, usados para seguridad y soporte.",
+      "S3_TITLE": "Para qué los usamos",
+      "S3_BODY": "Para autenticarte, mostrarte tu propia información, enviarte correos transaccionales (verificación de email, recuperación de contraseña) y mejorar el servicio. No usamos tus datos financieros para publicidad ni los compartimos con terceros con fines comerciales.",
+      "S4_TITLE": "Dónde se almacenan",
+      "S4_BODY": "Los datos se almacenan en bases de datos PostgreSQL gestionadas por Supabase, cuyos servidores se ubican fuera de Latinoamérica (Estados Unidos o Unión Europea según el plan vigente). El correo transaccional se envía a través de SendGrid. Al usar el servicio aceptas esta transferencia internacional de datos, realizada con proveedores que cumplen estándares de seguridad reconocidos.",
+      "S5_TITLE": "Cookies y almacenamiento local",
+      "S5_BODY": "Usamos almacenamiento local del navegador (localStorage) para guardar el token de sesión, idioma y preferencias de tema. No usamos cookies de seguimiento ni de publicidad.",
+      "S6_TITLE": "Tus derechos (LGPD y Latinoamérica)",
+      "S6_BODY": "Si te encuentras en Brasil (Ley General de Protección de Datos — LGPD nº 13.709/2018) o en otro país de Latinoamérica con normativa de protección de datos, tienes derecho a:",
+      "S6_LI1": "Acceder a los datos que tenemos sobre ti.",
+      "S6_LI2": "Corregir o actualizar información incorrecta.",
+      "S6_LI3": "Pedir la eliminación de tu cuenta y datos asociados.",
+      "S6_LI4": "Exportar tus datos en formato legible (próximamente desde la app).",
+      "S6_LI5": "Retirar tu consentimiento o presentar una reclamación ante tu autoridad de protección de datos.",
+      "S7_TITLE": "Conservación",
+      "S7_BODY": "Mantenemos tus datos mientras tu cuenta esté activa. Si cierras la cuenta, eliminamos los datos personales en un plazo razonable, salvo aquellos que debamos conservar por obligación legal.",
+      "S8_TITLE": "Cambios a esta política",
+      "S8_BODY": "Si actualizamos esta política, te avisaremos por correo o desde la app. La fecha de última actualización aparece al inicio de este documento.",
+      "S9_TITLE": "Contacto",
+      "S9_BODY": "Para ejercer cualquier derecho o resolver dudas sobre privacidad, escríbenos a"
+    }
   }
 }
