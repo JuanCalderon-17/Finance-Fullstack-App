@@ -62,6 +62,11 @@
     background: var(--color-danger-light);
     color: var(--color-danger);
   }
+
+  &.savings-icon {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+  }
 }
 
 .ds-stat-amount {
@@ -268,6 +273,7 @@
 
 .amount-income { color: var(--color-success) !important; }
 .amount-expense { color: var(--color-danger) !important; }
+.amount-savings { color: #6366f1 !important; }
 
 // ============ CATEGORY BADGES ============
 .ds-category-badge {
@@ -288,6 +294,11 @@
   &.badge-expense {
     background: var(--color-danger-light);
     color: var(--color-danger);
+  }
+
+  &.badge-savings {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
   }
 }
 
