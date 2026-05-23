@@ -63,6 +63,11 @@
         </div>
       </div>
 
+      <a routerLink="/settings" routerLinkActive="active" class="sidebar-footer-link">
+        <i class="bi bi-gear-fill"></i>
+        <span>{{ 'NAVIGATION.SETTINGS' | translate }}</span>
+      </a>
+
       <button class="sidebar-logout" (click)="logout()">
         <i class="bi bi-box-arrow-right"></i>
         <span>{{ 'BUTTONS.LOGOUT' | translate }}</span>

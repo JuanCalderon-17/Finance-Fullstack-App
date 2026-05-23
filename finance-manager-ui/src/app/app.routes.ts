@@ -39,6 +39,16 @@ export const routes: Routes = [
     ]
   },
 
+  // Public legal pages
+  {
+    path: 'terms',
+    loadComponent: () => import('./pages/legal/terms/terms.component').then(m => m.TermsComponent)
+  },
+  {
+    path: 'privacy',
+    loadComponent: () => import('./pages/legal/privacy/privacy.component').then(m => m.PrivacyComponent)
+  },
+
   // Protected — shell wrapper
   {
     path: '',
@@ -56,6 +66,10 @@ export const routes: Routes = [
       {
         path: 'savings',
         loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent)
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
       }
     ]
   },

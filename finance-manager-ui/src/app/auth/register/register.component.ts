@@ -14,7 +14,7 @@ import { AuthService } from "../../core/services/auth.service";
 })
 export class RegisterComponent {
   
-  model: any = { fullName: '', email: '', password: '', confirmPassword: '' };
+  model: any = { fullName: '', email: '', password: '', confirmPassword: '', acceptedTerms: false };
   isLoading: boolean = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
@@ -81,6 +81,12 @@ export class RegisterComponent {
     // C. Coincidencia de Contraseñas
     if (this.model.password !== this.model.confirmPassword) {
       this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_MISMATCH');
+      return false;
+    }
+
+    // D. Aceptación de Términos y Política de Privacidad
+    if (!this.model.acceptedTerms) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.TERMS_NOT_ACCEPTED');
       return false;
     }
 

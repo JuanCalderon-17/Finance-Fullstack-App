@@ -446,6 +446,11 @@
           <a (click)="selectLanguage('en')">English</a>
           <a (click)="selectLanguage('pt')">Português</a>
         </div>
+        <div class="footer-col">
+          <h4>{{ 'LANDING.FOOTER.LEGAL' | translate }}</h4>
+          <a routerLink="/terms">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
+          <a routerLink="/privacy">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a>
+        </div>
       </div>
     </div>
 
