@@ -424,7 +424,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         else expenseArr[day] += amount;
       });
 
-      this.applyCashflowData(labels, incomeArr, expenseArr, savingsArr);
+      this.applyCashflowData(
+        labels,
+        this.toCumulative(incomeArr),
+        this.toCumulative(expenseArr),
+        this.toCumulative(savingsArr)
+      );
       return;
     }
 
@@ -455,10 +460,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.applyCashflowData(
       buckets.map(b => b.label),
-      buckets.map(b => b.income),
-      buckets.map(b => b.expense),
-      buckets.map(b => b.savings)
+      this.toCumulative(buckets.map(b => b.income)),
+      this.toCumulative(buckets.map(b => b.expense)),
+      this.toCumulative(buckets.map(b => b.savings))
     );
+  }
+
+  private toCumulative(values: number[]): number[] {
+    let sum = 0;
+    return values.map(v => (sum += v));
   }
 
   private applyCashflowData(labels: string[], income: number[], expense: number[], savings: number[]): void {
