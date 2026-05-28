@@ -47,6 +47,7 @@ export class SavingsComponent implements OnInit, OnDestroy {
       this.currencyCode = currency.code;
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
+      this.calculateTotal();
     });
     
     this.loadData();
