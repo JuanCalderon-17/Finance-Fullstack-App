@@ -143,22 +143,11 @@ export class SavingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Actualizar con conversión correcta
   updateSavingInDb(account: SavingAccount) {
     if (!account.id) return;
 
-    // Crear copia para enviar
-    const savingToUpdate = { ...account };
-
-    // Si el balance se modificó y estamos en BRL, convertir a USD
-    if (this.currencyCode === 'BRL') {
-      // El balance en pantalla está en BRL, convertir a USD para guardar
-      savingToUpdate.balance = account.balance / this.exchangeRate;
-      savingToUpdate.currency = 'USD';
-      console.log(`🔄 Actualizando: R$ ${account.balance} → $ ${savingToUpdate.balance.toFixed(2)}`);
-    } else {
-      savingToUpdate.currency = 'USD';
-    }
+    // account.balance is always in USD in the frontend state (loaded from DB as USD)
+    const savingToUpdate = { ...account, currency: 'USD' };
 
     this.savingsService.updateSaving(account.id, savingToUpdate).subscribe({
       next: () => {
@@ -169,13 +158,13 @@ export class SavingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // updateBalance ahora convierte correctamente
   updateBalance(account: SavingAccount, amount: number) {
-    // El amount viene en la moneda actual del usuario
-    account.balance += amount;
+    // amount comes from quick buttons in the display currency; convert to USD before adding
+    const amountInUsd = (this.currencyCode !== 'USD' && this.exchangeRate > 0)
+      ? amount / this.exchangeRate
+      : amount;
+    account.balance += amountInUsd;
     if (account.balance < 0) account.balance = 0;
-    
-    // Guardamos
     this.updateSavingInDb(account);
   }
 
