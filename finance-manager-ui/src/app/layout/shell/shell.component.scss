@@ -146,12 +146,12 @@ $topbar-height: 64px;
 }
 
 .topbar-avatar {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 700;
   display: flex;
   align-items: center;
