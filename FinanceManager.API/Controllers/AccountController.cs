@@ -102,7 +102,8 @@ namespace FinanceManager.API.Controllers
             {
                 Username = user.UserName,
                 FullName = user.FullName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                ProfilePictureUrl = user.ProfilePictureUrl
             };
         }
 
@@ -232,6 +233,45 @@ namespace FinanceManager.API.Controllers
                 Console.WriteLine($"--> [ERROR] Resend verification email failed for {user.Email}: {ex.Message}");
                 return StatusCode(500, new { error = "No pudimos enviar el correo. Intenta más tarde." });
             }
+        }
+
+        // PUT: api/account/profile
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto dto)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId!);
+            if (user == null) return NotFound();
+
+            user.FullName = dto.FullName;
+            user.ProfilePictureUrl = dto.ProfilePictureUrl;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok(new UserDto
+            {
+                Username = user.UserName!,
+                FullName = user.FullName,
+                Token = _tokenService.CreateToken(user),
+                ProfilePictureUrl = user.ProfilePictureUrl
+            });
+        }
+
+        // POST: api/account/change-password
+        [HttpPost("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId!);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok(new { message = "Password updated." });
         }
 
         // POST: api/account/reset-password

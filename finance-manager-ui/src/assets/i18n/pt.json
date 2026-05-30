@@ -333,6 +333,33 @@
     "JAN": "Jan", "FEB": "Fev", "MAR": "Mar", "APR": "Abr", "MAY": "Mai", "JUN": "Jun",
     "JUL": "Jul", "AUG": "Ago", "SEP": "Set", "OCT": "Out", "NOV": "Nov", "DEC": "Dez"
   },
+  "PROFILE": {
+    "TITLE": "Perfil",
+    "SUBTITLE": "Gerencie sua conta e segurança",
+    "SAVING": "Salvando…",
+    "IDENTITY": {
+      "FULL_NAME": "Nome completo",
+      "EMAIL": "E-mail",
+      "EMAIL_SOON": "A alteração de e-mail estará disponível em breve.",
+      "CHANGE_PHOTO": "Alterar foto",
+      "INVALID_IMAGE": "Escolha um arquivo de imagem.",
+      "SAVE": "Salvar perfil",
+      "SUCCESS": "Perfil atualizado com sucesso.",
+      "ERROR": "Não foi possível salvar o perfil. Tente novamente."
+    },
+    "PASSWORD": {
+      "TITLE": "Alterar senha",
+      "DESC": "Use uma senha forte que você não reutilize em outros lugares.",
+      "CURRENT": "Senha atual",
+      "NEW": "Nova senha",
+      "CONFIRM": "Confirmar nova senha",
+      "SAVE": "Atualizar senha",
+      "EMPTY": "Preencha sua senha atual e a nova.",
+      "SUCCESS": "Senha atualizada com sucesso.",
+      "INCORRECT_CURRENT": "Sua senha atual está incorreta.",
+      "ERROR": "Não foi possível atualizar a senha. Tente novamente."
+    }
+  },
   "SETTINGS": {
     "TITLE": "Configurações",
     "SUBTITLE": "Sua conta e seus dados",

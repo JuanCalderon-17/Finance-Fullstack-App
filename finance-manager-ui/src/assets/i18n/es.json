@@ -343,6 +343,33 @@
     "NOV": "Nov",
     "DEC": "Dic"
   },
+  "PROFILE": {
+    "TITLE": "Perfil",
+    "SUBTITLE": "Administra tu cuenta y seguridad",
+    "SAVING": "Guardando…",
+    "IDENTITY": {
+      "FULL_NAME": "Nombre completo",
+      "EMAIL": "Correo electrónico",
+      "EMAIL_SOON": "El cambio de correo estará disponible pronto.",
+      "CHANGE_PHOTO": "Cambiar foto",
+      "INVALID_IMAGE": "Por favor elige un archivo de imagen.",
+      "SAVE": "Guardar perfil",
+      "SUCCESS": "Perfil actualizado correctamente.",
+      "ERROR": "No se pudo guardar el perfil. Inténtalo de nuevo."
+    },
+    "PASSWORD": {
+      "TITLE": "Cambiar contraseña",
+      "DESC": "Usa una contraseña segura que no reutilices en otros sitios.",
+      "CURRENT": "Contraseña actual",
+      "NEW": "Nueva contraseña",
+      "CONFIRM": "Confirmar nueva contraseña",
+      "SAVE": "Actualizar contraseña",
+      "EMPTY": "Completa tu contraseña actual y la nueva.",
+      "SUCCESS": "Contraseña actualizada correctamente.",
+      "INCORRECT_CURRENT": "Tu contraseña actual es incorrecta.",
+      "ERROR": "No se pudo actualizar la contraseña. Inténtalo de nuevo."
+    }
+  },
   "SETTINGS": {
     "TITLE": "Ajustes",
     "SUBTITLE": "Tu cuenta y tus datos",

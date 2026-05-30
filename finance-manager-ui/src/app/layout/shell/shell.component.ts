@@ -6,6 +6,7 @@ import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.com
 import { LanguageService } from '../../core/services/language.service';
 import { CurrencyService } from '../../core/services/currency.service';
 import { CurrencyStateService } from '../../core/services/currency-state.service';
+import { UserStateService } from '../../core/services/user-state.service';
 
 @Component({
   selector: 'app-shell',
@@ -16,31 +17,31 @@ import { CurrencyStateService } from '../../core/services/currency-state.service
 })
 export class ShellComponent implements OnInit {
   username: string = '';
+  fullName: string = '';
+  email: string = '';
+  profilePictureUrl: string | null = null;
   greeting: string = '';
   currencyCode: string = 'USD';
   currencySymbol: string = '$';
-  showLangMenu = false;
-  showCurrencyMenu = false;
-  sidebarCollapsed = false;
+  showUserMenu = false;
 
   constructor(
     public languageService: LanguageService,
     private currencyService: CurrencyService,
     private currencyStateService: CurrencyStateService,
+    private userStateService: UserStateService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    const raw = localStorage.getItem('user');
-    if (raw) {
-      try {
-        const user = JSON.parse(raw);
-        const firstName = user.fullName?.trim().split(/\s+/)[0];
-        this.username = firstName || user.username || user.email?.split('@')[0] || 'there';
-      } catch {
-        this.username = 'there';
-      }
-    }
+    // Live user info — updates instantly when the profile is edited.
+    this.userStateService.user$.subscribe(u => {
+      const firstName = u.fullName?.trim().split(/\s+/)[0];
+      this.username = firstName || u.username || u.email?.split('@')[0] || 'there';
+      this.fullName = u.fullName || '';
+      this.email = u.email || '';
+      this.profilePictureUrl = u.profilePictureUrl;
+    });
 
     const hour = new Date().getHours();
     if (hour < 12) this.greeting = 'Good Morning';
@@ -53,22 +54,15 @@ export class ShellComponent implements OnInit {
     });
   }
 
-  toggleLangMenu(event: Event): void {
+  toggleUserMenu(event: Event): void {
     event.stopPropagation();
-    this.showLangMenu = !this.showLangMenu;
-    this.showCurrencyMenu = false;
-  }
-
-  toggleCurrencyMenu(event: Event): void {
-    event.stopPropagation();
-    this.showCurrencyMenu = !this.showCurrencyMenu;
-    this.showLangMenu = false;
+    this.showUserMenu = !this.showUserMenu;
   }
 
   selectLanguage(lang: string, event: Event): void {
     event.stopPropagation();
     this.languageService.setLanguage(lang);
-    this.showLangMenu = false;
+    // Keep the menu open so the active segment updates in place.
   }
 
   selectCurrency(code: string, event: Event): void {
@@ -78,7 +72,7 @@ export class ShellComponent implements OnInit {
       next: rate => this.currencyStateService.setCurrency(code, symbol, rate),
       error: ()  => this.currencyStateService.setCurrency(code, symbol, 5.25)
     });
-    this.showCurrencyMenu = false;
+    // Keep the menu open so the active segment updates in place.
   }
 
   logout(): void {
@@ -90,10 +84,15 @@ export class ShellComponent implements OnInit {
     return this.username ? this.username.charAt(0).toUpperCase() : 'U';
   }
 
+  // Maps a language code to its local SVG flag (renders identically on every OS).
+  private readonly flagFiles: Record<string, string> = { en: 'us', es: 'es', pt: 'br' };
+  flagSrc(code: string): string {
+    return `assets/flags/${this.flagFiles[code] || code}.svg`;
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.lang-item')) this.showLangMenu = false;
-    if (!target.closest('.currency-item') && !target.closest('.topbar-currency-pill')) this.showCurrencyMenu = false;
+    if (!target.closest('.topbar-user')) this.showUserMenu = false;
   }
 }
