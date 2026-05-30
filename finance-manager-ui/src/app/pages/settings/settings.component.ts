@@ -23,6 +23,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private incomeCategories = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra', 'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
   private savingsCategories = ['Ahorro', 'Savings', 'Poupança', 'SAVING'];
 
+  // Export
   fromDate: string = '';
   toDate: string = '';
   isExporting = false;

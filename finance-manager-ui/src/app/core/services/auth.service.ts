@@ -40,4 +40,12 @@ export class AuthService {
       params: { token, email }
     });
   }
+
+  updateProfile(dto: { fullName: string; profilePictureUrl?: string }): Observable<any> {
+    return this.http.put(`${this.baseUrl}profile`, dto);
+  }
+
+  changePassword(dto: { currentPassword: string; newPassword: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}change-password`, dto);
+  }
 }

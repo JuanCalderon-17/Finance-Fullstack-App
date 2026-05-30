@@ -30,6 +30,22 @@ namespace FinanceManager.API.DTOs
         public string Username { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+        public string? ProfilePictureUrl { get; set; }
+    }
+
+    public class UpdateProfileDto
+    {
+        public string FullName { get; set; } = string.Empty;
+        public string? ProfilePictureUrl { get; set; }
+    }
+
+    public class ChangePasswordDto
+    {
+        [Required]
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string NewPassword { get; set; } = string.Empty;
     }
 
     // Asegúrate de tener este DTO también para el ForgotPassword
