@@ -13,6 +13,7 @@ namespace FinanceManager.API.Data
         public DbSet<SavingsAccount> SavingsAccounts { get; set; }
         public DbSet<Debt> Debts { get; set; }
         public DbSet<Installment> Installments { get; set; }
+        public DbSet<RecurringTransaction> RecurringTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,6 +55,15 @@ namespace FinanceManager.API.Data
             modelBuilder.Entity<Installment>()
                 .Property(i => i.Amount)
                 .HasPrecision(18, 2);
+
+            // RecurringTransaction
+            modelBuilder.Entity<RecurringTransaction>()
+                .Property(r => r.Amount)
+                .HasPrecision(18, 4);
+
+            modelBuilder.Entity<RecurringTransaction>()
+                .HasIndex(r => new { r.AppUserId, r.NextDueDate })
+                .HasDatabaseName("IX_RecurringTransactions_AppUserId_NextDueDate");
 
             // SavingsAccount
             modelBuilder.Entity<SavingsAccount>()

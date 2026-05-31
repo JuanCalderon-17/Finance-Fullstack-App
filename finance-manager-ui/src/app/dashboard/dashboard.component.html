@@ -1,5 +1,35 @@
+<!-- ===== RECURRING DUE REMINDERS ===== -->
+<div class="ds-due-banner" *ngIf="dueOccurrences.length > 0">
+  <div class="ds-due-head">
+    <i class="bi bi-bell-fill"></i>
+    <span>{{ 'RECURRING.DUE_TITLE' | translate }}</span>
+  </div>
+  <div class="ds-due-list">
+    <div class="ds-due-item" *ngFor="let due of dueOccurrences">
+      <div class="ds-due-info">
+        <span class="ds-due-name">{{ due.description }}</span>
+        <span class="ds-due-sub">
+          {{ currencySymbol }}{{ convertDueAmount(due) | number:'1.2-2' }}
+          · {{ 'RECURRING.DUE_ON' | translate }} {{ due.dueDate | date:'dd/MM/yyyy' }}
+          <span class="ds-due-overdue" *ngIf="due.overdueCount > 1">
+            (+{{ due.overdueCount - 1 }} {{ 'RECURRING.MORE_OVERDUE' | translate }})
+          </span>
+        </span>
+      </div>
+      <div class="ds-due-actions">
+        <button class="ds-due-confirm" (click)="confirmDue(due)">
+          <i class="bi bi-check-lg"></i> {{ 'RECURRING.CONFIRM' | translate }}
+        </button>
+        <button class="ds-due-skip" (click)="skipDue(due)">
+          {{ 'RECURRING.SKIP' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== ROW 1: STAT CARDS ===== -->
-<div class="row g-4 mb-4">
+<div class="row g-4 mb-4" id="tour-stats">
 
   <div class="col-lg-3 col-md-6">
     <div class="ds-stat-card" [ngClass]="totalIncome >= (totalSpent + totalSaved) ? 'ds-stat-balance-pos' : 'ds-stat-balance-neg'">
@@ -75,7 +105,7 @@
 <!-- ===== ROW 1.5: CASHFLOW TREND ===== -->
 <div class="row g-4 mb-4">
   <div class="col-12">
-    <div class="ds-card">
+    <div class="ds-card" id="tour-chart">
       <div class="ds-card-header cashflow-header">
         <span class="ds-card-title">
           <i class="bi bi-activity"></i>
@@ -104,7 +134,7 @@
 
   <!-- Transaction Form -->
   <div class="col-lg-4 col-md-5">
-    <div class="ds-card h-100">
+    <div class="ds-card h-100" id="tour-add">
       <div class="ds-card-header">
         <span class="ds-card-title" [class.editing]="isEditing">
           <i class="bi" [ngClass]="isEditing ? 'bi-pencil-square' : 'bi-plus-circle-fill'"></i>
@@ -181,7 +211,7 @@
 
   <!-- Transaction Table -->
   <div class="col-lg-8 col-md-7">
-    <div class="ds-card h-100">
+    <div class="ds-card h-100" id="tour-history">
       <div class="ds-card-header">
         <span class="ds-card-title">
           <i class="bi bi-clock-history"></i>

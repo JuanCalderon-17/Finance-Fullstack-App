@@ -1,3 +1,84 @@
+// ============ RECURRING DUE BANNER ============
+.ds-due-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--color-success);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-due-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+
+  i { color: var(--color-success); }
+}
+
+.ds-due-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ds-due-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.ds-due-info { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+
+.ds-due-name { font-weight: 600; color: var(--text-primary); font-size: 0.92rem; }
+
+.ds-due-sub { font-size: 0.82rem; color: var(--text-secondary); }
+
+.ds-due-overdue { color: var(--color-danger); font-weight: 600; }
+
+.ds-due-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+.ds-due-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  color: #062319;
+  font-weight: 700;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -10px rgba(16, 185, 129, 0.7); }
+}
+
+.ds-due-skip {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  &:hover { background: var(--bg-hover); color: var(--text-primary); }
+}
+
 // ============ DASHBOARD STAT CARDS ============
 .ds-stat-card {
   background: var(--bg-card);

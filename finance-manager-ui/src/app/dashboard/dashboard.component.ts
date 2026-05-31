@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../core/services/transaction.service';
+import { RecurringService, DueOccurrence } from '../core/services/recurring.service';
 import { Transaction } from '../shared/models/transaction.model';
 import { Router, RouterLink } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
@@ -36,7 +37,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   allTransactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
-  showSettingsMenu : boolean = false; 
+  dueOccurrences: DueOccurrence[] = [];
+  showSettingsMenu : boolean = false;
 
   // ✅ MAPA DE CATEGORÍAS: Base de Datos -> Clave JSON
   categoryMap: { [key: string]: string } = {
@@ -180,7 +182,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   exchangeRate : number = 1;
 
   constructor(
-    private transactionService: TransactionService, 
+    private transactionService: TransactionService,
+    private recurringService: RecurringService,
     private router: Router,
     private currencyService: CurrencyService,
     private currencyStateService: CurrencyStateService,
@@ -226,12 +229,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.loadTransactions();
     this.loadCashflowTrend();
-    
+    this.loadDue();
+
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
         this.tutorialService.startDashboardTutorial();
       }
     },2000); //wait 2 for page to load
+  }
+
+  // ===== Recurring due reminders =====
+  loadDue(): void {
+    this.recurringService.getDue().pipe(takeUntil(this.destroy$)).subscribe({
+      next: (due) => { this.dueOccurrences = due; this.cdr.markForCheck(); },
+      error: () => { /* non-blocking */ }
+    });
+  }
+
+  convertDueAmount(due: DueOccurrence): number {
+    return this.currencyStateService.convert(due.amount, due.currency || 'USD');
+  }
+
+  confirmDue(due: DueOccurrence): void {
+    this.recurringService.confirm(due.recurringId).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.loadTransactions();
+        this.loadCashflowTrend();
+        this.loadDue();
+      }
+    });
+  }
+
+  skipDue(due: DueOccurrence): void {
+    this.recurringService.skip(due.recurringId).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => this.loadDue()
+    });
   }
 
   toggleCurrency() {
