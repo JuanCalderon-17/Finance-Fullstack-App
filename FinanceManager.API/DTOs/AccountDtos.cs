@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Net.Http.Headers;
 
 namespace FinanceManager.API.DTOs
 {
@@ -32,7 +34,6 @@ namespace FinanceManager.API.DTOs
         public string FullName { get; set; } = string.Empty;
     }
 
-    // Asegúrate de tener este DTO también para el ForgotPassword
     public class ForgotPasswordDto
     {
         public string Email { get; set; } = string.Empty;
@@ -44,4 +45,10 @@ namespace FinanceManager.API.DTOs
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
     }
+
+    public class DeleteAccountDto
+    {
+    public string Password ( get; set; )
+    }
+
 }

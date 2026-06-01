@@ -253,19 +253,19 @@ namespace FinanceManager.API.Controllers
                     return BadRequest(new { error = "Usuario no encontrado." });
                 }
 
-                // Verificar token
+                // verify token
                 if (user.PasswordResetToken != request.Token)
                 {
                     return BadRequest(new { error = "Token inválido." });
                 }
 
-                // Verificar expiración
+                // verify token expiration
                 if (user.ResetTokenExpires < DateTime.UtcNow)
                 {
                     return BadRequest(new { error = "El token ha expirado. Solicita uno nuevo." });
                 }
 
-                // Cambiar contraseña directamente (sin usar el Token Provider)
+                // Change password, no need to use token provider
                 var passwordHasher = new PasswordHasher<AppUser>();
                 user.PasswordHash = passwordHasher.HashPassword(user, request.NewPassword);
 
@@ -289,6 +289,11 @@ namespace FinanceManager.API.Controllers
                 return StatusCode(500, new { error = "Error interno del servidor." });
             }
         }
+
+
+        [HttpDelete]
+        [EnableRateLimiting("auth")]
+        public async Task<IActionResult> DeleteAccount([FromBody] DeleteAccountDto request)
 
     }
 }

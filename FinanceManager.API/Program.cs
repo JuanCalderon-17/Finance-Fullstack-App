@@ -39,7 +39,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 
-// ----------------------------------------------------
+// passwords are hashshed to protect from vulnerabilites 
 
 builder.Services.AddIdentityCore<AppUser>(opt => { opt.Password.RequireNonAlphanumeric = false; })
     .AddEntityFrameworkStores<AppDbContext>()
