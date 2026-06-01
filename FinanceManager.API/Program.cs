@@ -52,8 +52,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "finanzasbr.com",
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "finanzasbr-app",
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
     });
 
@@ -72,6 +76,20 @@ builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = 429;
+
+    // Global DoS protection: 100 requests/min per client IP across every
+    // endpoint. Auth endpoints stack the stricter "auth" limiter on top.
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 100,
+            Window = TimeSpan.FromMinutes(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        });
+    });
 
     // Strict limit for auth endpoints (login, register, forgot-password)
     // 5 attempts per minute per IP — stops brute-force and email spam
@@ -165,11 +183,37 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Convert unhandled exceptions into a clean JSON 500 instead of leaking stack traces.
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+    });
+});
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Baseline security headers (API serves JSON only).
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["Referrer-Policy"] = "no-referrer";
+    context.Response.Headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'";
+    await next();
+});
 
 app.UseCors("AllowAngularApp");
 

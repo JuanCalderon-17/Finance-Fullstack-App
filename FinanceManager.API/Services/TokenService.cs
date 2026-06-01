@@ -11,6 +11,8 @@ namespace FinanceManager.API.Services
     public class TokenService : ITokenService
     {
         private readonly SymmetricSecurityKey _key;
+        private readonly string _issuer;
+        private readonly string _audience;
 
         // Inyectamos la configuración para poder leer nuestra clave secreta.
         public TokenService(IConfiguration config)
@@ -18,6 +20,8 @@ namespace FinanceManager.API.Services
             // La clave secreta se usa para firmar el token. Debe ser lo suficientemente larga y compleja.
             // La leemos desde nuestros archivos de configuración (appsettings.json).
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+            _issuer = config["Jwt:Issuer"] ?? "finanzasbr.com";
+            _audience = config["Jwt:Audience"] ?? "finanzasbr-app";
         }
 
         public string CreateToken(AppUser user)
