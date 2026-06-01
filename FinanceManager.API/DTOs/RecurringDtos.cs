@@ -6,10 +6,14 @@ namespace FinanceManager.API.DTOs
     public class CreateRecurringDto
     {
         [Required]
+        [StringLength(200, MinimumLength = 1)]
         public string Description { get; set; } = string.Empty;
+        [Range(0.01, 999999999)]
         public decimal Amount { get; set; }
         [Required]
+        [StringLength(50)]
         public string Category { get; set; } = string.Empty;
+        [StringLength(3)]
         public string Currency { get; set; } = "USD";
         public RecurrenceFrequency Frequency { get; set; }
         public DateTime StartDate { get; set; }
@@ -19,10 +23,14 @@ namespace FinanceManager.API.DTOs
     public class UpdateRecurringDto
     {
         [Required]
+        [StringLength(200, MinimumLength = 1)]
         public string Description { get; set; } = string.Empty;
+        [Range(0.01, 999999999)]
         public decimal Amount { get; set; }
         [Required]
+        [StringLength(50)]
         public string Category { get; set; } = string.Empty;
+        [StringLength(3)]
         public string Currency { get; set; } = "USD";
         public RecurrenceFrequency Frequency { get; set; }
         public DateTime StartDate { get; set; }

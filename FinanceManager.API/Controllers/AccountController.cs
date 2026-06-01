@@ -33,6 +33,15 @@ namespace FinanceManager.API.Controllers
             _emailService = emailService;
         }
 
+        // Reset/verification tokens are bearer secrets: email the raw token to the
+        // user but only ever persist its SHA-256 hash, so a DB leak can't be replayed.
+        private static string HashToken(string token)
+        {
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(token));
+            return Convert.ToHexString(bytes);
+        }
+
         // POST: api/account/register
         [HttpPost("register")]
         [EnableRateLimiting("auth")]
@@ -56,7 +65,7 @@ namespace FinanceManager.API.Controllers
 
             // Generate a verification token and save it — user can't log in until they confirm
             var verificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-            user.EmailVerificationToken = verificationToken;
+            user.EmailVerificationToken = HashToken(verificationToken);
             await _userManager.UpdateAsync(user);
 
             var verifyLink = $"https://finanzasbr.com/auth/verify-email?token={verificationToken}&email={user.Email}";
@@ -124,8 +133,8 @@ namespace FinanceManager.API.Controllers
             // Generar token random
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
-            // Guardar en DB
-            user.PasswordResetToken = token;
+            // Guardar en DB (solo el hash; el enlace lleva el token en claro)
+            user.PasswordResetToken = HashToken(token);
             user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
 
             // Importante: Asegurar que se guarde antes de enviar el correo
@@ -176,7 +185,7 @@ namespace FinanceManager.API.Controllers
             if (user.IsEmailVerified)
                 return Ok(new { message = "El correo ya fue verificado anteriormente." });
 
-            if (user.EmailVerificationToken != token)
+            if (user.EmailVerificationToken != HashToken(token))
                 return BadRequest(new { error = "Token inválido." });
 
             user.IsEmailVerified = true;
@@ -209,7 +218,7 @@ namespace FinanceManager.API.Controllers
 
             // Issue a fresh token (invalidates the previous one)
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-            user.EmailVerificationToken = token;
+            user.EmailVerificationToken = HashToken(token);
             var update = await _userManager.UpdateAsync(user);
             if (!update.Succeeded)
                 return StatusCode(500, new { error = "No se pudo generar el token." });
@@ -293,8 +302,8 @@ namespace FinanceManager.API.Controllers
                     return BadRequest(new { error = "Usuario no encontrado." });
                 }
 
-                // Verificar token
-                if (user.PasswordResetToken != request.Token)
+                // Verificar token (comparamos contra el hash almacenado)
+                if (user.PasswordResetToken != HashToken(request.Token))
                 {
                     return BadRequest(new { error = "Token inválido." });
                 }
