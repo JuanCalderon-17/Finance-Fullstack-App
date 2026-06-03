@@ -66,7 +66,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   savingsKeys: string[] = ['SAVING'];
 
   // Para que el HTML pueda pintar de verde/rojo/indigo sin errores
-  incomeCategories: string[] = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra', 'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
+  incomeCategories: string[] = [
+    'Sueldo', 'Negocio', 'Venta', 'Ingreso Extra',
+    'Salary', 'Business', 'Sale', 'Extra Income',
+    'Salário', 'Negócio', 'Venda', 'Renda Extra',
+    'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'
+  ];
   savingsCategories: string[] = ['Ahorro', 'Savings', 'Poupança', 'SAVING'];
 
   newTransaction: any = {
@@ -168,7 +173,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalSaved: number = 0;
 
   alertMessageKey: string = "";
-  alertColor: string = 'green';
 
   isLoading: boolean = false;
   loadingTooLong: boolean = false;
@@ -196,7 +200,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedMonth = today.getMonth();
     this.selectedYear = today.getFullYear();
 
-    for(let i = 2025; i <= 2026; i++ ) {
+    const currentYear = today.getFullYear();
+    for (let i = currentYear - 1; i <= currentYear + 1; i++) {
       this.years.push(i);
     }
   }
@@ -228,8 +233,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.loadTransactions();
+<<<<<<< HEAD
+=======
     this.loadCashflowTrend();
     this.loadDue();
+>>>>>>> origin/main
 
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
@@ -344,13 +352,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (this.totalSpent <= this.totalIncome) {
       this.alertMessageKey = "DASHBOARD.ALERTS.GOOD";
-      this.alertColor = 'green';
     } else if (this.totalSpent > this.totalIncome && this.totalSpent <= limitWithBuffer) {
       this.alertMessageKey = "DASHBOARD.ALERTS.WARNING";
-      this.alertColor = 'orange';
     } else {
       this.alertMessageKey = "DASHBOARD.ALERTS.DANGER";
-      this.alertColor = 'red';
     }
 
     this.updateChart();

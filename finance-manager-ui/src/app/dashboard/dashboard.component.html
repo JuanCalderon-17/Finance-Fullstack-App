@@ -164,6 +164,15 @@
           </div>
 
           <div class="mb-3">
+            <label class="ds-label">{{ 'TRANSACTION.DATE' | translate }}</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+              <input type="date" class="form-control"
+                     [(ngModel)]="newTransaction.transactionDate" name="date" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
             <label class="ds-label">{{ 'TRANSACTION.CATEGORY' | translate }}</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-tag"></i></span>
@@ -244,12 +253,17 @@
           <div class="spinner-border text-primary" role="status"></div>
         </div>
 
-        <div *ngIf="!isLoading && filteredTransactions.length === 0" class="ds-empty-state">
+        <div *ngIf="!isLoading && loadError" class="ds-empty-state">
+          <i class="bi bi-exclamation-circle fs-2 text-danger"></i>
+          <p class="mt-2 text-muted">{{ 'TRANSACTION.LOAD_ERROR' | translate }}</p>
+        </div>
+
+        <div *ngIf="!isLoading && !loadError && filteredTransactions.length === 0" class="ds-empty-state">
           <i class="bi bi-inbox fs-2 text-muted"></i>
           <p class="mt-2 text-muted">{{ 'TRANSACTION.NO_TRANSACTIONS' | translate }}</p>
         </div>
 
-        <table class="ds-table" *ngIf="!isLoading && filteredTransactions.length > 0">
+        <table class="ds-table" *ngIf="!isLoading && !loadError && filteredTransactions.length > 0">
           <thead>
             <tr>
               <th>{{ 'TRANSACTION.DATE' | translate }}</th>
