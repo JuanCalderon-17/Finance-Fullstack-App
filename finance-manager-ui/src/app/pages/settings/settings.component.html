@@ -1,0 +1,65 @@
+<div class="settings-page">
+
+  <header class="settings-header">
+    <h1 class="settings-title">{{ 'SETTINGS.TITLE' | translate }}</h1>
+    <p class="settings-subtitle">{{ 'SETTINGS.SUBTITLE' | translate }}</p>
+  </header>
+
+  <section class="settings-card">
+    <div class="card-head">
+      <div class="card-icon"><i class="bi bi-download"></i></div>
+      <div>
+        <h2 class="card-title">{{ 'SETTINGS.EXPORT.TITLE' | translate }}</h2>
+        <p class="card-desc">{{ 'SETTINGS.EXPORT.DESC' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="presets">
+      <button type="button" class="preset-pill" (click)="applyPreset('thisMonth')">{{ 'SETTINGS.EXPORT.PRESET_THIS_MONTH' | translate }}</button>
+      <button type="button" class="preset-pill" (click)="applyPreset('last30')">{{ 'SETTINGS.EXPORT.PRESET_LAST_30' | translate }}</button>
+      <button type="button" class="preset-pill" (click)="applyPreset('allTime')">{{ 'SETTINGS.EXPORT.PRESET_ALL_TIME' | translate }}</button>
+    </div>
+
+    <div class="range-row">
+      <div class="range-field">
+        <label for="fromDate">{{ 'SETTINGS.EXPORT.FROM' | translate }}</label>
+        <input type="date" id="fromDate" name="fromDate" [(ngModel)]="fromDate" class="range-input" />
+      </div>
+      <div class="range-field">
+        <label for="toDate">{{ 'SETTINGS.EXPORT.TO' | translate }}</label>
+        <input type="date" id="toDate" name="toDate" [(ngModel)]="toDate" class="range-input" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button"
+              class="export-btn"
+              [disabled]="isExporting"
+              (click)="exportCsv()">
+        <i class="bi bi-filetype-csv"></i>
+        <span *ngIf="!isExporting">{{ 'SETTINGS.EXPORT.DOWNLOAD_BUTTON' | translate }}</span>
+        <span *ngIf="isExporting">
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ 'SETTINGS.EXPORT.EXPORTING' | translate }}
+        </span>
+      </button>
+    </div>
+
+    <div *ngIf="statusKey"
+         class="status"
+         [class.status--success]="statusKind === 'success'"
+         [class.status--info]="statusKind === 'info'"
+         [class.status--error]="statusKind === 'error'">
+      <ng-container *ngIf="statusKey === 'SETTINGS.EXPORT.SUCCESS'; else otherStatus">
+        {{ 'SETTINGS.EXPORT.SUCCESS' | translate: { count: statusCount } }}
+      </ng-container>
+      <ng-template #otherStatus>{{ statusKey | translate }}</ng-template>
+    </div>
+
+    <p class="legal-link">
+      {{ 'SETTINGS.EXPORT.LGPD_NOTE' | translate }}
+      <a routerLink="/privacy">{{ 'SETTINGS.EXPORT.LGPD_LINK' | translate }}</a>
+    </p>
+  </section>
+
+</div>

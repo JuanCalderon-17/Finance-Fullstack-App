@@ -1,0 +1,105 @@
+<app-image-cropper
+  *ngIf="showCropper"
+  [imageSrc]="cropSource"
+  (cropped)="onCropped($event)"
+  (cancelled)="showCropper = false">
+</app-image-cropper>
+
+<div class="profile-page">
+
+  <header class="profile-header">
+    <h1 class="profile-title">{{ 'PROFILE.TITLE' | translate }}</h1>
+    <p class="profile-subtitle">{{ 'PROFILE.SUBTITLE' | translate }}</p>
+  </header>
+
+  <!-- ===== IDENTITY CARD ===== -->
+  <section class="settings-card profile-identity">
+    <div class="identity-head">
+      <button type="button" class="profile-avatar-large" (click)="fileInput.click()"
+              [title]="'PROFILE.IDENTITY.CHANGE_PHOTO' | translate">
+        <img *ngIf="editPictureUrl" [src]="editPictureUrl" alt="profile" class="profile-avatar-img" />
+        <span *ngIf="!editPictureUrl" class="profile-avatar-initial">{{ userInitial }}</span>
+        <span class="profile-avatar-overlay"><i class="bi bi-camera-fill"></i></span>
+      </button>
+      <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+
+      <h2 class="card-title">{{ fullName || username }}</h2>
+      <p class="card-desc">{{ email }}</p>
+      <button type="button" class="change-photo-link" (click)="fileInput.click()">
+        <i class="bi bi-upload"></i> {{ 'PROFILE.IDENTITY.CHANGE_PHOTO' | translate }}
+      </button>
+    </div>
+
+    <div class="profile-fields">
+      <div class="profile-field">
+        <label class="profile-label">{{ 'PROFILE.IDENTITY.FULL_NAME' | translate }}</label>
+        <input type="text" class="profile-input" [(ngModel)]="editFullName"
+               [placeholder]="'PROFILE.IDENTITY.FULL_NAME' | translate" />
+      </div>
+
+      <div class="profile-field">
+        <label class="profile-label">{{ 'PROFILE.IDENTITY.EMAIL' | translate }}</label>
+        <input type="email" class="profile-input" [value]="email" disabled readonly />
+        <span class="profile-hint">{{ 'PROFILE.IDENTITY.EMAIL_SOON' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="export-btn" [disabled]="isSavingProfile" (click)="saveProfile()">
+        <i class="bi bi-check-circle"></i>
+        <span *ngIf="!isSavingProfile">{{ 'PROFILE.IDENTITY.SAVE' | translate }}</span>
+        <span *ngIf="isSavingProfile">{{ 'PROFILE.SAVING' | translate }}</span>
+      </button>
+    </div>
+
+    <div *ngIf="profileStatus" class="status"
+         [class.status--success]="profileStatusKind === 'success'"
+         [class.status--error]="profileStatusKind === 'error'">
+      {{ profileStatus }}
+    </div>
+  </section>
+
+  <!-- ===== PASSWORD CARD ===== -->
+  <section class="settings-card">
+    <div class="card-head">
+      <div class="card-icon"><i class="bi bi-shield-lock"></i></div>
+      <div>
+        <h2 class="card-title">{{ 'PROFILE.PASSWORD.TITLE' | translate }}</h2>
+        <p class="card-desc">{{ 'PROFILE.PASSWORD.DESC' | translate }}</p>
+      </div>
+    </div>
+
+    <div class="profile-fields">
+      <div class="profile-field">
+        <label class="profile-label">{{ 'PROFILE.PASSWORD.CURRENT' | translate }}</label>
+        <input type="password" class="profile-input" [(ngModel)]="currentPassword"
+               autocomplete="current-password" placeholder="••••••••" />
+      </div>
+      <div class="profile-field">
+        <label class="profile-label">{{ 'PROFILE.PASSWORD.NEW' | translate }}</label>
+        <input type="password" class="profile-input" [(ngModel)]="newPassword"
+               autocomplete="new-password" placeholder="••••••••" />
+      </div>
+      <div class="profile-field">
+        <label class="profile-label">{{ 'PROFILE.PASSWORD.CONFIRM' | translate }}</label>
+        <input type="password" class="profile-input" [(ngModel)]="confirmPassword"
+               autocomplete="new-password" placeholder="••••••••" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="export-btn" [disabled]="isSavingPassword" (click)="changePassword()">
+        <i class="bi bi-key"></i>
+        <span *ngIf="!isSavingPassword">{{ 'PROFILE.PASSWORD.SAVE' | translate }}</span>
+        <span *ngIf="isSavingPassword">{{ 'PROFILE.SAVING' | translate }}</span>
+      </button>
+    </div>
+
+    <div *ngIf="passwordStatus" class="status"
+         [class.status--success]="passwordStatusKind === 'success'"
+         [class.status--error]="passwordStatusKind === 'error'">
+      {{ passwordStatus }}
+    </div>
+  </section>
+
+</div>

@@ -28,21 +28,23 @@ $topbar-height: 64px;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.5rem 1.25rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+  height: $topbar-height;
+  padding: 0 1.25rem;
+  box-sizing: border-box;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.8; }
 
   .sidebar-logo-img {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
-    border-radius: 8px;
-    background: var(--color-primary);
-    padding: 4px;
-    filter: brightness(0) invert(1);
   }
 
   .sidebar-logo-text {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: var(--text-primary);
     letter-spacing: -0.02em;
@@ -91,90 +93,6 @@ $topbar-height: 64px;
   }
 }
 
-.sidebar-footer {
-  padding: 0.75rem;
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.sidebar-footer-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0.875rem;
-  border-radius: 10px;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.15s ease;
-  user-select: none;
-
-  i { font-size: 1rem; flex-shrink: 0; }
-
-  &:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-  }
-}
-
-.sidebar-dropdown {
-  position: absolute;
-  bottom: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 0.4rem;
-  box-shadow: var(--shadow-lg);
-  z-index: 200;
-}
-
-.sidebar-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.83rem;
-  font-weight: 500;
-  border-radius: 7px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-align: left;
-
-  &:hover { background: var(--bg-hover); color: var(--text-primary); }
-  &.active { background: var(--color-info-light); color: var(--color-primary); font-weight: 600; }
-}
-
-.sidebar-logout {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0.875rem;
-  border-radius: 10px;
-  width: 100%;
-  border: none;
-  background: transparent;
-  color: var(--color-danger);
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-align: left;
-
-  i { font-size: 1rem; }
-
-  &:hover { background: var(--color-danger-light); }
-}
-
 // ============ MAIN AREA ============
 .shell-main {
   margin-left: $sidebar-width;
@@ -191,12 +109,10 @@ $topbar-height: 64px;
   top: 0;
   z-index: 50;
   background: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.75rem;
-  box-shadow: var(--shadow-sm);
 }
 
 .topbar-title {
@@ -213,45 +129,218 @@ $topbar-height: 64px;
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
 }
 
-.topbar-currency-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+// ============ AVATAR ============
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+// ============ AVATAR + USER MENU ============
+.topbar-user {
+  position: relative;
   cursor: pointer;
-  transition: all 0.15s ease;
-
-  i { font-size: 0.85rem; }
-
-  &:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-strong);
-    color: var(--text-primary);
-  }
 }
 
 .topbar-avatar {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: white;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+  user-select: none;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.85; }
+}
+
+.topbar-user-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 240px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+}
+
+// ============ PROFILE CARD ============
+.user-menu-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
   cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--bg-hover);
+
+    .user-menu-profile-chevron { opacity: 1; transform: translateX(0); }
+  }
+}
+
+.user-menu-profile-chevron {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.user-menu-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.user-menu-profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.user-menu-fullname {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-menu-email {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ============ MENU ITEMS ============
+.user-menu-section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  padding: 0.4rem 0.75rem 0.2rem;
+}
+
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: all 0.15s ease;
+
+  i { font-size: 0.95rem; flex-shrink: 0; width: 18px; text-align: center; }
+
+  &:hover { background: var(--bg-hover); color: var(--text-primary); }
+  &.active { background: var(--color-info-light); color: var(--color-primary); font-weight: 600; }
+}
+
+.user-menu-danger {
+  color: var(--color-danger);
+  &:hover { background: var(--color-danger-light); color: var(--color-danger); }
+}
+
+.user-menu-divider {
+  border-top: 1px solid var(--border-color);
+  margin: 0.35rem 0;
+}
+
+// ============ SEGMENTED CONTROL (currency / language) ============
+.segmented {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 3px;
+  margin: 0 0.25rem 0.5rem;
+}
+
+.segmented-option {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.45rem;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+
+  &:hover { color: var(--text-primary); }
+
+  &.active {
+    background: var(--color-info-light);
+    color: var(--color-primary);
+  }
+
+  .seg-flag {
+    width: 18px;
+    height: 13px;
+    border-radius: 2px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.user-menu-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.75rem;
+
+  .user-menu-theme-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
 }
 
 .shell-content {

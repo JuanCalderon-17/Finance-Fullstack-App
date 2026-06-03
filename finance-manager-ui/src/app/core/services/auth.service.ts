@@ -28,10 +28,24 @@ export class AuthService {
 
   // Método reset password (CORREGIDO)
   resetPassword(email: string, token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}reset-password`, { // ← Quitamos /account extra
+    return this.http.post(`${this.baseUrl}reset-password`, {
       email,
       token,
       newPassword
     });
+  }
+
+  verifyEmail(token: string, email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}verify-email`, {
+      params: { token, email }
+    });
+  }
+
+  updateProfile(dto: { fullName: string; profilePictureUrl?: string }): Observable<any> {
+    return this.http.put(`${this.baseUrl}profile`, dto);
+  }
+
+  changePassword(dto: { currentPassword: string; newPassword: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}change-password`, dto);
   }
 }

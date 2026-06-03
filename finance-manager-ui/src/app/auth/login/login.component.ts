@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // <-- 1. IMPORTAR FormsModule
 import { AuthService } from '../../core/services/auth.service'; // <-- 1. IMPORTA EL SERVICIO
+import { UserStateService } from '../../core/services/user-state.service';
 import { Router } from '@angular/router'; //Importo router para mover al usuario de paginas
 import { RouterModule } from '@angular/router'; // Añade RouterModule
 import {TranslateModule} from '@ngx-translate/core'
@@ -21,7 +22,8 @@ export class LoginComponent {
   // Inyectando el contructor
   constructor(
     private authService: AuthService,
-    private router: Router 
+    private userState: UserStateService,
+    private router: Router
   ) { }
 
   login() { 
@@ -35,18 +37,20 @@ export class LoginComponent {
       console.log('Respuesta exitosa', response);
       if (response && response.token) {
         localStorage.setItem('user', JSON.stringify(response));
+        this.userState.refreshFromStorage();
         console.log('Token guardado en localStorage');
         this.router.navigate(['/dashboard']);
         }
       },
 
-      // 'error' se ejecuta si la API devuelve un error
       error : (err) => {
-        console.error('Hubo un error en el login', err)
+        console.error('Hubo un error en el login', err);
 
-        //friendly error message
-        if(err.status === 401 ||  err.status === 400) {
-          this.errorMessage = 'Usuario o contraseña incorrectos';  
+        const serverMessage = err.error;
+        if (typeof serverMessage === 'string' && serverMessage.includes('verificar tu correo')) {
+          this.errorMessage = 'Debes verificar tu correo antes de iniciar sesión. Revisa tu bandeja de entrada.';
+        } else if (err.status === 401 || err.status === 400) {
+          this.errorMessage = 'Usuario o contraseña incorrectos';
         } else {
           this.errorMessage = 'Ocurrió un error. Inténtalo más tarde.';
         }

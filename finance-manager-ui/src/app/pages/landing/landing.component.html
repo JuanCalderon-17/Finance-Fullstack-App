@@ -1,89 +1,460 @@
-<div class="landing-paths">
+<div class="landing-wrapper">
 
-  <div class="logo-wrapper">
-    <img src="finanzascapa.png" alt="Logo Finanzas" class="app-logo">
-  </div>
+  <!-- ===== TOP NAV ===== -->
+  <header class="landing-nav">
+    <a routerLink="/" class="nav-logo">
+      <img src="favicon.png" alt="Finanzas" />
+      <span class="nav-logo-text">Finanzas</span>
+    </a>
 
-  <div class="language-switcher">
-    <button class="current-lang-btn" (click)="toggleLangMenu()">
-      @if (languageService.getCurrentLanguage() === 'es') {
-        <img src="https://flagcdn.com/w40/es.png" alt="ES">
-        <span>ES</span>
-      }
-      @if (languageService.getCurrentLanguage() === 'en') {
-        <img src="https://flagcdn.com/w40/us.png" alt="US">
-        <span>EN</span>
-      }
-      @if (languageService.getCurrentLanguage() === 'pt') {
-        <img src="https://flagcdn.com/w40/br.png" alt="BR">
-        <span>PT</span>
-      }
-      <span class="arrow" [class.rotate]="isLangMenuOpen">▼</span>
-    </button>
+    <nav class="nav-links">
+      <a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+      <a href="#how">{{ 'LANDING.NAV.HOW' | translate }}</a>
+      <a href="#pricing">{{ 'LANDING.NAV.PRICING' | translate }}</a>
+    </nav>
 
-    @if (isLangMenuOpen) {
-      <div class="lang-dropdown">
-        <button (click)="selectLanguage('es')">
-          <img src="https://flagcdn.com/w40/es.png" alt="ES"> Español
+    <div class="nav-actions">
+      <div class="language-switcher nav-lang">
+        <button class="current-lang-btn" (click)="toggleLangMenu()">
+          @if (languageService.getCurrentLanguage() === 'es') {
+            <img src="https://flagcdn.com/w40/es.png" alt="ES"><span>ES</span>
+          }
+          @if (languageService.getCurrentLanguage() === 'en') {
+            <img src="https://flagcdn.com/w40/us.png" alt="US"><span>EN</span>
+          }
+          @if (languageService.getCurrentLanguage() === 'pt') {
+            <img src="https://flagcdn.com/w40/br.png" alt="BR"><span>PT</span>
+          }
+          <span class="arrow" [class.rotate]="isLangMenuOpen">▼</span>
         </button>
-        <button (click)="selectLanguage('en')">
-          <img src="https://flagcdn.com/w40/us.png" alt="US"> English
-        </button>
-        <button (click)="selectLanguage('pt')">
-          <img src="https://flagcdn.com/w40/br.png" alt="BR"> Português
-        </button>
+
+        @if (isLangMenuOpen) {
+          <div class="lang-dropdown">
+            <button (click)="selectLanguage('es')"><img src="https://flagcdn.com/w40/es.png" alt="ES"> Español</button>
+            <button (click)="selectLanguage('en')"><img src="https://flagcdn.com/w40/us.png" alt="US"> English</button>
+            <button (click)="selectLanguage('pt')"><img src="https://flagcdn.com/w40/br.png" alt="BR"> Português</button>
+          </div>
+        }
       </div>
-    }
-  </div>
 
-  <div class="paths-bg" aria-hidden="true">
-    <svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid meet">
-      <path
-        *ngFor="let p of paths1"
-        [attr.d]="p.d"
-        [attr.pathLength]="1"
-        [attr.stroke-width]="p.width"
-        [attr.stroke-opacity]="p.opacity"
-        [style.--duration]="p.duration + 's'"
-        class="flow-path"
-      />
-    </svg>
-    <svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid meet">
-      <path
-        *ngFor="let p of paths2"
-        [attr.d]="p.d"
-        [attr.pathLength]="1"
-        [attr.stroke-width]="p.width"
-        [attr.stroke-opacity]="p.opacity"
-        [style.--duration]="p.duration + 's'"
-        class="flow-path"
-      />
-    </svg>
-  </div>
+      <a routerLink="/auth/login" class="nav-link-btn">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
+      <a routerLink="/auth/register" class="nav-cta-btn">{{ 'LANDING.NAV.START_FREE' | translate }}</a>
+    </div>
+  </header>
 
-  <div class="hero">
-    <span class="pill-tag">{{ 'LANDING.PILL_TAG' | translate }}</span>
+  <!-- ===== HERO (existing, with paths background) ===== -->
+  <section class="landing-paths landing-hero">
 
-    <h1 class="hero-title">
-      <span *ngFor="let word of titleWords" class="word">
-        <span
-          *ngFor="let letter of word.letters"
-          class="letter"
-          [style.animation-delay]="letter.delay + 's'"
-        >{{ letter.char === ' ' ? ' ' : letter.char }}</span>
-      </span>
-    </h1>
-
-    <p class="hero-description">{{ 'LANDING.DESCRIPTION' | translate }}</p>
-
-    <div class="cta-shell">
-      <button routerLink="/auth/login" class="cta-button">
-        <span class="cta-text">{{ 'LANDING.CTA_BUTTON' | translate }}</span>
-        <span class="cta-arrow">→</span>
-      </button>
+    <div class="paths-bg" aria-hidden="true">
+      <svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid meet">
+        <path
+          *ngFor="let p of paths1"
+          [attr.d]="p.d"
+          [attr.pathLength]="1"
+          [attr.stroke-width]="p.width"
+          [attr.stroke-opacity]="p.opacity"
+          [style.--duration]="p.duration + 's'"
+          class="flow-path"
+        />
+      </svg>
+      <svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid meet">
+        <path
+          *ngFor="let p of paths2"
+          [attr.d]="p.d"
+          [attr.pathLength]="1"
+          [attr.stroke-width]="p.width"
+          [attr.stroke-opacity]="p.opacity"
+          [style.--duration]="p.duration + 's'"
+          class="flow-path"
+        />
+      </svg>
     </div>
 
-    <p class="trust-microcopy">{{ 'LANDING.TRUST_MICROCOPY' | translate }}</p>
-  </div>
+    <div class="hero">
+      <span class="pill-tag">{{ 'LANDING.PILL_TAG' | translate }}</span>
+
+      <h1 class="hero-title">
+        <span *ngFor="let word of titleWords" class="word">
+          <span
+            *ngFor="let letter of word.letters"
+            class="letter"
+            [style.animation-delay]="letter.delay + 's'"
+          >{{ letter.char === ' ' ? ' ' : letter.char }}</span>
+        </span>
+      </h1>
+
+      <p class="hero-description">{{ 'LANDING.DESCRIPTION' | translate }}</p>
+
+      <div class="cta-shell">
+        <a routerLink="/auth/login" class="cta-button">
+          <span class="cta-text">{{ 'LANDING.CTA_BUTTON' | translate }}</span>
+          <span class="cta-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== PRODUCT PREVIEW ===== -->
+  <section class="landing-section section-preview">
+    <div class="section-container preview-container">
+
+      <div class="preview-frame reveal-scroll" appReveal>
+        <div class="preview-titlebar">
+          <span class="preview-dot dot-red"></span>
+          <span class="preview-dot dot-yellow"></span>
+          <span class="preview-dot dot-green"></span>
+          <span class="preview-url">finanzasbr.com/dashboard</span>
+        </div>
+
+        <div class="preview-body">
+          <div class="preview-greeting">
+            <span class="preview-greeting-text">{{ 'LANDING.PREVIEW.GREETING' | translate }}</span>
+            <span class="preview-currency-pill">💱 USD · $</span>
+          </div>
+
+          <div class="preview-stats-row">
+            <div class="preview-stat-card">
+              <div class="preview-stat-top">
+                <span class="preview-stat-label">{{ 'DASHBOARD.AVAILABLE' | translate }}</span>
+                <span class="preview-stat-badge badge-pos">▲ 12%</span>
+              </div>
+              <div class="preview-stat-value">$2,847.50</div>
+              <div class="preview-stat-sub">{{ 'LANDING.PREVIEW.SAVING_PERCENT' | translate }}</div>
+            </div>
+            <div class="preview-stat-card">
+              <div class="preview-stat-top">
+                <span class="preview-stat-label">{{ 'DASHBOARD.TOTAL_INCOME' | translate }}</span>
+                <span class="preview-stat-icon-wrap preview-icon-up"><i class="bi bi-arrow-up-circle-fill"></i></span>
+              </div>
+              <div class="preview-stat-value">$3,200.00</div>
+              <div class="preview-stat-sub">{{ 'MONTHS.MAY' | translate }} · 2026</div>
+            </div>
+            <div class="preview-stat-card">
+              <div class="preview-stat-top">
+                <span class="preview-stat-label">{{ 'DASHBOARD.TOTAL_SPENT' | translate }}</span>
+                <span class="preview-stat-icon-wrap preview-icon-down"><i class="bi bi-arrow-down-circle-fill"></i></span>
+              </div>
+              <div class="preview-stat-value">$352.50</div>
+              <div class="preview-stat-sub">{{ 'LANDING.PREVIEW.OF_INCOME' | translate }}</div>
+            </div>
+          </div>
+
+          <div class="preview-chart-card">
+            <div class="preview-chart-header">
+              <span class="preview-chart-title">📊 {{ 'DASHBOARD.CASHFLOW_TREND' | translate }}</span>
+              <div class="preview-range">
+                <span class="preview-range-pill">1M</span>
+                <span class="preview-range-pill active">6M</span>
+                <span class="preview-range-pill">1Y</span>
+              </div>
+            </div>
+            <div class="preview-chart-body">
+              <svg class="preview-chart-svg" viewBox="0 0 600 160" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="grad-income" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#34d399" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+                  </linearGradient>
+                  <linearGradient id="grad-expense" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#f87171" stop-opacity="0.18"/>
+                    <stop offset="100%" stop-color="#f87171" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,90 C60,75 100,60 160,55 C220,50 260,80 320,65 C380,50 420,30 480,40 C540,50 580,30 600,25 L600,160 L0,160 Z" fill="url(#grad-income)"/>
+                <path d="M0,90 C60,75 100,60 160,55 C220,50 260,80 320,65 C380,50 420,30 480,40 C540,50 580,30 600,25" stroke="#34d399" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M0,120 C60,115 100,125 160,118 C220,110 260,128 320,120 C380,112 420,128 480,118 C540,108 580,118 600,112 L600,160 L0,160 Z" fill="url(#grad-expense)"/>
+                <path d="M0,120 C60,115 100,125 160,118 C220,110 260,128 320,120 C380,112 420,128 480,118 C540,108 580,118 600,112" stroke="#f87171" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <circle cx="480" cy="40" r="4" fill="#34d399" stroke="#0e1c17" stroke-width="2"/>
+                <circle cx="480" cy="118" r="4" fill="#f87171" stroke="#0e1c17" stroke-width="2"/>
+              </svg>
+              <div class="preview-chart-legend">
+                <span class="legend-item"><span class="legend-dot dot-income"></span>{{ 'DASHBOARD.TOTAL_INCOME' | translate }}</span>
+                <span class="legend-item"><span class="legend-dot dot-expense"></span>{{ 'DASHBOARD.TOTAL_SPENT' | translate }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-glow" aria-hidden="true"></div>
+
+    </div>
+  </section>
+
+  <!-- ===== TRUST BAR ===== -->
+  <section class="landing-section section-trust">
+    <div class="section-container">
+      <p class="trust-lead">{{ 'LANDING.TRUST.LEAD' | translate }}</p>
+      <div class="trust-row">
+        <div class="trust-item"><span class="trust-flag">🇺🇸</span> USD</div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><span class="trust-flag">🇧🇷</span> BRL</div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><span class="trust-flag">🌎</span> {{ 'LANDING.TRUST.LANGUAGES' | translate }}</div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><i class="bi bi-shield-check"></i> {{ 'LANDING.TRUST.FREE_FOREVER' | translate }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES GRID ===== -->
+  <section class="landing-section section-features" id="features">
+    <div class="section-container">
+      <p class="section-eyebrow" appReveal>{{ 'LANDING.FEATURES.EYEBROW' | translate }}</p>
+      <h2 class="section-headline" appReveal [revealDelay]="120">{{ 'LANDING.FEATURES.HEADLINE_1' | translate }}<br />{{ 'LANDING.FEATURES.HEADLINE_2' | translate }}</h2>
+
+      <div class="features-grid">
+
+        <div class="feature-card reveal--stagger-1" appReveal>
+          <div class="feature-card-visual feature-visual-transactions">
+            <div class="mock-row income"><span class="mock-dot"></span><span class="mock-label">{{ 'LANDING.FEATURES.MOCK_SALARY' | translate }}</span><span class="mock-amount">+$3,200</span></div>
+            <div class="mock-row expense"><span class="mock-dot"></span><span class="mock-label">{{ 'LANDING.FEATURES.MOCK_GROCERIES' | translate }}</span><span class="mock-amount">−$240</span></div>
+            <div class="mock-row expense"><span class="mock-dot"></span><span class="mock-label">{{ 'LANDING.FEATURES.MOCK_RENT' | translate }}</span><span class="mock-amount">−$1,100</span></div>
+          </div>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F1_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F1_DESC' | translate }}</p>
+        </div>
+
+        <div class="feature-card reveal--stagger-2" appReveal>
+          <div class="feature-card-visual feature-visual-debts">
+            <div class="mock-debt-bar">
+              <div class="mock-debt-fill"></div>
+            </div>
+            <div class="mock-debt-stats">
+              <span class="mock-stat"><strong>$2,450</strong> {{ 'LANDING.FEATURES.MOCK_REMAINING' | translate }}</span>
+              <span class="mock-stat-meta">{{ 'LANDING.FEATURES.MOCK_OF_INSTALLMENTS' | translate }}</span>
+            </div>
+          </div>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F2_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F2_DESC' | translate }}</p>
+        </div>
+
+        <div class="feature-card reveal--stagger-3" appReveal>
+          <div class="feature-card-visual feature-visual-savings">
+            <div class="mock-ring">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(52,211,153,0.15)" stroke-width="8"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#34d399" stroke-width="8" stroke-dasharray="263.9" stroke-dashoffset="92.4" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+              </svg>
+              <span class="mock-ring-text">65%</span>
+            </div>
+            <div class="mock-savings-label">{{ 'LANDING.FEATURES.MOCK_EMERGENCY' | translate }}</div>
+          </div>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F3_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F3_DESC' | translate }}</p>
+        </div>
+
+        <div class="feature-card reveal--stagger-4" appReveal>
+          <div class="feature-card-visual feature-visual-insights">
+            <svg class="mock-chart" viewBox="0 0 200 80" preserveAspectRatio="none">
+              <path d="M0,60 Q30,40 50,45 T100,30 T150,40 T200,20" stroke="#34d399" stroke-width="2" fill="none"/>
+              <path d="M0,60 Q30,40 50,45 T100,30 T150,40 T200,20 L200,80 L0,80 Z" fill="rgba(52,211,153,0.08)"/>
+              <path d="M0,55 Q30,65 50,55 T100,60 T150,50 T200,55" stroke="#f87171" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">{{ 'LANDING.FEATURES.F4_TITLE' | translate }}</h3>
+          <p class="feature-desc">{{ 'LANDING.FEATURES.F4_DESC' | translate }}</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="landing-section section-detail" id="how">
+    <div class="section-container detail-layout">
+
+      <div class="detail-content">
+        <p class="section-eyebrow">{{ 'LANDING.HOW.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left">{{ 'LANDING.HOW.HEADLINE_1' | translate }}<br />{{ 'LANDING.HOW.HEADLINE_2' | translate }}</h2>
+        <ul class="detail-checklist">
+          <li>
+            <span class="check-icon"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>{{ 'LANDING.HOW.STEP1_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.HOW.STEP1_DESC' | translate }}</span>
+            </div>
+          </li>
+          <li>
+            <span class="check-icon"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>{{ 'LANDING.HOW.STEP2_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.HOW.STEP2_DESC' | translate }}</span>
+            </div>
+          </li>
+          <li>
+            <span class="check-icon"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>{{ 'LANDING.HOW.STEP3_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.HOW.STEP3_DESC' | translate }}</span>
+            </div>
+          </li>
+        </ul>
+        <a routerLink="/auth/register" class="detail-cta">
+          {{ 'LANDING.HOW.CTA' | translate }} <span>→</span>
+        </a>
+      </div>
+
+      <div class="detail-visual detail-visual-orb reveal-scroll" appReveal>
+        <div class="orb-container">
+          <div class="orb-glow"></div>
+          <div class="orb-ring orb-ring-1"></div>
+          <div class="orb-ring orb-ring-2"></div>
+          <div class="orb-ring orb-ring-3"></div>
+          <div class="orb-core">
+            <i class="bi bi-graph-up-arrow"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== MULTI-CURRENCY DETAIL ===== -->
+  <section class="landing-section section-detail section-detail-reverse">
+    <div class="section-container detail-layout">
+
+      <div class="detail-visual detail-visual-currency reveal-scroll" appReveal>
+        <div class="currency-card">
+          <div class="currency-row currency-row-usd">
+            <span class="currency-flag">🇺🇸</span>
+            <div class="currency-info">
+              <span class="currency-code">USD</span>
+              <span class="currency-name">{{ 'LANDING.MULTI_CURRENCY.USD_NAME' | translate }}</span>
+            </div>
+            <span class="currency-active">✓</span>
+          </div>
+          <div class="currency-divider"></div>
+          <div class="currency-row currency-row-brl">
+            <span class="currency-flag">🇧🇷</span>
+            <div class="currency-info">
+              <span class="currency-code">BRL</span>
+              <span class="currency-name">{{ 'LANDING.MULTI_CURRENCY.BRL_NAME' | translate }}</span>
+            </div>
+            <span class="currency-rate">5.25</span>
+          </div>
+          <div class="currency-bottom">
+            <i class="bi bi-arrow-left-right"></i>
+            <span>{{ 'LANDING.MULTI_CURRENCY.LIVE_RATES' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-content">
+        <p class="section-eyebrow">{{ 'LANDING.MULTI_CURRENCY.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left">{{ 'LANDING.MULTI_CURRENCY.HEADLINE_1' | translate }}<br />{{ 'LANDING.MULTI_CURRENCY.HEADLINE_2' | translate }}</h2>
+        <ul class="detail-checklist">
+          <li>
+            <span class="check-icon"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>{{ 'LANDING.MULTI_CURRENCY.POINT1_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.MULTI_CURRENCY.POINT1_DESC' | translate }}</span>
+            </div>
+          </li>
+          <li>
+            <span class="check-icon"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>{{ 'LANDING.MULTI_CURRENCY.POINT2_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.MULTI_CURRENCY.POINT2_DESC' | translate }}</span>
+            </div>
+          </li>
+          <li>
+            <span class="check-icon"><i class="bi bi-check-lg"></i></span>
+            <div>
+              <strong>{{ 'LANDING.MULTI_CURRENCY.POINT3_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.MULTI_CURRENCY.POINT3_DESC' | translate }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="landing-section section-stats" id="pricing">
+    <div class="section-container">
+      <p class="section-eyebrow stats-eyebrow">{{ 'LANDING.STATS.EYEBROW' | translate }}</p>
+      <h2 class="section-headline">{{ 'LANDING.STATS.HEADLINE' | translate }}</h2>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">$0</div>
+          <div class="stat-label">{{ 'LANDING.STATS.FOREVER' | translate }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">2 min</div>
+          <div class="stat-label">{{ 'LANDING.STATS.TO_SETUP' | translate }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">3</div>
+          <div class="stat-label">{{ 'LANDING.STATS.LANGUAGES_LABEL' | translate }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">∞</div>
+          <div class="stat-label">{{ 'LANDING.STATS.TRANSACTIONS_LABEL' | translate }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="landing-section section-final-cta">
+    <div class="section-container final-cta-content">
+      <h2 class="final-cta-headline">{{ 'LANDING.FINAL.HEADLINE_1' | translate }}<br />{{ 'LANDING.FINAL.HEADLINE_2' | translate }}</h2>
+      <p class="final-cta-subtitle">{{ 'LANDING.FINAL.SUBTITLE' | translate }}</p>
+      <div class="final-cta-actions">
+        <a routerLink="/auth/register" class="cta-button cta-button-big">
+          <span class="cta-text">{{ 'LANDING.NAV.START_FREE' | translate }}</span>
+          <span class="cta-arrow">→</span>
+        </a>
+        <a routerLink="/auth/login" class="cta-button-ghost">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="landing-footer">
+    <div class="section-container footer-layout">
+      <div class="footer-brand">
+        <a routerLink="/" class="nav-logo">
+          <img src="favicon.png" alt="Finanzas" />
+          <span class="nav-logo-text">Finanzas</span>
+        </a>
+        <p class="footer-tagline">{{ 'LANDING.FOOTER.TAGLINE' | translate }}</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>{{ 'LANDING.FOOTER.PRODUCT' | translate }}</h4>
+          <a routerLink="/auth/register">{{ 'LANDING.FOOTER.SIGN_UP' | translate }}</a>
+          <a routerLink="/auth/login">{{ 'LANDING.NAV.SIGN_IN' | translate }}</a>
+          <a href="#features">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+        </div>
+        <div class="footer-col">
+          <h4>{{ 'LANDING.FOOTER.BUILT_WITH' | translate }}</h4>
+          <a>Angular</a>
+          <a>ASP.NET</a>
+          <a>PostgreSQL</a>
+        </div>
+        <div class="footer-col">
+          <h4>{{ 'LANDING.FOOTER.LANGUAGE' | translate }}</h4>
+          <a (click)="selectLanguage('es')">Español</a>
+          <a (click)="selectLanguage('en')">English</a>
+          <a (click)="selectLanguage('pt')">Português</a>
+        </div>
+        <div class="footer-col">
+          <h4>{{ 'LANDING.FOOTER.LEGAL' | translate }}</h4>
+          <a routerLink="/terms">{{ 'LANDING.FOOTER.TERMS' | translate }}</a>
+          <a routerLink="/privacy">{{ 'LANDING.FOOTER.PRIVACY' | translate }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Finanzas · finanzasbr.com</span>
+    </div>
+  </footer>
 
 </div>

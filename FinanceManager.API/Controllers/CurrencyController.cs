@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FinanceManager.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace FinanceManager.API.Controllers
 {
@@ -19,6 +20,7 @@ namespace FinanceManager.API.Controllers
 
         [HttpGet("rate/{targetCurrency}")]
         [AllowAnonymous]
+        [EnableRateLimiting("currency")]
         public async Task<IActionResult> GetExchangeRate(string targetCurrency)
         {
             if (string.IsNullOrWhiteSpace(targetCurrency))
@@ -48,6 +50,7 @@ namespace FinanceManager.API.Controllers
 
         [HttpGet("rates")]
         [AllowAnonymous]
+        [EnableRateLimiting("currency")]
         public async Task<IActionResult> GetAllRates()
         {
             try

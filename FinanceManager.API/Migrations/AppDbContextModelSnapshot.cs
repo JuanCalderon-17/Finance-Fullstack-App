@@ -41,9 +41,15 @@ namespace FinanceManager.API.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("EmailVerificationToken")
+                        .HasColumnType("text");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -70,6 +76,9 @@ namespace FinanceManager.API.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("text");
 
                     b.Property<string>("RecoveryKeyword")
                         .IsRequired()
@@ -179,6 +188,57 @@ namespace FinanceManager.API.Migrations
                         .HasDatabaseName("IX_Installments_DebtId");
 
                     b.ToTable("Installments");
+                });
+
+            modelBuilder.Entity("FinanceManager.API.Models.RecurringTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("numeric(18,4)");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Frequency")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("NextDueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId", "NextDueDate")
+                        .HasDatabaseName("IX_RecurringTransactions_AppUserId_NextDueDate");
+
+                    b.ToTable("RecurringTransactions");
                 });
 
             modelBuilder.Entity("FinanceManager.API.Models.SavingsAccount", b =>
@@ -414,6 +474,17 @@ namespace FinanceManager.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Debt");
+                });
+
+            modelBuilder.Entity("FinanceManager.API.Models.RecurringTransaction", b =>
+                {
+                    b.HasOne("FinanceManager.API.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("FinanceManager.API.Models.SavingsAccount", b =>

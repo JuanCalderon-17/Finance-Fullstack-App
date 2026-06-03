@@ -1,0 +1,117 @@
+.cropper-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.cropper-modal {
+  background: var(--bg-card, #1b1b1b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  text-align: center;
+}
+
+.cropper-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #fff);
+  margin: 0 0 0.25rem;
+}
+
+.cropper-hint {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #9b9b9b);
+  margin: 0 0 1.25rem;
+}
+
+.cropper-stage {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &:active { cursor: grabbing; }
+}
+
+.cropper-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+// Circular guide overlay: dark mask outside the circle.
+.cropper-ring {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45) inset;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.cropper-zoom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.25rem 0;
+  color: var(--text-secondary, #9b9b9b);
+
+  i { font-size: 0.9rem; flex-shrink: 0; }
+}
+
+.cropper-zoom {
+  flex: 1;
+  accent-color: #34d399;
+  cursor: pointer;
+}
+
+.cropper-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.cropper-btn {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &.ghost {
+    background: transparent;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+    color: var(--text-secondary, #c8c8c8);
+
+    &:hover { background: var(--bg-hover, rgba(255, 255, 255, 0.05)); }
+  }
+
+  &.primary {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    color: #062319;
+    border: none;
+
+    &:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -10px rgba(52, 211, 153, 0.6); }
+  }
+}

@@ -42,17 +42,22 @@ Built end-to-end (backend, frontend, database, deployment) by **[Juan Calderón]
 
 ### Auth & accounts
 - JWT bearer-token authentication with ASP.NET Identity
-- Password reset by email (SendGrid + MailKit)
+- Email verification on signup (required before first login)
+- Password reset by email — delivery via **Resend** with a resilient flow that never leaks user-enumeration info
+- Per-endpoint **rate limiting** (fixed-window) on auth, currency, and general routes to throttle brute-force and abuse
 - Per-user data isolation enforced at every endpoint
 
-### Transactions
+### Transactions & dashboard
 - Categorized income and expenses with monthly filters
 - Server-side filtering by month/year (handles large histories without loading the full list)
+- **Cashflow trend chart** showing inflows vs. outflows over time, with a premium visual style
 - Chart.js dashboard summarizing distribution by category
 - Half-month filter (1st / 2nd half) for granular tracking
+- **SaaS-style shell** with collapsible sidebar navigation and responsive layout
 
 ### Debts with installment schedules
 - Auto-generates an installment schedule from balance, interest rate, and term
+- **Dual-balance tracking** — `originalBalance` (frozen at creation) vs. `currentBalance` (recalculated from real payments), so progress and remaining-balance numbers stay truthful even after renegotiations
 - Editable per-installment amounts (handles renegotiations and irregular payments)
 - Edits to balance or interest rate **regenerate only unpaid installments**, preserving payment history
 - Progress bar driven by actual paid amounts vs. total installment amounts (not the original formula), so the UI stays truthful when the user has manually adjusted installments
@@ -172,8 +177,6 @@ A few decisions worth calling out for code reviewers:
 
 Honest about scope so reviewers know what's been thought about vs. what's still on the list:
 
-- **Rate limiting** on `/auth/login` — planned, not yet implemented
-- **Email verification on signup** — currently any email is accepted
 - **Refresh token rotation** — currently single-token JWTs; refresh flow planned
 - **Account deletion / data export (GDPR)** — planned
 - **Unit / integration test coverage** — currently none on the backend; a few scaffolded specs on the frontend. Adding xUnit tests for the financial logic (`GenerateInstallments`, currency conversion) is the next priority.

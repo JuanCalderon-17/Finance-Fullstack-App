@@ -14,9 +14,10 @@ import { AuthService } from "../../core/services/auth.service";
 })
 export class RegisterComponent {
   
-  model: any = { fullName: '', email: '', password: '', confirmPassword: '' };
+  model: any = { fullName: '', email: '', password: '', confirmPassword: '', acceptedTerms: false };
   isLoading: boolean = false;
   errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(
     private authService: AuthService, 
@@ -38,9 +39,11 @@ export class RegisterComponent {
     this.isLoading = true;
 
     this.authService.register(this.model).subscribe({
-      next: (response) => {
-        localStorage.setItem('user', JSON.stringify(response));
-        window.location.href = '/dashboard';
+      next: () => {
+        this.isLoading = false;
+        this.errorMessage = null;
+        // Backend no longer returns a token — user must verify email first
+        this.successMessage = 'Revisa tu correo y haz clic en el enlace para activar tu cuenta.';
       },
       error: (err) => {
         this.handleError(err);
@@ -78,6 +81,12 @@ export class RegisterComponent {
     // C. Coincidencia de Contraseñas
     if (this.model.password !== this.model.confirmPassword) {
       this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_MISMATCH');
+      return false;
+    }
+
+    // D. Aceptación de Términos y Política de Privacidad
+    if (!this.model.acceptedTerms) {
+      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.TERMS_NOT_ACCEPTED');
       return false;
     }
 

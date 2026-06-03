@@ -1,4 +1,7 @@
 ﻿using System.Text;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using FinanceManager.API.Data;
 using FinanceManager.API.Interfaces;
 using FinanceManager.API.Models;
@@ -49,8 +52,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "finanzasbr.com",
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "finanzasbr-app",
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
     });
 
@@ -58,12 +65,62 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // register services for user management, token generation, and email sending
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddHttpClient<IEmailService, EmailService>();
 
 // service for fetching currency exchange rates from an external API
 builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
 
 
+
+// Rate limiting — bouncer rules for our API endpoints
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = 429;
+
+    // Global DoS protection: 100 requests/min per client IP across every
+    // endpoint. Auth endpoints stack the stricter "auth" limiter on top.
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+    {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 100,
+            Window = TimeSpan.FromMinutes(1),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0
+        });
+    });
+
+    // Strict limit for auth endpoints (login, register, forgot-password)
+    // 5 attempts per minute per IP — stops brute-force and email spam
+    options.AddFixedWindowLimiter("auth", o =>
+    {
+        o.PermitLimit = 5;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // Moderate limit for currency endpoint
+    // 30 requests per minute per IP — protects external API quota
+    options.AddFixedWindowLimiter("currency", o =>
+    {
+        o.PermitLimit = 30;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // Default global limit for all other endpoints
+    // 100 requests per minute per IP — general DoS protection
+    options.AddFixedWindowLimiter("general", o =>
+    {
+        o.PermitLimit = 100;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+});
 
 builder.Services.AddCors(options =>
 {
@@ -126,13 +183,48 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Convert unhandled exceptions into a clean JSON 500 instead of leaking stack traces.
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+    });
+});
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Baseline security headers (API serves JSON only).
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["Referrer-Policy"] = "no-referrer";
+    context.Response.Headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'";
+    await next();
+});
+
 app.UseCors("AllowAngularApp");
+
+// Tell ASP.NET to trust X-Forwarded-For from Render's proxy so the rate
+// limiter sees the real client IP, not the proxy's IP.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -31,8 +31,22 @@ export const routes: Routes = [
       {
         path: 'reset-password',
         loadComponent: () => import('./auth/reset-password/reset-password.component').then(m => ResetPasswordComponent)
+      },
+      {
+        path: 'verify-email',
+        loadComponent: () => import('./auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
       }
     ]
+  },
+
+  // Public legal pages
+  {
+    path: 'terms',
+    loadComponent: () => import('./pages/legal/terms/terms.component').then(m => m.TermsComponent)
+  },
+  {
+    path: 'privacy',
+    loadComponent: () => import('./pages/legal/privacy/privacy.component').then(m => m.PrivacyComponent)
   },
 
   // Protected — shell wrapper
@@ -52,6 +66,18 @@ export const routes: Routes = [
       {
         path: 'savings',
         loadComponent: () => import('./pages/savings/savings.component').then(m => m.SavingsComponent)
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+      },
+      {
+        path: 'recurring',
+        loadComponent: () => import('./pages/recurring/recurring.component').then(m => m.RecurringComponent)
       }
     ]
   },

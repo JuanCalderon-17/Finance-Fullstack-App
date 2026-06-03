@@ -3,10 +3,10 @@
   <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar">
 
-    <div class="sidebar-logo">
+    <a routerLink="/dashboard" class="sidebar-logo" title="Dashboard">
       <img src="favicon.png" alt="logo" class="sidebar-logo-img" />
       <span class="sidebar-logo-text">Finanzas</span>
-    </div>
+    </a>
 
     <nav class="sidebar-nav">
       <a routerLink="/dashboard" routerLinkActive="active" class="sidebar-nav-item">
@@ -21,50 +21,12 @@
         <i class="bi bi-piggy-bank-fill"></i>
         <span>{{ 'NAVIGATION.SAVINGS' | translate }}</span>
       </a>
+      <a routerLink="/recurring" routerLinkActive="active" class="sidebar-nav-item">
+        <i class="bi bi-arrow-repeat"></i>
+        <span>{{ 'NAVIGATION.RECURRING' | translate }}</span>
+      </a>
     </nav>
 
-    <div class="sidebar-footer">
-
-      <div class="sidebar-footer-item">
-        <app-theme-toggle></app-theme-toggle>
-      </div>
-
-      <div class="sidebar-footer-item lang-item" (click)="$event.stopPropagation(); showLangMenu = !showLangMenu; showCurrencyMenu = false">
-        <i class="bi bi-globe2"></i>
-        <span>{{ languageService.getCurrentLanguage().toUpperCase() }}</span>
-        <div class="sidebar-dropdown" *ngIf="showLangMenu" (click)="$event.stopPropagation()">
-          <button *ngFor="let lang of languageService.getAvailableLanguages()"
-                  type="button"
-                  class="sidebar-dropdown-item"
-                  [class.active]="languageService.getCurrentLanguage() === lang.code"
-                  (click)="$event.stopPropagation(); selectLanguage(lang.code)">
-            <span>{{ lang.flag }}</span>
-            <span>{{ lang.name }}</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="sidebar-footer-item currency-item" (click)="$event.stopPropagation(); showCurrencyMenu = !showCurrencyMenu; showLangMenu = false">
-        <i class="bi bi-currency-exchange"></i>
-        <span>{{ currencyCode }}</span>
-        <div class="sidebar-dropdown" *ngIf="showCurrencyMenu" (click)="$event.stopPropagation()">
-          <button type="button" class="sidebar-dropdown-item" [class.active]="currencyCode === 'USD'"
-                  (click)="$event.stopPropagation(); toggleCurrency('USD')">
-            <span>🇺🇸</span><span>USD</span>
-          </button>
-          <button type="button" class="sidebar-dropdown-item" [class.active]="currencyCode === 'BRL'"
-                  (click)="$event.stopPropagation(); toggleCurrency('BRL')">
-            <span>🇧🇷</span><span>BRL</span>
-          </button>
-        </div>
-      </div>
-
-      <button class="sidebar-logout" (click)="logout()">
-        <i class="bi bi-box-arrow-right"></i>
-        <span>{{ 'BUTTONS.LOGOUT' | translate }}</span>
-      </button>
-
-    </div>
   </aside>
 
   <!-- ===== MAIN AREA ===== -->
@@ -74,12 +36,73 @@
       <div class="topbar-greeting">
         <h2 class="topbar-title">{{ greeting }}, <span class="topbar-name">{{ username }}</span> 👋</h2>
       </div>
+
       <div class="topbar-actions">
-        <div class="topbar-currency-pill" (click)="showCurrencyMenu = !showCurrencyMenu">
-          <i class="bi bi-currency-exchange"></i>
-          <span>{{ currencyCode }} · {{ currencySymbol }}</span>
+        <div class="topbar-user" (click)="toggleUserMenu($event)">
+
+          <!-- Avatar: photo if set, else initial -->
+          <div class="topbar-avatar">
+            <img *ngIf="profilePictureUrl" [src]="profilePictureUrl" alt="profile" class="avatar-img" />
+            <span *ngIf="!profilePictureUrl">{{ userInitial }}</span>
+          </div>
+
+          <div class="topbar-user-menu" *ngIf="showUserMenu">
+
+            <!-- Profile card -->
+            <a routerLink="/profile" class="user-menu-profile" (click)="showUserMenu = false">
+              <div class="user-menu-avatar">
+                <img *ngIf="profilePictureUrl" [src]="profilePictureUrl" alt="profile" class="avatar-img" />
+                <span *ngIf="!profilePictureUrl">{{ userInitial }}</span>
+              </div>
+              <div class="user-menu-profile-info">
+                <span class="user-menu-fullname">{{ fullName || username }}</span>
+                <span class="user-menu-email">{{ email }}</span>
+              </div>
+              <i class="bi bi-chevron-right user-menu-profile-chevron"></i>
+            </a>
+
+            <div class="user-menu-divider"></div>
+
+            <!-- Currency -->
+            <div class="user-menu-section-label">{{ 'CURRENCY.TOGGLE' | translate }}</div>
+            <div class="segmented">
+              <button type="button" class="segmented-option" [class.active]="currencyCode === 'USD'"
+                      (click)="selectCurrency('USD', $event)">USD · $</button>
+              <button type="button" class="segmented-option" [class.active]="currencyCode === 'BRL'"
+                      (click)="selectCurrency('BRL', $event)">BRL · R$</button>
+            </div>
+
+            <!-- Language -->
+            <div class="user-menu-section-label">{{ 'NAVIGATION.LANGUAGE' | translate }}</div>
+            <div class="segmented">
+              <button *ngFor="let lang of languageService.getAvailableLanguages()"
+                      type="button"
+                      class="segmented-option"
+                      [class.active]="languageService.getCurrentLanguage() === lang.code"
+                      (click)="selectLanguage(lang.code, $event)">
+                <img class="seg-flag" [src]="flagSrc(lang.code)" [alt]="lang.code" aria-hidden="true" />
+                {{ lang.code | uppercase }}
+              </button>
+            </div>
+
+            <!-- Theme -->
+            <div class="user-menu-theme-row">
+              <span class="user-menu-theme-label">Theme</span>
+              <app-theme-toggle></app-theme-toggle>
+            </div>
+
+            <div class="user-menu-divider"></div>
+
+            <!-- Settings & Logout -->
+            <a routerLink="/settings" class="user-menu-item" (click)="showUserMenu = false">
+              <i class="bi bi-gear-fill"></i><span>{{ 'NAVIGATION.SETTINGS' | translate }}</span>
+            </a>
+            <button type="button" class="user-menu-item user-menu-danger" (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i><span>{{ 'BUTTONS.LOGOUT' | translate }}</span>
+            </button>
+
+          </div>
         </div>
-        <div class="topbar-avatar">{{ userInitial }}</div>
       </div>
     </header>
 
