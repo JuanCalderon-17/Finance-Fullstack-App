@@ -63,7 +63,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   incomeKeys: string[] = ['SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
 
   // Para que el HTML pueda pintar de verde/rojo sin errores
-  incomeCategories: string[] = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra', 'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
+  incomeCategories: string[] = [
+    'Sueldo', 'Negocio', 'Venta', 'Ingreso Extra',
+    'Salary', 'Business', 'Sale', 'Extra Income',
+    'Salário', 'Negócio', 'Venda', 'Renda Extra',
+    'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'
+  ];
 
   newTransaction: any = {
     description: '',
@@ -163,7 +168,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalIncome: number = 0;
 
   alertMessageKey: string = "";
-  alertColor: string = 'green';
 
   isLoading: boolean = false;
   loadingTooLong: boolean = false;
@@ -190,7 +194,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedMonth = today.getMonth();
     this.selectedYear = today.getFullYear();
 
-    for(let i = 2025; i <= 2026; i++ ) {
+    const currentYear = today.getFullYear();
+    for (let i = currentYear - 1; i <= currentYear + 1; i++) {
       this.years.push(i);
     }
   }
@@ -222,8 +227,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.loadTransactions();
-    this.loadCashflowTrend();
-    
+
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
         this.tutorialService.startDashboardTutorial();
@@ -307,13 +311,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (this.totalSpent <= this.totalIncome) {
       this.alertMessageKey = "DASHBOARD.ALERTS.GOOD";
-      this.alertColor = 'green';
     } else if (this.totalSpent > this.totalIncome && this.totalSpent <= limitWithBuffer) {
       this.alertMessageKey = "DASHBOARD.ALERTS.WARNING";
-      this.alertColor = 'orange';
     } else {
       this.alertMessageKey = "DASHBOARD.ALERTS.DANGER";
-      this.alertColor = 'red';
     }
 
     this.updateChart();
