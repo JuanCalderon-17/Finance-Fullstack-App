@@ -72,6 +72,13 @@ export class SavingsComponent implements OnInit, OnDestroy {
   convertAmount(acc: SavingAccount): number {
     return this.currencyStateService.convert(acc.balance, acc.currency || 'USD');
   }
+
+  /** Convert an amount entered in the current display currency back to USD (how the backend stores it). */
+  private toUsd(amount: number): number {
+    return (this.currencyCode !== 'USD' && this.exchangeRate > 0)
+      ? amount / this.exchangeRate
+      : amount;
+  }
   
   calculateTotal() {
     this.totalSavings = this.accounts.reduce((sum, acc) => {
@@ -82,32 +89,17 @@ export class SavingsComponent implements OnInit, OnDestroy {
   addAccount() {
     if (!this.newAccount.name) return;
     
-    //  Crear copia y convertir a USD si es BRL
+    // Backend always stores in USD: convert the entered amount from the display currency.
     const savingToSend: SavingAccount = {
       name: this.newAccount.name,
-      balance: this.newAccount.balance || 0,
+      balance: this.toUsd(this.newAccount.balance || 0),
       color: this.newAccount.color,
       icon: this.newAccount.icon,
-      currency: 'USD' // Backend siempre guarda en USD
+      currency: 'USD'
     };
 
-    //  Convertir a USD si el usuario está en BRL
-    if (this.currencyCode === 'BRL') {
-      savingToSend.balance = this.newAccount.balance / this.exchangeRate;
-      console.log(`🔄 Convertido: R$ ${this.newAccount.balance} → $ ${savingToSend.balance.toFixed(2)}`);
-    }
-
-    console.group('📤 ENVIANDO AL BACKEND (Savings)');
-    console.log('Monto original:', this.newAccount.balance, this.currencyCode);
-    console.log('Monto convertido:', savingToSend.balance, 'USD');
-    console.log('Objeto completo:', JSON.stringify(savingToSend, null, 2));
-    console.groupEnd();
-
-    // Enviar a la BD
     this.savingsService.createSaving(savingToSend).subscribe({
       next: (savedAccount) => {
-        console.log('✓ Saving created:', savedAccount);
-        
         this.accounts.push({ ...savedAccount, isEditing: false });
         this.calculateTotal();
         
@@ -147,8 +139,10 @@ export class SavingsComponent implements OnInit, OnDestroy {
   updateSavingInDb(account: SavingAccount) {
     if (!account.id) return;
 
-    // account.balance is always in USD in the frontend state (loaded from DB as USD)
-    const savingToUpdate = { ...account, currency: 'USD' };
+    // account.balance is always in USD in the frontend state (loaded from DB as USD).
+    // Strip view-only fields so we don't send them to the backend.
+    const { isEditing, editBalance, ...rest } = account;
+    const savingToUpdate = { ...rest, currency: 'USD' };
 
     this.savingsService.updateSaving(account.id, savingToUpdate).subscribe({
       next: () => {
@@ -160,13 +154,26 @@ export class SavingsComponent implements OnInit, OnDestroy {
   }
 
   updateBalance(account: SavingAccount, amount: number) {
+    if (!account.id) return;
+
     // amount comes from quick buttons in the display currency; convert to USD before adding
-    const amountInUsd = (this.currencyCode !== 'USD' && this.exchangeRate > 0)
-      ? amount / this.exchangeRate
-      : amount;
-    account.balance += amountInUsd;
-    if (account.balance < 0) account.balance = 0;
-    this.updateSavingInDb(account);
+    const amountInUsd = this.toUsd(amount);
+    const previousBalance = account.balance;
+
+    let newBalance = account.balance + amountInUsd;
+    if (newBalance < 0) newBalance = 0;
+    account.balance = newBalance;
+    this.calculateTotal();
+
+    const { isEditing, editBalance, ...rest } = account;
+    this.savingsService.updateSaving(account.id, { ...rest, currency: 'USD' }).subscribe({
+      error: (err) => {
+        // Roll back the optimistic update if the request failed.
+        account.balance = previousBalance;
+        this.calculateTotal();
+        console.error('Error actualizando', err);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -175,10 +182,15 @@ export class SavingsComponent implements OnInit, OnDestroy {
   }
 
   enableEdit(account: SavingAccount) {
+    // Edit form works in the display currency; balance is stored in USD.
+    account.editBalance = this.convertAmount(account);
     account.isEditing = true;
   }
 
   saveEdit(account: SavingAccount) {
+    // Convert the edited display-currency value back to USD before persisting.
+    account.balance = this.toUsd(account.editBalance ?? 0);
+    if (account.balance < 0) account.balance = 0;
     this.updateSavingInDb(account);
   }
 }

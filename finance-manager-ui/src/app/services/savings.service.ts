@@ -12,6 +12,7 @@ export interface SavingAccount {
   icon: string;
   currency?: string;
   isEditing?: boolean;
+  editBalance?: number; // display-currency value used while editing
 }
 
 @Injectable({
