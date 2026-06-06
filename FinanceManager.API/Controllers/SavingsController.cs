@@ -70,8 +70,11 @@ namespace FinanceManager.API.Controllers
             existingAccount.Name = dto.Name;
             existingAccount.Balance = dto.Balance;
             existingAccount.Color = dto.Color;
-            existingAccount.Goal = dto.Goal;
             existingAccount.Icon = dto.Icon;
+
+            // Only overwrite the goal when the client actually sends one, so an
+            // update that omits it (the UI doesn't expose goals yet) can't wipe it.
+            if (dto.Goal.HasValue) existingAccount.Goal = dto.Goal;
 
             await _context.SaveChangesAsync();
             return NoContent();
