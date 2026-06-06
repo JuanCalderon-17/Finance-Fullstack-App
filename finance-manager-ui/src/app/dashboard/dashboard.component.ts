@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../core/services/transaction.service';
+import { RecurringService, DueOccurrence } from '../core/services/recurring.service';
 import { Transaction } from '../shared/models/transaction.model';
 import { Router, RouterLink } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
@@ -36,7 +37,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   allTransactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
-  showSettingsMenu : boolean = false; 
+  dueOccurrences: DueOccurrence[] = [];
+  showSettingsMenu : boolean = false;
 
   // ✅ MAPA DE CATEGORÍAS: Base de Datos -> Clave JSON
   categoryMap: { [key: string]: string } = {
@@ -61,9 +63,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   //  Todo en mayúsculas para coincidir con el mapa
   incomeKeys: string[] = ['SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
+  savingsKeys: string[] = ['SAVING'];
 
-  // Para que el HTML pueda pintar de verde/rojo sin errores
-  incomeCategories: string[] = ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra', 'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'];
+  // Para que el HTML pueda pintar de verde/rojo/indigo sin errores
+  incomeCategories: string[] = [
+    'Sueldo', 'Negocio', 'Venta', 'Ingreso Extra',
+    'Salary', 'Business', 'Sale', 'Extra Income',
+    'Salário', 'Negócio', 'Venda', 'Renda Extra',
+    'SALARY', 'BUSINESS', 'SALE', 'EXTRA_INCOME'
+  ];
+  savingsCategories: string[] = ['Ahorro', 'Savings', 'Poupança', 'SAVING'];
 
   newTransaction: any = {
     description: '',
@@ -161,9 +170,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   years: number[] = [];
   totalSpent: number = 0;
   totalIncome: number = 0;
+  totalSaved: number = 0;
 
   alertMessageKey: string = "";
-  alertColor: string = 'green';
 
   isLoading: boolean = false;
   loadingTooLong: boolean = false;
@@ -177,7 +186,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   exchangeRate : number = 1;
 
   constructor(
-    private transactionService: TransactionService, 
+    private transactionService: TransactionService,
+    private recurringService: RecurringService,
     private router: Router,
     private currencyService: CurrencyService,
     private currencyStateService: CurrencyStateService,
@@ -190,7 +200,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedMonth = today.getMonth();
     this.selectedYear = today.getFullYear();
 
-    for(let i = 2025; i <= 2026; i++ ) {
+    const currentYear = today.getFullYear();
+    for (let i = currentYear - 1; i <= currentYear + 1; i++) {
       this.years.push(i);
     }
   }
@@ -222,13 +233,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.loadTransactions();
+<<<<<<< HEAD
+=======
     this.loadCashflowTrend();
-    
+    this.loadDue();
+>>>>>>> origin/main
+
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
         this.tutorialService.startDashboardTutorial();
       }
     },2000); //wait 2 for page to load
+  }
+
+  // ===== Recurring due reminders =====
+  loadDue(): void {
+    this.recurringService.getDue().pipe(takeUntil(this.destroy$)).subscribe({
+      next: (due) => { this.dueOccurrences = due; this.cdr.markForCheck(); },
+      error: () => { /* non-blocking */ }
+    });
+  }
+
+  convertDueAmount(due: DueOccurrence): number {
+    return this.currencyStateService.convert(due.amount, due.currency || 'USD');
+  }
+
+  confirmDue(due: DueOccurrence): void {
+    this.recurringService.confirm(due.recurringId).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => {
+        this.loadTransactions();
+        this.loadCashflowTrend();
+        this.loadDue();
+      }
+    });
+  }
+
+  skipDue(due: DueOccurrence): void {
+    this.recurringService.skip(due.recurringId).pipe(takeUntil(this.destroy$)).subscribe({
+      next: () => this.loadDue()
+    });
   }
 
   toggleCurrency() {
@@ -290,33 +333,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
   calculateStats() {
     this.totalSpent = 0;
     this.totalIncome = 0;
+    this.totalSaved = 0;
 
     this.filteredTransactions.forEach(t => {
       const convertedAmount = this.convertTransactionAmount(t);
-      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase(); // with this i get actual api 
-      
-      // comparar con api mapeada
+      const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase();
+
       if (this.incomeKeys.includes(categoryKey)) {
         this.totalIncome += convertedAmount;
+      } else if (this.savingsKeys.includes(categoryKey)) {
+        this.totalSaved += convertedAmount;
       } else {
         this.totalSpent += convertedAmount;
       }
     });
-    
-    const limitWithBuffer = this.totalIncome * 1.10; 
+
+    const limitWithBuffer = this.totalIncome * 1.10;
 
     if (this.totalSpent <= this.totalIncome) {
       this.alertMessageKey = "DASHBOARD.ALERTS.GOOD";
-      this.alertColor = 'green';
     } else if (this.totalSpent > this.totalIncome && this.totalSpent <= limitWithBuffer) {
       this.alertMessageKey = "DASHBOARD.ALERTS.WARNING";
-      this.alertColor = 'orange';
     } else {
       this.alertMessageKey = "DASHBOARD.ALERTS.DANGER";
-      this.alertColor = 'red';
     }
 
     this.updateChart();
+  }
+
+  getCategoryType(category: string): 'income' | 'savings' | 'expense' {
+    if (this.incomeCategories.includes(category)) return 'income';
+    if (this.savingsCategories.includes(category)) return 'savings';
+    return 'expense';
   }
 
   updateChart() {
@@ -325,13 +373,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.filteredTransactions.forEach(t => {
       const categoryKey = this.categoryMap[t.category] || t.category.toUpperCase();
 
-      // Solo graficamos gastos (NO ingresos)
-      if(!this.incomeKeys.includes(categoryKey)) { 
-        if(!categoryTotals[categoryKey]) {
-          categoryTotals[categoryKey] = 0;
-        }
-        categoryTotals[categoryKey] += this.convertTransactionAmount(t);
-      }
+      // Pie chart shows true spending only — excludes income AND savings
+      if (this.incomeKeys.includes(categoryKey) || this.savingsKeys.includes(categoryKey)) return;
+
+      if (!categoryTotals[categoryKey]) categoryTotals[categoryKey] = 0;
+      categoryTotals[categoryKey] += this.convertTransactionAmount(t);
     });
 
     const labels = Object.keys(categoryTotals).map(catKey => {
@@ -395,11 +441,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const labels: string[] = [];
       const incomeArr: number[] = [];
       const expenseArr: number[] = [];
+      const savingsArr: number[] = [];
 
       for (let d = 1; d <= daysInMonth; d++) {
         labels.push(String(d));
         incomeArr.push(0);
         expenseArr.push(0);
+        savingsArr.push(0);
       }
 
       all.forEach(t => {
@@ -409,15 +457,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const amount = this.convertTransactionAmount(t);
         const catKey = this.categoryMap[t.category] || t.category.toUpperCase();
         if (this.incomeKeys.includes(catKey)) incomeArr[day] += amount;
+        else if (catKey === 'SAVING') savingsArr[day] += amount;
         else expenseArr[day] += amount;
       });
 
-      this.applyCashflowData(labels, incomeArr, expenseArr);
+      this.applyCashflowData(
+        labels,
+        this.toCumulative(incomeArr),
+        this.toCumulative(expenseArr),
+        this.toCumulative(savingsArr)
+      );
       return;
     }
 
     // Monthly buckets
-    const buckets: { label: string; year: number; month: number; income: number; expense: number }[] = [];
+    const buckets: { label: string; year: number; month: number; income: number; expense: number; savings: number }[] = [];
     for (let i = monthsToShow - 1; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       buckets.push({
@@ -425,7 +479,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         year: date.getFullYear(),
         month: date.getMonth(),
         income: 0,
-        expense: 0
+        expense: 0,
+        savings: 0
       });
     }
 
@@ -436,17 +491,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const amount = this.convertTransactionAmount(t);
       const catKey = this.categoryMap[t.category] || t.category.toUpperCase();
       if (this.incomeKeys.includes(catKey)) bucket.income += amount;
+      else if (catKey === 'SAVING') bucket.savings += amount;
       else bucket.expense += amount;
     });
 
     this.applyCashflowData(
       buckets.map(b => b.label),
-      buckets.map(b => b.income),
-      buckets.map(b => b.expense)
+      this.toCumulative(buckets.map(b => b.income)),
+      this.toCumulative(buckets.map(b => b.expense)),
+      this.toCumulative(buckets.map(b => b.savings))
     );
   }
 
-  private applyCashflowData(labels: string[], income: number[], expense: number[]): void {
+  private toCumulative(values: number[]): number[] {
+    let sum = 0;
+    return values.map(v => (sum += v));
+  }
+
+  private applyCashflowData(labels: string[], income: number[], expense: number[], savings: number[]): void {
     this.cashflowChartData = {
       labels,
       datasets: [
@@ -472,6 +534,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
           fill: true,
           tension: 0.4,
           pointBackgroundColor: '#ef4444',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          borderWidth: 1.75
+        },
+        {
+          label: this.translate.instant('DASHBOARD.TOTAL_SAVED'),
+          data: savings,
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99, 102, 241, 0.04)',
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#6366f1',
           pointBorderColor: '#fff',
           pointBorderWidth: 1.5,
           pointRadius: 0,

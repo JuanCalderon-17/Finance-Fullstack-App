@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography; // Necesario para el Token Random
 using System.Text;
 using FinanceManager.API.Services;
+using System.Security.Claims;
 
 namespace FinanceManager.API.Controllers
 {
@@ -31,6 +32,15 @@ namespace FinanceManager.API.Controllers
             _signInManager = signInManager;
             _tokenService = tokenService;
             _emailService = emailService;
+        }
+
+        // Reset/verification tokens are bearer secrets: email the raw token to the
+        // user but only ever persist its SHA-256 hash, so a DB leak can't be replayed.
+        private static string HashToken(string token)
+        {
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(token));
+            return Convert.ToHexString(bytes);
         }
 
         // POST: api/account/register
@@ -56,7 +66,7 @@ namespace FinanceManager.API.Controllers
 
             // Generate a verification token and save it — user can't log in until they confirm
             var verificationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-            user.EmailVerificationToken = verificationToken;
+            user.EmailVerificationToken = HashToken(verificationToken);
             await _userManager.UpdateAsync(user);
 
             var verifyLink = $"https://finanzasbr.com/auth/verify-email?token={verificationToken}&email={user.Email}";
@@ -102,7 +112,8 @@ namespace FinanceManager.API.Controllers
             {
                 Username = user.UserName,
                 FullName = user.FullName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                ProfilePictureUrl = user.ProfilePictureUrl
             };
         }
 
@@ -123,8 +134,8 @@ namespace FinanceManager.API.Controllers
             // Generar token random
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
-            // Guardar en DB
-            user.PasswordResetToken = token;
+            // Guardar en DB (solo el hash; el enlace lleva el token en claro)
+            user.PasswordResetToken = HashToken(token);
             user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
 
             // Importante: Asegurar que se guarde antes de enviar el correo
@@ -175,7 +186,7 @@ namespace FinanceManager.API.Controllers
             if (user.IsEmailVerified)
                 return Ok(new { message = "El correo ya fue verificado anteriormente." });
 
-            if (user.EmailVerificationToken != token)
+            if (user.EmailVerificationToken != HashToken(token))
                 return BadRequest(new { error = "Token inválido." });
 
             user.IsEmailVerified = true;
@@ -208,7 +219,7 @@ namespace FinanceManager.API.Controllers
 
             // Issue a fresh token (invalidates the previous one)
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-            user.EmailVerificationToken = token;
+            user.EmailVerificationToken = HashToken(token);
             var update = await _userManager.UpdateAsync(user);
             if (!update.Succeeded)
                 return StatusCode(500, new { error = "No se pudo generar el token." });
@@ -232,6 +243,45 @@ namespace FinanceManager.API.Controllers
                 Console.WriteLine($"--> [ERROR] Resend verification email failed for {user.Email}: {ex.Message}");
                 return StatusCode(500, new { error = "No pudimos enviar el correo. Intenta más tarde." });
             }
+        }
+
+        // PUT: api/account/profile
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto dto)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId!);
+            if (user == null) return NotFound();
+
+            user.FullName = dto.FullName;
+            user.ProfilePictureUrl = dto.ProfilePictureUrl;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok(new UserDto
+            {
+                Username = user.UserName!,
+                FullName = user.FullName,
+                Token = _tokenService.CreateToken(user),
+                ProfilePictureUrl = user.ProfilePictureUrl
+            });
+        }
+
+        // POST: api/account/change-password
+        [HttpPost("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId!);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded) return BadRequest(result.Errors);
+
+            return Ok(new { message = "Password updated." });
         }
 
         // POST: api/account/reset-password
@@ -290,10 +340,33 @@ namespace FinanceManager.API.Controllers
             }
         }
 
-
+        [Authorize]
         [HttpDelete]
         [EnableRateLimiting("auth")]
-        public async Task<IActionResult> DeleteAccount([FromBody] DeleteAccountDto request)
+        public async Task<IActionResult> DeleteAccount([FromBody]DeleteAccountDto deleteAccountDto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+        
+            var user =  await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, deleteAccountDto.Password);
+            if (!isPasswordValid)
+            {
+                return BadRequest( new { message = "Invalid credentials provided"});
+            }
+            
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return NoContent();
+            
+        }
 
     }
 }

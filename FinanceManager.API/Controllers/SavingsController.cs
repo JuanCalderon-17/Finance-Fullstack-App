@@ -1,4 +1,5 @@
 ﻿using FinanceManager.API.Data;
+using FinanceManager.API.DTOs;
 using FinanceManager.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -35,11 +36,19 @@ namespace FinanceManager.API.Controllers
 
         // POST: api/savings
         [HttpPost]
-        public async Task<ActionResult<SavingsAccount>> CreateSaving(SavingsAccount saving)
+        public async Task<ActionResult<SavingsAccount>> CreateSaving(SavingsDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            saving.AppUserId = userId;
+            var saving = new SavingsAccount
+            {
+                Name = dto.Name,
+                Balance = dto.Balance,
+                Goal = dto.Goal,
+                Color = dto.Color,
+                Icon = dto.Icon,
+                AppUserId = userId
+            };
 
             _context.SavingsAccounts.Add(saving);
             await _context.SaveChangesAsync();
@@ -49,10 +58,8 @@ namespace FinanceManager.API.Controllers
 
         // PUT: api/savings/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSaving(int id, SavingsAccount saving)
+        public async Task<IActionResult> UpdateSaving(int id, SavingsDto dto)
         {
-            if (id != saving.Id) return BadRequest();
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var existingAccount = await _context.SavingsAccounts
@@ -60,11 +67,11 @@ namespace FinanceManager.API.Controllers
 
             if (existingAccount == null) return NotFound("Cuenta no encontrada o no te pertenece.");
 
-            existingAccount.Name = saving.Name;
-            existingAccount.Balance = saving.Balance;
-            existingAccount.Color = saving.Color;
-            existingAccount.Goal = saving.Goal;
-            existingAccount.Icon = saving.Icon;
+            existingAccount.Name = dto.Name;
+            existingAccount.Balance = dto.Balance;
+            existingAccount.Color = dto.Color;
+            existingAccount.Goal = dto.Goal;
+            existingAccount.Icon = dto.Icon;
 
             await _context.SaveChangesAsync();
             return NoContent();

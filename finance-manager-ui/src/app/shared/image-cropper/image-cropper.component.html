@@ -1,0 +1,35 @@
+<div class="cropper-backdrop" (click)="cancel()">
+  <div class="cropper-modal" (click)="$event.stopPropagation()">
+    <h3 class="cropper-title">Center your photo</h3>
+    <p class="cropper-hint">Drag to reposition · use the slider to zoom</p>
+
+    <div class="cropper-stage"
+         (pointerdown)="onPointerDown($event)"
+         (pointermove)="onPointerMove($event)"
+         (pointerup)="onPointerUp()"
+         (pointerleave)="onPointerUp()">
+      <img #img
+           [src]="imageSrc"
+           class="cropper-img"
+           [style.width.px]="dw"
+           [style.height.px]="dh"
+           [style.transform]="'translate(' + posX + 'px, ' + posY + 'px)'"
+           (load)="onImageLoad()"
+           draggable="false"
+           alt="crop preview" />
+      <div class="cropper-ring"></div>
+    </div>
+
+    <div class="cropper-zoom-row">
+      <i class="bi bi-zoom-out"></i>
+      <input type="range" min="1" max="3" step="0.01"
+             [(ngModel)]="zoom" (input)="onZoom()" class="cropper-zoom" />
+      <i class="bi bi-zoom-in"></i>
+    </div>
+
+    <div class="cropper-actions">
+      <button type="button" class="cropper-btn ghost" (click)="cancel()">Cancel</button>
+      <button type="button" class="cropper-btn primary" (click)="confirm()">Apply</button>
+    </div>
+  </div>
+</div>

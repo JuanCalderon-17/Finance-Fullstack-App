@@ -2,7 +2,7 @@
   "LANDING": {
     "TITLE": "The finance app,",
     "SUBTITLE": "your way.",
-    "DESCRIPTION": "Your account to manage expenses, savings, and debts. No fees. No hassle. Total control.",
+    "DESCRIPTION": "Your account to manage expenses, savings, and debts.",
     "CTA_BUTTON": "START NOW",
     "PILL_TAG": "Personal finance, redesigned",
     "TRUST_MICROCOPY": "Free forever  ·  No credit card  ·  Set up in 2 minutes",
@@ -11,8 +11,92 @@
     "INCOME": "Income",
     "EXPENSE": "Expenses",
     "ADD_TRANSACTION": "Add transaction",
-    "EARLY_INCOME": "Early Income"
-
+    "EARLY_INCOME": "Early Income",
+    "NAV": {
+      "FEATURES": "Features",
+      "HOW": "How it works",
+      "PRICING": "Pricing",
+      "SIGN_IN": "Sign in",
+      "START_FREE": "Start free"
+    },
+    "PREVIEW": {
+      "GREETING": "Good Morning, Juan 👋",
+      "SAVING_PERCENT": "You're saving 27% this month",
+      "OF_INCOME": "11% of income"
+    },
+    "TRUST": {
+      "LEAD": "Built for everyone managing real money",
+      "LANGUAGES": "3 languages",
+      "FREE_FOREVER": "Free forever"
+    },
+    "FEATURES": {
+      "EYEBROW": "Personal finance, properly.",
+      "HEADLINE_1": "Money management has",
+      "HEADLINE_2": "never felt this clean.",
+      "MOCK_SALARY": "Salary",
+      "MOCK_GROCERIES": "Groceries",
+      "MOCK_RENT": "Rent",
+      "MOCK_REMAINING": "remaining",
+      "MOCK_OF_INSTALLMENTS": "8 of 12 installments",
+      "MOCK_EMERGENCY": "Emergency Fund",
+      "F1_TITLE": "Track every transaction",
+      "F1_DESC": "Categorize income and expenses. See where your money goes — daily, monthly, yearly.",
+      "F2_TITLE": "Master your debts",
+      "F2_DESC": "Track installments, interest, and progress. Know exactly when you'll be debt-free.",
+      "F3_TITLE": "Build savings goals",
+      "F3_DESC": "Set targets, watch them grow. Multi-currency support with live exchange rates.",
+      "F4_TITLE": "Smart insights",
+      "F4_DESC": "Cashflow trends. Spending breakdowns. Compare months at a glance."
+    },
+    "HOW": {
+      "EYEBROW": "Built for speed.",
+      "HEADLINE_1": "Start in 2 minutes.",
+      "HEADLINE_2": "Never look back.",
+      "STEP1_TITLE": "Sign up with your email",
+      "STEP1_DESC": "No credit card. No commitment. Just an account.",
+      "STEP2_TITLE": "Add your first transaction",
+      "STEP2_DESC": "Income, expense, savings, debt — categorized in seconds.",
+      "STEP3_TITLE": "Watch your money work for you",
+      "STEP3_DESC": "Real-time insights, cashflow trends, debt progress.",
+      "CTA": "Start free"
+    },
+    "MULTI_CURRENCY": {
+      "EYEBROW": "Cross-border ready.",
+      "HEADLINE_1": "Your money,",
+      "HEADLINE_2": "in your currency.",
+      "USD_NAME": "US Dollar",
+      "BRL_NAME": "Brazilian Real",
+      "LIVE_RATES": "Live exchange rates",
+      "POINT1_TITLE": "USD and BRL — switch instantly",
+      "POINT1_DESC": "Every value converts on the fly with real rates.",
+      "POINT2_TITLE": "Three languages built-in",
+      "POINT2_DESC": "Español · English · Português. Switch anytime.",
+      "POINT3_TITLE": "One account, everywhere",
+      "POINT3_DESC": "Your data syncs the moment you log in."
+    },
+    "STATS": {
+      "EYEBROW": "By the numbers.",
+      "HEADLINE": "Built to be yours.",
+      "FOREVER": "Forever",
+      "TO_SETUP": "To set up",
+      "LANGUAGES_LABEL": "Languages",
+      "TRANSACTIONS_LABEL": "Transactions"
+    },
+    "FINAL": {
+      "HEADLINE_1": "Personal finance —",
+      "HEADLINE_2": "redesigned from the ground up.",
+      "SUBTITLE": "Free forever. No credit card. Set up in 2 minutes."
+    },
+    "FOOTER": {
+      "TAGLINE": "The finance app, your way.",
+      "PRODUCT": "Product",
+      "SIGN_UP": "Sign up",
+      "BUILT_WITH": "Built with",
+      "LANGUAGE": "Language",
+      "LEGAL": "Legal",
+      "TERMS": "Terms and Conditions",
+      "PRIVACY": "Privacy Policy"
+    }
   },
   "AUTH": {
     "LOGIN": {
@@ -41,6 +125,10 @@
       "LOGIN_LINK": "Log In",
       "HERO_TITLE": "Start your legacy",
       "HERO_TEXT": "\"The first step to financial freedom is deciding to control your destiny. Sign up today and start building the future you deserve.\"",
+      "ACCEPT_TERMS_PREFIX": "I accept the",
+      "ACCEPT_TERMS_TERMS": "Terms and Conditions",
+      "ACCEPT_TERMS_AND": "and the",
+      "ACCEPT_TERMS_PRIVACY": "Privacy Policy",
       "ERRORS": {
         "EMPTY_NAME": "⛔ Please enter your full name.",
         "EMPTY_EMAIL": "⛔ Email is required.",
@@ -51,7 +139,8 @@
         "PASSWORD_UPPER": "⛔ Missing an uppercase letter.",
         "PASSWORD_DIGIT": "⛔ Missing a number.",
         "GENERIC": "An unexpected error occurred.",
-        "PASSWORD_MISMATCH": "⛔ Passwords do not match."
+        "PASSWORD_MISMATCH": "⛔ Passwords do not match.",
+        "TERMS_NOT_ACCEPTED": "⛔ You must accept the Terms and the Privacy Policy."
       }
     },
     "FORGOT_PASSWORD": {
@@ -85,15 +174,20 @@
     "FILTERS_TITLE": "📅 Filter your transactions",
     "FILTERS_DESC": "Filter by month, year, or fortnight to see exactly what you need.",
 
-    "CHART_TITLE": "📊 Visualize your expenses",
-    "CHART_DESC": "The chart shows how you distribute your expenses by category.",
+    "CHART_TITLE": "📊 Your cashflow trend",
+    "CHART_DESC": "See how your income, spending and savings add up over time. Switch between 1M, 6M and 1Y.",
+
+    "RECURRING_TITLE": "🔁 Recurring transactions",
+    "RECURRING_DESC": "Set up repeating income and expenses like rent, salary or subscriptions. When they're due, you'll confirm them right here on the dashboard.",
 
     "NAVIGATION_TITLE": "🧭 Explore more features",
-    "NAVIGATION_DESC": "Manage your savings and debts from the top menu.",
+    "NAVIGATION_DESC": "Manage your savings and debts from the sidebar.",
 
     "SAVINGS": {
       "WELCOME_TITLE": "💰 Manage your Savings",
       "WELCOME_DESC": "Here you can create savings goals and track your progress.",
+      "TOTAL_TITLE": "🏦 Your total savings",
+      "TOTAL_DESC": "This banner shows the combined balance of all your accounts, converted to your selected currency.",
       "ADD_GOAL_TITLE": "➕ Create a goal",
       "ADD_GOAL_DESC": "Define how much you want to save and what for. You can add money anytime.",
       "MANAGE_TITLE": "📊 Track progress",
@@ -114,6 +208,7 @@
     "TITLE": "Dashboard",
     "TOTAL_INCOME": "Total Income",
     "TOTAL_SPENT": "Total Spent",
+    "TOTAL_SAVED": "Total Saved",
     "AVAILABLE": "Available",
     "DEBT_LABEL": "Debt",
     "SAVING_MSG": "You are saving",
@@ -125,6 +220,7 @@
     "EDITING": "✏️ Editing",
     "NEW_TRANSACTION": "➕ New Transaction",
     "INCOME_GROUP": "Income 🤑",
+    "SAVINGS_GROUP": "Savings 🐷",
     "EXPENSE_GROUP": "Expenses 💸",
     "HISTORY": "History",
     "SERVER_WAKING": "The server is starting up, please wait a moment...",
@@ -238,8 +334,51 @@
     "DASHBOARD": "Dashboard",
     "SAVINGS": "Savings",
     "DEBTS": "Debts",
+    "RECURRING": "Recurring",
     "SETTINGS": "Settings",
     "LANGUAGE": "Language"
+  },
+  "RECURRING": {
+    "TITLE": "Recurring transactions",
+    "SUBTITLE": "Set up repeating income and expenses like rent, salary or subscriptions.",
+    "NEW_RULE": "New recurring rule",
+    "EDIT_RULE": "Edit recurring rule",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PH": "e.g. Rent, Netflix, Salary",
+    "AMOUNT": "Amount",
+    "CURRENCY": "Currency",
+    "CATEGORY": "Category",
+    "GROUP_INCOME": "Income",
+    "GROUP_EXPENSE": "Expense",
+    "FREQUENCY": "Frequency",
+    "START_DATE": "Start date",
+    "END_DATE": "End date",
+    "OPTIONAL": "optional",
+    "CREATE": "Create rule",
+    "SAVE_CHANGES": "Save changes",
+    "NEXT_DUE": "Next due",
+    "PAUSED": "Paused",
+    "PAUSE": "Pause",
+    "RESUME": "Resume",
+    "CREATED": "Recurring rule created.",
+    "UPDATED": "Recurring rule updated.",
+    "CONFIRM_DELETE": "Delete this recurring rule?",
+    "EMPTY_TITLE": "No recurring rules yet",
+    "EMPTY_DESC": "Create one on the left to automate your repeating transactions.",
+    "ERR_DESCRIPTION": "Please add a description.",
+    "ERR_AMOUNT": "Amount must be greater than 0.",
+    "ERR_SAVE": "Could not save. Try again.",
+    "FREQ": {
+      "WEEKLY": "Weekly",
+      "BIWEEKLY": "Every 2 weeks",
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly"
+    },
+    "DUE_TITLE": "Recurring transactions due",
+    "DUE_ON": "due",
+    "MORE_OVERDUE": "more overdue",
+    "CONFIRM": "Confirm",
+    "SKIP": "Skip"
   },
   "CURRENCY": {
     "USD": "Dollar",
@@ -249,5 +388,119 @@
   "MONTHS": {
     "JAN": "Jan", "FEB": "Feb", "MAR": "Mar", "APR": "Apr", "MAY": "May", "JUN": "Jun",
     "JUL": "Jul", "AUG": "Aug", "SEP": "Sep", "OCT": "Oct", "NOV": "Nov", "DEC": "Dec"
+  },
+  "PROFILE": {
+    "TITLE": "Profile",
+    "SUBTITLE": "Manage your account and security",
+    "SAVING": "Saving…",
+    "IDENTITY": {
+      "FULL_NAME": "Full name",
+      "EMAIL": "Email",
+      "EMAIL_SOON": "Email changes are coming soon.",
+      "CHANGE_PHOTO": "Change photo",
+      "INVALID_IMAGE": "Please choose an image file.",
+      "SAVE": "Save profile",
+      "SUCCESS": "Profile updated successfully.",
+      "ERROR": "Failed to save profile. Try again."
+    },
+    "PASSWORD": {
+      "TITLE": "Change password",
+      "DESC": "Use a strong password you don't reuse elsewhere.",
+      "CURRENT": "Current password",
+      "NEW": "New password",
+      "CONFIRM": "Confirm new password",
+      "SAVE": "Update password",
+      "EMPTY": "Please fill in your current and new password.",
+      "SUCCESS": "Password updated successfully.",
+      "INCORRECT_CURRENT": "Your current password is incorrect.",
+      "ERROR": "Could not update password. Try again."
+    }
+  },
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "SUBTITLE": "Your account and your data",
+    "EXPORT": {
+      "TITLE": "Export data",
+      "DESC": "Download your transactions as CSV to open in Excel, Google Sheets or your accounting app. Amounts are exported in their original currency, without conversion.",
+      "PRESET_THIS_MONTH": "This month",
+      "PRESET_LAST_30": "Last 30 days",
+      "PRESET_ALL_TIME": "All time",
+      "FROM": "From",
+      "TO": "To",
+      "DOWNLOAD_BUTTON": "Download CSV",
+      "EXPORTING": "Generating...",
+      "SUCCESS": "✓ Exported {{count}} transactions.",
+      "NO_DATA": "No transactions in the selected range.",
+      "ERROR_RANGE_INVALID": "⛔ 'From' date cannot be later than 'To'.",
+      "ERROR_GENERIC": "An error occurred while exporting. Please try again.",
+      "LGPD_NOTE": "You have the right to data portability under LGPD and equivalent regulations.",
+      "LGPD_LINK": "View Privacy Policy"
+    }
+  },
+  "LEGAL": {
+    "BACK": "← Back to home",
+    "EYEBROW": "Legal document",
+    "LAST_UPDATED": "Last updated",
+    "DISCLAIMER_LABEL": "Important notice",
+    "DISCLAIMER_BODY": "This document is a general text drafted by the Finanzas team and does not constitute legal advice. We recommend consulting a lawyer to review its content before relying on it for decisions.",
+    "TERMS": {
+      "TITLE": "Terms and Conditions",
+      "S1_TITLE": "Acceptance of terms",
+      "S1_BODY": "By creating an account or using Finanzas (finanzasbr.com), you accept these Terms and our Privacy Policy. If you do not agree, please do not use the service.",
+      "S2_TITLE": "Service description",
+      "S2_BODY": "Finanzas is a personal web application for tracking income, expenses, debts and savings. The service is provided as-is, without guarantees of continuous availability, and may be modified or discontinued at any time.",
+      "S3_TITLE": "Acceptable use",
+      "S3_BODY": "By using Finanzas you agree to:",
+      "S3_LI1": "Not enter false information or third-party data without their consent.",
+      "S3_LI2": "Not attempt to access other users' accounts or interfere with the system.",
+      "S3_LI3": "Not use the service for illegal activities or to violate third-party rights.",
+      "S3_LI4": "Not reverse-engineer, mass-scrape or resell the service without authorization.",
+      "S4_TITLE": "Your account",
+      "S4_BODY": "You are responsible for the security of your password and for all activity carried out under your account. If you detect unauthorized access, contact us immediately. We may suspend or delete accounts that violate these Terms.",
+      "S5_TITLE": "Your content",
+      "S5_BODY": "The financial data you load remains yours. You grant us only the technical permission needed to store, process and display it within the service. You may request deletion at any time (see Privacy Policy).",
+      "S6_TITLE": "Intellectual property",
+      "S6_BODY": "The software, brand, design and content of Finanzas are owned by the Finanzas team and protected by applicable laws. No license is granted over them beyond the permitted use of the service.",
+      "S7_TITLE": "Limitation of liability",
+      "S7_BODY": "Finanzas is a personal tracking tool and does not constitute financial, accounting, tax or investment advice. To the extent permitted by law, we are not liable for losses arising from decisions made based on the data shown, nor for service interruptions or loss of information due to causes beyond our reasonable control.",
+      "S8_TITLE": "Changes and termination",
+      "S8_BODY": "We may update these Terms. If changes are substantial we will notify you by email or within the app. Continued use of the service after the update implies acceptance. You may close your account at any time.",
+      "S9_TITLE": "Governing law and contact",
+      "S9_BODY": "These Terms are governed by the laws of Brazil. For users in other Latin American countries, mandatory local consumer protection rules also apply. For any inquiry, write to"
+    },
+    "PRIVACY": {
+      "TITLE": "Privacy Policy",
+      "S1_TITLE": "Who we are",
+      "S1_BODY": "Finanzas (finanzasbr.com) is an application operated by the Finanzas team. This policy explains what data we collect, why, and how we protect it.",
+      "S2_TITLE": "What data we collect",
+      "S2_BODY": "We collect only what is needed for the service to work:",
+      "S2_LI1_LABEL": "Account data",
+      "S2_LI1_BODY": "your name, email and password (stored as a hash, never in plain text).",
+      "S2_LI2_LABEL": "Financial data",
+      "S2_LI2_BODY": "transactions, debts, installments, savings accounts and categories you enter yourself.",
+      "S2_LI3_LABEL": "Preferences",
+      "S2_LI3_BODY": "language, preferred currency and light/dark mode.",
+      "S2_LI4_LABEL": "Technical data",
+      "S2_LI4_BODY": "browser type and date of last access, used for security and support.",
+      "S3_TITLE": "How we use them",
+      "S3_BODY": "To authenticate you, show you your own information, send transactional emails (email verification, password recovery) and improve the service. We do not use your financial data for advertising nor share it with third parties for commercial purposes.",
+      "S4_TITLE": "Where they are stored",
+      "S4_BODY": "Data is stored in managed PostgreSQL databases hosted by Supabase, whose servers are located outside Latin America (United States or European Union depending on the active plan). Transactional email is sent through SendGrid. By using the service you accept this international data transfer, performed with providers that comply with recognized security standards.",
+      "S5_TITLE": "Cookies and local storage",
+      "S5_BODY": "We use browser local storage (localStorage) to keep the session token, language and theme preferences. We do not use tracking or advertising cookies.",
+      "S6_TITLE": "Your rights (LGPD and Latin America)",
+      "S6_BODY": "If you are in Brazil (General Data Protection Law — LGPD No. 13.709/2018) or in another Latin American country with data protection regulations, you have the right to:",
+      "S6_LI1": "Access the data we hold about you.",
+      "S6_LI2": "Correct or update inaccurate information.",
+      "S6_LI3": "Request deletion of your account and associated data.",
+      "S6_LI4": "Export your data in a readable format (coming soon from the app).",
+      "S6_LI5": "Withdraw your consent or file a complaint with your data protection authority.",
+      "S7_TITLE": "Retention",
+      "S7_BODY": "We keep your data while your account is active. If you close the account, we delete personal data within a reasonable period, except what we must retain by legal obligation.",
+      "S8_TITLE": "Changes to this policy",
+      "S8_BODY": "If we update this policy, we will notify you by email or from the app. The last update date appears at the top of this document.",
+      "S9_TITLE": "Contact",
+      "S9_BODY": "To exercise any right or resolve privacy questions, write to"
+    }
   }
 }

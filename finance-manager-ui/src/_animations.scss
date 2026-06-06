@@ -1,0 +1,68 @@
+// ============================================
+// SCROLL-REVEAL ANIMATION UTILITIES
+// Mercury-inspired: subtle fade-up. NO scale, NO rotation, NO bounce.
+// Tokens live in _themes.scss (:root). Consumed by appReveal directive.
+// ============================================
+
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--anim-reveal-distance));
+  will-change: opacity, transform;
+  transition:
+    opacity   var(--anim-enter) var(--ease-enter),
+    transform var(--anim-enter) var(--ease-enter);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// Stagger modifiers — apply to siblings. Index is 1-based.
+@for $i from 1 through 8 {
+  .reveal--stagger-#{$i} {
+    transition-delay: calc(var(--anim-stagger) * #{$i - 1});
+  }
+}
+
+// Inline escape hatch: style="--reveal-delay: 240ms"
+.reveal[style*="--reveal-delay"] {
+  transition-delay: var(--reveal-delay);
+}
+
+// ============================================
+// DRAMATIC REVEAL — Mercury "stretch upward" effect
+// IntersectionObserver-driven (via appReveal directive). Element starts
+// shrunk, dropped, and invisible — then scales/rises into place when it
+// enters the viewport. Works in every browser.
+// Use on large standalone visuals: product previews, hero images,
+// big section illustrations. NOT for grouped/staggered items.
+// Pair with appReveal directive: <div appReveal class="reveal-scroll">
+// ============================================
+
+.reveal-scroll {
+  opacity: 0;
+  transform: scale(0.55) translateY(140px);
+  transform-origin: center top;
+  will-change: opacity, transform;
+  transition:
+    opacity   calc(var(--anim-enter) * 1.6) var(--ease-enter),
+    transform calc(var(--anim-enter) * 1.6) var(--ease-enter);
+}
+
+.reveal-scroll.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+// Reduced motion — single global gate (covers both .reveal and .reveal-scroll)
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible,
+  .reveal-scroll,
+  .reveal-scroll.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

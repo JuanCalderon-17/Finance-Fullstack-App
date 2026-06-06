@@ -1,0 +1,126 @@
+<div class="recurring-page">
+
+  <header class="recurring-header">
+    <h1 class="recurring-title">{{ 'RECURRING.TITLE' | translate }}</h1>
+    <p class="recurring-subtitle">{{ 'RECURRING.SUBTITLE' | translate }}</p>
+  </header>
+
+  <div class="recurring-grid">
+
+    <!-- ===== FORM ===== -->
+    <section class="rec-card rec-form-card">
+      <div class="card-head">
+        <div class="card-icon"><i class="bi bi-arrow-repeat"></i></div>
+        <h2 class="card-title">
+          {{ (editingId ? 'RECURRING.EDIT_RULE' : 'RECURRING.NEW_RULE') | translate }}
+        </h2>
+      </div>
+
+      <div class="rec-field">
+        <label class="rec-label">{{ 'RECURRING.DESCRIPTION' | translate }}</label>
+        <input type="text" class="rec-input" [(ngModel)]="form.description"
+               placeholder="{{ 'RECURRING.DESCRIPTION_PH' | translate }}" />
+      </div>
+
+      <div class="rec-row">
+        <div class="rec-field">
+          <label class="rec-label">{{ 'RECURRING.AMOUNT' | translate }}</label>
+          <input type="number" step="0.01" class="rec-input" [(ngModel)]="form.amount" placeholder="0.00" />
+        </div>
+        <div class="rec-field">
+          <label class="rec-label">{{ 'RECURRING.CURRENCY' | translate }}</label>
+          <select class="rec-input" [(ngModel)]="form.currency">
+            <option value="USD">USD · $</option>
+            <option value="BRL">BRL · R$</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rec-field">
+        <label class="rec-label">{{ 'RECURRING.CATEGORY' | translate }}</label>
+        <select class="rec-input" [(ngModel)]="form.category">
+          <optgroup [label]="'RECURRING.GROUP_INCOME' | translate">
+            <option *ngFor="let c of incomeCategories" [value]="c">{{ c }}</option>
+          </optgroup>
+          <optgroup [label]="'RECURRING.GROUP_EXPENSE' | translate">
+            <option *ngFor="let c of expenseCategories" [value]="c">{{ c }}</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="rec-row">
+        <div class="rec-field">
+          <label class="rec-label">{{ 'RECURRING.FREQUENCY' | translate }}</label>
+          <select class="rec-input" [(ngModel)]="form.frequency">
+            <option *ngFor="let f of frequencies" [ngValue]="f.value">{{ f.key | translate }}</option>
+          </select>
+        </div>
+        <div class="rec-field">
+          <label class="rec-label">{{ 'RECURRING.START_DATE' | translate }}</label>
+          <input type="date" class="rec-input" [(ngModel)]="form.startDate" />
+        </div>
+      </div>
+
+      <div class="rec-field">
+        <label class="rec-label">{{ 'RECURRING.END_DATE' | translate }} <span class="rec-optional">({{ 'RECURRING.OPTIONAL' | translate }})</span></label>
+        <input type="date" class="rec-input" [(ngModel)]="form.endDate" />
+      </div>
+
+      <div class="rec-actions">
+        <button type="button" class="rec-btn-primary" (click)="save()">
+          <i class="bi bi-check-circle"></i>
+          {{ (editingId ? 'RECURRING.SAVE_CHANGES' : 'RECURRING.CREATE') | translate }}
+        </button>
+        <button *ngIf="editingId" type="button" class="rec-btn-ghost" (click)="cancelEdit()">
+          {{ 'BUTTONS.CANCEL' | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="status" class="rec-status"
+           [class.rec-status--success]="statusKind === 'success'"
+           [class.rec-status--error]="statusKind === 'error'">
+        {{ status }}
+      </div>
+    </section>
+
+    <!-- ===== LIST ===== -->
+    <section class="rec-list">
+      <div *ngIf="rules.length === 0 && !isLoading" class="rec-empty">
+        <i class="bi bi-arrow-repeat"></i>
+        <h3>{{ 'RECURRING.EMPTY_TITLE' | translate }}</h3>
+        <p>{{ 'RECURRING.EMPTY_DESC' | translate }}</p>
+      </div>
+
+      <div *ngFor="let rule of rules" class="rec-item" [class.rec-item--inactive]="!rule.isActive">
+        <div class="rec-item-main">
+          <div class="rec-item-top">
+            <span class="rec-item-name">{{ rule.description }}</span>
+            <span class="rec-item-amount">{{ rule.currency === 'BRL' ? 'R$' : '$' }}{{ rule.amount | number:'1.2-2' }}</span>
+          </div>
+          <div class="rec-item-meta">
+            <span class="rec-chip"><i class="bi bi-arrow-repeat"></i> {{ freqLabel(rule.frequency) | translate }}</span>
+            <span class="rec-chip">{{ rule.category }}</span>
+            <span class="rec-chip" *ngIf="rule.isActive">
+              <i class="bi bi-calendar-event"></i>
+              {{ 'RECURRING.NEXT_DUE' | translate }}: {{ rule.nextDueDate | date:'dd/MM/yyyy' }}
+            </span>
+            <span class="rec-chip rec-chip--paused" *ngIf="!rule.isActive">{{ 'RECURRING.PAUSED' | translate }}</span>
+          </div>
+        </div>
+        <div class="rec-item-actions">
+          <button class="rec-icon-btn" (click)="toggleActive(rule)"
+                  [title]="(rule.isActive ? 'RECURRING.PAUSE' : 'RECURRING.RESUME') | translate">
+            <i class="bi" [ngClass]="rule.isActive ? 'bi-pause-fill' : 'bi-play-fill'"></i>
+          </button>
+          <button class="rec-icon-btn" (click)="startEdit(rule)" [title]="'BUTTONS.EDIT' | translate">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <button class="rec-icon-btn rec-icon-btn--danger" (click)="remove(rule)" [title]="'BUTTONS.DELETE' | translate">
+            <i class="bi bi-trash-fill"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

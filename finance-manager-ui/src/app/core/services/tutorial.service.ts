@@ -50,16 +50,16 @@ export class TutorialService {
         }
       },
       {
-        element: '.stats-section',
+        element: '#tour-stats',
         popover: {
           title: this.translate.instant('TUTORIAL.HEART_TITLE'),
           description: this.translate.instant('TUTORIAL.HEART_FINANZE'),
-          side: 'over',
+          side: 'bottom',
           align: 'center'
         }
       },
       {
-        element: '.form-card',
+        element: '#tour-add',
         popover: {
           title: this.translate.instant('TUTORIAL.ADD_TRANSACTION_TITLE'),
           description: this.translate.instant('TUTORIAL.ADD_TRANSACTION_DESC'),
@@ -68,16 +68,7 @@ export class TutorialService {
         }
       },
       {
-        element: '.settings-dropdown-container',
-        popover: {
-          title: this.translate.instant('TUTORIAL.CURRENCY_TITLE'),
-          description: this.translate.instant('TUTORIAL.CURRENCY_DESC'),
-          side: 'bottom',
-          align: 'end'
-        }
-      },
-      {
-        element: '.history-header',
+        element: '#tour-history',
         popover: {
           title: this.translate.instant('TUTORIAL.FILTERS_TITLE'),
           description: this.translate.instant('TUTORIAL.FILTERS_DESC'),
@@ -86,12 +77,30 @@ export class TutorialService {
         }
       },
       {
-        element: '.chart-container',
+        element: '#tour-chart',
         popover: {
           title: this.translate.instant('TUTORIAL.CHART_TITLE'),
           description: this.translate.instant('TUTORIAL.CHART_DESC'),
-          side: 'left',
+          side: 'top',
           align: 'center'
+        }
+      },
+      {
+        element: 'a[routerLink="/recurring"]',
+        popover: {
+          title: this.translate.instant('TUTORIAL.RECURRING_TITLE'),
+          description: this.translate.instant('TUTORIAL.RECURRING_DESC'),
+          side: 'right',
+          align: 'center'
+        }
+      },
+      {
+        element: '.topbar-user',
+        popover: {
+          title: this.translate.instant('TUTORIAL.CURRENCY_TITLE'),
+          description: this.translate.instant('TUTORIAL.CURRENCY_DESC'),
+          side: 'bottom',
+          align: 'end'
         }
       },
       {
@@ -99,7 +108,7 @@ export class TutorialService {
         popover: {
           title: this.translate.instant('TUTORIAL.NAVIGATION_TITLE'),
           description: this.translate.instant('TUTORIAL.NAVIGATION_DESC'),
-          side: 'bottom',
+          side: 'right',
           align: 'center'
         }
       },
@@ -107,7 +116,7 @@ export class TutorialService {
         popover: {
           title: this.translate.instant('TUTORIAL.FINISH_TITLE'),
           description: this.translate.instant('TUTORIAL.FINISH_DESC'),
-          side: 'left',
+          side: 'over',
           align: 'center'
         }
       }
@@ -144,7 +153,16 @@ private getSavingsSteps(): DriveStep[] {
       }
     },
     {
-      element: '.savings-form',
+      element: '.savings-summary-banner',
+      popover: {
+        title: this.translate.instant('TUTORIAL.SAVINGS.TOTAL_TITLE'),
+        description: this.translate.instant('TUTORIAL.SAVINGS.TOTAL_DESC'),
+        side: 'bottom',
+        align: 'center'
+      }
+    },
+    {
+      element: '.savings-form-card',
       popover: {
         title: this.translate.instant('TUTORIAL.SAVINGS.ADD_GOAL_TITLE'),
         description: this.translate.instant('TUTORIAL.SAVINGS.ADD_GOAL_DESC'),
