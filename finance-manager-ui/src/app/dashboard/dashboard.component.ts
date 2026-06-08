@@ -233,11 +233,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
 
     this.loadTransactions();
-<<<<<<< HEAD
-=======
     this.loadCashflowTrend();
     this.loadDue();
->>>>>>> origin/main
 
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
