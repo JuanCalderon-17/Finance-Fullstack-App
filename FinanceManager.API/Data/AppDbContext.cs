@@ -19,24 +19,23 @@ namespace FinanceManager.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // ============ RELACIONES ============
+            // Relations
 
-            // Debt -> User (AppUserId)
+            // Debt -> User
             modelBuilder.Entity<Debt>()
                 .HasOne(d => d.User)
                 .WithMany()
                 .HasForeignKey(d => d.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Debt -> Installments (1 a muchos)
+            // Debt -> Installments 
             modelBuilder.Entity<Debt>()
                 .HasMany(d => d.InstallmentsList)
                 .WithOne(i => i.Debt)
                 .HasForeignKey(i => i.DebtId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // ============ DECIMALES (PostgreSQL) ============
-
+            // Dcimals "Postgres"
             // Transaction
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Amount)
