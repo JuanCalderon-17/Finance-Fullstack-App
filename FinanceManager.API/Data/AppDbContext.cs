@@ -75,12 +75,12 @@ namespace FinanceManager.API.Data
 
             // ============ INDICES ============
 
-            // Transaction: el patron mas comun es filtrar por usuario + fecha
+            // Transaction
             modelBuilder.Entity<Transaction>()
                 .HasIndex(t => new { t.AppUserId, t.TransactionDate })
                 .HasDatabaseName("IX_Transactions_AppUserId_Date");
 
-            // Transaction: para agrupar por categoria en el grafico de pastel
+            // Transaction
             modelBuilder.Entity<Transaction>()
                 .HasIndex(t => new { t.AppUserId, t.Category })
                 .HasDatabaseName("IX_Transactions_AppUserId_Category");
