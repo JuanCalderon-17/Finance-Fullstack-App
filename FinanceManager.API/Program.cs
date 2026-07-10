@@ -19,33 +19,68 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 //configuration for Render deployment
-builder.Services.AddDbContext<AppDbContext>(options =>
+// Resolve the connection string once at startup, probing each candidate with a
+// real 5-second connection attempt. A stale DATABASE_URL (e.g. an expired free
+// Render Postgres) then falls back to DefaultConnection instead of taking every
+// endpoint down with generic 500s.
+string BuildConnectionStringFromUrl(string dbUrl)
 {
-    var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var databaseUri = new Uri(dbUrl);
+    var userInfo = databaseUri.UserInfo.Split(':', 2);
+    var username = Uri.UnescapeDataString(userInfo[0]);
+    var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
+    var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
 
-    if (!string.IsNullOrEmpty(dbUrl))
+    return $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={username};Password={password};Ssl Mode=Require;Trust Server Certificate=true";
+}
+
+var connectionCandidates = new List<(string Source, string Value)>();
+
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    try
     {
-        Console.WriteLine("--> Usando Base de Datos de Render (Postgres)");
-        var databaseUri = new Uri(dbUrl);
-        // Split on the first ':' only and unescape: passwords may contain ':' or percent-encoded chars
-        var userInfo = databaseUri.UserInfo.Split(':', 2);
-        var username = Uri.UnescapeDataString(userInfo[0]);
-        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
-        var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
-
-        connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={username};Password={password};Ssl Mode=Require;Trust Server Certificate=true";
+        connectionCandidates.Add(("DATABASE_URL", BuildConnectionStringFromUrl(databaseUrl)));
     }
-
-    if (string.IsNullOrWhiteSpace(connectionString))
+    catch (Exception ex)
     {
-        throw new InvalidOperationException(
-            "No database configured. Set the DATABASE_URL environment variable (production) " +
-            "or ConnectionStrings:DefaultConnection via user secrets (local dev).");
+        Console.WriteLine($"--> [WARN] DATABASE_URL is malformed, skipping it: {ex.Message}");
     }
+}
 
-    options.UseNpgsql(connectionString);
-});
+var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+if (!string.IsNullOrWhiteSpace(defaultConnection))
+{
+    connectionCandidates.Add(("ConnectionStrings:DefaultConnection", defaultConnection));
+}
+
+if (connectionCandidates.Count == 0)
+{
+    throw new InvalidOperationException(
+        "No database configured. Set the DATABASE_URL environment variable " +
+        "or ConnectionStrings:DefaultConnection.");
+}
+
+var activeConnectionString = connectionCandidates[0].Value;
+foreach (var (source, candidate) in connectionCandidates)
+{
+    try
+    {
+        var probe = new Npgsql.NpgsqlConnectionStringBuilder(candidate) { Timeout = 5 };
+        using var probeConnection = new Npgsql.NpgsqlConnection(probe.ConnectionString);
+        probeConnection.Open();
+        Console.WriteLine($"--> Base de datos conectada usando {source}");
+        activeConnectionString = candidate;
+        break;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> [WARN] {source} no acepta conexiones: {ex.Message}");
+    }
+}
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(activeConnectionString));
 
 
 
