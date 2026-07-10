@@ -28,10 +28,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     {
         Console.WriteLine("--> Usando Base de Datos de Render (Postgres)");
         var databaseUri = new Uri(dbUrl);
-        var userInfo = databaseUri.UserInfo.Split(':');
+        // Split on the first ':' only and unescape: passwords may contain ':' or percent-encoded chars
+        var userInfo = databaseUri.UserInfo.Split(':', 2);
+        var username = Uri.UnescapeDataString(userInfo[0]);
+        var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
         var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
 
-        connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Require;Trust Server Certificate=true";
+        connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={username};Password={password};Ssl Mode=Require;Trust Server Certificate=true";
+    }
+
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        throw new InvalidOperationException(
+            "No database configured. Set the DATABASE_URL environment variable (production) " +
+            "or ConnectionStrings:DefaultConnection via user secrets (local dev).");
     }
 
     options.UseNpgsql(connectionString);
@@ -45,13 +55,23 @@ builder.Services.AddIdentityCore<AppUser>(opt => { opt.Password.RequireNonAlphan
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager<SignInManager<AppUser>>();
 
+// Fail fast with a clear message instead of booting an app that can't sign/validate tokens.
+// HMAC-SHA512 needs a key of at least 64 bytes.
+var tokenKey = builder.Configuration["TokenKey"];
+if (string.IsNullOrWhiteSpace(tokenKey) || tokenKey.Length < 64)
+{
+    throw new InvalidOperationException(
+        "TokenKey is not configured or is shorter than 64 characters. " +
+        "Set the TokenKey environment variable (production) or user secrets (local dev).");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "finanzasbr.com",
             ValidateAudience = true,
@@ -179,7 +199,9 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"--> Error migraciones: {ex.Message}");
+        // Log the FULL exception (inner exceptions carry the real DB error);
+        // the app still boots so /api/health can report the database as down.
+        Console.WriteLine($"--> Error migraciones: {ex}");
     }
 }
 
@@ -229,7 +251,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.MapGet("/api/health", () => Results.Ok(new { status = "ok", timestamp = DateTime.UtcNow }))
-   .AllowAnonymous();
+// Health check pings the database so a dead DB shows up here as 503
+// instead of hiding behind generic 500s on real endpoints.
+app.MapGet("/api/health", async (AppDbContext db) =>
+{
+    var dbOk = false;
+    try
+    {
+        dbOk = await db.Database.CanConnectAsync();
+    }
+    catch
+    {
+        // CanConnectAsync normally returns false rather than throwing, but be safe
+    }
+
+    return dbOk
+        ? Results.Ok(new { status = "ok", database = "ok", timestamp = DateTime.UtcNow })
+        : Results.Json(new { status = "degraded", database = "unreachable", timestamp = DateTime.UtcNow }, statusCode: 503);
+}).AllowAnonymous();
 
 app.Run();
