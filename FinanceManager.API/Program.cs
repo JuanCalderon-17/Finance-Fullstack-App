@@ -19,23 +19,68 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 //configuration for Render deployment
-builder.Services.AddDbContext<AppDbContext>(options =>
+// Resolve the connection string once at startup, probing each candidate with a
+// real 5-second connection attempt. A stale DATABASE_URL (e.g. an expired free
+// Render Postgres) then falls back to DefaultConnection instead of taking every
+// endpoint down with generic 500s.
+string BuildConnectionStringFromUrl(string dbUrl)
 {
-    var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var databaseUri = new Uri(dbUrl);
+    var userInfo = databaseUri.UserInfo.Split(':', 2);
+    var username = Uri.UnescapeDataString(userInfo[0]);
+    var password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : "";
+    var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
 
-    if (!string.IsNullOrEmpty(dbUrl))
+    return $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={username};Password={password};Ssl Mode=Require;Trust Server Certificate=true";
+}
+
+var connectionCandidates = new List<(string Source, string Value)>();
+
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    try
     {
-        Console.WriteLine("--> Usando Base de Datos de Render (Postgres)");
-        var databaseUri = new Uri(dbUrl);
-        var userInfo = databaseUri.UserInfo.Split(':');
-        var port = databaseUri.Port > 0 ? databaseUri.Port : 5432;
-
-        connectionString = $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};Ssl Mode=Require;Trust Server Certificate=true";
+        connectionCandidates.Add(("DATABASE_URL", BuildConnectionStringFromUrl(databaseUrl)));
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> [WARN] DATABASE_URL is malformed, skipping it: {ex.Message}");
+    }
+}
 
-    options.UseNpgsql(connectionString);
-});
+var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+if (!string.IsNullOrWhiteSpace(defaultConnection))
+{
+    connectionCandidates.Add(("ConnectionStrings:DefaultConnection", defaultConnection));
+}
+
+if (connectionCandidates.Count == 0)
+{
+    throw new InvalidOperationException(
+        "No database configured. Set the DATABASE_URL environment variable " +
+        "or ConnectionStrings:DefaultConnection.");
+}
+
+var activeConnectionString = connectionCandidates[0].Value;
+foreach (var (source, candidate) in connectionCandidates)
+{
+    try
+    {
+        var probe = new Npgsql.NpgsqlConnectionStringBuilder(candidate) { Timeout = 5 };
+        using var probeConnection = new Npgsql.NpgsqlConnection(probe.ConnectionString);
+        probeConnection.Open();
+        Console.WriteLine($"--> Base de datos conectada usando {source}");
+        activeConnectionString = candidate;
+        break;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"--> [WARN] {source} no acepta conexiones: {ex.Message}");
+    }
+}
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(activeConnectionString));
 
 
 
@@ -45,13 +90,23 @@ builder.Services.AddIdentityCore<AppUser>(opt => { opt.Password.RequireNonAlphan
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager<SignInManager<AppUser>>();
 
+// Fail fast with a clear message instead of booting an app that can't sign/validate tokens.
+// HMAC-SHA512 needs a key of at least 64 bytes.
+var tokenKey = builder.Configuration["TokenKey"];
+if (string.IsNullOrWhiteSpace(tokenKey) || tokenKey.Length < 64)
+{
+    throw new InvalidOperationException(
+        "TokenKey is not configured or is shorter than 64 characters. " +
+        "Set the TokenKey environment variable (production) or user secrets (local dev).");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "finanzasbr.com",
             ValidateAudience = true,
@@ -179,7 +234,9 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"--> Error migraciones: {ex.Message}");
+        // Log the FULL exception (inner exceptions carry the real DB error);
+        // the app still boots so /api/health can report the database as down.
+        Console.WriteLine($"--> Error migraciones: {ex}");
     }
 }
 
@@ -229,7 +286,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.MapGet("/api/health", () => Results.Ok(new { status = "ok", timestamp = DateTime.UtcNow }))
-   .AllowAnonymous();
+// Health check pings the database so a dead DB shows up here as 503
+// instead of hiding behind generic 500s on real endpoints.
+app.MapGet("/api/health", async (AppDbContext db) =>
+{
+    var dbOk = false;
+    try
+    {
+        dbOk = await db.Database.CanConnectAsync();
+    }
+    catch
+    {
+        // CanConnectAsync normally returns false rather than throwing, but be safe
+    }
+
+    return dbOk
+        ? Results.Ok(new { status = "ok", database = "ok", timestamp = DateTime.UtcNow })
+        : Results.Json(new { status = "degraded", database = "unreachable", timestamp = DateTime.UtcNow }, statusCode: 503);
+}).AllowAnonymous();
 
 app.Run();
