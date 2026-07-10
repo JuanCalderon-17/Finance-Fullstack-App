@@ -40,9 +40,9 @@ ng generate component <name>   # Scaffold a new component
 ### Backend
 
 - **Framework**: ASP.NET Core 9.0 with ASP.NET Identity
-- **Database**: PostgreSQL via EF Core (Npgsql). In production (Render), the `DATABASE_URL` environment variable is parsed at startup in `Program.cs` to build the connection string. Locally, it uses the `DefaultConnection` string from `appsettings.json` pointing to Supabase.
-- **Auth**: JWT Bearer tokens. The secret key is `TokenKey` in `appsettings.json`. Tokens are issued by `TokenService`.
-- **Email**: SendGrid + MailKit for password reset and notifications.
+- **Database**: PostgreSQL via EF Core (Npgsql). In production (Render), the `DATABASE_URL` environment variable is parsed at startup in `Program.cs` to build the connection string. Locally, `ConnectionStrings:DefaultConnection` comes from user secrets (the `UserSecretsId` in the csproj) pointing to Supabase. **Never commit connection strings to `appsettings.json`.**
+- **Auth**: JWT Bearer tokens. The signing key is the `TokenKey` config value — set via the `TokenKey` environment variable in production and user secrets locally (never committed). Startup fails fast if it's missing or under 64 chars. Tokens are issued by `TokenService`.
+- **Email**: Resend HTTP API (`EmailService`), configured via `RESEND_API_KEY`, `EMAIL_FROM`, and `EMAIL_FROM_NAME` environment variables (or the `Resend:*` config section). Used for email verification and password reset.
 - **Currency**: `CurrencyService` (registered with `AddHttpClient`) fetches live exchange rates.
 
 **Key files**:
