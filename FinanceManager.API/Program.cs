@@ -63,6 +63,7 @@ if (connectionCandidates.Count == 0)
 }
 
 var activeConnectionString = connectionCandidates[0].Value;
+var activeConnectionSource = connectionCandidates[0].Source;
 foreach (var (source, candidate) in connectionCandidates)
 {
     try
@@ -72,6 +73,7 @@ foreach (var (source, candidate) in connectionCandidates)
         probeConnection.Open();
         Console.WriteLine($"--> Base de datos conectada usando {source}");
         activeConnectionString = candidate;
+        activeConnectionSource = source;
         break;
     }
     catch (Exception ex)
@@ -286,23 +288,40 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Health check pings the database so a dead DB shows up here as 503
-// instead of hiding behind generic 500s on real endpoints.
-app.MapGet("/api/health", async (AppDbContext db) =>
+// Health check opens a real DB connection so a dead DB shows up here as 503
+// with the actual failure reason (exception type + message, never credentials)
+// instead of hiding behind generic 500s on real endpoints. Also reports which
+// connection source (DATABASE_URL vs DefaultConnection) won the startup probe.
+app.MapGet("/api/health", async () =>
 {
-    var dbOk = false;
+    string databaseStatus;
+    string? databaseError = null;
     try
     {
-        dbOk = await db.Database.CanConnectAsync();
+        var probe = new Npgsql.NpgsqlConnectionStringBuilder(activeConnectionString) { Timeout = 5 };
+        await using var probeConnection = new Npgsql.NpgsqlConnection(probe.ConnectionString);
+        await probeConnection.OpenAsync();
+        databaseStatus = "ok";
     }
-    catch
+    catch (Exception ex)
     {
-        // CanConnectAsync normally returns false rather than throwing, but be safe
+        databaseStatus = "unreachable";
+        databaseError = $"{ex.GetType().Name}: {ex.Message}";
+        Console.WriteLine($"--> [HEALTH] DB check failed via {activeConnectionSource}: {databaseError}");
     }
 
-    return dbOk
-        ? Results.Ok(new { status = "ok", database = "ok", timestamp = DateTime.UtcNow })
-        : Results.Json(new { status = "degraded", database = "unreachable", timestamp = DateTime.UtcNow }, statusCode: 503);
+    var payload = new
+    {
+        status = databaseStatus == "ok" ? "ok" : "degraded",
+        database = databaseStatus,
+        source = activeConnectionSource,
+        error = databaseError,
+        timestamp = DateTime.UtcNow
+    };
+
+    return databaseStatus == "ok"
+        ? Results.Ok(payload)
+        : Results.Json(payload, statusCode: 503);
 }).AllowAnonymous();
 
 app.Run();
