@@ -1,4 +1,6 @@
-﻿namespace FinanceManager.API.DTOs
+﻿using Org.BouncyCastle.Asn1.Mozilla;
+
+namespace FinanceManager.API.DTOs
 {
     public class InstallmentDto
     {
