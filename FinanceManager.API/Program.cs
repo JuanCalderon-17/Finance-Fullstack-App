@@ -34,6 +34,18 @@ string BuildConnectionStringFromUrl(string dbUrl)
     return $"Host={databaseUri.Host};Port={port};Database={databaseUri.LocalPath.TrimStart('/')};Username={username};Password={password};Ssl Mode=Require;Trust Server Certificate=true";
 }
 
+// Npgsql 9 negotiates SCRAM channel binding by default (Channel Binding=Prefer).
+// Supabase's Supavisor pooler rejects that handshake, which surfaces as a bogus
+// "28P01: password authentication failed" even when the password is correct — the
+// failure happens at the pooler before Postgres ever sees it. Forcing
+// Channel Binding=Disable uses plain SCRAM-SHA-256, still secure over the required
+// SSL channel. Include Error Detail surfaces the real reason if anything else fails.
+string WithReliableAuthSettings(string cs)
+{
+    var trimmed = cs.TrimEnd().TrimEnd(';');
+    return trimmed + ";Channel Binding=Disable;Include Error Detail=true";
+}
+
 var connectionCandidates = new List<(string Source, string Value)>();
 
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
@@ -41,7 +53,7 @@ if (!string.IsNullOrEmpty(databaseUrl))
 {
     try
     {
-        connectionCandidates.Add(("DATABASE_URL", BuildConnectionStringFromUrl(databaseUrl)));
+        connectionCandidates.Add(("DATABASE_URL", WithReliableAuthSettings(BuildConnectionStringFromUrl(databaseUrl))));
     }
     catch (Exception ex)
     {
@@ -52,7 +64,7 @@ if (!string.IsNullOrEmpty(databaseUrl))
 var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 if (!string.IsNullOrWhiteSpace(defaultConnection))
 {
-    connectionCandidates.Add(("ConnectionStrings:DefaultConnection", defaultConnection));
+    connectionCandidates.Add(("ConnectionStrings:DefaultConnection", WithReliableAuthSettings(defaultConnection)));
 }
 
 if (connectionCandidates.Count == 0)
