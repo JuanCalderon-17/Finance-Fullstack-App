@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet, Router, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { ThemeService } from './services/theme.service';
-import { TranslateService, TranslateModule } from '@ngx-translate/core'; 
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from './core/services/language.service';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
 
@@ -17,18 +18,10 @@ export class AppComponent implements OnInit {
   title = 'finance-manager-ui';
   showMenu: boolean = true;
 
-  constructor(private themeService: ThemeService, private translate: TranslateService, private router: Router) {
-    // Configuración inicial del idioma
-    this.translate.addLangs(['en', 'es', 'pt']); // Opcional: define qué idiomas tienes
-    this.translate.setDefaultLang('en');
-
-    // Intentar recuperar el idioma guardado, o usar el del navegador, o default 'en'
-    const savedLang = localStorage.getItem('language');
-    const browserLang = this.translate.getBrowserLang();
-    const langToUse = savedLang || (browserLang?.match(/en|es|pt/) ? browserLang : 'en');
-    
-    this.translate.use(langToUse); // Usar el idioma decidido
-    
+  // LanguageService se auto-inicializa al construirse (lee 'app-language' del
+  // localStorage); inyectarlo aquí garantiza que corre en TODAS las rutas,
+  // incluidas las de auth que no lo inyectan por su cuenta.
+  constructor(private themeService: ThemeService, private languageService: LanguageService, private router: Router) {
     // Lógica del menú
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)

@@ -8,18 +8,21 @@ import { TranslateService } from '@ngx-translate/core';
 export class LanguageService{ 
     constructor(private translate: TranslateService) {
         this.translate.addLangs(['en', 'es', 'pt']);
+        this.translate.setDefaultLang('es');
 
-        //conseguimos el lenguage deseado desde el localstorage del navegador
-        const savedLang = localStorage.getItem('app-language') || 'es';
-        this.setLanguage(savedLang);
+        // idioma guardado > idioma del navegador (si es soportado) > español
+        const savedLang = localStorage.getItem('app-language');
+        const browserLang = this.translate.getBrowserLang();
+        const lang = savedLang
+            || (browserLang && ['en', 'es', 'pt'].includes(browserLang) ? browserLang : 'es');
+        this.setLanguage(lang);
     }
 
     setLanguage(lang: string): void {
         this.translate.use(lang);
-        
+
         //guardar en localstorage
         localStorage.setItem('app-language', lang);
-        console.log(`🌐 Idioma cambiado a: ${lang}`);
     }
 
     getCurrentLanguage(): string {
