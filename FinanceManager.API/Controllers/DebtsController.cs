@@ -269,13 +269,19 @@ namespace FinanceManager.API.Controllers
             for (int i = 0; i < totalCount; i++)
             {
                 int number = startNumber + i;
+                // Installment #k is always due k months after the schedule anchor,
+                // so partial regeneration keeps the original due dates. Midnight
+                // dates get anchored at noon UTC so UTC-n browsers don't render
+                // them as the previous day.
+                var due = startDate.AddMonths(number);
+                if (due.TimeOfDay == TimeSpan.Zero)
+                    due = due.AddHours(12);
+
                 installments.Add(new Installment
                 {
                     InstallmentNumber = number,
-                    // Installment #k is always due k months after the schedule anchor,
-                    // so partial regeneration keeps the original due dates.
                     Amount = Math.Round(monthlyPayment, 2),
-                    DueDate = startDate.AddMonths(number),
+                    DueDate = due,
                     IsPaid = false
                 });
             }

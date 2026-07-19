@@ -159,10 +159,16 @@ namespace FinanceManager.API.Controllers
 
         // Npgsql exige Kind=Utc para columnas 'timestamp with time zone';
         // el body llega como "YYYY-MM-DD" y se deserializa con Kind=Unspecified.
-        private static DateTime AsUtc(DateTime date) =>
-            date.Kind == DateTimeKind.Unspecified
+        private static DateTime AsUtc(DateTime date)
+        {
+            var utc = date.Kind == DateTimeKind.Unspecified
                 ? DateTime.SpecifyKind(date, DateTimeKind.Utc)
                 : date.ToUniversalTime();
+
+            // Una fecha sin hora llega como medianoche; anclarla a mediodía UTC
+            // evita que los navegadores en UTC-n la muestren como el día anterior.
+            return utc.TimeOfDay == TimeSpan.Zero ? utc.AddHours(12) : utc;
+        }
 
         private bool TransactionExists(int id)
         {
