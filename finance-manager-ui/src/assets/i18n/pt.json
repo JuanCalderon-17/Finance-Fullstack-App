@@ -159,6 +159,7 @@
     "NEXT": "Próximo →",
     "PREVIOUS": "← Anterior",
     "DONE": "Entendi!",
+    "PROGRESS": "{{current}} de {{total}}",
     "WELCOME_TITLE": "👋 Bem-vindo ao Finanzas!",
     "WELCOME_DESC": "Vamos mostrar como usar o app em segundos. Você pode pular o tutorial a qualquer momento.",
     "HEART_TITLE": "Receitas e Despesas Mensais",
@@ -307,7 +308,9 @@
     "ORIGINAL": "Original",
     "ADJUSTED": "Ajustado",
     "PAID_IN_FULL": "Quitada",
-    "OVERPAID_BY": "Pagou a mais"
+    "OVERPAID_BY": "Pagou a mais",
+    "TOTAL_WITH_INTEREST": "Total a pagar (com juros)",
+    "FLEXIBLE_HINT": "Você pode editar o valor de cada parcela pendente se pagar quantias diferentes (por exemplo $8, $8, $8 e $16); se não mexer, o sistema calcula automaticamente."
   },
   "BUTTONS": {
     "ADD": "Adicionar",

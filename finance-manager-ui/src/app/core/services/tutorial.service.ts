@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { driver, DriveStep } from 'driver.js';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -29,6 +29,7 @@ export class TutorialService {
       nextBtnText: this.translate.instant('TUTORIAL.NEXT'),
       prevBtnText: this.translate.instant('TUTORIAL.PREVIOUS'),
       doneBtnText: this.translate.instant('TUTORIAL.DONE'),
+    progressText: this.translate.instant('TUTORIAL.PROGRESS'),
       onDestroyed: () => {
         this.markTutorialAsCompleted();
       },
@@ -132,6 +133,7 @@ startSavingsTutorial(): void {
     nextBtnText: this.translate.instant('TUTORIAL.NEXT'),
     prevBtnText: this.translate.instant('TUTORIAL.PREVIOUS'),
     doneBtnText: this.translate.instant('TUTORIAL.DONE'),
+    progressText: this.translate.instant('TUTORIAL.PROGRESS'),
     onDestroyed: () => {
       localStorage.setItem('tutorial-savings-completed', 'true');
     },
@@ -199,6 +201,7 @@ startDebtsTutorial(): void {
     nextBtnText: this.translate.instant('TUTORIAL.NEXT'),
     prevBtnText: this.translate.instant('TUTORIAL.PREVIOUS'),
     doneBtnText: this.translate.instant('TUTORIAL.DONE'),
+    progressText: this.translate.instant('TUTORIAL.PROGRESS'),
     onDestroyed: () => {
       localStorage.setItem('tutorial-debts-completed', 'true');
     },

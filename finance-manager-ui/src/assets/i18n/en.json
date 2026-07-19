@@ -159,6 +159,7 @@
     "NEXT": "Next →",
     "PREVIOUS": "← Previous",
     "DONE": "Got it!",
+    "PROGRESS": "{{current}} of {{total}}",
     "WELCOME_TITLE": "👋 Welcome to Finanzas!",
     "WELCOME_DESC": "We'll show you how to use the app in seconds. You can skip the tutorial at any time.",
 
@@ -315,7 +316,9 @@
     "ORIGINAL": "Original",
     "ADJUSTED": "Adjusted",
     "PAID_IN_FULL": "Paid in full",
-    "OVERPAID_BY": "Overpaid by"
+    "OVERPAID_BY": "Overpaid by",
+    "TOTAL_WITH_INTEREST": "Total to pay (with interest)",
+    "FLEXIBLE_HINT": "You can edit the amount of any pending installment if you pay different amounts (for example $8, $8, $8 and $16); if you leave them alone, the system calculates them automatically."
   },
   "BUTTONS": {
     "ADD": "Add",

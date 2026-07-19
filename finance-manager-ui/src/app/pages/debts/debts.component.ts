@@ -48,6 +48,12 @@ export class DebtsComponent implements OnInit, OnDestroy {
       this.currencySymbol = currency.symbol;
       this.exchangeRate = currency.rate;
       this.currentDebt.currency = currency.code;
+      // Re-derive the editable installment inputs in the new display currency
+      for (const d of this.debts) {
+        for (const i of d.installmentsList || []) {
+          i.displayAmount = this.roundMoney(this.convertNumber(i.amount, d.currency));
+        }
+      }
     });
     this.loadData();
 
@@ -100,29 +106,52 @@ export class DebtsComponent implements OnInit, OnDestroy {
       .reduce((s: number, i: any) => s + i.amount, 0);
     d.paidAmount = paidAmount;
 
-    // Remaining = original debt minus what was actually paid (clamped at 0)
-    const rawRemaining = d.originalBalance - paidAmount;
+    // Total to pay = sum of ALL installments. This includes interest and any
+    // manually edited amounts, so it is the real target — not originalBalance,
+    // which is principal only and understates interest-bearing debts.
+    const totalInstallmentAmount = allInstallments.reduce((s: number, i: any) => s + i.amount, 0);
+    const totalToPay = allInstallments.length > 0 ? totalInstallmentAmount : d.originalBalance;
+    d.totalToPay = totalToPay;
+
+    const rawRemaining = totalToPay - paidAmount;
     d.remainingAmount = Math.max(0, rawRemaining);
 
     // Overpayment indicator
     d.isOverpaid = rawRemaining < -0.01;
     d.overpaidAmount = d.isOverpaid ? Math.abs(rawRemaining) : 0;
 
-    // Paid-in-full = exactly settled or overpaid
-    d.isPaidInFull = rawRemaining <= 0.01;
+    // Paid-in-full = every installment settled (or the money target reached)
+    const allPaid = allInstallments.length > 0 && allInstallments.every((i: any) => i.isPaid);
+    d.isPaidInFull = allPaid || rawRemaining <= 0.01;
 
-    // Progress against the original debt (not the editable schedule)
-    d.progress = d.originalBalance > 0
-      ? Math.min(100, (paidAmount / d.originalBalance) * 100)
+    d.progress = totalToPay > 0
+      ? Math.min(100, (paidAmount / totalToPay) * 100)
       : 0;
 
-    // Has the installment-sum drifted from the originalBalance?
-    // (Triggers the "Original $X · Adjusted $Y" display in the template.)
-    const totalInstallmentAmount = allInstallments.reduce((s: number, i: any) => s + i.amount, 0);
-    const current = d.currentBalance ?? totalInstallmentAmount;
-    d.hasDelta = Math.abs(current - d.originalBalance) > 0.01;
+    // "Adjusted" only when the schedule drifted from what the debt's own terms
+    // predict (manual edits) — interest alone is expected, not an adjustment.
+    d.hasDelta = allInstallments.length > 0 &&
+      Math.abs(totalInstallmentAmount - this.expectedTotal(d)) > 0.05;
+
+    // Pending installment inputs are edited in the active display currency
+    for (const i of allInstallments) {
+      i.displayAmount = this.roundMoney(this.convertNumber(i.amount, d.currency));
+    }
 
     return d;
+  }
+
+  // Mirrors the backend amortization in DebtsController.GenerateInstallments
+  private expectedTotal(d: any): number {
+    if (!(d.interestRate > 0) || !(d.installments > 0)) return d.originalBalance;
+    const r = d.interestRate / 12 / 100;
+    const factor = Math.pow(1 + r, d.installments);
+    const monthly = d.originalBalance * (r * factor) / (factor - 1);
+    return this.roundMoney(monthly * d.installments);
+  }
+
+  private roundMoney(value: number): number {
+    return Math.round(value * 100) / 100;
   }
 
   calculateTotal() {
@@ -211,12 +240,13 @@ export class DebtsComponent implements OnInit, OnDestroy {
     });
   }
 
-  //update amount of installment 
+  //update amount of installment
+  // newAmount arrives in the active display currency; storage is always USD
   updateInstallmentAmount(debtId: number, installmentId: number, newAmount: number) {
     // Validaciones
     if (newAmount <= 0) {
       alert('El monto debe ser mayor a 0');
-      this.loadData(); 
+      this.loadData();
       return;
     }
 
@@ -226,8 +256,14 @@ export class DebtsComponent implements OnInit, OnDestroy {
       return;
     }
 
+    let amountUsd = newAmount;
+    if (this.currencyCode === 'BRL') {
+      amountUsd = newAmount / this.exchangeRate;
+    }
+    amountUsd = this.roundMoney(amountUsd);
+
     //update in the backend
-    this.debtsService.updateInstallment(debtId, installmentId, { amount: newAmount }).subscribe({
+    this.debtsService.updateInstallment(debtId, installmentId, { amount: amountUsd }).subscribe({
       next: () => {
         this.loadData();
       },

@@ -201,6 +201,18 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   max-width: 400px;
   z-index: 10000003 !important;
+  // driver.js fuerza Helvetica/sans-serif; usamos la fuente de la app
+  font-family: inherit;
+
+  // La X de cerrar vive FUERA del footer: estilo propio para el tema oscuro
+  > .driver-popover-close-btn {
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: none;
+
+    &:hover {
+      color: #fff;
+    }
+  }
 
   .driver-popover-title {
     font-size: 1.25rem;
@@ -229,6 +241,10 @@ body {
       font-size: 0.9rem;
       transition: all 0.2s;
       cursor: pointer;
+      // driver.js pone text-shadow blanca 1px (para botones claros);
+      // con texto blanco crea un halo que se ve borroso
+      text-shadow: none;
+      font-family: inherit;
 
       &:hover {
         background: linear-gradient(135deg, #0b5ed7 0%, #084298 100%);
