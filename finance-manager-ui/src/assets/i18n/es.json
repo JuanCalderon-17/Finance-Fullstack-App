@@ -189,6 +189,7 @@
     "NEXT": "Siguiente →",
     "PREVIOUS": "← Anterior",
     "DONE": "¡Entendido!",
+    "PROGRESS": "{{current}} de {{total}}",
     "WELCOME_TITLE": "👋 ¡Bienvenido a Finanzas!",
     "WELCOME_DESC": "Te mostraremos cómo usar la app en segundos. Puedes saltar el tutorial en cualquier momento.",
     "HEART_TITLE": "Ingresos y Gastos Mensuales",

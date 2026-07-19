@@ -159,6 +159,7 @@
     "NEXT": "Next →",
     "PREVIOUS": "← Previous",
     "DONE": "Got it!",
+    "PROGRESS": "{{current}} of {{total}}",
     "WELCOME_TITLE": "👋 Welcome to Finanzas!",
     "WELCOME_DESC": "We'll show you how to use the app in seconds. You can skip the tutorial at any time.",
 
