@@ -22,8 +22,17 @@ namespace FinanceManager.API.Controllers
 
         private string? UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        // Npgsql 'timestamp with time zone' requires UTC DateTimes.
-        private static DateTime Utc(DateTime d) => DateTime.SpecifyKind(d, DateTimeKind.Utc);
+        // Npgsql 'timestamp with time zone' requires UTC DateTimes. Date-only values
+        // arrive as midnight; anchoring them at noon UTC keeps the calendar day
+        // stable in every client timezone (a midnight date renders as the previous
+        // day for UTC-n browsers).
+        private static DateTime Utc(DateTime d)
+        {
+            var utc = d.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(d, DateTimeKind.Utc)
+                : d.ToUniversalTime();
+            return utc.TimeOfDay == TimeSpan.Zero ? utc.AddHours(12) : utc;
+        }
 
         // GET: api/recurring
         [HttpGet]
@@ -83,6 +92,11 @@ namespace FinanceManager.API.Controllers
             // If the schedule moved and NextDueDate falls before the new start, realign it.
             if (rule.NextDueDate < rule.StartDate) rule.NextDueDate = rule.StartDate;
 
+            // If the new EndDate is before the next occurrence, the rule is finished:
+            // deactivate it now (otherwise it stays active but never shows as due).
+            if (rule.EndDate.HasValue && rule.NextDueDate > rule.EndDate.Value)
+                rule.IsActive = false;
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -105,9 +119,12 @@ namespace FinanceManager.API.Controllers
         public async Task<ActionResult<IEnumerable<DueOccurrenceDto>>> GetDue()
         {
             var today = DateTime.UtcNow.Date;
+            // Inclusive end-of-day cutoff: due dates are stored at noon UTC, so
+            // comparing against midnight would miss the ones due today.
+            var cutoff = today.AddDays(1);
 
             var rules = await _context.RecurringTransactions
-                .Where(r => r.AppUserId == UserId && r.IsActive && r.NextDueDate <= today)
+                .Where(r => r.AppUserId == UserId && r.IsActive && r.NextDueDate < cutoff)
                 .ToListAsync();
 
             var due = rules
@@ -143,7 +160,9 @@ namespace FinanceManager.API.Controllers
                 Amount = rule.Amount,
                 Category = rule.Category,
                 Currency = rule.Currency,
-                TransactionDate = rule.NextDueDate,
+                // Utc() re-anchors legacy midnight due dates at noon so the posted
+                // transaction lands on the right calendar day in every timezone.
+                TransactionDate = Utc(rule.NextDueDate),
                 AppUserId = userId!
             };
             _context.Transactions.Add(transaction);

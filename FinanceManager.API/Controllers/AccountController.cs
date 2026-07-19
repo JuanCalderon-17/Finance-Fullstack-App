@@ -127,9 +127,9 @@ namespace FinanceManager.API.Controllers
             if (string.IsNullOrEmpty(request.Email)) return BadRequest("El email es requerido.");
 
             var user = await _userManager.FindByEmailAsync(request.Email);
-            // Por seguridad, a veces es mejor retornar Ok() aunque no exista, 
-            // pero para debug dejaremos el BadRequest si no lo encuentra.
-            if (user == null) return BadRequest("Usuario no encontrado.");
+            // Respuesta genérica: no revelar qué emails tienen cuenta registrada
+            if (user == null)
+                return Ok(new { message = "Si la cuenta existe, te enviamos un enlace. Revisa tu correo." });
 
             // Generar token random
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
@@ -303,8 +303,8 @@ namespace FinanceManager.API.Controllers
                     return BadRequest(new { error = "Usuario no encontrado." });
                 }
 
-                // verify token
-                if (user.PasswordResetToken != request.Token)
+                // verify token — la BD guarda el hash SHA-256, el enlace lleva el token en claro
+                if (user.PasswordResetToken != HashToken(request.Token))
                 {
                     return BadRequest(new { error = "Token inválido." });
                 }
