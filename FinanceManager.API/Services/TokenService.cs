@@ -44,6 +44,10 @@ namespace FinanceManager.API.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
+                // Program.cs validates issuer+audience; without these claims every
+                // token gets rejected with 401 on [Authorize] endpoints.
+                Issuer = _issuer,
+                Audience = _audience,
                 SigningCredentials = creds
             };
 
