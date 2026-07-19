@@ -79,10 +79,10 @@ namespace FinanceManager.API.Controllers
                 return Forbid();
             }
 
-            // Usamos el nombre de variable 
+            // Usamos el nombre de variable
             originalTransaction.Description = transaction.Description;
             originalTransaction.Amount = transaction.Amount;
-            originalTransaction.TransactionDate = transaction.TransactionDate;
+            originalTransaction.TransactionDate = AsUtc(transaction.TransactionDate);
             originalTransaction.Category = transaction.Category;
 
             try
@@ -104,49 +104,32 @@ namespace FinanceManager.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Transactions (CON CÓDIGO DE DIAGNÓSTICO)
+        // POST: api/Transactions
         [HttpPost]
         public async Task<ActionResult<Transaction>> PostTransaction(CreateTransactionDto transactionDto)
         {
-
             // 1. Obtenemos el ID del usuario que está haciendo la petición.
-            var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
-
-            // Imprimimos en la ventana de Salida (Debug) para ver qué ID estamos obteniendo.
-            System.Diagnostics.Debug.WriteLine($"--- ID de usuario extraído del token: {userId}");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("Error de diagnóstico: No se pudo encontrar el ID de usuario en el token.");
+                return BadRequest("No se pudo encontrar el ID de usuario en el token.");
             }
 
-            // 2. ¡PASO CRUCIAL! Verificamos si este usuario REALMENTE existe en la base de datos AHORA MISMO.
-            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
-
-            System.Diagnostics.Debug.WriteLine($"--- ¿El usuario con ID {userId} existe en la BD?: {userExists}");
-
-            if (!userExists)
-            {
-                // Si el usuario no existe, devolvemos un error claro en lugar de dejar que la BD falle.
-                return BadRequest($"Error de diagnóstico: El usuario con ID '{userId}' no fue encontrado en la base de datos.");
-            }
-
-            // --- FIN DEL CÓDIGO DE DIAGNÓSTICO ---
-
-            // 3. Creamos un nuevo objeto Transaction
+            // 2. Creamos un nuevo objeto Transaction respetando la fecha elegida por el usuario.
             var newTransaction = new Transaction
             {
                 Description = transactionDto.Description,
                 Amount = transactionDto.Amount,
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = transactionDto.TransactionDate == default
+                    ? DateTime.UtcNow
+                    : AsUtc(transactionDto.TransactionDate),
                 Category = transactionDto.Category,
-                Currency = transactionDto.Currency ?? "USD", 
+                Currency = transactionDto.Currency ?? "USD",
                 AppUserId = userId
-
-                
             };
 
-            // 4. Guardamos la nueva transacción en la base de datos.
+            // 3. Guardamos la nueva transacción en la base de datos.
             _context.Transactions.Add(newTransaction);
             await _context.SaveChangesAsync();
 
@@ -173,6 +156,13 @@ namespace FinanceManager.API.Controllers
 
             return NoContent();
         }
+
+        // Npgsql exige Kind=Utc para columnas 'timestamp with time zone';
+        // el body llega como "YYYY-MM-DD" y se deserializa con Kind=Unspecified.
+        private static DateTime AsUtc(DateTime date) =>
+            date.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(date, DateTimeKind.Utc)
+                : date.ToUniversalTime();
 
         private bool TransactionExists(int id)
         {

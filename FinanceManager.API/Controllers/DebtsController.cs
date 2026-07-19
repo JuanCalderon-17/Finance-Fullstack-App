@@ -108,14 +108,32 @@ namespace FinanceManager.API.Controllers
 
             if (financialParamsChanged)
             {
+                // Preserve the original payment schedule: installment #k was due at anchor+k months,
+                // so regenerated installments keep their dates instead of restarting from "today".
+                var firstInstallment = debt.InstallmentsList
+                    .OrderBy(i => i.InstallmentNumber)
+                    .FirstOrDefault();
+                DateTime? scheduleAnchor = firstInstallment != null
+                    ? firstInstallment.DueDate.AddMonths(-firstInstallment.InstallmentNumber)
+                    : (DateTime?)null;
+
+                decimal paidTotal = debt.InstallmentsList.Where(i => i.IsPaid).Sum(i => i.Amount);
+
                 // Remove only unpaid installments — paid ones are historical records
                 var unpaid = debt.InstallmentsList.Where(i => !i.IsPaid).ToList();
                 _context.Installments.RemoveRange(unpaid);
+                foreach (var inst in unpaid)
+                    debt.InstallmentsList.Remove(inst);
 
                 int remainingCount = dto.Installments - paidCount;
                 if (remainingCount > 0)
                 {
-                    var newInstallments = GenerateInstallments(debt, startNumber: paidCount + 1, count: remainingCount);
+                    var newInstallments = GenerateInstallments(
+                        debt,
+                        startNumber: paidCount + 1,
+                        count: remainingCount,
+                        anchorDate: scheduleAnchor,
+                        alreadyPaidTotal: paidTotal);
                     foreach (var inst in newInstallments)
                         debt.InstallmentsList.Add(inst);
                 }
@@ -221,7 +239,12 @@ namespace FinanceManager.API.Controllers
             };
         }
 
-        private List<Installment> GenerateInstallments(Debt debt, int startNumber = 1, int? count = null)
+        private List<Installment> GenerateInstallments(
+            Debt debt,
+            int startNumber = 1,
+            int? count = null,
+            DateTime? anchorDate = null,
+            decimal alreadyPaidTotal = 0)
         {
             var installments = new List<Installment>();
             int totalCount = count ?? debt.Installments;
@@ -241,25 +264,31 @@ namespace FinanceManager.API.Controllers
                 monthlyPayment = debt.Balance / debt.Installments;
             }
 
-            var startDate = DateTime.UtcNow.Date;
+            var startDate = anchorDate ?? DateTime.UtcNow.Date;
 
             for (int i = 0; i < totalCount; i++)
             {
+                int number = startNumber + i;
                 installments.Add(new Installment
                 {
-                    InstallmentNumber = startNumber + i,
+                    InstallmentNumber = number,
+                    // Installment #k is always due k months after the schedule anchor,
+                    // so partial regeneration keeps the original due dates.
                     Amount = Math.Round(monthlyPayment, 2),
-                    DueDate = startDate.AddMonths(i + 1),
+                    DueDate = startDate.AddMonths(number),
                     IsPaid = false
                 });
             }
 
-            // Rounding adjustment only on full series (not partial regeneration after paid installments)
-            if (startNumber == 1)
+            // The whole series (already-paid + generated) must sum to the expected total;
+            // the last generated installment absorbs rounding drift and any difference
+            // left by manually edited paid amounts (e.g. the user paid 8/8/8 → last = 16).
+            var expectedTotal = Math.Round(monthlyPayment * debt.Installments, 2);
+            var diff = expectedTotal - alreadyPaidTotal - installments.Sum(i => i.Amount);
+            if (diff != 0)
             {
-                var roundingDiff = Math.Round(monthlyPayment * debt.Installments, 2) - installments.Sum(i => i.Amount);
-                if (roundingDiff != 0)
-                    installments[^1].Amount = Math.Round(installments[^1].Amount + roundingDiff, 2);
+                var adjusted = Math.Round(installments[^1].Amount + diff, 2);
+                installments[^1].Amount = Math.Max(0, adjusted);
             }
 
             return installments;

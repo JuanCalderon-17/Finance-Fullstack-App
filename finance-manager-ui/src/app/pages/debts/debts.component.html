@@ -128,10 +128,16 @@
               <strong>{{ 'DEBTS.ORIGINAL' | translate }}:</strong>
               <span>{{ currencySymbol }}{{ convertNumber(d.originalBalance, d.currency) | number:'1.2-2' }}</span>
 
+              <ng-container *ngIf="d.interestRate > 0 && !d.hasDelta">
+                <span class="text-muted mx-2">·</span>
+                <strong>{{ 'DEBTS.TOTAL_WITH_INTEREST' | translate }}:</strong>
+                <span>{{ currencySymbol }}{{ convertNumber(d.totalToPay, d.currency) | number:'1.2-2' }}</span>
+              </ng-container>
+
               <ng-container *ngIf="d.hasDelta">
                 <span class="text-muted mx-2">·</span>
                 <strong>{{ 'DEBTS.ADJUSTED' | translate }}:</strong>
-                <span class="text-warning">{{ currencySymbol }}{{ convertNumber(d.currentBalance, d.currency) | number:'1.2-2' }}</span>
+                <span class="text-warning">{{ currencySymbol }}{{ convertNumber(d.totalToPay, d.currency) | number:'1.2-2' }}</span>
               </ng-container>
             </div>
 
@@ -232,6 +238,10 @@
 
           <div *ngIf="d.expanded" class="mt-3">
 
+            <div class="small text-muted mb-2">
+              <i class="bi bi-lightbulb"></i> {{ 'DEBTS.FLEXIBLE_HINT' | translate }}
+            </div>
+
             <div *ngIf="!d.installmentsList?.length"
                  class="alert alert-warning">
               No installments found.
@@ -256,8 +266,8 @@
                     *ngIf="!inst.isPaid"
                     type="number"
                     class="form-control form-control-sm"
-                    [(ngModel)]="inst.amount"
-                    (blur)="updateInstallmentAmount(d.id, inst.id, inst.amount)"
+                    [(ngModel)]="inst.displayAmount"
+                    (blur)="updateInstallmentAmount(d.id, inst.id, inst.displayAmount)"
                   />
                   <div *ngIf="inst.isPaid" class="fw-bold">
                     {{ currencySymbol }}{{ convertNumber(inst.amount, d.currency) | number:'1.2-2' }}
