@@ -110,7 +110,9 @@
       "NO_ACCOUNT": "¿No tienes cuenta?",
       "REGISTER_LINK": "Crear nueva",
       "HERO_TITLE": "Toma el control",
-      "HERO_TEXT": "Bienvenido a Finance Manager. La herramienta diseñada para rastrear tus gastos, optimizar tu capital y evitar sorpresas financieras. Tu dinero, bajo tus reglas."
+      "HERO_TEXT": "Bienvenido a Finance Manager. La herramienta diseñada para rastrear tus gastos, optimizar tu capital y evitar sorpresas financieras. Tu dinero, bajo tus reglas.",
+      "SHOW_PASSWORD": "Mostrar contraseña",
+      "HIDE_PASSWORD": "Ocultar contraseña"
     },
     "REGISTER": {
       "TITLE": "Crear Cuenta",

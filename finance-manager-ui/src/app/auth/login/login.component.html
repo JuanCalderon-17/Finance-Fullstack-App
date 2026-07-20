@@ -35,13 +35,22 @@
                     <label class="form-label" for="password">
                       {{ 'AUTH.LOGIN.PASSWORD' | translate }}
                     </label>
-                    <input type="password"
-                           id="password"
-                           name="password"
-                           class="form-control custom-input"
-                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
-                           [(ngModel)]="model.password"
-                           required />
+                    <div class="password-wrapper">
+                      <input [type]="showPassword ? 'text' : 'password'"
+                             id="password"
+                             name="password"
+                             class="form-control custom-input"
+                             [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+                             [(ngModel)]="model.password"
+                             required />
+                      <button type="button"
+                              class="password-toggle"
+                              (click)="showPassword = !showPassword"
+                              [attr.aria-label]="(showPassword ? 'AUTH.LOGIN.HIDE_PASSWORD' : 'AUTH.LOGIN.SHOW_PASSWORD') | translate"
+                              [attr.aria-pressed]="showPassword">
+                        <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                      </button>
+                    </div>
                   </div>
 
                   <div *ngIf="errorMessage" class="alert alert-danger text-center">
