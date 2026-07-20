@@ -304,7 +304,9 @@ app.MapControllers();
 // with the actual failure reason (exception type + message, never credentials)
 // instead of hiding behind generic 500s on real endpoints. Also reports which
 // connection source (DATABASE_URL vs DefaultConnection) won the startup probe.
-app.MapGet("/api/health", async () =>
+// Accepts HEAD as well as GET: uptime monitors on free tiers (e.g. UptimeRobot)
+// can only send HEAD, and a GET-only route would reject them with 405.
+app.MapMethods("/api/health", new[] { "GET", "HEAD" }, async () =>
 {
     string databaseStatus;
     string? databaseError = null;
