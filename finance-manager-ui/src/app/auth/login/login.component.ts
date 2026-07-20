@@ -15,9 +15,10 @@ import {TranslateModule} from '@ngx-translate/core'
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  model: any = {}; 
+  model: any = {};
   errorMessage: string | null = null;
   isLoading: boolean = false;
+  showPassword: boolean = false;
 
   // Inyectando el contructor
   constructor(

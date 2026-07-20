@@ -110,7 +110,9 @@
       "REGISTER_LINK": "Criar nova",
       "FORGOT_PASSWORD": "Esqueceu sua senha?",
       "HERO_TITLE": "Assuma o controle",
-      "HERO_TEXT": "Bem-vindo ao Finance Manager. A ferramenta projetada para rastrear seus gastos, otimizar seu capital e evitar surpresas financeiras. Seu dinheiro, suas regras."
+      "HERO_TEXT": "Bem-vindo ao Finance Manager. A ferramenta projetada para rastrear seus gastos, otimizar seu capital e evitar surpresas financeiras. Seu dinheiro, suas regras.",
+      "SHOW_PASSWORD": "Mostrar senha",
+      "HIDE_PASSWORD": "Ocultar senha"
     },
     "REGISTER": {
       "TITLE": "NOVA CONTA",
