@@ -320,7 +320,7 @@
     "PAID_IN_FULL": "Paid in full",
     "OVERPAID_BY": "Overpaid by",
     "TOTAL_WITH_INTEREST": "Total to pay (with interest)",
-    "FLEXIBLE_HINT": "You can edit the amount of any pending installment if you pay different amounts (for example $8, $8, $8 and $16); if you leave them alone, the system calculates them automatically."
+    "FLEXIBLE_HINT": "You can edit the amount of any pending installment if you pay different amounts. When you pay an installment with a different amount, the remaining installments recalculate automatically to show what is actually left."
   },
   "BUTTONS": {
     "ADD": "Add",

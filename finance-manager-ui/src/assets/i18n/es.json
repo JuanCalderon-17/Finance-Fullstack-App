@@ -312,7 +312,7 @@
     "PAID_IN_FULL": "Pagada por completo",
     "OVERPAID_BY": "Pagaste de más",
     "TOTAL_WITH_INTEREST": "Total a pagar (con interés)",
-    "FLEXIBLE_HINT": "Puedes editar el monto de cada cuota pendiente si pagas cantidades distintas (por ejemplo $8, $8, $8 y $16); si no las tocas, el sistema las calcula automáticamente."
+    "FLEXIBLE_HINT": "Puedes editar el monto de cada cuota pendiente si pagas cantidades distintas. Al pagar una cuota con un monto diferente, las cuotas restantes se recalculan solas para mostrar lo que realmente falta."
   },
   "BUTTONS": {
     "SAVE": "Guardar",

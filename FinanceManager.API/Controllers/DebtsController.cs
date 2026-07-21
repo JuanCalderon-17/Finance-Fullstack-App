@@ -186,6 +186,12 @@ namespace FinanceManager.API.Controllers
                 installment.PaidDate = dto.IsPaid.Value ? DateTime.UtcNow : null;
             }
 
+            // Re-spread only on payment events: paid-state changed here, or the
+            // amount of an already-paid installment was corrected. Editing a
+            // PENDING amount stays purely manual (custom plans like 8/8/8/16).
+            if (dto.IsPaid.HasValue || (dto.Amount.HasValue && installment.IsPaid))
+                RebalancePendingInstallments(debt);
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -208,11 +214,59 @@ namespace FinanceManager.API.Controllers
             installment.IsPaid = !installment.IsPaid;
             installment.PaidDate = installment.IsPaid ? DateTime.UtcNow : null;
 
+            RebalancePendingInstallments(debt);
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
         // ================== HELPERS ==================
+
+        // Total the whole series must sum to: amortized total when there is
+        // interest, plain balance otherwise (mirrors GenerateInstallments).
+        private static decimal ExpectedTotal(Debt debt)
+        {
+            if (debt.InterestRate > 0)
+            {
+                var r = (double)(debt.InterestRate / 12 / 100);
+                var n = debt.Installments;
+                var factor = Math.Pow(1 + r, n);
+                var monthly = debt.Balance * (decimal)(r * factor / (factor - 1));
+                return Math.Round(monthly * n, 2);
+            }
+            return debt.Balance;
+        }
+
+        // After paying a different-than-scheduled amount, spread the real
+        // outstanding balance evenly across the pending installments so each
+        // row shows what is actually still owed. No-op when the schedule
+        // already covers the balance (paying the exact amount moves nothing).
+        private static void RebalancePendingInstallments(Debt debt)
+        {
+            var pending = debt.InstallmentsList
+                .Where(i => !i.IsPaid)
+                .OrderBy(i => i.InstallmentNumber)
+                .ToList();
+            if (pending.Count == 0) return;
+
+            var paidTotal = debt.InstallmentsList.Where(i => i.IsPaid).Sum(i => i.Amount);
+            var remaining = ExpectedTotal(debt) - paidTotal;
+            var pendingTotal = pending.Sum(i => i.Amount);
+
+            if (Math.Abs(remaining - pendingTotal) <= 0.01m) return;
+
+            if (remaining <= 0)
+            {
+                // Overpaid: nothing left to owe on the pending rows.
+                foreach (var i in pending) i.Amount = 0;
+                return;
+            }
+
+            var share = Math.Round(remaining / pending.Count, 2);
+            foreach (var i in pending) i.Amount = share;
+            // Last pending installment absorbs the rounding remainder.
+            pending[^1].Amount = Math.Max(0, Math.Round(remaining - share * (pending.Count - 1), 2));
+        }
 
         private DebtDto MapToDto(Debt debt)
         {
