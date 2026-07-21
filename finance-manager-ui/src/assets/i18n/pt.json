@@ -312,7 +312,7 @@
     "PAID_IN_FULL": "Quitada",
     "OVERPAID_BY": "Pagou a mais",
     "TOTAL_WITH_INTEREST": "Total a pagar (com juros)",
-    "FLEXIBLE_HINT": "Você pode editar o valor de cada parcela pendente se pagar quantias diferentes (por exemplo $8, $8, $8 e $16); se não mexer, o sistema calcula automaticamente."
+    "FLEXIBLE_HINT": "Você pode editar o valor de cada parcela pendente se pagar quantias diferentes. Ao pagar uma parcela com um valor diferente, as parcelas restantes se recalculam sozinhas para mostrar o que realmente falta."
   },
   "BUTTONS": {
     "ADD": "Adicionar",
