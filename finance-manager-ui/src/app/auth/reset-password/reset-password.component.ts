@@ -16,6 +16,8 @@ export class ResetPasswordComponent implements OnInit {
   email: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   isLoading: boolean = false;
   message: string = '';
   errorMessage: string = '';
