@@ -1,0 +1,47 @@
+<div class="assistant">
+
+  <header class="assistant-header">
+    <h1 class="assistant-title">
+      <i class="bi bi-stars"></i> {{ 'ASSISTANT.TITLE' | translate }}
+    </h1>
+    <p class="assistant-subtitle">{{ 'ASSISTANT.SUBTITLE' | translate }}</p>
+  </header>
+
+  <div class="assistant-messages">
+
+    <div *ngIf="messages.length === 0" class="assistant-empty">
+      <i class="bi bi-chat-dots"></i>
+      <p>{{ 'ASSISTANT.EMPTY' | translate }}</p>
+    </div>
+
+    <div *ngFor="let m of messages"
+         class="assistant-bubble"
+         [class.is-user]="m.role === 'user'"
+         [class.is-assistant]="m.role === 'assistant'">
+      <div *ngIf="m.content" class="bubble-content">{{ m.content }}</div>
+      <span *ngIf="m.role === 'assistant' && loading && !m.content" class="bubble-thinking">
+        {{ 'ASSISTANT.THINKING' | translate }}
+      </span>
+    </div>
+
+    <p *ngIf="errored" class="assistant-error">{{ 'ASSISTANT.ERROR' | translate }}</p>
+
+    <div #scrollAnchor></div>
+  </div>
+
+  <form class="assistant-input" (ngSubmit)="send()">
+    <textarea
+      [(ngModel)]="input"
+      name="message"
+      rows="1"
+      [placeholder]="'ASSISTANT.PLACEHOLDER' | translate"
+      (keydown)="onKeydown($event)"
+      [disabled]="loading"></textarea>
+    <button type="submit"
+            [disabled]="loading || !input.trim()"
+            [attr.aria-label]="'ASSISTANT.SEND' | translate">
+      <i class="bi bi-send-fill"></i>
+    </button>
+  </form>
+
+</div>
