@@ -469,6 +469,145 @@
   .range-pill { padding: 0.3rem 0.65rem; min-width: 32px; font-size: 0.7rem; }
 }
 
+// ============ AI INSIGHTS CARD ============
+.ds-ai-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-ai-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.ds-ai-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+
+  i { color: var(--color-primary); }
+}
+
+.ds-ai-refresh {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--bg-hover);
+    color: var(--color-primary);
+  }
+
+  &:disabled { cursor: default; opacity: 0.6; }
+
+  .spinning {
+    display: inline-block;
+    animation: ds-ai-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes ds-ai-spin {
+  to { transform: rotate(360deg); }
+}
+
+// Reserve roughly the height of 3 insight lines so the card doesn't grow when
+// the AI response lands and push the stat cards down mid-read.
+.ds-ai-body {
+  min-height: 4.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ds-ai-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+
+  li {
+    position: relative;
+    padding-left: 1.1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.45;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+  }
+}
+
+.ds-ai-loading,
+.ds-ai-empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.ds-ai-error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: 0.9rem;
+}
+
+// AI one-liner under the cash-flow chart
+.ds-ai-caption {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin: 0.85rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.45;
+
+  i {
+    color: var(--color-primary);
+    flex: 0 0 auto;
+    margin-top: 0.15em;
+  }
+}
+
+.ds-ai-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
 // ============ RESPONSIVE ============
 @media (max-width: 768px) {
   .ds-stat-amount { font-size: 1.4rem; }

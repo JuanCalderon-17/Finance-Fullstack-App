@@ -1,7 +1,7 @@
 <div class="landing-wrapper">
 
   <!-- ===== TOP NAV ===== -->
-  <header class="landing-nav">
+  <header class="landing-nav" [class.is-scrolled]="isNavScrolled">
     <a routerLink="/" class="nav-logo">
       <img src="favicon.png" alt="Finanzas" />
       <span class="nav-logo-text">Finanzas</span>
@@ -99,7 +99,9 @@
   <section class="landing-section section-preview">
     <div class="section-container preview-container">
 
-      <div class="preview-frame reveal-scroll" appReveal>
+      <!-- No appReveal here on purpose: this is the hero product shot and must be
+           visible on first paint, not gated behind a scroll animation. -->
+      <div class="preview-frame">
         <div class="preview-titlebar">
           <span class="preview-dot dot-red"></span>
           <span class="preview-dot dot-yellow"></span>
@@ -111,6 +113,17 @@
           <div class="preview-greeting">
             <span class="preview-greeting-text">{{ 'LANDING.PREVIEW.GREETING' | translate }}</span>
             <span class="preview-currency-pill">💱 USD · $</span>
+          </div>
+
+          <div class="preview-ai-card">
+            <div class="preview-ai-head">
+              <i class="bi bi-stars"></i>
+              <span>{{ 'LANDING.PREVIEW.AI_TITLE' | translate }}</span>
+            </div>
+            <ul class="preview-ai-list">
+              <li>{{ 'LANDING.PREVIEW.AI_1' | translate }}</li>
+              <li>{{ 'LANDING.PREVIEW.AI_2' | translate }}</li>
+            </ul>
           </div>
 
           <div class="preview-stats-row">
@@ -182,10 +195,129 @@
     </div>
   </section>
 
+  <!-- ===== AI ASSISTANT ===== -->
+  <section class="landing-section section-detail section-ai" id="ai">
+    <div class="section-container detail-layout">
+
+      <div class="detail-content">
+        <p class="section-eyebrow" appReveal>{{ 'LANDING.AI.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left" appReveal [revealDelay]="100">
+          {{ 'LANDING.AI.HEADLINE_1' | translate }}<br />{{ 'LANDING.AI.HEADLINE_2' | translate }}
+        </h2>
+        <p class="ai-lead" appReveal [revealDelay]="160">{{ 'LANDING.AI.LEAD' | translate }}</p>
+
+        <ul class="detail-checklist">
+          <li appReveal [revealDelay]="220">
+            <span class="check-icon"><i class="bi bi-shield-check"></i></span>
+            <div>
+              <strong>{{ 'LANDING.AI.P1_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.AI.P1_DESC' | translate }}</span>
+            </div>
+          </li>
+          <li appReveal [revealDelay]="280">
+            <span class="check-icon"><i class="bi bi-stars"></i></span>
+            <div>
+              <strong>{{ 'LANDING.AI.P2_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.AI.P2_DESC' | translate }}</span>
+            </div>
+          </li>
+          <li appReveal [revealDelay]="340">
+            <span class="check-icon"><i class="bi bi-translate"></i></span>
+            <div>
+              <strong>{{ 'LANDING.AI.P3_TITLE' | translate }}</strong>
+              <span>{{ 'LANDING.AI.P3_DESC' | translate }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="detail-visual reveal-scroll" appReveal [revealDelay]="160">
+        <div class="ai-chat-mock">
+          <div class="ai-chat-head">
+            <span class="ai-chat-avatar"><i class="bi bi-stars"></i></span>
+            <span class="ai-chat-name">{{ 'ASSISTANT.TITLE' | translate }}</span>
+          </div>
+          <div class="ai-chat-body">
+            <div class="ai-bubble is-user">{{ 'LANDING.AI.CHAT_Q1' | translate }}</div>
+            <div class="ai-bubble is-bot">{{ 'LANDING.AI.CHAT_A1' | translate }}</div>
+            <div class="ai-bubble is-user">{{ 'LANDING.AI.CHAT_Q2' | translate }}</div>
+            <div class="ai-bubble is-bot ai-typing" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== LIFESTYLE PHOTO + TRANSACTION OVERLAY =====
+       The photo alone would be decoration; what makes this work is the real
+       product UI layered on top of a real moment of use.
+       TO SWAP THE IMAGE: drop your file at
+         src/assets/landing-photo.webp
+       and it appears automatically (see .photo-frame in the SCSS). Until then a
+       gradient placeholder renders, so nothing looks broken. -->
+  <section class="landing-section section-detail section-detail-reverse section-photo">
+    <div class="section-container detail-layout">
+
+      <div class="photo-visual reveal-scroll" appReveal>
+        <!-- Cards live OUTSIDE .photo-frame: the frame needs overflow:hidden to
+             round the image, which would clip cards meant to spill past its edge. -->
+        <div class="photo-stack">
+          <div class="photo-frame">
+            <div class="photo-scrim" aria-hidden="true"></div>
+          </div>
+
+          <div class="photo-cards">
+            <div class="photo-card" appReveal [revealDelay]="200">
+              <span class="photo-card-icon icon-food"><i class="bi bi-bag-fill"></i></span>
+              <div class="photo-card-info">
+                <span class="photo-card-title">{{ 'LANDING.PHOTO.C1_TITLE' | translate }}</span>
+                <span class="photo-card-meta">{{ 'LANDING.PHOTO.C1_META' | translate }}</span>
+              </div>
+              <span class="photo-card-amount">{{ 'LANDING.PHOTO.C1_AMOUNT' | translate }}</span>
+            </div>
+
+            <div class="photo-card" appReveal [revealDelay]="300">
+              <span class="photo-card-icon icon-transport"><i class="bi bi-bus-front-fill"></i></span>
+              <div class="photo-card-info">
+                <span class="photo-card-title">{{ 'LANDING.PHOTO.C2_TITLE' | translate }}</span>
+                <span class="photo-card-meta">{{ 'LANDING.PHOTO.C2_META' | translate }}</span>
+              </div>
+              <span class="photo-card-amount">{{ 'LANDING.PHOTO.C2_AMOUNT' | translate }}</span>
+            </div>
+
+            <div class="photo-card" appReveal [revealDelay]="400">
+              <span class="photo-card-icon icon-installment"><i class="bi bi-laptop-fill"></i></span>
+              <div class="photo-card-info">
+                <span class="photo-card-title">{{ 'LANDING.PHOTO.C3_TITLE' | translate }}</span>
+                <span class="photo-card-meta">{{ 'LANDING.PHOTO.C3_META' | translate }}</span>
+              </div>
+              <span class="photo-card-amount">{{ 'LANDING.PHOTO.C3_AMOUNT' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-content">
+        <p class="section-eyebrow" appReveal>{{ 'LANDING.PHOTO.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left" appReveal [revealDelay]="100">
+          {{ 'LANDING.PHOTO.HEADLINE_1' | translate }}<br />{{ 'LANDING.PHOTO.HEADLINE_2' | translate }}
+        </h2>
+        <p class="ai-lead" appReveal [revealDelay]="160">{{ 'LANDING.PHOTO.LEAD' | translate }}</p>
+        <a routerLink="/auth/register" class="detail-cta" appReveal [revealDelay]="220">
+          {{ 'LANDING.PHOTO.CTA' | translate }} <span>→</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ===== TRUST BAR ===== -->
   <section class="landing-section section-trust">
     <div class="section-container">
-      <p class="trust-lead">{{ 'LANDING.TRUST.LEAD' | translate }}</p>
+      <p class="trust-lead" appReveal>{{ 'LANDING.TRUST.LEAD' | translate }}</p>
       <div class="trust-row">
         <div class="trust-item"><span class="trust-flag">🇺🇸</span> USD</div>
         <div class="trust-divider"></div>
@@ -266,24 +398,24 @@
     <div class="section-container detail-layout">
 
       <div class="detail-content">
-        <p class="section-eyebrow">{{ 'LANDING.HOW.EYEBROW' | translate }}</p>
-        <h2 class="section-headline section-headline-left">{{ 'LANDING.HOW.HEADLINE_1' | translate }}<br />{{ 'LANDING.HOW.HEADLINE_2' | translate }}</h2>
+        <p class="section-eyebrow" appReveal>{{ 'LANDING.HOW.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left" appReveal [revealDelay]="100">{{ 'LANDING.HOW.HEADLINE_1' | translate }}<br />{{ 'LANDING.HOW.HEADLINE_2' | translate }}</h2>
         <ul class="detail-checklist">
-          <li>
+          <li appReveal [revealDelay]="180">
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
               <strong>{{ 'LANDING.HOW.STEP1_TITLE' | translate }}</strong>
               <span>{{ 'LANDING.HOW.STEP1_DESC' | translate }}</span>
             </div>
           </li>
-          <li>
+          <li appReveal [revealDelay]="240">
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
               <strong>{{ 'LANDING.HOW.STEP2_TITLE' | translate }}</strong>
               <span>{{ 'LANDING.HOW.STEP2_DESC' | translate }}</span>
             </div>
           </li>
-          <li>
+          <li appReveal [revealDelay]="300">
             <span class="check-icon"><i class="bi bi-check-lg"></i></span>
             <div>
               <strong>{{ 'LANDING.HOW.STEP3_TITLE' | translate }}</strong>
@@ -291,7 +423,7 @@
             </div>
           </li>
         </ul>
-        <a routerLink="/auth/register" class="detail-cta">
+        <a routerLink="/auth/register" class="detail-cta" appReveal [revealDelay]="360">
           {{ 'LANDING.HOW.CTA' | translate }} <span>→</span>
         </a>
       </div>
@@ -375,23 +507,23 @@
   <!-- ===== STATS ===== -->
   <section class="landing-section section-stats" id="pricing">
     <div class="section-container">
-      <p class="section-eyebrow stats-eyebrow">{{ 'LANDING.STATS.EYEBROW' | translate }}</p>
-      <h2 class="section-headline">{{ 'LANDING.STATS.HEADLINE' | translate }}</h2>
+      <p class="section-eyebrow stats-eyebrow" appReveal>{{ 'LANDING.STATS.EYEBROW' | translate }}</p>
+      <h2 class="section-headline" appReveal [revealDelay]="120">{{ 'LANDING.STATS.HEADLINE' | translate }}</h2>
 
       <div class="stats-grid">
-        <div class="stat-item">
+        <div class="stat-item" appReveal [revealDelay]="180">
           <div class="stat-value">$0</div>
           <div class="stat-label">{{ 'LANDING.STATS.FOREVER' | translate }}</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" appReveal [revealDelay]="240">
           <div class="stat-value">2 min</div>
           <div class="stat-label">{{ 'LANDING.STATS.TO_SETUP' | translate }}</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" appReveal [revealDelay]="300">
           <div class="stat-value">3</div>
           <div class="stat-label">{{ 'LANDING.STATS.LANGUAGES_LABEL' | translate }}</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item" appReveal [revealDelay]="360">
           <div class="stat-value">∞</div>
           <div class="stat-label">{{ 'LANDING.STATS.TRANSACTIONS_LABEL' | translate }}</div>
         </div>
@@ -402,9 +534,9 @@
   <!-- ===== FINAL CTA ===== -->
   <section class="landing-section section-final-cta">
     <div class="section-container final-cta-content">
-      <h2 class="final-cta-headline">{{ 'LANDING.FINAL.HEADLINE_1' | translate }}<br />{{ 'LANDING.FINAL.HEADLINE_2' | translate }}</h2>
-      <p class="final-cta-subtitle">{{ 'LANDING.FINAL.SUBTITLE' | translate }}</p>
-      <div class="final-cta-actions">
+      <h2 class="final-cta-headline" appReveal>{{ 'LANDING.FINAL.HEADLINE_1' | translate }}<br />{{ 'LANDING.FINAL.HEADLINE_2' | translate }}</h2>
+      <p class="final-cta-subtitle" appReveal [revealDelay]="120">{{ 'LANDING.FINAL.SUBTITLE' | translate }}</p>
+      <div class="final-cta-actions" appReveal [revealDelay]="200">
         <a routerLink="/auth/register" class="cta-button cta-button-big">
           <span class="cta-text">{{ 'LANDING.NAV.START_FREE' | translate }}</span>
           <span class="cta-arrow">→</span>

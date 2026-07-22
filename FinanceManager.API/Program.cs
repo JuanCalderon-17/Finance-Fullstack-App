@@ -139,6 +139,11 @@ builder.Services.AddHttpClient<IEmailService, EmailService>();
 // service for fetching currency exchange rates from an external API
 builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
 
+// AI chat assistant — provider-agnostic interface. Default: Gemini (free tier).
+// To use Claude instead, swap GeminiAiService for an AnthropicAiService here.
+builder.Services.AddHttpClient<IAiService, GeminiAiService>();
+builder.Services.AddScoped<FinanceContextBuilder>();
+
 
 
 // Rate limiting — bouncer rules for our API endpoints
@@ -175,6 +180,16 @@ builder.Services.AddRateLimiter(options =>
     options.AddFixedWindowLimiter("currency", o =>
     {
         o.PermitLimit = 30;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+
+    // AI chat endpoint — protects the external LLM quota (free tier)
+    // 15 requests per minute per IP
+    options.AddFixedWindowLimiter("ai", o =>
+    {
+        o.PermitLimit = 15;
         o.Window = TimeSpan.FromMinutes(1);
         o.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
         o.QueueLimit = 0;

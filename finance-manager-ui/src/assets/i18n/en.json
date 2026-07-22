@@ -1,10 +1,14 @@
 {
+  "META": {
+    "TITLE": "Finanzas — AI Financial Assistant",
+    "DESCRIPTION": "AI analyzes your spending, debts and goals and explains what's happening with your money. Free, in 3 languages."
+  },
   "LANDING": {
-    "TITLE": "The finance app,",
-    "SUBTITLE": "your way.",
-    "DESCRIPTION": "Your account to manage expenses, savings, and debts.",
+    "TITLE": "Your money,",
+    "SUBTITLE": "explained by AI.",
+    "DESCRIPTION": "AI analyzes your spending, debts and goals — and explains what's actually happening with your money.",
     "CTA_BUTTON": "START NOW",
-    "PILL_TAG": "Personal finance, redesigned",
+    "PILL_TAG": "Personal finance with AI",
     "TRUST_MICROCOPY": "Free forever  ·  No credit card  ·  Set up in 2 minutes",
     "ITEM_AVALIABLE": "Available Balance",
     "JANUARY_DATE": "January 24, 2026",
@@ -20,9 +24,43 @@
       "START_FREE": "Start free"
     },
     "PREVIEW": {
+      "AI_TITLE": "AI insights",
+      "AI_1": "Your Food spending is up 18% versus your average.",
+      "AI_2": "Your card installment is due in 3 days — $320.",
       "GREETING": "Good Morning, Juan 👋",
       "SAVING_PERCENT": "You're saving 27% this month",
       "OF_INCOME": "11% of income"
+    },
+    "AI": {
+      "EYEBROW": "Talk to your money.",
+      "HEADLINE_1": "Ask. The AI answers",
+      "HEADLINE_2": "with your numbers.",
+      "LEAD": "No spreadsheets, no confusing reports. Ask in plain language and get an answer based on your real data.",
+      "P1_TITLE": "Answers from your data",
+      "P1_DESC": "The AI reads your transactions, debts and goals — and never invents numbers.",
+      "P2_TITLE": "Automatic insights",
+      "P2_DESC": "Every day, a summary of what changed in your finances.",
+      "P3_TITLE": "In your language",
+      "P3_DESC": "English, español or português — it replies in the app's language.",
+      "CHAT_Q1": "How much did I spend on food this month?",
+      "CHAT_A1": "You spent $630 on Food in July, 18% above your 3-month average.",
+      "CHAT_Q2": "And my card installment?"
+    },
+    "PHOTO": {
+      "EYEBROW": "Nothing slips through.",
+      "HEADLINE_1": "Your whole month,",
+      "HEADLINE_2": "no surprises.",
+      "LEAD": "Track every expense, follow your installments and goals — and find out before money gets tight, not after.",
+      "CTA": "Start free",
+      "C1_TITLE": "Delivery",
+      "C1_META": "Food · Jul 28",
+      "C1_AMOUNT": "$42.00",
+      "C2_TITLE": "Transit pass",
+      "C2_META": "Transport · Jul 24",
+      "C2_AMOUNT": "$120.00",
+      "C3_TITLE": "Laptop",
+      "C3_META": "Installment 2/12 · Jul 22",
+      "C3_AMOUNT": "$320.00"
     },
     "TRUST": {
       "LEAD": "Built for everyone managing real money",
@@ -335,7 +373,25 @@
     "SENDING": "Sending...",
     "RETRY": "Retry"
   },
+  "INSIGHTS": {
+    "TITLE": "AI insights",
+    "REFRESH": "Refresh",
+    "LOADING": "Analyzing your finances...",
+    "ERROR": "Couldn't generate insights right now.",
+    "EMPTY": "Not enough data to analyze yet.",
+    "ASK_MORE": "Ask the assistant"
+  },
+  "ASSISTANT": {
+    "TITLE": "Assistant",
+    "SUBTITLE": "Ask about your money — spending, debts and savings.",
+    "PLACEHOLDER": "Ask about your finances...",
+    "SEND": "Send",
+    "THINKING": "Thinking...",
+    "EMPTY": "Ask me anything about your finances. For example: \"How much did I spend on food this month?\"",
+    "ERROR": "Something went wrong. Please try again."
+  },
   "NAVIGATION": {
+    "ASSISTANT": "Assistant",
     "DASHBOARD": "Dashboard",
     "SAVINGS": "Savings",
     "DEBTS": "Debts",

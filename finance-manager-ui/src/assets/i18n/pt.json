@@ -1,10 +1,14 @@
 {
+  "META": {
+    "TITLE": "Finanzas — Assistente Financeiro com IA",
+    "DESCRIPTION": "A IA analisa seus gastos, dívidas e metas e explica o que está acontecendo com seu dinheiro. Grátis, em 3 idiomas."
+  },
   "LANDING": {
-    "TITLE": "O app financeiro,",
-    "SUBTITLE": "do seu jeito.",
-    "DESCRIPTION": "Sua conta para gerenciar gastos, economias e dívidas.",
+    "TITLE": "Seu dinheiro,",
+    "SUBTITLE": "explicado por IA.",
+    "DESCRIPTION": "A IA analisa seus gastos, dívidas e metas — e explica o que está acontecendo com seu dinheiro.",
     "CTA_BUTTON": "COMEÇAR AGORA",
-    "PILL_TAG": "Finanças pessoais, repensadas",
+    "PILL_TAG": "Finanças pessoais com IA",
     "TRUST_MICROCOPY": "Grátis para sempre  ·  Sem cartão de crédito  ·  Pronto em 2 minutos",
     "ITEM_AVAILABLE": "Saldo disponível",
     "JANUARY_DATE": "24 de janeiro de 2026",
@@ -20,9 +24,43 @@
       "START_FREE": "Começar grátis"
     },
     "PREVIEW": {
+      "AI_TITLE": "Análise IA",
+      "AI_1": "Seus gastos com Comida subiram 18% em relação à sua média.",
+      "AI_2": "A parcela do cartão vence em 3 dias — R$ 320.",
       "GREETING": "Bom dia, Juan 👋",
       "SAVING_PERCENT": "Você está economizando 27% este mês",
       "OF_INCOME": "11% da renda"
+    },
+    "AI": {
+      "EYEBROW": "Converse com seu dinheiro.",
+      "HEADLINE_1": "Pergunte. A IA responde",
+      "HEADLINE_2": "com os seus números.",
+      "LEAD": "Sem planilhas, sem relatórios confusos. Pergunte em português e receba a resposta baseada nos seus dados reais.",
+      "P1_TITLE": "Respostas com seus dados",
+      "P1_DESC": "A IA lê suas transações, dívidas e metas — e nunca inventa números.",
+      "P2_TITLE": "Análises automáticas",
+      "P2_DESC": "Todo dia, um resumo do que mudou nas suas finanças.",
+      "P3_TITLE": "No seu idioma",
+      "P3_DESC": "Português, español ou English — ela responde no idioma do app.",
+      "CHAT_Q1": "Quanto gastei com comida este mês?",
+      "CHAT_A1": "Você gastou R$ 630 com Comida em julho, 18% acima da sua média dos últimos 3 meses.",
+      "CHAT_Q2": "E a parcela do cartão?"
+    },
+    "PHOTO": {
+      "EYEBROW": "Nada passa despercebido.",
+      "HEADLINE_1": "Seu mês inteiro,",
+      "HEADLINE_2": "sem sustos.",
+      "LEAD": "Registre cada gasto, acompanhe parcelas e metas — e saiba antes que a conta aperte, não depois.",
+      "CTA": "Começar grátis",
+      "C1_TITLE": "Delivery",
+      "C1_META": "Comida · 28 de jul",
+      "C1_AMOUNT": "R$ 42,00",
+      "C2_TITLE": "Passagem",
+      "C2_META": "Transporte · 24 de jul",
+      "C2_AMOUNT": "R$ 120,00",
+      "C3_TITLE": "Notebook",
+      "C3_META": "Parcela 2/12 · 22 de jul",
+      "C3_AMOUNT": "R$ 320,00"
     },
     "TRUST": {
       "LEAD": "Feito para quem gerencia dinheiro de verdade",
@@ -326,7 +364,25 @@
     "CREATE": "Criar",
     "SENDING": "Enviando..."
   },
+  "INSIGHTS": {
+    "TITLE": "Análise IA",
+    "REFRESH": "Atualizar",
+    "LOADING": "Analisando suas finanças...",
+    "ERROR": "Não foi possível gerar as análises agora.",
+    "EMPTY": "Ainda não há dados suficientes para analisar.",
+    "ASK_MORE": "Perguntar ao assistente"
+  },
+  "ASSISTANT": {
+    "TITLE": "Assistente",
+    "SUBTITLE": "Pergunte sobre seu dinheiro: gastos, dívidas e economias.",
+    "PLACEHOLDER": "Pergunte sobre suas finanças...",
+    "SEND": "Enviar",
+    "THINKING": "Pensando...",
+    "EMPTY": "Pergunte o que quiser sobre suas finanças. Por exemplo: \"Quanto gastei com comida este mês?\"",
+    "ERROR": "Algo deu errado. Tente novamente."
+  },
   "NAVIGATION": {
+    "ASSISTANT": "Assistente",
     "DASHBOARD": "Painel",
     "SAVINGS": "Economias",
     "DEBTS": "Dívidas",
