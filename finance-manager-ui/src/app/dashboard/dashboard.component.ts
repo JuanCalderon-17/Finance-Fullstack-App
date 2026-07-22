@@ -15,6 +15,7 @@ import { CurrencyStateService } from '../core/services/currency-state.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../core/services/language.service';
 import { TutorialService } from '../core/services/tutorial.service';
+import { ChatService } from '../core/services/chat.service';
 
 
 @Component({
@@ -39,6 +40,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   filteredTransactions: Transaction[] = [];
   dueOccurrences: DueOccurrence[] = [];
   showSettingsMenu : boolean = false;
+
+  // AI insights card
+  aiInsights: string[] = [];
+  aiTrendComment = '';
+  insightsLoading = false;
+  insightsError = false;
 
   // ✅ MAPA DE CATEGORÍAS: Base de Datos -> Clave JSON
   categoryMap: { [key: string]: string } = {
@@ -194,8 +201,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     public languageService: LanguageService,
     private tutorialService: TutorialService,
+    private chatService: ChatService,
     private cdr: ChangeDetectorRef
-  ) { 
+  ) {
     const today = new Date();
     this.selectedMonth = today.getMonth();
     this.selectedYear = today.getFullYear();
@@ -230,11 +238,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.updateChart();
       this.loadCashflowTrend();
+      // Cached insights are per-language, so this re-generates on a language switch.
+      this.loadInsights();
     });
 
     this.loadTransactions();
     this.loadCashflowTrend();
     this.loadDue();
+    this.loadInsights();
 
     setTimeout(() => {
       if(this.tutorialService.shouldShowTutorial()) {
@@ -644,6 +655,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   changeLanguage( language: string): void {
     this.languageService.setLanguage(language);
+  }
+
+  /**
+   * Loads the AI insights card. Uses today's localStorage cache unless `force`
+   * is set (refresh button), so the AI quota isn't spent on every dashboard load.
+   */
+  loadInsights(force = false): void {
+    const lang = this.languageService.getCurrentLanguage();
+
+    if (!force) {
+      const cached = this.chatService.getCachedInsights(lang);
+      if (cached) {
+        this.aiInsights = cached.insights;
+        this.aiTrendComment = cached.trendComment;
+        this.insightsError = false;
+        this.cdr.markForCheck();
+        return;
+      }
+    }
+
+    this.insightsLoading = true;
+    this.insightsError = false;
+    this.cdr.markForCheck();
+
+    this.chatService.getInsights(lang)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.aiInsights = res.insights ?? [];
+          this.aiTrendComment = res.trendComment ?? '';
+          this.chatService.cacheInsights(lang, this.aiInsights, this.aiTrendComment);
+          this.insightsLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.insightsError = true;
+          this.insightsLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   ngOnDestroy(): void {

@@ -28,6 +28,44 @@
   </div>
 </div>
 
+<!-- ===== AI INSIGHTS CARD ===== -->
+<div class="ds-ai-card">
+  <div class="ds-ai-head">
+    <span class="ds-ai-title">
+      <i class="bi bi-stars"></i> {{ 'INSIGHTS.TITLE' | translate }}
+    </span>
+    <button type="button"
+            class="ds-ai-refresh"
+            (click)="loadInsights(true)"
+            [disabled]="insightsLoading"
+            [title]="'INSIGHTS.REFRESH' | translate">
+      <i class="bi bi-arrow-clockwise" [class.spinning]="insightsLoading"></i>
+    </button>
+  </div>
+
+  <div class="ds-ai-body">
+    <p *ngIf="insightsLoading" class="ds-ai-loading">
+      {{ 'INSIGHTS.LOADING' | translate }}
+    </p>
+
+    <p *ngIf="!insightsLoading && insightsError" class="ds-ai-error">
+      {{ 'INSIGHTS.ERROR' | translate }}
+    </p>
+
+    <ul *ngIf="!insightsLoading && !insightsError && aiInsights.length > 0" class="ds-ai-list">
+      <li *ngFor="let insight of aiInsights">{{ insight }}</li>
+    </ul>
+
+    <p *ngIf="!insightsLoading && !insightsError && aiInsights.length === 0" class="ds-ai-empty">
+      {{ 'INSIGHTS.EMPTY' | translate }}
+    </p>
+  </div>
+
+  <a routerLink="/assistant" class="ds-ai-link">
+    {{ 'INSIGHTS.ASK_MORE' | translate }} <i class="bi bi-arrow-right"></i>
+  </a>
+</div>
+
 <!-- ===== ROW 1: STAT CARDS ===== -->
 <div class="row g-4 mb-4" id="tour-stats">
 
@@ -124,6 +162,12 @@
         <div class="cashflow-chart-wrapper" *ngIf="!isLoadingTrend">
           <canvas baseChart [data]="cashflowChartData" [type]="cashflowChartType" [options]="cashflowChartOptions"></canvas>
         </div>
+
+        <!-- AI reading of the trend (comes from the same insights call — no extra cost) -->
+        <p class="ds-ai-caption" *ngIf="!isLoadingTrend && aiTrendComment">
+          <i class="bi bi-stars"></i>
+          <span>{{ aiTrendComment }}</span>
+        </p>
       </div>
     </div>
   </div>
