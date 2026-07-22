@@ -227,15 +227,28 @@ export class DebtsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // mark installment as paid or not paid
-  toggleInstallment(debtId: number, installmentId: number) {
-    this.debtsService.toggleInstallment(debtId, installmentId).subscribe({
+  // mark installment as paid or not paid.
+  // Sends the current (possibly edited) amount AND the paid flag in ONE request,
+  // so the backend rebalances atomically. Two separate calls (blur-save the
+  // amount, then a toggle) raced, and the remaining installments never
+  // recalculated because neither request saw the combined "new amount + paid".
+  setInstallmentPaid(debt: any, inst: any) {
+    const newPaid = !inst.isPaid;
+
+    // inst.displayAmount is edited in the active currency; the backend stores USD.
+    let amountUsd = Number(inst.displayAmount);
+    if (!Number.isFinite(amountUsd) || amountUsd <= 0) amountUsd = inst.amount;
+    if (this.currencyCode === 'BRL' && this.exchangeRate > 0) amountUsd = amountUsd / this.exchangeRate;
+    amountUsd = this.roundMoney(amountUsd);
+
+    this.debtsService.updateInstallment(debt.id, inst.id, { amount: amountUsd, isPaid: newPaid }).subscribe({
       next: () => {
         this.loadData();
       },
       error: (err) => {
         console.error('Error al cambiar estado:', err);
         alert('No se pudo actualizar el estado de la cuota');
+        this.loadData();
       }
     });
   }

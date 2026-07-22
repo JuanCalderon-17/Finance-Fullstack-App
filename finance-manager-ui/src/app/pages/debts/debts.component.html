@@ -290,7 +290,7 @@
 
                 <button
                   class="btn btn-sm btn-outline-success"
-                  (click)="toggleInstallment(d.id, inst.id)"
+                  (click)="setInstallmentPaid(d, inst)"
                 >
                   {{ (inst.isPaid ? 'DEBTS.MARK_AS_UNPAID' : 'DEBTS.MARK_AS_PAID') | translate }}
                 </button>
