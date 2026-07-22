@@ -23,6 +23,9 @@ export class LanguageService{
 
         //guardar en localstorage
         localStorage.setItem('app-language', lang);
+
+        // Keep <html lang> in sync — screen readers and search engines read it.
+        document.documentElement.lang = lang;
     }
 
     getCurrentLanguage(): string {

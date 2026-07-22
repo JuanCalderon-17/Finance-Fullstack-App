@@ -6,13 +6,48 @@
 @use 'themes';      // importar temas
 @use 'animations';  // scroll-reveal utilities
 
-// Estilos base del body 
+// ===== TIPOGRAFÍA =====
+// Sora para titulares (carácter, geométrica) e Inter para UI/cuerpo (legibilidad
+// y cifras tabulares, clave en tablas de dinero). Se cargan en index.html.
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Sora', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+// Estilos base del body
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+// Los controles de formulario NO heredan la fuente: el navegador les impone la
+// suya. Sin esto, botones e inputs se quedarían en la fuente del sistema y
+// media app seguiría viéndose genérica.
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+// Dinero alineado en columnas: todos los dígitos con el mismo ancho.
+.ds-stat-amount,
+.ds-table td,
+.stat-value,
+.preview-stat-value,
+.mock-amount,
+.currency-amount {
+  font-variant-numeric: tabular-nums;
 }
 
 //  OVERRIDES DE BOOTSTRAP PARA DARK MODE 

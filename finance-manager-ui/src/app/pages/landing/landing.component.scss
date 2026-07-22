@@ -23,22 +23,64 @@ $danger: #f87171;
   color: $ink;
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden;
+
+  /* `overflow-x: hidden` here silently broke the sticky nav: per spec it forces
+     overflow-y to `auto`, which makes this element a scroll container, so the
+     header stuck to *it* instead of the viewport and scrolled away.
+     `clip` gives the same horizontal clipping without creating that container. */
+  overflow-x: clip;
 }
 
 /* ============ TOP NAV ============ */
+/* Floating capsule nav: detached from the edges, rounded, blurred. Reads much
+   lighter than a full-bleed bar and is the current product-site convention. */
 .landing-nav {
   position: sticky;
-  top: 0;
+  top: 1rem;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  background: rgba(5, 13, 10, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid $line;
+  gap: 1.25rem;
+
+  width: calc(100% - 3rem);
+  max-width: 1120px;
+  margin: 1rem auto 0;
+  padding: 0.55rem 0.65rem 0.55rem 1.25rem;
+
+  background: rgba(8, 18, 14, 0.72);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
+
+  transition: max-width 0.28s ease, padding 0.28s ease, background 0.28s ease,
+              box-shadow 0.28s ease, border-color 0.28s ease;
+
+  /* Tightens and gains contrast once content starts passing underneath. */
+  &.is-scrolled {
+    max-width: 960px;
+    padding: 0.4rem 0.5rem 0.4rem 1.1rem;
+    background: rgba(8, 18, 14, 0.92);
+    border-color: rgba(52, 211, 153, 0.2);
+    box-shadow: 0 12px 38px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-logo img {
+    transition: height 0.28s ease;
+  }
+
+  &.is-scrolled .nav-logo img {
+    height: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-nav,
+  .landing-nav .nav-logo img {
+    transition: none;
+  }
 }
 
 .nav-logo {
@@ -115,7 +157,13 @@ $danger: #f87171;
 }
 
 @media (max-width: 768px) {
-  .landing-nav { padding: 0.75rem 1rem; }
+  .landing-nav {
+    width: calc(100% - 1.5rem);
+    margin-top: 0.75rem;
+    top: 0.75rem;
+    padding: 0.4rem 0.5rem 0.4rem 1rem;
+    gap: 0.5rem;
+  }
   .nav-links { display: none; }
   .nav-link-btn { display: none; }
 }
@@ -156,7 +204,12 @@ $danger: #f87171;
 }
 
 .landing-hero {
-  min-height: calc(100vh - 64px);
+  /* Shorter than a full viewport on purpose: the product mockup below must
+     peek above the fold, so the first screen shows the app, not just text.
+     padding-bottom keeps clearance for the CTA on short viewports, where the
+     hero content is taller than min-height and the preview would overlap it. */
+  min-height: calc(78vh - 64px);
+  padding-bottom: 3.5rem;
 }
 
 /* === LANGUAGE SWITCHER (now in nav) === */
@@ -169,12 +222,13 @@ $danger: #f87171;
   .current-lang-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid $line-2;
-    padding: 6px 12px;
+    /* Tighter than the standalone version: it now lives inside the capsule. */
+    padding: 5px 9px;
     border-radius: 9999px;
     color: #fff;
     cursor: pointer;
@@ -447,14 +501,168 @@ $danger: #f87171;
 
 /* ============ PRODUCT PREVIEW ============ */
 .section-preview {
-  padding: 1rem 1.5rem 4rem;
+  padding: 0 1.5rem 4rem;
   position: relative;
-  margin-top: -3rem; /* pulls preview up into the hero glow */
+  margin-top: -1rem; /* slight pull into the hero glow, without covering the CTA */
 }
 
 .preview-container {
   position: relative;
   max-width: 1100px;
+}
+
+/* === AI ASSISTANT SECTION === */
+.ai-lead {
+  margin: 0 0 1.75rem;
+  color: rgba(233, 245, 240, 0.62);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 34rem;
+}
+
+.ai-chat-mock {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(10, 22, 18, 0.92);
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.ai-chat-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(52, 211, 153, 0.14);
+  background: rgba(52, 211, 153, 0.05);
+}
+
+.ai-chat-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(52, 211, 153, 0.16);
+  color: #34d399;
+  font-size: 0.85rem;
+}
+
+.ai-chat-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(233, 245, 240, 0.9);
+}
+
+.ai-chat-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ai-bubble {
+  max-width: 85%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 14px;
+  font-size: 0.83rem;
+  line-height: 1.45;
+
+  &.is-user {
+    align-self: flex-end;
+    background: #34d399;
+    color: #06231a;
+    font-weight: 500;
+    border-bottom-right-radius: 4px;
+  }
+
+  &.is-bot {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(233, 245, 240, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom-left-radius: 4px;
+  }
+}
+
+/* Three dots that pulse, so the mock reads as "still answering" */
+.ai-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.7rem 0.85rem;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(52, 211, 153, 0.75);
+    animation: ai-typing-dot 1.3s ease-in-out infinite;
+
+    &:nth-child(2) { animation-delay: 0.18s; }
+    &:nth-child(3) { animation-delay: 0.36s; }
+  }
+}
+
+@keyframes ai-typing-dot {
+  0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+  30%           { opacity: 1;    transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-typing span { animation: none; opacity: 0.6; }
+}
+
+/* AI insights strip inside the product mockup — the differentiator, shown
+   first thing in the fake dashboard just like in the real one. */
+.preview-ai-card {
+  background: rgba(52, 211, 153, 0.06);
+  border: 1px solid rgba(52, 211, 153, 0.22);
+  border-left: 3px solid #34d399;
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.preview-ai-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #34d399;
+  margin-bottom: 0.45rem;
+}
+
+.preview-ai-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  li {
+    position: relative;
+    padding-left: 0.85rem;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: rgba(233, 245, 240, 0.72);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.52em;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #34d399;
+    }
+  }
 }
 
 .preview-glow {

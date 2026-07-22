@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -34,6 +34,8 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   isLangMenuOpen = false;
+  /** Drives the compact state of the sticky header once the user scrolls. */
+  isNavScrolled = false;
   paths1: FlowPath[] = this.generatePaths(1);
   paths2: FlowPath[] = this.generatePaths(-1);
   titleWords: TitleWord[] = [];
@@ -74,6 +76,12 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    // Cheap threshold check — assigning the same value is a no-op for Angular.
+    this.isNavScrolled = window.scrollY > 40;
   }
 
   toggleLangMenu(): void {

@@ -1,10 +1,14 @@
 {
+  "META": {
+    "TITLE": "Finanzas — Asistente Financiero con IA",
+    "DESCRIPTION": "La IA analiza tus gastos, deudas y metas y te explica qué está pasando con tu dinero. Gratis, en 3 idiomas."
+  },
   "LANDING": {
-    "TITLE": "La app de finanzas,",
-    "SUBTITLE": "a tu manera.",
-    "DESCRIPTION": "Tu cuenta para gestionar gastos, ahorros y deudas.",
+    "TITLE": "Tu dinero,",
+    "SUBTITLE": "explicado por IA.",
+    "DESCRIPTION": "La IA analiza tus gastos, deudas y metas — y te explica qué está pasando con tu dinero.",
     "CTA_BUTTON": "EMPEZAR AHORA",
-    "PILL_TAG": "Finanzas personales, reinventadas",
+    "PILL_TAG": "Finanzas personales con IA",
     "TRUST_MICROCOPY": "Gratis para siempre  ·  Sin tarjeta de crédito  ·  Listo en 2 minutos",
     "ITEM_AVALIABLE": "Saldo Disponible",
     "JANUARY_DATE": "24 de enero, 2026",
@@ -20,9 +24,27 @@
       "START_FREE": "Empezar gratis"
     },
     "PREVIEW": {
+      "AI_TITLE": "Análisis IA",
+      "AI_1": "Tus gastos en Comida subieron 18% respecto a tu promedio.",
+      "AI_2": "La cuota de la tarjeta vence en 3 días — $320.",
       "GREETING": "Buenos días, Juan 👋",
       "SAVING_PERCENT": "Estás ahorrando 27% este mes",
       "OF_INCOME": "11% de los ingresos"
+    },
+    "AI": {
+      "EYEBROW": "Conversa con tu dinero.",
+      "HEADLINE_1": "Pregunta. La IA responde",
+      "HEADLINE_2": "con tus números.",
+      "LEAD": "Sin planillas ni reportes confusos. Pregunta en español y recibe la respuesta basada en tus datos reales.",
+      "P1_TITLE": "Respuestas con tus datos",
+      "P1_DESC": "La IA lee tus transacciones, deudas y metas — y nunca inventa números.",
+      "P2_TITLE": "Análisis automáticos",
+      "P2_DESC": "Cada día, un resumen de lo que cambió en tus finanzas.",
+      "P3_TITLE": "En tu idioma",
+      "P3_DESC": "Español, português o English — responde en el idioma de la app.",
+      "CHAT_Q1": "¿Cuánto gasté en comida este mes?",
+      "CHAT_A1": "Gastaste $630 en Comida en julio, 18% por encima de tu promedio de los últimos 3 meses.",
+      "CHAT_Q2": "¿Y la cuota de la tarjeta?"
     },
     "TRUST": {
       "LEAD": "Hecho para quienes gestionan dinero real",
@@ -326,7 +348,25 @@
     "ADD": "Agregar",
     "SENDING": "Enviando..."
   },
+  "INSIGHTS": {
+    "TITLE": "Análisis IA",
+    "REFRESH": "Actualizar",
+    "LOADING": "Analizando tus finanzas...",
+    "ERROR": "No se pudieron generar los análisis ahora.",
+    "EMPTY": "Aún no hay datos suficientes para analizar.",
+    "ASK_MORE": "Preguntar al asistente"
+  },
+  "ASSISTANT": {
+    "TITLE": "Asistente",
+    "SUBTITLE": "Pregunta sobre tu dinero: gastos, deudas y ahorros.",
+    "PLACEHOLDER": "Pregunta sobre tus finanzas...",
+    "SEND": "Enviar",
+    "THINKING": "Pensando...",
+    "EMPTY": "Pregúntame lo que quieras sobre tus finanzas. Por ejemplo: \"¿Cuánto gasté en comida este mes?\"",
+    "ERROR": "Algo salió mal. Inténtalo de nuevo."
+  },
   "NAVIGATION": {
+    "ASSISTANT": "Asistente",
     "DASHBOARD": "Panel",
     "SAVINGS": "Ahorros",
     "DEBTS": "Deudas",
