@@ -62,8 +62,8 @@ export class DebtsService {
     );
   }
 
-  // ✅ NUEVO: Actualizar monto de una cuota
-  updateInstallment(debtId: number, installmentId: number, data: { amount?: number }): Observable<any> {
+  // ✅ NUEVO: Actualizar monto y/o estado de una cuota (en un solo request)
+  updateInstallment(debtId: number, installmentId: number, data: { amount?: number; isPaid?: boolean }): Observable<any> {
     return this.http.put(
       `${this.apiUrl}/${debtId}/installments/${installmentId}`,
       data
