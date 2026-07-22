@@ -46,6 +46,22 @@
       "CHAT_A1": "You spent $630 on Food in July, 18% above your 3-month average.",
       "CHAT_Q2": "And my card installment?"
     },
+    "PHOTO": {
+      "EYEBROW": "Nothing slips through.",
+      "HEADLINE_1": "Your whole month,",
+      "HEADLINE_2": "no surprises.",
+      "LEAD": "Track every expense, follow your installments and goals — and find out before money gets tight, not after.",
+      "CTA": "Start free",
+      "C1_TITLE": "Delivery",
+      "C1_META": "Food · Jul 28",
+      "C1_AMOUNT": "$42.00",
+      "C2_TITLE": "Transit pass",
+      "C2_META": "Transport · Jul 24",
+      "C2_AMOUNT": "$120.00",
+      "C3_TITLE": "Laptop",
+      "C3_META": "Installment 2/12 · Jul 22",
+      "C3_AMOUNT": "$320.00"
+    },
     "TRUST": {
       "LEAD": "Built for everyone managing real money",
       "LANGUAGES": "3 languages",

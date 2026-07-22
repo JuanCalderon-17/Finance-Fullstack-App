@@ -251,6 +251,69 @@
     </div>
   </section>
 
+  <!-- ===== LIFESTYLE PHOTO + TRANSACTION OVERLAY =====
+       The photo alone would be decoration; what makes this work is the real
+       product UI layered on top of a real moment of use.
+       TO SWAP THE IMAGE: drop your file at
+         src/assets/landing-photo.webp
+       and it appears automatically (see .photo-frame in the SCSS). Until then a
+       gradient placeholder renders, so nothing looks broken. -->
+  <section class="landing-section section-detail section-detail-reverse section-photo">
+    <div class="section-container detail-layout">
+
+      <div class="photo-visual reveal-scroll" appReveal>
+        <!-- Cards live OUTSIDE .photo-frame: the frame needs overflow:hidden to
+             round the image, which would clip cards meant to spill past its edge. -->
+        <div class="photo-stack">
+          <div class="photo-frame">
+            <div class="photo-scrim" aria-hidden="true"></div>
+          </div>
+
+          <div class="photo-cards">
+            <div class="photo-card" appReveal [revealDelay]="200">
+              <span class="photo-card-icon icon-food"><i class="bi bi-bag-fill"></i></span>
+              <div class="photo-card-info">
+                <span class="photo-card-title">{{ 'LANDING.PHOTO.C1_TITLE' | translate }}</span>
+                <span class="photo-card-meta">{{ 'LANDING.PHOTO.C1_META' | translate }}</span>
+              </div>
+              <span class="photo-card-amount">{{ 'LANDING.PHOTO.C1_AMOUNT' | translate }}</span>
+            </div>
+
+            <div class="photo-card" appReveal [revealDelay]="300">
+              <span class="photo-card-icon icon-transport"><i class="bi bi-bus-front-fill"></i></span>
+              <div class="photo-card-info">
+                <span class="photo-card-title">{{ 'LANDING.PHOTO.C2_TITLE' | translate }}</span>
+                <span class="photo-card-meta">{{ 'LANDING.PHOTO.C2_META' | translate }}</span>
+              </div>
+              <span class="photo-card-amount">{{ 'LANDING.PHOTO.C2_AMOUNT' | translate }}</span>
+            </div>
+
+            <div class="photo-card" appReveal [revealDelay]="400">
+              <span class="photo-card-icon icon-installment"><i class="bi bi-laptop-fill"></i></span>
+              <div class="photo-card-info">
+                <span class="photo-card-title">{{ 'LANDING.PHOTO.C3_TITLE' | translate }}</span>
+                <span class="photo-card-meta">{{ 'LANDING.PHOTO.C3_META' | translate }}</span>
+              </div>
+              <span class="photo-card-amount">{{ 'LANDING.PHOTO.C3_AMOUNT' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-content">
+        <p class="section-eyebrow" appReveal>{{ 'LANDING.PHOTO.EYEBROW' | translate }}</p>
+        <h2 class="section-headline section-headline-left" appReveal [revealDelay]="100">
+          {{ 'LANDING.PHOTO.HEADLINE_1' | translate }}<br />{{ 'LANDING.PHOTO.HEADLINE_2' | translate }}
+        </h2>
+        <p class="ai-lead" appReveal [revealDelay]="160">{{ 'LANDING.PHOTO.LEAD' | translate }}</p>
+        <a routerLink="/auth/register" class="detail-cta" appReveal [revealDelay]="220">
+          {{ 'LANDING.PHOTO.CTA' | translate }} <span>→</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ===== TRUST BAR ===== -->
   <section class="landing-section section-trust">
     <div class="section-container">

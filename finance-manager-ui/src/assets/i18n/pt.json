@@ -46,6 +46,22 @@
       "CHAT_A1": "Você gastou R$ 630 com Comida em julho, 18% acima da sua média dos últimos 3 meses.",
       "CHAT_Q2": "E a parcela do cartão?"
     },
+    "PHOTO": {
+      "EYEBROW": "Nada passa despercebido.",
+      "HEADLINE_1": "Seu mês inteiro,",
+      "HEADLINE_2": "sem sustos.",
+      "LEAD": "Registre cada gasto, acompanhe parcelas e metas — e saiba antes que a conta aperte, não depois.",
+      "CTA": "Começar grátis",
+      "C1_TITLE": "Delivery",
+      "C1_META": "Comida · 28 de jul",
+      "C1_AMOUNT": "R$ 42,00",
+      "C2_TITLE": "Passagem",
+      "C2_META": "Transporte · 24 de jul",
+      "C2_AMOUNT": "R$ 120,00",
+      "C3_TITLE": "Notebook",
+      "C3_META": "Parcela 2/12 · 22 de jul",
+      "C3_AMOUNT": "R$ 320,00"
+    },
     "TRUST": {
       "LEAD": "Feito para quem gerencia dinheiro de verdade",
       "LANGUAGES": "3 idiomas",

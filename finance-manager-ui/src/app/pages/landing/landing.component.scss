@@ -511,6 +511,126 @@ $danger: #f87171;
   max-width: 1100px;
 }
 
+/* === LIFESTYLE PHOTO SECTION ===
+   Drop the real image at src/assets/landing-photo.webp and it replaces the
+   placeholder gradient automatically — no markup change needed.
+   Target: ~1200x1500 (4:5 portrait), WebP, under ~250KB. */
+.photo-visual {
+  display: flex;
+  justify-content: center;
+}
+
+/* Positioning context for the cards, so they can spill past the frame's edge
+   without being clipped by its overflow:hidden. */
+.photo-stack {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+}
+
+.photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+
+  /* Placeholder gradient sits underneath; the photo covers it once present. */
+  background-color: #0d1f19;
+  background-image:
+    url('/assets/landing-photo.webp'),
+    linear-gradient(145deg, #123028 0%, #0a1a15 55%, #06110d 100%);
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+
+/* Fuses a bright photo into the dark page instead of letting it clash. */
+.photo-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 13, 10, 0.15) 0%, rgba(5, 13, 10, 0.55) 65%, rgba(5, 13, 10, 0.88) 100%),
+    linear-gradient(90deg, rgba(5, 13, 10, 0.35) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.photo-cards {
+  position: absolute;
+  right: -2.5rem;
+  bottom: 1.75rem;
+  left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 2;
+}
+
+.photo-card {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 14px;
+  background: rgba(10, 20, 16, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+}
+
+.photo-card-icon {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  color: #061410;
+
+  &.icon-food { background: #34d399; }
+  &.icon-transport { background: #60a5fa; }
+  &.icon-installment { background: #fbbf24; }
+}
+
+.photo-card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.photo-card-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(233, 245, 240, 0.95);
+  line-height: 1.25;
+}
+
+.photo-card-meta {
+  font-size: 0.7rem;
+  color: rgba(233, 245, 240, 0.5);
+  line-height: 1.3;
+}
+
+.photo-card-amount {
+  flex: 0 0 auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(233, 245, 240, 0.95);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .photo-cards {
+    right: 0.75rem;
+    left: 0.75rem;
+  }
+}
+
 /* === AI ASSISTANT SECTION === */
 .ai-lead {
   margin: 0 0 1.75rem;

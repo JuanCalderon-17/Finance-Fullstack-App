@@ -46,6 +46,22 @@
       "CHAT_A1": "Gastaste $630 en Comida en julio, 18% por encima de tu promedio de los últimos 3 meses.",
       "CHAT_Q2": "¿Y la cuota de la tarjeta?"
     },
+    "PHOTO": {
+      "EYEBROW": "Nada se te escapa.",
+      "HEADLINE_1": "Todo tu mes,",
+      "HEADLINE_2": "sin sustos.",
+      "LEAD": "Registra cada gasto, sigue tus cuotas y metas — y entérate antes de que la cuenta apriete, no después.",
+      "CTA": "Empezar gratis",
+      "C1_TITLE": "Delivery",
+      "C1_META": "Comida · 28 de jul",
+      "C1_AMOUNT": "$42,00",
+      "C2_TITLE": "Pasaje",
+      "C2_META": "Transporte · 24 de jul",
+      "C2_AMOUNT": "$120,00",
+      "C3_TITLE": "Notebook",
+      "C3_META": "Cuota 2/12 · 22 de jul",
+      "C3_AMOUNT": "$320,00"
+    },
     "TRUST": {
       "LEAD": "Hecho para quienes gestionan dinero real",
       "LANGUAGES": "3 idiomas",
