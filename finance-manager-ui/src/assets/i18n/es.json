@@ -170,17 +170,17 @@
       "ACCEPT_TERMS_AND": "y la",
       "ACCEPT_TERMS_PRIVACY": "Política de Privacidad",
       "ERRORS": {
-        "EMPTY_NAME": "⛔ Por favor ingresa tu nombre completo.",
-        "EMPTY_EMAIL": "⛔ El correo electrónico es obligatorio.",
-        "EMPTY_PASSWORD": "⛔ La contraseña es obligatoria.",
-        "PASSWORD_COMPLEXITY": "⛔ La contraseña debe tener al menos una Mayúscula y un Número.",
-        "INVALID_USER": "⛔ El nombre de usuario no es válido.",
-        "PASSWORD_SHORT": "⛔ La contraseña es muy corta.",
-        "PASSWORD_UPPER": "⛔ Falta una letra mayúscula.",
-        "PASSWORD_DIGIT": "⛔ Falta un número.",
+        "EMPTY_NAME": "Por favor ingresa tu nombre completo.",
+        "EMPTY_EMAIL": "El correo electrónico es obligatorio.",
+        "EMPTY_PASSWORD": "La contraseña es obligatoria.",
+        "PASSWORD_COMPLEXITY": "La contraseña debe tener al menos una Mayúscula y un Número.",
+        "INVALID_USER": "El nombre de usuario no es válido.",
+        "PASSWORD_SHORT": "La contraseña es muy corta.",
+        "PASSWORD_UPPER": "Falta una letra mayúscula.",
+        "PASSWORD_DIGIT": "Falta un número.",
         "GENERIC": "Ocurrió un error inesperado.",
-        "PASSWORD_MISMATCH": "⛔ Las contraseñas no coinciden.",
-        "TERMS_NOT_ACCEPTED": "⛔ Debes aceptar los Términos y la Política de Privacidad."
+        "PASSWORD_MISMATCH": "Las contraseñas no coinciden.",
+        "TERMS_NOT_ACCEPTED": "Debes aceptar los Términos y la Política de Privacidad."
       }
     },
     "FORGOT_PASSWORD": {
@@ -193,6 +193,50 @@
       "BACK_TO_LOGIN": "← Volver al inicio",
       "SUCCESS_MSG": "¡Enlace enviado! Revisa tu correo.",
       "ERROR_GENERIC": "No se pudo enviar. Intenta de nuevo."
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Restablecer Contraseña",
+      "INSTRUCTIONS": "Ingresa la nueva contraseña de tu cuenta.",
+      "NEW_PASSWORD": "Nueva Contraseña",
+      "NEW_PASSWORD_PLACEHOLDER": "Mínimo 6 caracteres",
+      "CONFIRM_PASSWORD": "Confirmar Contraseña",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Repite la contraseña",
+      "BUTTON": "RESTABLECER CONTRASEÑA",
+      "SUBMITTING": "Restableciendo...",
+      "BACK_TO_LOGIN": "← Volver al inicio",
+      "INVALID_LINK": "El enlace no es válido o ya expiró.",
+      "REQUEST_NEW_LINK": "Solicitar un enlace nuevo",
+      "ERRORS": {
+        "EMPTY_FIELDS": "Completa todos los campos.",
+        "PASSWORD_MISMATCH": "Las contraseñas no coinciden.",
+        "PASSWORD_SHORT": "La contraseña debe tener al menos 6 caracteres."
+      }
+    },
+    "VERIFY_EMAIL": {
+      "TITLE": "Verificar Correo",
+      "CHECKING": "Verificando tu correo...",
+      "GO_TO_LOGIN": "← Ir al inicio de sesión"
+    },
+    "STATUS": {
+      "EMAIL_IN_USE": "Ese correo ya está registrado.",
+      "VERIFICATION_SENT": "Revisa tu correo y haz clic en el enlace para activar tu cuenta.",
+      "CREATED_EMAIL_FAILED": "Creamos tu cuenta, pero no pudimos enviar el correo de verificación. Solicita el reenvío.",
+      "VERIFICATION_RESENT": "Te enviamos un nuevo enlace de verificación. Revisa tu correo.",
+      "EMAIL_VERIFIED": "¡Correo verificado! Ya puedes iniciar sesión.",
+      "ALREADY_VERIFIED": "Este correo ya estaba verificado. Puedes iniciar sesión.",
+      "RESET_LINK_SENT": "¡Enlace enviado! Revisa tu correo.",
+      "PASSWORD_RESET": "¡Contraseña restablecida correctamente!",
+      "EMAIL_REQUIRED": "El correo electrónico es obligatorio.",
+      "FIELDS_REQUIRED": "Completa todos los campos.",
+      "MISSING_TOKEN": "Enlace inválido: falta el token o el correo.",
+      "INVALID_TOKEN": "El enlace no es válido o ya fue usado.",
+      "TOKEN_EXPIRED": "El enlace expiró. Solicita uno nuevo.",
+      "USER_NOT_FOUND": "No encontramos una cuenta con ese correo.",
+      "EMAIL_SEND_FAILED": "No pudimos enviar el correo. Intenta de nuevo en unos minutos.",
+      "TOKEN_GENERATION_FAILED": "No pudimos generar el enlace. Intenta de nuevo.",
+      "VERIFY_FAILED": "No pudimos verificar el correo. Intenta de nuevo.",
+      "RESET_FAILED": "No pudimos cambiar la contraseña. Intenta de nuevo.",
+      "SERVER_ERROR": "Error del servidor. Intenta más tarde."
     }
   },
   "DASHBOARD": {
@@ -493,7 +537,7 @@
       "EXPORTING": "Generando...",
       "SUCCESS": "✓ Se exportaron {{count}} transacciones.",
       "NO_DATA": "No hay transacciones en el rango seleccionado.",
-      "ERROR_RANGE_INVALID": "⛔ La fecha 'Desde' no puede ser posterior a 'Hasta'.",
+      "ERROR_RANGE_INVALID": "La fecha 'Desde' no puede ser posterior a 'Hasta'.",
       "ERROR_GENERIC": "Ocurrió un error al exportar. Intenta de nuevo.",
       "LGPD_NOTE": "Tienes derecho a la portabilidad de tus datos según la LGPD y normativa equivalente.",
       "LGPD_LINK": "Ver Política de Privacidad"

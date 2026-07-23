@@ -14,14 +14,14 @@
                   <h4 class="mt-1 mb-4 pb-1 title-text">{{'AUTH.REGISTER.TITLE' | translate }}</h4>
                 </div>
 
-                <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4" role="alert">
-                  <i class="bi bi-envelope-check-fill me-2"></i>
-                  <div>{{ successMessage }}</div>
+                <div *ngIf="successMessage" class="auth-alert auth-alert--success" role="status">
+                  <span class="auth-alert__icon"><i class="bi bi-envelope-check-fill"></i></span>
+                  <div class="auth-alert__body">{{ successMessage }}</div>
                 </div>
 
-                <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                  <div>{{ errorMessage }}</div>
+                <div *ngIf="errorMessage" class="auth-alert auth-alert--error" role="alert">
+                  <span class="auth-alert__icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                  <div class="auth-alert__body">{{ errorMessage }}</div>
                 </div>
 
                 <form *ngIf="!successMessage" (ngSubmit)="register()">

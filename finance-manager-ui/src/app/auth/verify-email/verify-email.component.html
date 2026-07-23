@@ -3,24 +3,26 @@
 
     <div class="text-center mb-4">
       <h1 class="display-1">✉️</h1>
-      <h2>VERIFICAR CORREO</h2>
+      <h2>{{ 'AUTH.VERIFY_EMAIL.TITLE' | translate }}</h2>
     </div>
 
     <div *ngIf="isLoading" class="text-center">
       <span class="spinner"></span>
-      <p>Verificando tu correo...</p>
+      <p>{{ 'AUTH.VERIFY_EMAIL.CHECKING' | translate }}</p>
     </div>
 
-    <div *ngIf="message" class="alert alert-success">
-      {{ message }}
+    <div *ngIf="message" class="auth-alert auth-alert--success" role="status">
+      <span class="auth-alert__icon"><i class="bi bi-check-lg"></i></span>
+      <div class="auth-alert__body">{{ message }}</div>
     </div>
 
-    <div *ngIf="errorMessage" class="alert alert-danger">
-      {{ errorMessage }}
+    <div *ngIf="errorMessage" class="auth-alert auth-alert--error" role="alert">
+      <span class="auth-alert__icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
+      <div class="auth-alert__body">{{ errorMessage }}</div>
     </div>
 
     <div class="back-link">
-      <a routerLink="/auth/login">← Ir al Login</a>
+      <a routerLink="/auth/login">{{ 'AUTH.VERIFY_EMAIL.GO_TO_LOGIN' | translate }}</a>
     </div>
 
   </div>

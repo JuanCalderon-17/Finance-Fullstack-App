@@ -1,3 +1,71 @@
+/* === Verify Email — Dark Emerald Vault === */
+/* Matches forgot-password / reset-password: this screen previously had no card
+   styling at all and rendered on the browser default background. */
+
+.auth-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #050d0a;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 70%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse at center,
+                rgba(52, 211, 153, 0.14) 0%,
+                rgba(52, 211, 153, 0.04) 40%,
+                transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * { position: relative; z-index: 1; }
+}
+
+.auth-card {
+  background: rgba(10, 20, 16, 0.6);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  padding: 40px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65),
+              0 4px 20px rgba(52, 211, 153, 0.08);
+  color: white;
+}
+
+h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  margin-bottom: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+.display-1 { margin-bottom: 0.5rem; }
+
 .text-center { text-align: center; }
 .mb-4 { margin-bottom: 1.5rem; }
 
@@ -5,8 +73,8 @@
   display: inline-block;
   width: 1.2rem;
   height: 1.2rem;
-  border: 3px solid rgba(255,255,255,0.3);
-  border-top-color: #3498db;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #34d399;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-right: 0.5rem;
@@ -14,3 +82,21 @@
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2s; }
+}
+
+.back-link { margin-top: 25px; }
+
+.back-link a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #34d399;
+    text-decoration: underline;
+  }
+}

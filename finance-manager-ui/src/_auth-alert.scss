@@ -1,0 +1,84 @@
+// ============================================
+// AUTH ALERTS — shared across login / register / forgot / reset / verify
+// ============================================
+// Bootstrap's .alert-success / .alert-danger are pale panels meant for light
+// pages; on the dark emerald glass cards of the auth flows they read as bright
+// stickers. These are tinted glass panels in the app's own palette instead.
+// Global (not component-scoped) so all five auth screens share one look.
+
+.auth-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: auth-alert-in 380ms var(--ease-enter, cubic-bezier(0.16, 1, 0.3, 1)) both;
+
+  &__icon {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 0.8rem;
+    line-height: 1;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  // Inline follow-up link (e.g. "request a new link" under an expired token)
+  &__action {
+    display: inline-block;
+    margin-top: 0.55rem;
+    font-weight: 700;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover { filter: brightness(1.15); }
+  }
+
+  &--success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(52, 211, 153, 0.35);
+    color: #a7f3d0;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.1);
+
+    .auth-alert__icon {
+      background: rgba(52, 211, 153, 0.18);
+      color: #34d399;
+    }
+  }
+
+  &--error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(248, 113, 113, 0.35);
+    color: #fecaca;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.1);
+
+    .auth-alert__icon {
+      background: rgba(248, 113, 113, 0.18);
+      color: #f87171;
+    }
+  }
+}
+
+@keyframes auth-alert-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-alert { animation: none; }
+}
