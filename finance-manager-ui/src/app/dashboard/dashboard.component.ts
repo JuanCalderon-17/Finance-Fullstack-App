@@ -84,10 +84,53 @@ export class DashboardComponent implements OnInit, OnDestroy {
   newTransaction: any = {
     description: '',
     amount: 0,
-    category: 'Comida', 
+    category: 'Comida',
     transactionDate: new Date().toISOString().slice(0, 10),
-    currency: 'USD'  
+    currency: 'USD'
   };
+
+  // Users could not find where to add income: the only hint was an <optgroup>
+  // buried inside the category dropdown. The type is now an explicit choice
+  // made before the category, and it filters the category list.
+  transactionType: 'expense' | 'income' | 'savings' = 'expense';
+  showTransactionModal = false;
+
+  private readonly categoriesByType: Record<'expense' | 'income' | 'savings', string[]> = {
+    income: ['Sueldo', 'Negocio', 'Venta', 'Ingreso Extra'],
+    savings: ['Ahorro'],
+    expense: ['Comida', 'Educacion', 'Transporte', 'Salud', 'Ocio', 'Casa', 'Compras', 'Otros']
+  };
+
+  get visibleCategories(): string[] {
+    return this.categoriesByType[this.transactionType];
+  }
+
+  /** Percentage of income still available, or null when there is no income to divide by. */
+  get availableRatio(): number | null {
+    if (!this.totalIncome) return null;
+    return (this.totalIncome - this.totalSpent - this.totalSaved) / this.totalIncome;
+  }
+
+  setTransactionType(type: 'expense' | 'income' | 'savings'): void {
+    this.transactionType = type;
+    // Keep the current category only if it still belongs to the chosen type.
+    if (!this.visibleCategories.includes(this.newTransaction.category)) {
+      this.newTransaction.category = this.visibleCategories[0];
+    }
+    this.cdr.markForCheck();
+  }
+
+  openTransactionModal(): void {
+    this.showTransactionModal = true;
+    this.cdr.markForCheck();
+  }
+
+  closeTransactionModal(): void {
+    // cancelEdit resets the form and closes the modal, so a successful
+    // add/update (which already calls it) dismisses the modal too.
+    this.cancelEdit();
+    this.cdr.markForCheck();
+  }
 
   public pieChartOptions: ChartConfiguration<'doughnut'>['options'] = {
     responsive: true,
@@ -358,9 +401,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     const limitWithBuffer = this.totalIncome * 1.10;
 
-    if (this.totalSpent <= this.totalIncome) {
+    if (this.totalIncome === 0 && this.totalSpent === 0) {
+      // Nothing recorded yet — an alarm here would be noise.
+      this.alertMessageKey = "DASHBOARD.ALERTS.EMPTY";
+    } else if (this.totalIncome === 0) {
+      // Spending with no income on record is a data gap, not overspending.
+      this.alertMessageKey = "DASHBOARD.ALERTS.NO_INCOME";
+    } else if (this.totalSpent <= this.totalIncome) {
       this.alertMessageKey = "DASHBOARD.ALERTS.GOOD";
-    } else if (this.totalSpent > this.totalIncome && this.totalSpent <= limitWithBuffer) {
+    } else if (this.totalSpent <= limitWithBuffer) {
       this.alertMessageKey = "DASHBOARD.ALERTS.WARNING";
     } else {
       this.alertMessageKey = "DASHBOARD.ALERTS.DANGER";
@@ -618,7 +667,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   edit(transaction: Transaction) {
     this.isEditing = true;
     this.editingId = transaction.id;
-    this.newTransaction = { ...transaction }; 
+    this.newTransaction = { ...transaction };
+    // Keep the type selector in sync with what is being edited.
+    this.transactionType = this.getCategoryType(transaction.category);
+    this.showTransactionModal = true;
   }
 
   getCategoryKey(category: string): string {
@@ -630,12 +682,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   cancelEdit() {
     this.isEditing = false;
     this.editingId = null;
-    this.newTransaction = { 
-      description: '', 
-      amount: 0, 
-      category: 'Comida', 
+    this.transactionType = 'expense';
+    this.showTransactionModal = false;
+    this.newTransaction = {
+      description: '',
+      amount: 0,
+      category: 'Comida',
       transactionDate: new Date().toISOString().slice(0, 10),
-      currency: this.currencyCode 
+      currency: this.currencyCode
     };
   }
 
