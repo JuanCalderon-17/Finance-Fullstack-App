@@ -50,7 +50,7 @@ namespace FinanceManager.API.Controllers
         {
             if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email.ToLower()))
             {
-                return BadRequest("El email ya está en uso.");
+                return BadRequest(new { error = "El email ya está en uso.", code = "EMAIL_IN_USE" });
             }
 
             var user = new AppUser
@@ -86,10 +86,10 @@ namespace FinanceManager.API.Controllers
             {
                 // Don't fail registration if email send fails — user can request a resend later
                 Console.WriteLine($"--> [WARN] Verification email failed for {user.Email}: {ex.Message}");
-                return Ok(new { message = "Cuenta creada, pero no pudimos enviar el correo de verificación. Solicita el reenvío.", emailSent = false });
+                return Ok(new { message = "Cuenta creada, pero no pudimos enviar el correo de verificación. Solicita el reenvío.", code = "CREATED_EMAIL_FAILED", emailSent = false });
             }
 
-            return Ok(new { message = "Revisa tu correo para verificar tu cuenta.", emailSent = true });
+            return Ok(new { message = "Revisa tu correo para verificar tu cuenta.", code = "VERIFICATION_SENT", emailSent = true });
         }
 
         // POST: api/account/login
@@ -124,12 +124,13 @@ namespace FinanceManager.API.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
         {
             // Validamos que venga el email
-            if (string.IsNullOrEmpty(request.Email)) return BadRequest("El email es requerido.");
+            if (string.IsNullOrEmpty(request.Email)) return BadRequest(new { error = "El email es requerido.", code = "EMAIL_REQUIRED" });
 
             var user = await _userManager.FindByEmailAsync(request.Email);
-            // Respuesta genérica: no revelar qué emails tienen cuenta registrada
+            // Respuesta genérica: no revelar qué emails tienen cuenta registrada.
+            // Mismo code que el envío real, si no el cliente delataría la cuenta.
             if (user == null)
-                return Ok(new { message = "Si la cuenta existe, te enviamos un enlace. Revisa tu correo." });
+                return Ok(new { message = "Si la cuenta existe, te enviamos un enlace. Revisa tu correo.", code = "RESET_LINK_SENT" });
 
             // Generar token random
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
@@ -140,7 +141,7 @@ namespace FinanceManager.API.Controllers
 
             // Importante: Asegurar que se guarde antes de enviar el correo
             var updateResult = await _userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded) return BadRequest("Error al generar el token.");
+            if (!updateResult.Succeeded) return BadRequest(new { error = "Error al generar el token.", code = "TOKEN_GENERATION_FAILED" });
 
             // 2. CORREGIDO: El link debe apuntar a tu FRONTEND (Vercel), no al backend
             // Usé la URL que vi en tus logs: https://finanancemanagerpp.vercel.app
@@ -161,13 +162,13 @@ namespace FinanceManager.API.Controllers
                 await _emailService.SendEmailAsync(request.Email, "Recuperar Contraseña", body);
 
                 // Respuesta JSON correcta para Angular
-                return Ok(new { message = "¡Enlace enviado! Revisa tu correo." });
+                return Ok(new { message = "¡Enlace enviado! Revisa tu correo.", code = "RESET_LINK_SENT" });
             }
             catch (Exception ex)
             {
-                // Si falla el correo, lo atrapamos y devolvemos el error real
+                // El detalle del provider va al log, no al cliente: filtraba interno al navegador
                 Console.WriteLine($"--> [ERROR CONTROLADO] Falló envío email: {ex.Message}");
-                return BadRequest(new { error = $"No se pudo enviar el correo: {ex.Message}" });
+                return BadRequest(new { error = "No se pudo enviar el correo.", code = "EMAIL_SEND_FAILED" });
             }
         }
 
@@ -177,26 +178,26 @@ namespace FinanceManager.API.Controllers
         public async Task<IActionResult> VerifyEmail([FromQuery] string token, [FromQuery] string email)
         {
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
-                return BadRequest(new { error = "Token y email son requeridos." });
+                return BadRequest(new { error = "Token y email son requeridos.", code = "MISSING_TOKEN" });
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
-                return BadRequest(new { error = "Usuario no encontrado." });
+                return BadRequest(new { error = "Usuario no encontrado.", code = "USER_NOT_FOUND" });
 
             if (user.IsEmailVerified)
-                return Ok(new { message = "El correo ya fue verificado anteriormente." });
+                return Ok(new { message = "El correo ya fue verificado anteriormente.", code = "ALREADY_VERIFIED" });
 
             if (user.EmailVerificationToken != HashToken(token))
-                return BadRequest(new { error = "Token inválido." });
+                return BadRequest(new { error = "Token inválido.", code = "INVALID_TOKEN" });
 
             user.IsEmailVerified = true;
             user.EmailVerificationToken = null;
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
-                return StatusCode(500, new { error = "Error al verificar el correo." });
+                return StatusCode(500, new { error = "Error al verificar el correo.", code = "VERIFY_FAILED" });
 
-            return Ok(new { message = "¡Correo verificado! Ya puedes iniciar sesión." });
+            return Ok(new { message = "¡Correo verificado! Ya puedes iniciar sesión.", code = "EMAIL_VERIFIED" });
         }
 
         // POST: api/account/resend-verification
@@ -206,23 +207,23 @@ namespace FinanceManager.API.Controllers
         public async Task<IActionResult> ResendVerification([FromBody] ResendVerificationDto dto)
         {
             if (string.IsNullOrEmpty(dto.Email))
-                return BadRequest(new { error = "El email es requerido." });
+                return BadRequest(new { error = "El email es requerido.", code = "EMAIL_REQUIRED" });
 
             var user = await _userManager.FindByEmailAsync(dto.Email);
 
             // Always return Ok to avoid leaking which emails are registered
             if (user == null)
-                return Ok(new { message = "Si la cuenta existe, te enviamos un nuevo enlace." });
+                return Ok(new { message = "Si la cuenta existe, te enviamos un nuevo enlace.", code = "VERIFICATION_RESENT" });
 
             if (user.IsEmailVerified)
-                return BadRequest(new { error = "Esta cuenta ya está verificada." });
+                return BadRequest(new { error = "Esta cuenta ya está verificada.", code = "ALREADY_VERIFIED" });
 
             // Issue a fresh token (invalidates the previous one)
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
             user.EmailVerificationToken = HashToken(token);
             var update = await _userManager.UpdateAsync(user);
             if (!update.Succeeded)
-                return StatusCode(500, new { error = "No se pudo generar el token." });
+                return StatusCode(500, new { error = "No se pudo generar el token.", code = "TOKEN_GENERATION_FAILED" });
 
             var verifyLink = $"https://finanzasbr.com/auth/verify-email?token={token}&email={user.Email}";
             var body = $@"
@@ -236,12 +237,12 @@ namespace FinanceManager.API.Controllers
             try
             {
                 await _emailService.SendEmailAsync(user.Email, "Verifica tu cuenta", body);
-                return Ok(new { message = "Te enviamos un nuevo enlace de verificación." });
+                return Ok(new { message = "Te enviamos un nuevo enlace de verificación.", code = "VERIFICATION_RESENT" });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"--> [ERROR] Resend verification email failed for {user.Email}: {ex.Message}");
-                return StatusCode(500, new { error = "No pudimos enviar el correo. Intenta más tarde." });
+                return StatusCode(500, new { error = "No pudimos enviar el correo. Intenta más tarde.", code = "EMAIL_SEND_FAILED" });
             }
         }
 
@@ -294,25 +295,25 @@ namespace FinanceManager.API.Controllers
             {
                 if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(request.NewPassword))
                 {
-                    return BadRequest(new { error = "Todos los campos son requeridos." });
+                    return BadRequest(new { error = "Todos los campos son requeridos.", code = "FIELDS_REQUIRED" });
                 }
 
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
-                    return BadRequest(new { error = "Usuario no encontrado." });
+                    return BadRequest(new { error = "Usuario no encontrado.", code = "USER_NOT_FOUND" });
                 }
 
                 // verify token — la BD guarda el hash SHA-256, el enlace lleva el token en claro
                 if (user.PasswordResetToken != HashToken(request.Token))
                 {
-                    return BadRequest(new { error = "Token inválido." });
+                    return BadRequest(new { error = "Token inválido.", code = "INVALID_TOKEN" });
                 }
 
                 // verify token expiration
                 if (user.ResetTokenExpires < DateTime.UtcNow)
                 {
-                    return BadRequest(new { error = "El token ha expirado. Solicita uno nuevo." });
+                    return BadRequest(new { error = "El token ha expirado. Solicita uno nuevo.", code = "TOKEN_EXPIRED" });
                 }
 
                 // Change password, no need to use token provider
@@ -327,16 +328,16 @@ namespace FinanceManager.API.Controllers
 
                 if (!result.Succeeded)
                 {
-                    return BadRequest(new { error = "Error al cambiar la contraseña." });
+                    return BadRequest(new { error = "Error al cambiar la contraseña.", code = "RESET_FAILED" });
                 }
 
                 Console.WriteLine($"--> [ÉXITO] Contraseña cambiada para: {user.Email}");
-                return Ok(new { message = "Contraseña restablecida correctamente." });
+                return Ok(new { message = "Contraseña restablecida correctamente.", code = "PASSWORD_RESET" });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"--> [ERROR RESET PASSWORD] {ex.Message}");
-                return StatusCode(500, new { error = "Error interno del servidor." });
+                return StatusCode(500, new { error = "Error interno del servidor.", code = "SERVER_ERROR" });
             }
         }
 

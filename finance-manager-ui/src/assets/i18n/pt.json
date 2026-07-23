@@ -170,17 +170,17 @@
       "ACCEPT_TERMS_AND": "e a",
       "ACCEPT_TERMS_PRIVACY": "Política de Privacidade",
       "ERRORS": {
-        "EMPTY_NAME": "⛔ Por favor insira seu nome completo.",
-        "EMPTY_EMAIL": "⛔ O e-mail é obrigatório.",
-        "EMPTY_PASSWORD": "⛔ A senha é obrigatória.",
-        "PASSWORD_COMPLEXITY": "⛔ A senha deve ter pelo menos uma letra Maiúscula e um Número.",
-        "INVALID_USER": "⛔ Nome de usuário inválido.",
-        "PASSWORD_SHORT": "⛔ A senha é muito curta.",
-        "PASSWORD_UPPER": "⛔ Falta uma letra maiúscula.",
-        "PASSWORD_DIGIT": "⛔ Falta um número.",
+        "EMPTY_NAME": "Por favor insira seu nome completo.",
+        "EMPTY_EMAIL": "O e-mail é obrigatório.",
+        "EMPTY_PASSWORD": "A senha é obrigatória.",
+        "PASSWORD_COMPLEXITY": "A senha deve ter pelo menos uma letra Maiúscula e um Número.",
+        "INVALID_USER": "Nome de usuário inválido.",
+        "PASSWORD_SHORT": "A senha é muito curta.",
+        "PASSWORD_UPPER": "Falta uma letra maiúscula.",
+        "PASSWORD_DIGIT": "Falta um número.",
         "GENERIC": "Ocorreu um erro inesperado.",
-        "PASSWORD_MISMATCH": "⛔ As senhas não coincidem.",
-        "TERMS_NOT_ACCEPTED": "⛔ Você deve aceitar os Termos e a Política de Privacidade."
+        "PASSWORD_MISMATCH": "As senhas não coincidem.",
+        "TERMS_NOT_ACCEPTED": "Você deve aceitar os Termos e a Política de Privacidade."
       }
     },
     "FORGOT_PASSWORD": {
@@ -193,6 +193,50 @@
       "BACK_TO_LOGIN": "← Voltar ao login",
       "SUCCESS_MSG": "Link enviado! Verifique seu e-mail.",
       "ERROR_GENERIC": "Não foi possível enviar o e-mail. Tente novamente."
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Redefinir Senha",
+      "INSTRUCTIONS": "Digite a nova senha da sua conta.",
+      "NEW_PASSWORD": "Nova Senha",
+      "NEW_PASSWORD_PLACEHOLDER": "Mínimo 6 caracteres",
+      "CONFIRM_PASSWORD": "Confirmar Senha",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Repita a senha",
+      "BUTTON": "REDEFINIR SENHA",
+      "SUBMITTING": "Redefinindo...",
+      "BACK_TO_LOGIN": "← Voltar ao login",
+      "INVALID_LINK": "O link é inválido ou já expirou.",
+      "REQUEST_NEW_LINK": "Solicitar um novo link",
+      "ERRORS": {
+        "EMPTY_FIELDS": "Preencha todos os campos.",
+        "PASSWORD_MISMATCH": "As senhas não coincidem.",
+        "PASSWORD_SHORT": "A senha deve ter pelo menos 6 caracteres."
+      }
+    },
+    "VERIFY_EMAIL": {
+      "TITLE": "Verificar E-mail",
+      "CHECKING": "Verificando seu e-mail...",
+      "GO_TO_LOGIN": "← Ir para o login"
+    },
+    "STATUS": {
+      "EMAIL_IN_USE": "Esse e-mail já está cadastrado.",
+      "VERIFICATION_SENT": "Verifique seu e-mail e clique no link para ativar sua conta.",
+      "CREATED_EMAIL_FAILED": "Criamos sua conta, mas não conseguimos enviar o e-mail de verificação. Solicite o reenvio.",
+      "VERIFICATION_RESENT": "Enviamos um novo link de verificação. Verifique seu e-mail.",
+      "EMAIL_VERIFIED": "E-mail verificado! Agora você já pode entrar.",
+      "ALREADY_VERIFIED": "Este e-mail já estava verificado. Você pode entrar.",
+      "RESET_LINK_SENT": "Link enviado! Verifique seu e-mail.",
+      "PASSWORD_RESET": "Senha redefinida com sucesso!",
+      "EMAIL_REQUIRED": "O e-mail é obrigatório.",
+      "FIELDS_REQUIRED": "Preencha todos os campos.",
+      "MISSING_TOKEN": "Link inválido: falta o token ou o e-mail.",
+      "INVALID_TOKEN": "O link é inválido ou já foi usado.",
+      "TOKEN_EXPIRED": "O link expirou. Solicite um novo.",
+      "USER_NOT_FOUND": "Não encontramos uma conta com esse e-mail.",
+      "EMAIL_SEND_FAILED": "Não conseguimos enviar o e-mail. Tente novamente em alguns minutos.",
+      "TOKEN_GENERATION_FAILED": "Não conseguimos gerar o link. Tente novamente.",
+      "VERIFY_FAILED": "Não conseguimos verificar o e-mail. Tente novamente.",
+      "RESET_FAILED": "Não conseguimos alterar a senha. Tente novamente.",
+      "SERVER_ERROR": "Erro no servidor. Tente mais tarde."
     }
   },
   "TUTORIAL": {
@@ -483,7 +527,7 @@
       "EXPORTING": "Gerando...",
       "SUCCESS": "✓ {{count}} transações exportadas.",
       "NO_DATA": "Não há transações no intervalo selecionado.",
-      "ERROR_RANGE_INVALID": "⛔ A data 'De' não pode ser posterior à 'Até'.",
+      "ERROR_RANGE_INVALID": "A data 'De' não pode ser posterior à 'Até'.",
       "ERROR_GENERIC": "Ocorreu um erro ao exportar. Tente novamente.",
       "LGPD_NOTE": "Você tem direito à portabilidade dos seus dados segundo a LGPD e regulamentos equivalentes.",
       "LGPD_LINK": "Ver Política de Privacidade"

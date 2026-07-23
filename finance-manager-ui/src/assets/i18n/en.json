@@ -170,17 +170,17 @@
       "ACCEPT_TERMS_AND": "and the",
       "ACCEPT_TERMS_PRIVACY": "Privacy Policy",
       "ERRORS": {
-        "EMPTY_NAME": "⛔ Please enter your full name.",
-        "EMPTY_EMAIL": "⛔ Email is required.",
-        "EMPTY_PASSWORD": "⛔ Password is required.",
-        "PASSWORD_COMPLEXITY": "⛔ Password must have at least one Uppercase letter and one Number.",
-        "INVALID_USER": "⛔ Invalid username.",
-        "PASSWORD_SHORT": "⛔ Password is too short.",
-        "PASSWORD_UPPER": "⛔ Missing an uppercase letter.",
-        "PASSWORD_DIGIT": "⛔ Missing a number.",
+        "EMPTY_NAME": "Please enter your full name.",
+        "EMPTY_EMAIL": "Email is required.",
+        "EMPTY_PASSWORD": "Password is required.",
+        "PASSWORD_COMPLEXITY": "Password must have at least one Uppercase letter and one Number.",
+        "INVALID_USER": "Invalid username.",
+        "PASSWORD_SHORT": "Password is too short.",
+        "PASSWORD_UPPER": "Missing an uppercase letter.",
+        "PASSWORD_DIGIT": "Missing a number.",
         "GENERIC": "An unexpected error occurred.",
-        "PASSWORD_MISMATCH": "⛔ Passwords do not match.",
-        "TERMS_NOT_ACCEPTED": "⛔ You must accept the Terms and the Privacy Policy."
+        "PASSWORD_MISMATCH": "Passwords do not match.",
+        "TERMS_NOT_ACCEPTED": "You must accept the Terms and the Privacy Policy."
       }
     },
     "FORGOT_PASSWORD": {
@@ -193,6 +193,50 @@
       "BACK_TO_LOGIN": "← Back to login",
       "SUCCESS_MSG": "Link sent! Check your email.",
       "ERROR_GENERIC": "Could not send email. Please try again."
+    },
+    "RESET_PASSWORD": {
+      "TITLE": "Reset Password",
+      "INSTRUCTIONS": "Enter the new password for your account.",
+      "NEW_PASSWORD": "New Password",
+      "NEW_PASSWORD_PLACEHOLDER": "At least 6 characters",
+      "CONFIRM_PASSWORD": "Confirm Password",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Repeat the password",
+      "BUTTON": "RESET PASSWORD",
+      "SUBMITTING": "Resetting...",
+      "BACK_TO_LOGIN": "← Back to login",
+      "INVALID_LINK": "This link is invalid or has expired.",
+      "REQUEST_NEW_LINK": "Request a new link",
+      "ERRORS": {
+        "EMPTY_FIELDS": "Please fill in every field.",
+        "PASSWORD_MISMATCH": "Passwords do not match.",
+        "PASSWORD_SHORT": "Password must be at least 6 characters."
+      }
+    },
+    "VERIFY_EMAIL": {
+      "TITLE": "Verify Email",
+      "CHECKING": "Verifying your email...",
+      "GO_TO_LOGIN": "← Go to login"
+    },
+    "STATUS": {
+      "EMAIL_IN_USE": "That email is already registered.",
+      "VERIFICATION_SENT": "Check your inbox and click the link to activate your account.",
+      "CREATED_EMAIL_FAILED": "We created your account, but couldn't send the verification email. Please request a new one.",
+      "VERIFICATION_RESENT": "We sent you a new verification link. Check your inbox.",
+      "EMAIL_VERIFIED": "Email verified! You can now log in.",
+      "ALREADY_VERIFIED": "This email was already verified. You can log in.",
+      "RESET_LINK_SENT": "Link sent! Check your inbox.",
+      "PASSWORD_RESET": "Password reset successfully!",
+      "EMAIL_REQUIRED": "Email is required.",
+      "FIELDS_REQUIRED": "Please fill in every field.",
+      "MISSING_TOKEN": "Invalid link: the token or email is missing.",
+      "INVALID_TOKEN": "This link is invalid or has already been used.",
+      "TOKEN_EXPIRED": "This link has expired. Please request a new one.",
+      "USER_NOT_FOUND": "We couldn't find an account with that email.",
+      "EMAIL_SEND_FAILED": "We couldn't send the email. Please try again in a few minutes.",
+      "TOKEN_GENERATION_FAILED": "We couldn't generate the link. Please try again.",
+      "VERIFY_FAILED": "We couldn't verify your email. Please try again.",
+      "RESET_FAILED": "We couldn't change your password. Please try again.",
+      "SERVER_ERROR": "Server error. Please try again later."
     }
   },
   "TUTORIAL": {
@@ -492,7 +536,7 @@
       "EXPORTING": "Generating...",
       "SUCCESS": "✓ Exported {{count}} transactions.",
       "NO_DATA": "No transactions in the selected range.",
-      "ERROR_RANGE_INVALID": "⛔ 'From' date cannot be later than 'To'.",
+      "ERROR_RANGE_INVALID": "'From' date cannot be later than 'To'.",
       "ERROR_GENERIC": "An error occurred while exporting. Please try again.",
       "LGPD_NOTE": "You have the right to data portability under LGPD and equivalent regulations.",
       "LGPD_LINK": "View Privacy Policy"

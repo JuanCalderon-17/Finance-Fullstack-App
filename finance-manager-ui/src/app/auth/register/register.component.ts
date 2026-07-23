@@ -4,6 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
 import { AuthService } from "../../core/services/auth.service";
+import { AuthMessagesService } from "../../core/services/auth-messages.service";
 
 @Component({
   selector: 'app-register',
@@ -22,7 +23,8 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService, 
     private router: Router,
-    private translate: TranslateService 
+    private translate: TranslateService,
+    private authMessages: AuthMessagesService
   ) { }
   
   register() {
@@ -39,11 +41,13 @@ export class RegisterComponent {
     this.isLoading = true;
 
     this.authService.register(this.model).subscribe({
-      next: () => {
+      next: (res: any) => {
         this.isLoading = false;
         this.errorMessage = null;
-        // Backend no longer returns a token — user must verify email first
-        this.successMessage = 'Revisa tu correo y haz clic en el enlace para activar tu cuenta.';
+        // Backend no longer returns a token — user must verify email first.
+        // The response code tells us whether the email actually went out.
+        this.authMessages.fromResponse(res, 'AUTH.STATUS.VERIFICATION_SENT')
+          .subscribe(msg => this.successMessage = msg);
       },
       error: (err) => {
         this.handleError(err);
@@ -94,18 +98,19 @@ export class RegisterComponent {
   }
 
   handleError(err: any) {
+    // ASP.NET Identity validation failures arrive as a bare array of {code, description}
     if (Array.isArray(err.error)) {
       this.errorMessage = err.error.map((e: any) => {
         if (e.code === 'InvalidUserName') return this.translate.instant('AUTH.REGISTER.ERRORS.INVALID_USER');
         if (e.code === 'PasswordTooShort') return this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_SHORT');
         if (e.code === 'PasswordRequiresUpper') return this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_UPPER');
         if (e.code === 'PasswordRequiresDigit') return this.translate.instant('AUTH.REGISTER.ERRORS.PASSWORD_DIGIT');
-        return e.description; 
+        return e.description;
       }).join(' ');
-    } else if (typeof err.error === 'string') {
-      this.errorMessage = err.error;
-    } else {
-      this.errorMessage = this.translate.instant('AUTH.REGISTER.ERRORS.GENERIC');
+      return;
     }
+    // Everything else carries our own code; never render the backend's Spanish prose
+    this.authMessages.fromError(err, 'AUTH.REGISTER.ERRORS.GENERIC')
+      .subscribe(msg => this.errorMessage = msg);
   }
 }

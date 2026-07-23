@@ -54,6 +54,9 @@ export class DebtsComponent implements OnInit, OnDestroy {
           i.displayAmount = this.roundMoney(this.convertNumber(i.amount, d.currency));
         }
       }
+      // totalDebt is a stored number, not a template conversion — without this it
+      // keeps the old currency's value and only the symbol next to it changes.
+      this.calculateTotal();
     });
     this.loadData();
 

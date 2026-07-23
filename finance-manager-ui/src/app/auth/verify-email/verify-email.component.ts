@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
+import { AuthMessagesService } from '../../core/services/auth-messages.service';
 
 @Component({
   selector: 'app-verify-email',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './verify-email.component.html',
   styleUrl: './verify-email.component.scss'
 })
@@ -17,7 +19,9 @@ export class VerifyEmailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService,
+    private authMessages: AuthMessagesService
   ) {}
 
   ngOnInit() {
@@ -27,18 +31,21 @@ export class VerifyEmailComponent implements OnInit {
 
       if (!token || !email) {
         this.isLoading = false;
-        this.errorMessage = 'Enlace inválido. Falta el token o el email.';
+        this.translate.get('AUTH.STATUS.MISSING_TOKEN')
+          .subscribe(msg => this.errorMessage = msg);
         return;
       }
 
       this.authService.verifyEmail(token, email).subscribe({
         next: (res: any) => {
           this.isLoading = false;
-          this.message = res.message;
+          this.authMessages.fromResponse(res, 'AUTH.STATUS.EMAIL_VERIFIED')
+            .subscribe(msg => this.message = msg);
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = err.error?.error || 'No se pudo verificar el correo. El enlace puede ser inválido o ya fue usado.';
+          this.authMessages.fromError(err, 'AUTH.STATUS.VERIFY_FAILED')
+            .subscribe(msg => this.errorMessage = msg);
         }
       });
     });

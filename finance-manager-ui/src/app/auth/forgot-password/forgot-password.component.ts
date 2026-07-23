@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';   // para [(ngModel)]
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AuthMessagesService } from '../../core/services/auth-messages.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
@@ -19,7 +20,10 @@ export class ForgotPasswordComponent {
   message: string = '';      
   errorMessage: string = ''; 
 
-  constructor(private authService: AuthService, private translateService: TranslateService) {}
+  constructor(
+    private authService: AuthService,
+    private authMessages: AuthMessagesService
+  ) {}
 
   onSubmit() {
     if (!this.email) return;
@@ -29,14 +33,16 @@ export class ForgotPasswordComponent {
     this.errorMessage = '';
 
     this.authService.forgotPassword(this.email).subscribe({
-    next: () => {
+    next: (res: any) => {
       this.isLoading = false;
-      this.message = this.translateService.instant('AUTH.FORGOT_PASSWORD.SUCCESS_MSG');
+      this.authMessages.fromResponse(res, 'AUTH.FORGOT_PASSWORD.SUCCESS_MSG')
+        .subscribe(msg => this.message = msg);
       this.email = '';
     },
     error: (error) => {
       this.isLoading = false;
-      this.errorMessage = error.error || this.translateService.instant('AUTH.FORGOT_PASSWORD.ERROR_GENERIC');
+      this.authMessages.fromError(error, 'AUTH.FORGOT_PASSWORD.ERROR_GENERIC')
+        .subscribe(msg => this.errorMessage = msg);
     }
     });
   }
