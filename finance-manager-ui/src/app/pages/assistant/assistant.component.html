@@ -18,7 +18,12 @@
          class="assistant-bubble"
          [class.is-user]="m.role === 'user'"
          [class.is-assistant]="m.role === 'assistant'">
-      <div *ngIf="m.content" class="bubble-content">{{ m.content }}</div>
+      <!-- Assistant replies are Markdown from the model; render them. User text
+           stays plain so nothing they type is ever treated as markup. -->
+      <div *ngIf="m.content && m.role === 'assistant'"
+           class="bubble-content"
+           [innerHTML]="renderMarkdown(m.content)"></div>
+      <div *ngIf="m.content && m.role === 'user'" class="bubble-content">{{ m.content }}</div>
       <span *ngIf="m.role === 'assistant' && loading && !m.content" class="bubble-thinking">
         {{ 'ASSISTANT.THINKING' | translate }}
       </span>
