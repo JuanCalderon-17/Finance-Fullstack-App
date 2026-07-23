@@ -38,6 +38,41 @@ export class AssistantComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
+  /**
+   * Minimal, safe Markdown → HTML for assistant replies (bold, italic, bullet
+   * lists, line breaks). HTML is escaped first so nothing from the model is
+   * ever injected as markup; Angular's [innerHTML] sanitizer is a second layer.
+   * A full Markdown library would be overkill for these short chat answers.
+   */
+  renderMarkdown(raw: string): string {
+    const escaped = raw
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    const inline = (s: string): string =>
+      s
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') // **bold** first
+        .replace(/\*([^*]+?)\*/g, '<em>$1</em>');         // then *italic*
+
+    const out: string[] = [];
+    let inList = false;
+
+    for (const line of escaped.split('\n')) {
+      const bullet = line.match(/^\s*[*-]\s+(.*)$/);
+      if (bullet) {
+        if (!inList) { out.push('<ul>'); inList = true; }
+        out.push(`<li>${inline(bullet[1])}</li>`);
+        continue;
+      }
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(line.trim() === '' ? '<br>' : `${inline(line)}<br>`);
+    }
+    if (inList) out.push('</ul>');
+
+    return out.join('');
+  }
+
   async send(): Promise<void> {
     const text = this.input.trim();
     if (!text || this.loading) return;

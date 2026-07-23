@@ -85,6 +85,27 @@
     color: #9ca3af;
     font-style: italic;
   }
+
+  // Rendered Markdown from the assistant. The content already carries its own
+  // <br>/<ul>/<li>, so it must not also collapse under the bubble's pre-wrap.
+  &.is-assistant .bubble-content {
+    white-space: normal;
+
+    strong { font-weight: 700; }
+    em { font-style: italic; }
+
+    ul {
+      margin: 0.35rem 0;
+      padding-left: 1.15rem;
+    }
+
+    li {
+      margin: 0.1rem 0;
+    }
+
+    // Trailing <br> after the last line adds a stray blank line — hide it.
+    br:last-child { display: none; }
+  }
 }
 
 .assistant-error {
