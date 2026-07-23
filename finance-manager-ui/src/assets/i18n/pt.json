@@ -308,8 +308,16 @@
     "ALERTS": {
       "GOOD": "Indo bem. Você está dentro das suas possibilidades!",
       "WARNING": "Cuidado: Você gastou um pouco a mais.",
-      "DANGER": "ALERTA VERMELHO! Você ultrapassou seu limite."
-    }
+      "DANGER": "ALERTA VERMELHO! Você ultrapassou seu limite.",
+      "EMPTY": "Sem movimentos ainda. Adicione o primeiro para ver sua análise.",
+      "NO_INCOME": "Você ainda não registrou nenhuma receita neste período."
+    },
+    "ADD_MOVEMENT": "Nova receita ou despesa",
+    "MOVEMENT_TYPE": "Tipo de movimento",
+    "TYPE_EXPENSE": "Despesa",
+    "TYPE_INCOME": "Receita",
+    "TYPE_SAVINGS": "Economia",
+    "THIS_PERIOD": "Neste período"
   },
   "TRANSACTION": {
     "DESCRIPTION": "Descrição",
@@ -482,8 +490,18 @@
     "TOGGLE": "Alternar Moeda"
   },
   "MONTHS": {
-    "JAN": "Jan", "FEB": "Fev", "MAR": "Mar", "APR": "Abr", "MAY": "Mai", "JUN": "Jun",
-    "JUL": "Jul", "AUG": "Ago", "SEP": "Set", "OCT": "Out", "NOV": "Nov", "DEC": "Dez"
+    "JAN": "Jan",
+    "FEB": "Fev",
+    "MAR": "Mar",
+    "APR": "Abr",
+    "MAY": "Mai",
+    "JUN": "Jun",
+    "JUL": "Jul",
+    "AUG": "Ago",
+    "SEP": "Set",
+    "OCT": "Out",
+    "NOV": "Nov",
+    "DEC": "Dez"
   },
   "PROFILE": {
     "TITLE": "Perfil",

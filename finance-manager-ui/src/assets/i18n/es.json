@@ -266,8 +266,16 @@
     "ALERTS": {
       "GOOD": "Vamos bien. ¡Estás dentro de tus posibilidades!",
       "WARNING": "Cuidado: Te has pasado un poco. ¡Frena los gastos!",
-      "DANGER": "¡ALERTA ROJA! Has superado tu límite de seguridad del 10%."
-    }
+      "DANGER": "¡ALERTA ROJA! Has superado tu límite de seguridad del 10%.",
+      "EMPTY": "Aún no hay movimientos. Agrega el primero para ver tu análisis.",
+      "NO_INCOME": "Todavía no registraste ningún ingreso en este período."
+    },
+    "ADD_MOVEMENT": "Nuevo ingreso o gasto",
+    "MOVEMENT_TYPE": "Tipo de movimiento",
+    "TYPE_EXPENSE": "Gasto",
+    "TYPE_INCOME": "Ingreso",
+    "TYPE_SAVINGS": "Ahorro",
+    "THIS_PERIOD": "En este período"
   },
   "TUTORIAL": {
     "NEXT": "Siguiente →",
