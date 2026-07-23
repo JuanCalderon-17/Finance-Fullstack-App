@@ -17,6 +17,10 @@ export class RegisterComponent {
   
   model: any = { fullName: '', email: '', password: '', confirmPassword: '', acceptedTerms: false };
   isLoading: boolean = false;
+
+  // Independent show/hide for each field, so the eye on one doesn't reveal the other.
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
 

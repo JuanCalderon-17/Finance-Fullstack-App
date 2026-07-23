@@ -42,16 +42,36 @@
 
                   <div class="form-group mb-3">
                     <label class="form-label" for="password">{{ 'AUTH.REGISTER.PASSWORD' | translate }}</label>
-                    <input type="password" id="password" name="password" class="form-control custom-input"
-                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" 
-                           [(ngModel)]="model.password" required />
+                    <div class="password-wrapper">
+                      <input [type]="showPassword ? 'text' : 'password'"
+                             id="password" name="password" class="form-control custom-input"
+                             [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+                             [(ngModel)]="model.password" required />
+                      <button type="button"
+                              class="password-toggle"
+                              (click)="showPassword = !showPassword"
+                              [attr.aria-label]="(showPassword ? 'AUTH.LOGIN.HIDE_PASSWORD' : 'AUTH.LOGIN.SHOW_PASSWORD') | translate"
+                              [attr.aria-pressed]="showPassword">
+                        <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+                      </button>
+                    </div>
                   </div>
 
                   <div class="form-group mb-4">
                     <label class="form-label" for="confirmPassword">{{ 'AUTH.REGISTER.CONFIRM_PASSWORD' | translate }}</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control custom-input"
-                           [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
-                           [(ngModel)]="model.confirmPassword" required />
+                    <div class="password-wrapper">
+                      <input [type]="showConfirmPassword ? 'text' : 'password'"
+                             id="confirmPassword" name="confirmPassword" class="form-control custom-input"
+                             [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate"
+                             [(ngModel)]="model.confirmPassword" required />
+                      <button type="button"
+                              class="password-toggle"
+                              (click)="showConfirmPassword = !showConfirmPassword"
+                              [attr.aria-label]="(showConfirmPassword ? 'AUTH.LOGIN.HIDE_PASSWORD' : 'AUTH.LOGIN.SHOW_PASSWORD') | translate"
+                              [attr.aria-pressed]="showConfirmPassword">
+                        <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
+                      </button>
+                    </div>
                   </div>
 
                   <div class="form-check mb-4 terms-check">
