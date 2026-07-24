@@ -742,14 +742,109 @@
   &:hover { text-decoration: underline; }
 }
 
+// ============ TRANSACTIONS — MOBILE CARD LIST ============
+// La tabla vive solo en escritorio; en móvil se apila como tarjetas.
+.ds-txn-cards { display: none; }
+
+.ds-txn-card {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child { border-bottom: none; }
+}
+
+.ds-txn-card-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.ds-txn-card-desc {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-txn-card-amount {
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ds-txn-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.55rem;
+}
+
+.ds-txn-card-date {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+// Empuja los botones de acción al extremo derecho de la fila meta.
+.ds-txn-card-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
 // ============ RESPONSIVE ============
 @media (max-width: 768px) {
   .ds-stat-amount { font-size: 1.4rem; }
   .ds-chart-wrapper { max-width: 100%; height: 220px; }
 
-  .ds-table {
-    font-size: 0.8rem;
+  // Tarjetas de resumen en 2 columnas en vez de 4 apiladas (menos scroll).
+  #tour-stats > [class*="col-"] {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
 
-    thead th, tbody td { padding: 0.6rem 0.75rem; }
+  .ds-stat-card { padding: 1rem 1.1rem; }
+  .ds-stat-amount { font-size: 1.25rem; }
+
+  // Cambiar tabla por lista de tarjetas.
+  .ds-table--desktop { display: none; }
+  .ds-txn-cards { display: block; }
+
+  // El header de la tarjeta (botón añadir + filtros) se ajusta en varias líneas
+  // en vez de desbordar.
+  .ds-card-header {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+
+    .d-flex { flex-wrap: wrap; }
+  }
+
+  .ds-add-btn { flex: 1 1 auto; justify-content: center; }
+  .ds-filter-select { flex: 1 1 auto; }
+
+  // Área táctil de 44px en los botones de acción (el ícono no cambia de tamaño).
+  .ds-action-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 0.95rem;
+  }
+
+  .cashflow-header { padding: 0.9rem 1rem; }
+  .cashflow-body { padding: 1rem; }
+}
+
+// Teléfonos estrechos (≤360px): una sola columna en el resumen para que las
+// cifras no se corten.
+@media (max-width: 360px) {
+  #tour-stats > [class*="col-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }

@@ -228,6 +228,12 @@ $accents: (
 
 @media (max-width: 768px) {
   .savings-grid { grid-template-columns: 1fr; }
+
+  // El formulario deja de ser sticky en móvil (apilado sobre la lista, solo
+  // roba altura de pantalla). El !important vence a la clase .sticky-top de
+  // Bootstrap del template.
+  .savings-form-card.sticky-top,
+  .savings-form-card { position: static !important; top: auto; }
 }
 
 .savings-account-card {

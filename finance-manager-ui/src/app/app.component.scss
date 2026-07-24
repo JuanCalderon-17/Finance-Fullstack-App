@@ -1,4 +1,5 @@
-
+/* Altura de la barra inferior (sin contar el safe-area del dispositivo). */
+$bottom-nav-height: 64px;
 
 /* 1. Por defecto OCULTA en PC/Laptop */
 .bottom-nav-container {
@@ -7,78 +8,73 @@
 
 /* 2. Mostrar SOLO en Celulares (menos de 768px) */
 @media (max-width: 768px) {
-  
+
   :host {
     display: block;
-    padding-bottom: 80px; /* Espacio para que no tape el contenido */
+    /* Altura de la barra + el safe-area inferior (barra gestos del iPhone),
+       para que el contenido nunca quede tapado por la nav. */
+    padding-bottom: calc(#{$bottom-nav-height} + env(safe-area-inset-bottom, 0px));
   }
 
   .bottom-nav-container {
-    display: block; /* Activamos el contenedor */
+    display: block;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 9999; /* Siempre encima */
-    
-    /* ESTILOS BASE (Modo Claro) */
-    background: #ffffff;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.05); 
-    border-top: 1px solid #eee;
-    
-    /* Transición suave para el cambio de tema */
-    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    z-index: 9999;
+
+    /* Colores del tema: se adaptan solos a claro/oscuro (antes usaba
+       :host-context(body.dark-mode), un selector que nunca coincide porque
+       el tema vive en html[data-theme="dark"]). */
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+
+    /* Reservar el safe-area del iPhone para que los íconos no queden bajo la
+       barra de gestos. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .mobile-nav {
-    display: flex;            
-    justify-content: space-around; 
-    align-items: center;
-    height: 70px; /* Un poco más alto para comodidad */            
-    padding-bottom: 5px;      
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    height: $bottom-nav-height;
   }
 
   .nav-item {
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 3px;
     text-decoration: none;
-    color: #a0a0a0; /* Gris suave (inactivo) */          
-    font-size: 11px;           
-    width: 100%;
-    height: 100%;
-    transition: all 0.2s ease;
+    color: var(--text-secondary);
+    font-size: 10.5px;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    padding: 6px 2px;
+    transition: color 0.2s ease;
+
+    span {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .nav-item i {
-    font-size: 24px;          
-    margin-bottom: 4px;
+    font-size: 21px;
+    line-height: 1;
   }
 
-  /* Color Activo en Modo Claro */
+  /* Destino activo — verde esmeralda del tema (consistente con el sidebar de
+     escritorio y el resto de la app). */
   .nav-item.active-link {
-    color: #0d6efd; 
+    color: var(--color-primary);
     font-weight: 600;
-    transform: translateY(-2px); /* Pequeña animación */
-  }
-
-
-  :host-context(body.dark-mode) {
-    
-    .bottom-nav-container {
-      background: #1a1a2e !important; /* Fondo Oscuro Profundo */
-      border-top: 1px solid #2f3336 !important; 
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
-    }
-
-    .nav-item {
-      color: #6c757d; /* Iconos inactivos un poco más oscuros */
-    }
-
-    .nav-item.active-link {
-      color: #48dbfb; /* Azul Neón Cyan brillante */
-      text-shadow: 0 0 8px rgba(72, 219, 251, 0.4); /* Efecto brillo */
-    }
   }
 }
