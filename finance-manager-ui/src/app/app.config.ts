@@ -1,12 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideCharts } from 'ng2-charts';
-import {
-  PieController, DoughnutController, ArcElement, Tooltip, Legend,
-  LineController, LineElement, PointElement,
-  CategoryScale, LinearScale, Filler
-} from 'chart.js';
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -21,12 +15,9 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([jwtInterceptor])),
-    provideCharts({ registerables: [
-      PieController, DoughnutController, ArcElement, Tooltip, Legend,
-      LineController, LineElement, PointElement,
-      CategoryScale, LinearScale, Filler
-    ] }),
-
+    // Chart.js ya NO se registra aquí (raíz): eso lo metía en el bundle inicial
+    // de todas las páginas. Ahora se registra dentro de DashboardComponent, que
+    // es lazy, así que la librería viaja en el chunk del dashboard.
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'es',
