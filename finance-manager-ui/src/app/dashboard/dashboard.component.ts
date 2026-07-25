@@ -8,7 +8,21 @@ import { RecurringService, DueOccurrence } from '../core/services/recurring.serv
 import { Transaction } from '../shared/models/transaction.model';
 import { Router, RouterLink } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import {
+  Chart, ChartConfiguration, ChartData, ChartType,
+  PieController, DoughnutController, ArcElement, Tooltip, Legend,
+  LineController, LineElement, PointElement, CategoryScale, LinearScale, Filler
+} from 'chart.js';
+
+// Registro local de Chart.js. Antes vivía en app.config.ts (raíz), lo que metía
+// la librería en el bundle inicial de TODAS las páginas. Al registrarla aquí —en
+// un componente lazy— Chart.js se empaqueta en el chunk del dashboard y solo se
+// descarga al entrar a esta ruta. Se registran exactamente los mismos elementos
+// que antes, para no cambiar el comportamiento de los gráficos.
+Chart.register(
+  PieController, DoughnutController, ArcElement, Tooltip, Legend,
+  LineController, LineElement, PointElement, CategoryScale, LinearScale, Filler
+);
 import { ThemeToggleComponent } from '../shared/theme-toggle/theme-toggle.component';
 import { CurrencyService } from '../core/services/currency.service';
 import { CurrencyStateService } from '../core/services/currency-state.service';
