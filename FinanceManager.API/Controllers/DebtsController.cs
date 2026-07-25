@@ -1,6 +1,7 @@
 ﻿using FinanceManager.API.Data;
 using FinanceManager.API.DTOs;
 using FinanceManager.API.Models;
+using FinanceManager.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +70,7 @@ namespace FinanceManager.API.Controllers
                 Icon = dto.Icon
             };
 
-            debt.InstallmentsList = GenerateInstallments(debt);
+            debt.InstallmentsList = DebtCalculator.GenerateInstallments(debt);
 
             _context.Debts.Add(debt);
             await _context.SaveChangesAsync();
@@ -128,7 +129,7 @@ namespace FinanceManager.API.Controllers
                 int remainingCount = dto.Installments - paidCount;
                 if (remainingCount > 0)
                 {
-                    var newInstallments = GenerateInstallments(
+                    var newInstallments = DebtCalculator.GenerateInstallments(
                         debt,
                         startNumber: paidCount + 1,
                         count: remainingCount,
@@ -190,7 +191,7 @@ namespace FinanceManager.API.Controllers
             // amount of an already-paid installment was corrected. Editing a
             // PENDING amount stays purely manual (custom plans like 8/8/8/16).
             if (dto.IsPaid.HasValue || (dto.Amount.HasValue && installment.IsPaid))
-                RebalancePendingInstallments(debt);
+                DebtCalculator.RebalancePendingInstallments(debt);
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -214,59 +215,15 @@ namespace FinanceManager.API.Controllers
             installment.IsPaid = !installment.IsPaid;
             installment.PaidDate = installment.IsPaid ? DateTime.UtcNow : null;
 
-            RebalancePendingInstallments(debt);
+            DebtCalculator.RebalancePendingInstallments(debt);
 
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
         // ================== HELPERS ==================
-
-        // Total the whole series must sum to: amortized total when there is
-        // interest, plain balance otherwise (mirrors GenerateInstallments).
-        private static decimal ExpectedTotal(Debt debt)
-        {
-            if (debt.InterestRate > 0)
-            {
-                var r = (double)(debt.InterestRate / 12 / 100);
-                var n = debt.Installments;
-                var factor = Math.Pow(1 + r, n);
-                var monthly = debt.Balance * (decimal)(r * factor / (factor - 1));
-                return Math.Round(monthly * n, 2);
-            }
-            return debt.Balance;
-        }
-
-        // After paying a different-than-scheduled amount, spread the real
-        // outstanding balance evenly across the pending installments so each
-        // row shows what is actually still owed. No-op when the schedule
-        // already covers the balance (paying the exact amount moves nothing).
-        private static void RebalancePendingInstallments(Debt debt)
-        {
-            var pending = debt.InstallmentsList
-                .Where(i => !i.IsPaid)
-                .OrderBy(i => i.InstallmentNumber)
-                .ToList();
-            if (pending.Count == 0) return;
-
-            var paidTotal = debt.InstallmentsList.Where(i => i.IsPaid).Sum(i => i.Amount);
-            var remaining = ExpectedTotal(debt) - paidTotal;
-            var pendingTotal = pending.Sum(i => i.Amount);
-
-            if (Math.Abs(remaining - pendingTotal) <= 0.01m) return;
-
-            if (remaining <= 0)
-            {
-                // Overpaid: nothing left to owe on the pending rows.
-                foreach (var i in pending) i.Amount = 0;
-                return;
-            }
-
-            var share = Math.Round(remaining / pending.Count, 2);
-            foreach (var i in pending) i.Amount = share;
-            // Last pending installment absorbs the rounding remainder.
-            pending[^1].Amount = Math.Max(0, Math.Round(remaining - share * (pending.Count - 1), 2));
-        }
+        // The amortization / rebalancing math lives in DebtCalculator so it can be
+        // unit tested without a database. See FinanceManager.API.Tests.
 
         private DebtDto MapToDto(Debt debt)
         {
@@ -293,65 +250,5 @@ namespace FinanceManager.API.Controllers
             };
         }
 
-        private List<Installment> GenerateInstallments(
-            Debt debt,
-            int startNumber = 1,
-            int? count = null,
-            DateTime? anchorDate = null,
-            decimal alreadyPaidTotal = 0)
-        {
-            var installments = new List<Installment>();
-            int totalCount = count ?? debt.Installments;
-            decimal monthlyPayment;
-
-            // Monthly payment is always calculated from the full debt (balance + total installments)
-            if (debt.InterestRate > 0)
-            {
-                var r = (double)(debt.InterestRate / 12 / 100);
-                var n = debt.Installments;
-                var numerator = r * Math.Pow(1 + r, n);
-                var denominator = Math.Pow(1 + r, n) - 1;
-                monthlyPayment = debt.Balance * (decimal)(numerator / denominator);
-            }
-            else
-            {
-                monthlyPayment = debt.Balance / debt.Installments;
-            }
-
-            var startDate = anchorDate ?? DateTime.UtcNow.Date;
-
-            for (int i = 0; i < totalCount; i++)
-            {
-                int number = startNumber + i;
-                // Installment #k is always due k months after the schedule anchor,
-                // so partial regeneration keeps the original due dates. Midnight
-                // dates get anchored at noon UTC so UTC-n browsers don't render
-                // them as the previous day.
-                var due = startDate.AddMonths(number);
-                if (due.TimeOfDay == TimeSpan.Zero)
-                    due = due.AddHours(12);
-
-                installments.Add(new Installment
-                {
-                    InstallmentNumber = number,
-                    Amount = Math.Round(monthlyPayment, 2),
-                    DueDate = due,
-                    IsPaid = false
-                });
-            }
-
-            // The whole series (already-paid + generated) must sum to the expected total;
-            // the last generated installment absorbs rounding drift and any difference
-            // left by manually edited paid amounts (e.g. the user paid 8/8/8 → last = 16).
-            var expectedTotal = Math.Round(monthlyPayment * debt.Installments, 2);
-            var diff = expectedTotal - alreadyPaidTotal - installments.Sum(i => i.Amount);
-            if (diff != 0)
-            {
-                var adjusted = Math.Round(installments[^1].Amount + diff, 2);
-                installments[^1].Amount = Math.Max(0, adjusted);
-            }
-
-            return installments;
-        }
     }
 }

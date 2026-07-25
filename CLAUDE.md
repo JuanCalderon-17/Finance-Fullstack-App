@@ -18,20 +18,28 @@ FinanceManagerApp is a full-stack personal finance manager. The public domain is
 ```bash
 dotnet run                                          # Start API (dev mode)
 dotnet build                                        # Build
+dotnet test                                         # Run unit tests (from repo root)
 dotnet ef migrations add <MigrationName>            # Create a new EF migration
 dotnet ef database update                           # Apply migrations manually
 ```
 
 The API auto-applies migrations on startup via `context.Database.Migrate()` in `Program.cs`.
 
+Note: `dotnet build`/`dotnet test` fails with a file-lock error while `dotnet run` is
+active. Stop the dev API first, or build elsewhere with `-p:BaseOutputPath=<dir>`.
+
 ### Frontend (`finance-manager-ui/`)
 
 ```bash
 npm start          # Dev server at http://localhost:4200
 npm run build      # Production build to dist/
-npm test           # Run unit tests with Karma/Jasmine
+npm test           # Run unit tests in a watching browser (Karma/Jasmine)
+npm run test:ci    # Single headless run — use this to check the suite
 ng generate component <name>   # Scaffold a new component
 ```
+
+`karma.conf.js` points `CHROME_BIN` at the Chrome that puppeteer installs as a
+devDependency, so `test:ci` needs no system Chrome. Specs run in random order.
 
 ---
 
@@ -44,6 +52,7 @@ ng generate component <name>   # Scaffold a new component
 - **Auth**: JWT Bearer tokens. The signing key is the `TokenKey` config value (env var overrides `appsettings.json`); startup fails fast if it's missing or under 64 chars. TEMPORARY: committed pending rotation, same rule as above. Tokens are issued by `TokenService`.
 - **Email**: Resend HTTP API (`EmailService`), configured via `RESEND_API_KEY`, `EMAIL_FROM`, and `EMAIL_FROM_NAME` environment variables (or the `Resend:*` config section). Used for email verification and password reset.
 - **Currency**: `CurrencyService` (registered with `AddHttpClient`) fetches live exchange rates.
+- **Debt math**: `Services/DebtCalculator.cs` holds the amortization and installment-rebalancing logic as pure static methods, kept free of EF and HTTP so it can be unit tested. `DebtsController` only orchestrates persistence around it — new money math belongs in the calculator, not the controller.
 
 **Key files**:
 - `Program.cs` — DI registration, CORS policy (allows `localhost:4200` and production domains), middleware pipeline
@@ -51,6 +60,9 @@ ng generate component <name>   # Scaffold a new component
 - `Models/` — `AppUser`, `Transaction`, `SavingsAccount`, `Debt`, `Installment`
 - `Controllers/` — `AccountController`, `TransactionsController`, `DebtsController`, `SavingsController`, `CurrencyController`
 - `DTOs/` — Data transfer objects for all request/response shapes
+
+**Tests**: `FinanceManager.API.Tests/` (xUnit) covers `DebtCalculator` — amortization
+totals, rounding, due dates, partial regeneration and rebalancing after payments.
 
 ### Frontend
 
@@ -77,6 +89,14 @@ All protected routes use `canActivate: [authGuard]` and are lazy-loaded.
 - `core/services/` — `AuthService`, `TransactionService`, `CurrencyService`, `CurrencyStateService`, `LanguageService`, `TutorialService`
 - `services/` — `DebtsService`, `SavingsService`, `ThemeService`
 - `shared/models/` — shared TypeScript interfaces
+
+**Tests**: specs live next to the code they cover. `src/testing/test-providers.ts`
+exposes `provideTestingDependencies()` — HTTP (mocked), router and ngx-translate —
+which every TestBed here needs; without it `createComponent` throws
+`NullInjectorError`. The translate loader is a no-op, so assertions expect the raw
+translation key. Money calculations (`DashboardComponent` totals and alerts,
+`DebtsComponent.calculateMetrics`, `CurrencyStateService.convert`) are tested by
+constructing the class directly with stubs, bypassing `ngOnInit`'s HTTP and timers.
 
 ### Deployment
 
