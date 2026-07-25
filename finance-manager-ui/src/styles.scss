@@ -26,6 +26,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// En móvil, ninguna vista debe permitir scroll horizontal de toda la página:
+// un solo elemento ancho (una tabla, un banner) no debería mover la app entera.
+// Cada zona con contenido ancho gestiona su propio overflow (ver contenedores
+// `.ds-table-scroll`, etc.).
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
+}
+
+// iOS Safari hace zoom automático al enfocar un input con fuente < 16px. En
+// móvil forzamos 16px en los controles para que el teclado no descuadre la
+// vista. En escritorio se respeta el tamaño de cada componente (no aplica).
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea,
+  .form-control,
+  .form-select {
+    font-size: 16px;
+  }
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   letter-spacing: -0.02em;
@@ -209,35 +230,10 @@ select:-webkit-autofill {
     }
   }
 }
-/* =========================================================
-   FIX GLOBAL: BARRA MÓVIL EN DARK MODE
-   ========================================================= */
+// La barra de navegación móvil (.bottom-nav-container) ahora se estiliza por
+// completo con variables de tema en app.component.scss, así que se adapta a
+// claro/oscuro sin overrides con !important aquí.
 
-@media (max-width: 768px) {
-  
-  [data-theme="dark"] .bottom-nav-container {
-    /* 1. Usamos el mismo color del fondo de la app */
-    background-color: var(--bg-secondary) !important; 
-    
-    /* 2. Borde casi invisible, solo para separar sutilmente si hay contenido scrolleable */
-    border-top: 1px solid rgba(255, 255, 255, 0.05) !important; 
-    
-    /* 3. Quitamos la sombra fuerte para que parezca parte del mismo plano */
-    box-shadow: none !important;
-  }
-
-  /* Íconos inactivos */
-  [data-theme="dark"] .nav-item {
-    color: #6c757d !important;
-  }
-
-  /* Ícono ACTIVO */
-  [data-theme="dark"] .nav-item.active-link {
-    color: #48dbfb !important; /* Azul Cyan */
-    /* Sin efectos de brillo exagerados, estilo limpio y plano */
-    font-weight: bold;
-  }
-}
 // ============ DRIVER.JS TUTORIAL STYLES ============
 
 // Popover (tooltip)

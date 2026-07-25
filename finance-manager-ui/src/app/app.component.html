@@ -2,10 +2,20 @@
 
 <div class="bottom-nav-container" *ngIf="showMenu">
   <nav class="mobile-nav">
-    
+
     <a routerLink="/dashboard" routerLinkActive="active-link" class="nav-item">
       <i class="bi bi-grid-fill"></i>
       <span>{{ 'NAVIGATION.DASHBOARD' | translate }}</span>
+    </a>
+
+    <a routerLink="/assistant" routerLinkActive="active-link" class="nav-item">
+      <i class="bi bi-stars"></i>
+      <span>{{ 'NAVIGATION.ASSISTANT' | translate }}</span>
+    </a>
+
+    <a routerLink="/debts" routerLinkActive="active-link" class="nav-item">
+      <i class="bi bi-credit-card-2-front-fill"></i>
+      <span>{{ 'NAVIGATION.DEBTS' | translate }}</span>
     </a>
 
     <a routerLink="/savings" routerLinkActive="active-link" class="nav-item">
@@ -13,9 +23,9 @@
       <span>{{ 'NAVIGATION.SAVINGS' | translate }}</span>
     </a>
 
-    <a routerLink="/debts" routerLinkActive="active-link" class="nav-item">
-      <i class="bi bi-credit-card-2-front-fill"></i>
-      <span>{{ 'NAVIGATION.DEBTS' | translate }}</span>
+    <a routerLink="/recurring" routerLinkActive="active-link" class="nav-item">
+      <i class="bi bi-arrow-repeat"></i>
+      <span>{{ 'NAVIGATION.RECURRING' | translate }}</span>
     </a>
 
   </nav>

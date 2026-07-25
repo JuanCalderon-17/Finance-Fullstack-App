@@ -229,7 +229,9 @@
           <p class="mt-2 text-muted">{{ 'TRANSACTION.NO_TRANSACTIONS' | translate }}</p>
         </div>
 
-        <table class="ds-table" *ngIf="!isLoading && !loadError && filteredTransactions.length > 0">
+        <!-- Escritorio: tabla completa. En móvil se oculta por CSS y se muestra
+             la lista de tarjetas de abajo (5 columnas no caben en un teléfono). -->
+        <table class="ds-table ds-table--desktop" *ngIf="!isLoading && !loadError && filteredTransactions.length > 0">
           <thead>
             <tr>
               <th>{{ 'TRANSACTION.DATE' | translate }}</th>
@@ -268,6 +270,38 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Móvil: misma información en tarjetas apiladas (se oculta en escritorio). -->
+        <div class="ds-txn-cards" *ngIf="!isLoading && !loadError && filteredTransactions.length > 0">
+          <div class="ds-txn-card" *ngFor="let t of filteredTransactions">
+            <div class="ds-txn-card-main">
+              <span class="ds-txn-card-desc">{{ t.description }}</span>
+              <span class="ds-txn-card-amount amount-{{ getCategoryType(t.category) }}">
+                {{ currencySymbol }}{{ convertTransactionAmount(t) | number:'1.2-2' }}
+              </span>
+            </div>
+            <div class="ds-txn-card-meta">
+              <span class="ds-category-badge badge-{{ getCategoryType(t.category) }}">
+                <i class="bi"
+                   [ngClass]="{
+                     'bi-arrow-up-circle-fill': getCategoryType(t.category) === 'income',
+                     'bi-piggy-bank-fill': getCategoryType(t.category) === 'savings',
+                     'bi-arrow-down-circle-fill': getCategoryType(t.category) === 'expense'
+                   }"></i>
+                {{ getCategoryKey(t.category) | translate }}
+              </span>
+              <span class="ds-txn-card-date">{{ t.transactionDate | date:'dd/MM/yyyy' }}</span>
+              <div class="ds-txn-card-actions">
+                <button class="ds-action-btn edit-btn" (click)="edit(t)" aria-label="Edit">
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button class="ds-action-btn delete-btn" (click)="deleteTransaction(t.id)" aria-label="Delete">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
