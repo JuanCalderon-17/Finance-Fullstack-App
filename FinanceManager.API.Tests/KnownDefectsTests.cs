@@ -274,28 +274,6 @@ public class KnownDefectsTests : IClassFixture<ApiFactory>, IAsyncLifetime
         Assert.Equal(0, stored.DueDate.Hour); // WRONG — the anchor is gone
     }
 
-    // ===================== 7. account deletion, not reproducible here =====================
-
-    [Fact(Skip = "Needs Postgres: SQLite does not reproduce the missing ON DELETE clause.")]
-    public Task KnownBug_DeletingAnAccountWithSavings_FailsWithAForeignKeyViolation()
-    {
-        // Highest user-facing impact of everything in this file, and the one test that
-        // cannot be written against this harness.
-        //
-        // SavingsAccounts is the only user-owned table without cascade delete. Its
-        // AppUserId is string?, so EF treats the relationship as optional and the initial
-        // migration emits the FK with no ON DELETE clause, leaving Postgres at NO ACTION —
-        // whereas Debts, Transactions and RecurringTransactions all get Cascade.
-        // AccountController.DeleteAccount calls UserManager.DeleteAsync without clearing
-        // savings first, so Postgres raises 23503 and the user gets a 500.
-        //
-        // Net effect: any user who has ever created a savings account can never delete
-        // their account.
-        //
-        // Reproducing it needs a real Postgres (Testcontainers, or a scratch database),
-        // because this suite runs SQLite, whose FK enforcement differs. Verify against
-        // Postgres before fixing, and fix with a migration adding the cascade rather than
-        // by hand-deleting rows in the controller.
-        return Task.CompletedTask;
-    }
+    // The savings cascade defect that used to be pinned here is fixed: see
+    // AccountDeletionTests, which covers deletion end to end.
 }
