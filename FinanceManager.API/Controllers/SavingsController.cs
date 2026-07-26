@@ -40,6 +40,11 @@ namespace FinanceManager.API.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // Without this, a token missing the claim would persist a row with a null owner:
+            // invisible to every "where AppUserId == userId" query, and impossible to delete
+            // through the API. Cheaper to refuse than to leave orphans in the table.
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
             var saving = new SavingsAccount
             {
                 Name = dto.Name,

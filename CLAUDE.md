@@ -48,8 +48,8 @@ devDependency, so `test:ci` needs no system Chrome. Specs run in random order.
 ### Backend
 
 - **Framework**: ASP.NET Core 9.0 with ASP.NET Identity
-- **Database**: PostgreSQL (Supabase) via EF Core (Npgsql). At startup `Program.cs` probes connection candidates with a real connection attempt: `DATABASE_URL` env var first (URI format, parsed), then `ConnectionStrings:DefaultConnection` — the first one that accepts connections wins. TEMPORARY: `DefaultConnection` is committed in `appsettings.json` pending a credential rotation (the old value leaked in the public repo); after rotating, new values go ONLY in Render env vars + local user secrets (`UserSecretsId` is in the csproj), never in committed files.
-- **Auth**: JWT Bearer tokens. The signing key is the `TokenKey` config value (env var overrides `appsettings.json`); startup fails fast if it's missing or under 64 chars. TEMPORARY: committed pending rotation, same rule as above. Tokens are issued by `TokenService`.
+- **Database**: PostgreSQL (Supabase) via EF Core (Npgsql). At startup `Program.cs` probes connection candidates with a real connection attempt: `DATABASE_URL` env var first (URI format, parsed), then `ConnectionStrings:DefaultConnection` — the first one that accepts connections wins. The rotation is done: `appsettings.json` now ships blank values, and real credentials live ONLY in Render env vars + local user secrets (`UserSecretsId` is in the csproj) — never in committed files.
+- **Auth**: JWT Bearer tokens. The signing key is the `TokenKey` config value (env var overrides `appsettings.json`); startup fails fast if it's missing or under 64 chars. Blank in `appsettings.json`, same rule as above. Tokens are issued by `TokenService`.
 - **Email**: Resend HTTP API (`EmailService`), configured via `RESEND_API_KEY`, `EMAIL_FROM`, and `EMAIL_FROM_NAME` environment variables (or the `Resend:*` config section). Used for email verification and password reset.
 - **Currency**: `CurrencyService` (registered with `AddHttpClient`) fetches live exchange rates.
 - **Debt math**: `Services/DebtCalculator.cs` holds the amortization and installment-rebalancing logic as pure static methods, kept free of EF and HTTP so it can be unit tested. `DebtsController` only orchestrates persistence around it — new money math belongs in the calculator, not the controller.
@@ -61,8 +61,39 @@ devDependency, so `test:ci` needs no system Chrome. Specs run in random order.
 - `Controllers/` — `AccountController`, `TransactionsController`, `DebtsController`, `SavingsController`, `CurrencyController`
 - `DTOs/` — Data transfer objects for all request/response shapes
 
-**Tests**: `FinanceManager.API.Tests/` (xUnit) covers `DebtCalculator` — amortization
-totals, rounding, due dates, partial regeneration and rebalancing after payments.
+**Tests**: `FinanceManager.API.Tests/` (xUnit), three groups:
+
+- `DebtCalculatorTests` — amortization totals, rounding, due dates, partial
+  regeneration and rebalancing after payments. Pure functions, no host.
+- `Security/CrossUserIsolationTests` — boots the real API through
+  `Infrastructure/ApiFactory` (WebApplicationFactory over SQLite in-memory, real
+  JWTs from the app's own `TokenService`) and drives every protected route as the
+  wrong user. **Any new endpoint touching `AppUserId`-partitioned data belongs in
+  this matrix.**
+- `Security/EndpointCoverageTests` — reflects over every controller action and
+  fails when one is neither authorized nor listed as deliberately public, or is
+  authorized but missing from the isolation matrix. Adding an endpoint turns this
+  red until it is classified; that is intentional, don't route around it.
+- `KnownDefectsTests` — bugs found and pinned, not fixed. Each asserts what the
+  code does *today* and documents the correct behaviour in a comment, so fixing
+  one turns its test red on purpose.
+
+`Program.cs` branches on the `Testing` environment in three places so the app can
+be hosted in-process: it skips Postgres connection discovery, skips the
+Npgsql-specific migrations, and leaves `AppDbContext` unregistered for the factory
+to supply. `ApiMarker` exists only so `WebApplicationFactory` can find the
+assembly. The global rate limit reads `RateLimiting:GlobalPermitLimit` (default
+100/min) so the suite doesn't rate-limit itself.
+
+SQLite is not Postgres — decimal storage and `DateTime` Kind handling differ, so
+these tests assert authorization and behaviour, not money math or storage
+semantics. FK enforcement *is* active (the EF SQLite provider enables it) and the
+schema comes from `EnsureCreated`, i.e. straight from the model — so cascade rules
+are genuinely exercised. What that does **not** cover is whether a migration
+carries a schema change to production; that still needs applying against Postgres.
+
+**CI**: `.github/workflows/ci.yml` runs both suites on every push and PR —
+`dotnet test -c Release`, then `npm ci && npm run test:ci && npm run build`.
 
 ### Frontend
 
