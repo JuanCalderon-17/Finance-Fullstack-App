@@ -46,9 +46,15 @@ string WithReliableAuthSettings(string cs)
     return trimmed + ";Channel Binding=Disable;Include Error Detail=true";
 }
 
+// Integration tests host the app through WebApplicationFactory and register their
+// own provider, so there is no Postgres to discover. Skipping the block below saves
+// a connection timeout per candidate and, more importantly, avoids the "no database
+// configured" throw that would otherwise stop the test host from booting at all.
+var isTestHost = builder.Environment.IsEnvironment("Testing");
+
 var connectionCandidates = new List<(string Source, string Value)>();
 
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var databaseUrl = isTestHost ? null : Environment.GetEnvironmentVariable("DATABASE_URL");
 if (!string.IsNullOrEmpty(databaseUrl))
 {
     try
@@ -61,21 +67,21 @@ if (!string.IsNullOrEmpty(databaseUrl))
     }
 }
 
-var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+var defaultConnection = isTestHost ? null : builder.Configuration.GetConnectionString("DefaultConnection");
 if (!string.IsNullOrWhiteSpace(defaultConnection))
 {
     connectionCandidates.Add(("ConnectionStrings:DefaultConnection", WithReliableAuthSettings(defaultConnection)));
 }
 
-if (connectionCandidates.Count == 0)
+if (connectionCandidates.Count == 0 && !isTestHost)
 {
     throw new InvalidOperationException(
         "No database configured. Set the DATABASE_URL environment variable " +
         "or ConnectionStrings:DefaultConnection.");
 }
 
-var activeConnectionString = connectionCandidates[0].Value;
-var activeConnectionSource = connectionCandidates[0].Source;
+var activeConnectionString = connectionCandidates.Count > 0 ? connectionCandidates[0].Value : string.Empty;
+var activeConnectionSource = connectionCandidates.Count > 0 ? connectionCandidates[0].Source : "test-host";
 foreach (var (source, candidate) in connectionCandidates)
 {
     try
@@ -94,7 +100,12 @@ foreach (var (source, candidate) in connectionCandidates)
     }
 }
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(activeConnectionString));
+// Left unregistered under the test host so the factory can supply its own provider
+// without having to unpick an Npgsql registration first.
+if (!isTestHost)
+{
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(activeConnectionString));
+}
 
 
 
@@ -153,12 +164,16 @@ builder.Services.AddRateLimiter(options =>
 
     // Global DoS protection: 100 requests/min per client IP across every
     // endpoint. Auth endpoints stack the stricter "auth" limiter on top.
+    // Configurable because the integration suite drives every endpoint from a
+    // single IP and would otherwise rate-limit itself; production keeps the 100.
+    var globalPermitLimit = builder.Configuration.GetValue<int?>("RateLimiting:GlobalPermitLimit") ?? 100;
+
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
     {
         var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
         return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
         {
-            PermitLimit = 100,
+            PermitLimit = globalPermitLimit,
             Window = TimeSpan.FromMinutes(1),
             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
             QueueLimit = 0
@@ -252,8 +267,12 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+// Skipped under the test host: these migrations are Npgsql-specific, and running
+// them against the test provider would fail and leave a half-written migrations
+// history table behind that then breaks the factory's own schema creation.
+if (!isTestHost)
 {
+    using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     try
     {
