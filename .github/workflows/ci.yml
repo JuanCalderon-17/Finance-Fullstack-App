@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch makes the in-flight run obsolete.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (.NET 9)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore FinanceManagerApp.sln
+
+      # -c Release mirrors the Dockerfile, so CI fails on anything the deploy would hit.
+      - name: Build
+        run: dotnet build FinanceManagerApp.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test FinanceManagerApp.sln -c Release --no-build --verbosity normal
+
+  frontend:
+    name: Frontend (Angular 19)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: finance-manager-ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: finance-manager-ui/package-lock.json
+
+      # Also installs the Chrome that puppeteer ships, which karma.conf.js
+      # points CHROME_BIN at — no system browser needed.
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm run test:ci
+
+      # Production config: enforces the 1mb initial bundle budget as an error.
+      - name: Build
+        run: npm run build
