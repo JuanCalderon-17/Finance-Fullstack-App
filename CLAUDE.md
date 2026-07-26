@@ -85,9 +85,12 @@ to supply. `ApiMarker` exists only so `WebApplicationFactory` can find the
 assembly. The global rate limit reads `RateLimiting:GlobalPermitLimit` (default
 100/min) so the suite doesn't rate-limit itself.
 
-SQLite is not Postgres — decimal storage, `DateTime` Kind and FK/cascade behaviour
-differ. These tests assert authorization, not money math or schema semantics.
-Anything depending on real FK behaviour needs Postgres.
+SQLite is not Postgres — decimal storage and `DateTime` Kind handling differ, so
+these tests assert authorization and behaviour, not money math or storage
+semantics. FK enforcement *is* active (the EF SQLite provider enables it) and the
+schema comes from `EnsureCreated`, i.e. straight from the model — so cascade rules
+are genuinely exercised. What that does **not** cover is whether a migration
+carries a schema change to production; that still needs applying against Postgres.
 
 **CI**: `.github/workflows/ci.yml` runs both suites on every push and PR —
 `dotnet test -c Release`, then `npm ci && npm run test:ci && npm run build`.

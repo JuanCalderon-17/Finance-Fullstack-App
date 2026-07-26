@@ -28,11 +28,23 @@ namespace FinanceManager.API.Data
                 .HasForeignKey(d => d.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Debt -> Installments 
+            // Debt -> Installments
             modelBuilder.Entity<Debt>()
                 .HasMany(d => d.InstallmentsList)
                 .WithOne(i => i.Debt)
                 .HasForeignKey(i => i.DebtId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // SavingsAccount -> User
+            // Configured explicitly because AppUserId is nullable here, unlike every other
+            // user-owned table. EF's convention for an optional relationship is ClientSetNull,
+            // so this FK was the only one created without ON DELETE CASCADE — which meant
+            // deleting an account that had ever held a savings account failed on a foreign
+            // key violation and surfaced to the user as a 500.
+            modelBuilder.Entity<SavingsAccount>()
+                .HasOne(s => s.AppUser)
+                .WithMany()
+                .HasForeignKey(s => s.AppUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Dcimals "Postgres"
